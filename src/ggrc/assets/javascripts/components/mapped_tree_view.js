@@ -26,7 +26,14 @@
         return expandable;
       }
     },
-    init: function (element) {
+    init: function(element){
+      var self = this;
+
+      setTimeout(function(){
+        self._init_mapping_tree_view(element);
+      }, 1000);
+    },
+    _init_mapping_tree_view: function (element) {
       var el = $(element);
       var binding;
 
