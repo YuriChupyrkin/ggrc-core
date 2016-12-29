@@ -166,7 +166,8 @@
       if (this._super) {
         this._super.apply(this, arguments);
       }
-      this.setIsReadyForRender(false);
+      this.setIsReadyForRender(false);     
+      this.initMappedTreeDfd = new $.Deferred();
     },
     save: function () {
       if (!this.attr('program')) {
@@ -292,14 +293,33 @@
       }
     },
     refreshInstance: function () {
+      window.assessment = this;
       return this.refresh().then(function () {
         this.updateValidation();
       }.bind(this));
     },
+    resolveMappedTreeDfd: function() {
+      console.log("resolveMappedTreeDfd");
+      this.initMappedTreeDfd.resolve();
+      this.get_mapping('comments').unbind('length',
+        this.resolveMappedTreeDfdBinding);  
+    },
+    deferred_mapped_tree_init: function() {
+      // ToDo: remove
+      if(!this.initMappedTreeDfd) {
+        this.initMappedTreeDfd = new $.Deferred();
+      }
+
+      return this.initMappedTreeDfd;
+    },
     info_pane_preload: function () {
       if (!this._pane_preloaded) {
+        this.resolveMappedTreeDfdBinding = this.resolveMappedTreeDfd.bind(this);
+
         this.get_mapping('comments').bind('length',
           this.refreshInstance.bind(this));
+        this.get_mapping('comments').bind('length',
+          this.resolveMappedTreeDfdBinding);
         this.get_mapping('all_documents').bind('length',
           this.refreshInstance.bind(this));
         this.refreshInstance();

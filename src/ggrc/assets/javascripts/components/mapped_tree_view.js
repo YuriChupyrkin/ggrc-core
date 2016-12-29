@@ -29,9 +29,33 @@
     init: function(element){
       var self = this;
 
-      setTimeout(function(){
-        self._init_mapping_tree_view(element);
-      }, 1000);
+      if(!this.scope.mapping) {
+        // // for test! TODO: remove
+        // self._init_mapping_tree_view(element);
+        // return;
+        // // for test! TODO: remove
+
+        console.log("WRONG MAPPING");
+        var parentInstance = this.scope.parentInstance;
+        var promise = parentInstance.deferred_mapped_tree_init
+          .bind(parentInstance);
+
+        if (!promise) {
+          console.log("promise doesn't exist");
+          self._init_mapping_tree_view(element);
+        } else {
+          // ToDo: check type (should be function)...
+          promise().always(function(){
+            console.log('promise resolved;');
+            console.log(`Mapping: ${self.scope.mapping}`);
+            self._init_mapping_tree_view(element);
+          });
+        }
+
+        return;
+      }
+
+      self._init_mapping_tree_view(element);
     },
     _init_mapping_tree_view: function (element) {
       var el = $(element);
