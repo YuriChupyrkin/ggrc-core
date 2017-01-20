@@ -523,10 +523,29 @@
                     function checkRelationship(related, id) {
                       return _.findWhere(related, {id: id});
                     }
+
+                    model.bind(prop, function cb(ev) {
+                      var propName = ev.type;
+
+                      if (!propName) {
+                        return;
+                      }
+
+                      if (checkRelationship(this[propName], rel.id)) {
+                        model.unbind(prop, cb);
+                        dfd.resolve();
+                      } else if (dfd.state() === 'resolved') {
+                        // unbind if dfd resolved
+                        model.unbind(prop, cb);
+                      }
+                    });
                     model[prop].on('change', function cb() {
                       if (checkRelationship(this, rel.id)) {
-                        person[prop].unbind('change', cb);
+                        model[prop].unbind('change', cb);
                         dfd.resolve();
+                      } else if (dfd.state() === 'resolved') {
+                        // unbind if dfd resolved
+                        model[prop].unbind('change', cb);
                       }
                     });
                   });
