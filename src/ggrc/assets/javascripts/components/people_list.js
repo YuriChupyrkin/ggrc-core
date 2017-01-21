@@ -479,89 +479,102 @@
         this.scope.attr('instance').removeAttr(
           'validate_' + this.scope.attr('type'));
       },
+      create_relationship_for_selected_person: function (role, person,
+        instance) {
+        var relationship = CMS.Models.Relationship.get_relationship(person,
+                                                                  instance);
+        if (!relationship) {
+          relationship = CMS.Models.Relationship.createAssignee({
+            role: role,
+            source: person,
+            destination: instance,
+            context: instance.context
+          });
+          relationship = $.Deferred().resolve(relationship);
+          this.scope.attr('forbiddenForUnmap').push(person);
+          this.scope.attr('isNew', true);
+        } else {
+          relationship = relationship.refresh();
+        }
+
+        return relationship.then(function (relationship) {
+          var type = relationship.attr('attrs.AssigneeType');
+          relationship.attr('attrs.AssigneeType',
+            role + (type ? ',' + type : ''));
+          return relationship.save();
+        });
+      },
+      bind_related_properties: function (relationship, instance, person) {
+        var props = ['related_sources', 'related_destinations'];
+        var dfds = [];
+
+        if (this.scope.attr('isNew')) {
+          [instance, person].forEach(function (model) {
+            var dfd = $.Deferred();
+            props.forEach(function (prop) {
+              function checkRelationship(related, id) {
+                return _.findWhere(related, {id: id});
+              }
+
+              model.bind(prop, function cb(ev) {
+                var propName = ev.type;
+
+                if (!propName) {
+                  return;
+                }
+
+                if (checkRelationship(this[propName], relationship.id)) {
+                  model.unbind(prop, cb);
+                  dfd.resolve();
+                } else if (dfd.state() === 'resolved') {
+                  // unbind if dfd resolved
+                  model.unbind(prop, cb);
+                }
+              });
+              model[prop].on('change', function cb() {
+                if (checkRelationship(this, relationship.id)) {
+                  model[prop].unbind('change', cb);
+                  dfd.resolve();
+                } else if (dfd.state() === 'resolved') {
+                  // unbind if dfd resolved
+                  model[prop].unbind('change', cb);
+                }
+              });
+            });
+            dfds.push(dfd);
+          });
+        }
+        return dfds;
+      },
+      remove_forbiddenForUnmap: function (dfds, person, instance) {
+        var self = this;
+        $.when.apply($, dfds).then(function () {
+          if (self.scope.attr('isNew')) {
+            _.remove(self.scope.attr('forbiddenForUnmap'), function (item) {
+              return item.id === person.id;
+            });
+            self.scope.attr('isNew', false);
+          }
+          instance.refresh();
+        });
+      },
       '.person-selector input autocomplete:select': function (el, ev, ui) {
         var person = ui.item;
         var role = can.capitalize(this.scope.type);
         var instance = this.scope.attr('instance');
         var deferred = this.scope.attr('deferred');
-        var relationship;
 
         if (deferred) {
           this.scope.deferred_add_role(person, role);
         } else {
           // create or modify a relationship without caching
-          relationship = CMS.Models.Relationship.get_relationship(person,
-                                                                  instance);
-          if (!relationship) {
-            relationship = CMS.Models.Relationship.createAssignee({
-              role: role,
-              source: person,
-              destination: instance,
-              context: instance.context
-            });
-            relationship = $.Deferred().resolve(relationship);
-            this.scope.attr('forbiddenForUnmap').push(person);
-            this.scope.attr('isNew', true);
-          } else {
-            relationship = relationship.refresh();
-          }
-
-          relationship.then(function (relationship) {
-            var type = relationship.attr('attrs.AssigneeType');
-            relationship.attr('attrs.AssigneeType',
-              role + (type ? ',' + type : ''));
-            return relationship.save();
-          })
+          this.create_relationship_for_selected_person(role, person, instance)
             .then(function (rel) {
-              var props = ['related_sources', 'related_destinations'];
-              var dfds = [];
-
-              if (this.scope.attr('isNew')) {
-                [instance, person].forEach(function (model) {
-                  var dfd = $.Deferred();
-                  props.forEach(function (prop) {
-                    function checkRelationship(related, id) {
-                      return _.findWhere(related, {id: id});
-                    }
-
-                    model.bind(prop, function cb(ev) {
-                      var propName = ev.type;
-
-                      if (!propName) {
-                        return;
-                      }
-
-                      if (checkRelationship(this[propName], rel.id)) {
-                        model.unbind(prop, cb);
-                        dfd.resolve();
-                      } else if (dfd.state() === 'resolved') {
-                        // unbind if dfd resolved
-                        model.unbind(prop, cb);
-                      }
-                    });
-                    model[prop].on('change', function cb() {
-                      if (checkRelationship(this, rel.id)) {
-                        model[prop].unbind('change', cb);
-                        dfd.resolve();
-                      } else if (dfd.state() === 'resolved') {
-                        // unbind if dfd resolved
-                        model[prop].unbind('change', cb);
-                      }
-                    });
-                  });
-                  dfds.push(dfd);
-                });
-              }
-              return $.when.apply($, dfds);
+              return this.bind_related_properties(rel,
+                person, instance);
             }.bind(this))
-            .then(function () {
-              if (this.scope.attr('isNew')) {
-                _.remove(this.scope.attr('forbiddenForUnmap'), function (item) {
-                  return item.id === person.id;
-                });
-                this.scope.attr('isNew', false);
-              }
-              instance.refresh();
+            .then(function (dfds) {
+              this.remove_forbiddenForUnmap(dfds, person, instance);
             }.bind(this));
         }
       },
