@@ -452,4 +452,108 @@ describe('GGRC.Components.peopleGroup', function () {
          );
        });
   });
+  describe('".person-selector input autocomplete:select" event', function () {
+    var person = new can.Map({
+      name: 'person name',
+      related_sources: [],
+      related_destinations: []
+    });
+
+    var assessment = new can.Map({
+      related_sources: [],
+      related_destinations: [],
+      refresh: function () {}
+    });
+
+    var scope = new can.Map({
+      type: 'Verifier',
+      instance: assessment,
+      forbiddenForUnmap: [],
+      isNew: false
+    });
+
+    var relationship = {
+      role: scope.type,
+      id: 12345,
+      attr: function () {
+        return 'some attr value';
+      },
+      save: function () {
+        return this;
+      }
+    };
+
+    var peopleGroupComponent;
+
+    beforeEach(function () {
+       // reset scope
+      scope.attr('forbiddenForUnmap', []);
+      scope.attr('isNew', false);
+
+      peopleGroupComponent = GGRC.Components.get('peopleGroup');
+      peopleGroupComponent.prototype.scope = scope;
+    });
+
+    it('"create_relationship_for_selected_person" should change isNew',
+      function () {
+        var createRelationship = peopleGroupComponent.prototype
+          .events.create_relationship_for_selected_person
+          .bind(peopleGroupComponent.prototype);
+
+        spyOn(CMS.Models.Relationship, 'createAssignee')
+          .and.returnValue(relationship);
+
+        createRelationship(scope.type, person, assessment)
+          .then(function () {
+            expect(scope.attr('forbiddenForUnmap').length).toEqual(1);
+            expect(scope.attr('isNew')).toEqual(true);
+          });
+      });
+
+    it('"remove_forbiddenForUnmap" should remove person and update isNew state',
+      function () {
+        var dfds;
+        var bindRelatedProperties = peopleGroupComponent.prototype
+            .events.bind_related_properties
+            .bind(peopleGroupComponent.prototype);
+
+        var removeForbiddenForUnmap = peopleGroupComponent.prototype
+            .events.remove_forbiddenForUnmap
+            .bind(peopleGroupComponent.prototype);
+
+        // set spyOn for check of call counts
+        spyOn(assessment, 'refresh');
+
+        // set scope state
+        scope.attr('forbiddenForUnmap', [person]);
+        scope.attr('isNew', true);
+
+        dfds = bindRelatedProperties(relationship, person, assessment);
+
+        removeForbiddenForUnmap(dfds, person, assessment).then(function () {
+          expect(scope.attr('forbiddenForUnmap').length).toEqual(0);
+          expect(scope.attr('isNew')).toEqual(false);
+          expect(assessment.refresh.calls.count()).toEqual(1);
+        });
+
+        // update and change of related properties for
+        // invoke of removeForbiddenForUnmapEvent
+        assessment.attr('related_sources', [relationship]);
+        person.attr('related_destinations').push(relationship);
+      });
+
+    it('"bind_related_properties" should return 2 dfds',
+      function () {
+        var dfds;
+        var bindRelatedProperties = peopleGroupComponent.prototype
+          .events.bind_related_properties
+          .bind(peopleGroupComponent.prototype);
+
+        // set scope state
+        scope.attr('isNew', true);
+
+        dfds = bindRelatedProperties(relationship, person, assessment);
+        expect(dfds.length).toEqual(2);
+      });
+  });
 });

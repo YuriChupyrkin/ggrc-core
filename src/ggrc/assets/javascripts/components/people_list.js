@@ -504,7 +504,7 @@
           return relationship.save();
         });
       },
-      bind_related_properties: function (relationship, instance, person) {
+      bind_related_properties: function (relationship, person, instance) {
         var props = ['related_sources', 'related_destinations'];
         var dfds = [];
 
@@ -548,7 +548,7 @@
       },
       remove_forbiddenForUnmap: function (dfds, person, instance) {
         var self = this;
-        $.when.apply($, dfds).then(function () {
+        return $.when.apply($, dfds).then(function () {
           if (self.scope.attr('isNew')) {
             _.remove(self.scope.attr('forbiddenForUnmap'), function (item) {
               return item.id === person.id;
