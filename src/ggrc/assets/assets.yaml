@@ -189,6 +189,7 @@ dashboard-js-files:
   - components/csv/export.js
   - components/csv/import.js
   - components/people_list.js
+  - components/unmap_action.js
   - components/mapped_tree_view.js
   - components/reusable_objects.js
   - components/assessment_generator.js
@@ -337,6 +338,7 @@ dashboard-js-template-files:
   - base_templates/attachment.mustache
   - base_templates/base.mustache
   - base_templates/comment_list.mustache
+  - base_templates/unmap_action.mustache
   - base_templates/comment_subtree.mustache
   - base_templates/dates_list.mustache
   - base_templates/description.mustache

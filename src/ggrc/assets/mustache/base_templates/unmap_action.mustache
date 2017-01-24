@@ -1,0 +1,9 @@
+ <span class="file-controls">
+  {{^show_spinner}}
+    <a href="javascript://" class="info-action unmap" data-toggle="unmap" data-person={{id}}>
+      <span class="result" {{data 'result'}}></span>
+      <i class="fa fa-trash"></i>
+    </a>
+  {{/show_spinner}}
+  <spinner toggle="show_spinner"></spinner>
+</span>
