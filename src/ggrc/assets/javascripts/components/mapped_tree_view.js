@@ -69,11 +69,31 @@
       return mappedObjects;
     },
     events: {
+      showHideSpinner: function (el, trash, showSpinner) {
+        var trashClass = 'fa-trash';
+        var spinnerClasses = 'fa-spinner fa-spin';
+
+        if (showSpinner) {
+          trash.removeClass(trashClass);
+          trash.addClass(spinnerClasses);
+          el.addClass('disabled');
+        } else {
+          trash.removeClass(spinnerClasses);
+          trash.addClass(trashClass);
+          el.removeClass('disabled');
+        }
+      },
       '[data-toggle=unmap] click': function (el, ev) {
         var instance = el.find('.result').data('result');
         var mappings = this.scope.parentInstance.get_mapping(
           this.scope.mapping);
         var binding;
+        var that = this;
+        var trash = el.find('.fa-trash');
+
+        if (trash) {
+          this.showHideSpinner(el, trash, true);
+        }
 
         ev.stopPropagation();
 
@@ -91,7 +111,12 @@
                 return mapping.documentable.reify();
               }
             })
-            .fail(GGRC.Errors.notifierXHR('error'));
+            .fail(function () {
+              if (trash) {
+                that.showHideSpinner(el, trash, false);
+              }
+              GGRC.Errors.notifierXHR('error')();
+            });
         });
       }
     }
