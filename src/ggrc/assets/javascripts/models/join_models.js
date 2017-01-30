@@ -125,6 +125,7 @@
     snapshot_instance: function (snapshotData) {
     }
   }, {
+    selfLink: 'no-link-snapshot',
     reinit: function () {
       var revision = CMS.Models.Revision.findInCacheById(this.revision_id);
       this.content = revision.content;

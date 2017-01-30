@@ -206,6 +206,7 @@
             order: 150
           };
           all.Person.widget_icon = 'fa fa-person';
+          all.Snapshot.widget_icon = 'fa fa-person fa-spin';
           return all;
         })(),
         Contract: {
@@ -313,6 +314,12 @@
           }
         },
         business_objects: {
+          Snapshot: {
+            mapping: 'related_snapshots',
+            model: CMS.Models.Snapshot,
+            child_options: relatedObjectsChildOptions,
+            draw_children: true
+          },
           Audit: {
             mapping: 'related_audits',
             draw_children: true,

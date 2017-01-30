@@ -949,20 +949,31 @@
      * @param {Object} query - original query
      * @return {Object} The transformed query
      */
-    function transformQuery(query) {
+    function transformQuery(query, isSnapshotModel) {
       var type = query.object_name;
       var expression = query.filters.expression;
+      var id = expression.ids[0];
       query.object_name = 'Snapshot';
       query.filters.expression = {
         left: {
           left: 'child_type',
           op: {name: '='},
-          right: type
+          right: isSnapshotModel ? expression.object_name : type
         },
         op: {name: 'AND'},
-        right: expression
+        right: isSnapshotModel ? buildRightNodeForSnapshot(id) : expression
       };
       return query;
+    }
+
+    function buildRightNodeForSnapshot(id) {
+      var node = {
+        left: 'child_id',
+        op: {name: '='},
+        right: id
+      };
+
+      return node;
     }
 
     return {

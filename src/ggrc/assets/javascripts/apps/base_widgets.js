@@ -35,7 +35,8 @@
     Project: 250,
     Standard: 260,
     System: 270,
-    Vendor: 280
+    Vendor: 280,
+    Snapshot: 290
   };
   var allTypes = Object.keys(defaultOrderTypes).sort();
   // Items allowed for mapping via snapshot.
@@ -57,6 +58,7 @@
   var filteredTypes = _.difference(allTypes, excludeMappingConfig);
   // Audit is excluded and created a separate logic for it
   baseWidgetsByType = {
+    Snapshot: filteredTypes,
     AccessGroup: _.difference(filteredTypes, ['AccessGroup']),
     Audit: [].concat(snapshotWidgetsConfig, excludeMappingConfig,
       auditInclusion).sort(),
@@ -71,12 +73,12 @@
     Market: filteredTypes,
     Objective: filteredTypes,
     OrgGroup: filteredTypes,
-    Person: _.difference(filteredTypes, ['Person']),
+    Person: _.difference(filteredTypes, ['Person', 'Snapshot']),
     Policy: _.difference(filteredTypes,
       ['Contract', 'Policy', 'Regulation', 'Standard']),
     Process: filteredTypes,
     Product: filteredTypes,
-    Program: _.difference(filteredTypes, ['Program']),
+    Program: _.difference(filteredTypes, ['Program', 'Snapshot']),
     Project: filteredTypes,
     Regulation: _.difference(filteredTypes,
       ['Contract', 'Policy', 'Regulation', 'Standard']),
