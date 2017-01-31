@@ -151,6 +151,7 @@
     }
   }, {
     init: function () {
+      window.task = this;
       // default start and end date
       var startDate = this.attr('start_date') || new Date();
       var endDate = this.attr('end_date') ||

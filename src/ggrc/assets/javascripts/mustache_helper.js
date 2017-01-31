@@ -1425,6 +1425,7 @@ Mustache.registerHelper("json_escape", function (obj, options) {
   */
 });
 
+// issue is here!
 function localizeDate(date, options, tmpl) {
   if (!options) {
     return moment().format(tmpl);
