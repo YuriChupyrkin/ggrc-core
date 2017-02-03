@@ -888,6 +888,20 @@
     }
 
     /**
+     * set child_type's value as type for snapshot model
+     * @param {Object} instance - instance of model
+     * @return {Object} return updated instance
+     */
+    function updateTypeForSnapshot(instance) {
+      if (instance.type === 'Snapshot') {
+        instance.type = instance.child_type;
+        instance.constructor.shortName = instance.child_type;
+      }
+
+      return instance;
+    }
+
+    /**
      * Convert array of snapshots to array of object
      * @param {Object} values - array of snapshots
      * @return {Object} The array of objects
@@ -901,9 +915,16 @@
      * @param {Object} query - original query
      * @return {Object} The transformed query
      */
-    function transformQuery(query) {
+    function transformQuery(query, isSnapshotModel) {
       var type = query.object_name;
       var expression = query.filters.expression;
+
+      if (isSnapshotModel) {
+        type = !expression.left ?
+          expression.object_name :
+          expression.left.object_name;
+      }
+
       query.object_name = 'Snapshot';
       query.filters.expression = {
         left: {
@@ -912,9 +933,39 @@
           right: type
         },
         op: {name: 'AND'},
-        right: expression
+        right: isSnapshotModel ?
+          buildRightNodeForSnapshot(expression) :
+          expression
       };
       return query;
+    }
+
+    function buildRightNodeForSnapshot(expression) {
+      var id;
+      var node;
+
+      // if empty filter
+      if (!expression.left) {
+        id = expression.ids[0];
+        node = {
+          left: 'child_id',
+          op: {name: '='},
+          right: id
+        };
+      } else {
+        id = expression.left.ids[0];
+        node = {
+          left: {
+            left: 'child_id',
+            op: {name: '='},
+            right: id
+          },
+          op: {name: 'AND'},
+          right: expression.right
+        };
+      }
+
+      return node;
     }
 
     return {
@@ -929,7 +980,8 @@
       toObject: toObject,
       toObjects: toObjects,
       transformQuery: transformQuery,
-      setAttrs: setAttrs
+      setAttrs: setAttrs,
+      updateTypeForSnapshot: updateTypeForSnapshot
     };
   })();
 })(jQuery, window.GGRC = window.GGRC || {}, window.moment, window.Permission);

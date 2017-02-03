@@ -126,7 +126,8 @@
       controls: TypeFilter('related_objects', 'Control'),
       sections: TypeFilter('related_objects', 'Section'),
       clauses: TypeFilter('related_objects', 'Clause'),
-      objectives: TypeFilter('related_objects', 'Objective')
+      objectives: TypeFilter('related_objects', 'Objective'),
+      related_snapshots: TypeFilter('related_objects', 'Snapshot')
     },
     // Program
     Program: {

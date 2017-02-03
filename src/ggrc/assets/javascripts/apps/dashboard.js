@@ -197,7 +197,8 @@
 
     initWidgets();
 
-    widgetList = GGRC.WidgetList.get_widget_list_for(modelName);
+    widgetList = GGRC.WidgetList.get_widget_list_for(
+      modelName === 'Snapshot' ? instance.child_type : modelName);
 
     // the assessments_view only needs the Assessments widget
     if (isAssessmentsView) {

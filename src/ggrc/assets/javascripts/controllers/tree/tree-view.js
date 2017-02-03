@@ -265,6 +265,10 @@
         this.options.attr('is_subtree',
           this.element && this.element.closest('.inner-tree').length > 0);
 
+        // update type if parent_instance has "Snapshot" type
+        this.options.parent_instance = GGRC.Utils.Snapshots
+          .updateTypeForSnapshot(this.options.parent_instance);
+
         if (!this.options.attr('is_subtree') && !isCustomAttr) {
           this.page_loader = new GGRC.ListLoaders.TreePageLoader(
             this.options.model, this.options.parent_instance,
