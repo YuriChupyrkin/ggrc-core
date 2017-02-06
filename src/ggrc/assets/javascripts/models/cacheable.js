@@ -470,13 +470,18 @@
             sourceData = {};
           }
 
-          if (sourceData[self.shortName]) {
+          if (sourceData[self.shortName] && self.shortName !== 'Snapshot') {
             sourceData = sourceData[self.shortName];
             values = sourceData.values;
           } else if (sourceData.Snapshot) {
             // This is response with snapshots - convert it to objects
             sourceData = sourceData.Snapshot;
             values = GGRC.Utils.Snapshots.toObjects(sourceData.values);
+
+            // Do not modelize becasue 'toObjects' did it
+            sourceData.values = !values.splice ? [values] : values;
+            deferred.resolve(sourceData);
+            return;
           }
 
           if (!values.splice) {

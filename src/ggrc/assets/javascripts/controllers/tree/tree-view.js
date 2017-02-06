@@ -265,6 +265,10 @@
         this.options.attr('is_subtree',
           this.element && this.element.closest('.inner-tree').length > 0);
 
+        // update type if parent_instance has "Snapshot" type
+        // this.options.parent_instance = GGRC.Utils.Snapshots
+        //   .updateTypeForSnapshot(this.options.parent_instance);
+
         if (!this.options.attr('is_subtree') && !isCustomAttr) {
           this.page_loader = new GGRC.ListLoaders.TreePageLoader(
             this.options.model, this.options.parent_instance,
@@ -289,6 +293,12 @@
         } else {
           this.options.attr('allow_mapping_or_creating',
             this.options.allow_mapping || this.options.allow_creating);
+        }
+
+        if (this.options.parent_instance.isSnapshotModel) {
+          this.options.attr('allow_mapping_or_creating', false);
+          //this.options.attr('allow_mapping', false);
+          //this.options.attr('allow_creating', false);
         }
 
         if (this.element.parent().length === 0 || // element not attached
