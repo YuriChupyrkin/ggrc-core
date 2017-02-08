@@ -11,9 +11,12 @@
       var snapshots = GGRC.Utils.Snapshots;
       var queryParams = params;
       var result;
+      var isSnapshotModel = params.data[0].object_name === 'Snapshot';
       if (snapshots.isSnapshotScope(this.binding.instance) &&
-        snapshots.isSnapshotModel(params.data[0].object_name)) {
-        params.data[0] = snapshots.transformQuery(params.data[0]);
+        snapshots.isSnapshotModel(params.data[0].object_name) ||
+          isSnapshotModel) {
+        params.data[0] = snapshots.transformQuery(params.data[0],
+          isSnapshotModel);
         queryParams = params;
       }
       return this.model.query(queryParams)

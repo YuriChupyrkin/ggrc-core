@@ -46,7 +46,8 @@
         role: CMS.Models.Role,
         threat: CMS.Models.Threat,
         vulnerability: CMS.Models.Vulnerability,
-        template: CMS.Models.Template
+        template: CMS.Models.Template,
+        snapshot: CMS.Models.Snapshot
       };
     },
     init_widgets: function () {
@@ -67,6 +68,9 @@
       var extraDescriptorOptions;
       var overriddenModels;
       var extraContentControllerOptions;
+
+      // update type of "Snapshot"
+      object = GGRC.Utils.Snapshots.updateTypeForSnapshot(object);
 
       // TODO: Really ugly way to avoid executing IIFE - needs cleanup
       if (!GGRC.page_object) {
@@ -313,6 +317,12 @@
           }
         },
         business_objects: {
+          Snapshot: {
+            mapping: 'related_snapshots',
+            model: CMS.Models.Snapshot,
+            child_options: relatedObjectsChildOptions,
+            draw_children: true
+          },
           Audit: {
             mapping: 'related_audits',
             draw_children: true,

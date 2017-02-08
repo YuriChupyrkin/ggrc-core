@@ -1370,9 +1370,11 @@ Mustache.registerHelper("is_allowed_to_map", function (source, target, options) 
   target = resolve_computed(target);
   can_map = GGRC.Utils.allowed_to_map(source, target, options);
 
-  if (can_map) {
+  // do not allow mapping for snapshots
+  if (can_map && !source.isSnapshotModel) {
     return options.fn(options.contexts || this);
   }
+
   return options.inverse(options.contexts || this);
 });
 

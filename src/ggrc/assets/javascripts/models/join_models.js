@@ -129,6 +129,7 @@
       var revision = CMS.Models.Revision.findInCacheById(this.revision_id);
       this.content = revision.content;
     },
+    isSnapshotModel: true,
     display_name: function () {
       return '';
     },
