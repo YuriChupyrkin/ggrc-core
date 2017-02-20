@@ -69,13 +69,13 @@ can.Control('GGRC.Controllers.TreeFilter', {}, {
     parentControl.filter(filterString);
   },
   'input[type=reset] click': function (el, ev) {
-    this.element.find('input[type=text]').val('');
+    this.element.find('input[name=filter_query]').val('');
     this.apply_filter('');
   },
   'input[type=submit] click': function (el, ev) {
     this.apply_filter(this.$txtFilter.val());
   },
-  'input[type=checkbox] click': function (el, ev) {
+  'multiselect-dropdown multiselect:closed': function (el, ev, selected) {
     this.apply_filter(this.$txtFilter.val());
   },
   'input keyup': function (el, ev) {
@@ -83,19 +83,6 @@ can.Control('GGRC.Controllers.TreeFilter', {}, {
 
     if (ev.keyCode === 13) {
       this.apply_filter(el.val());
-    }
-    ev.stopPropagation();
-  },
-  'input, select change': function (el, ev) {
-    // this is left from the old filters and should eventually be replaced
-    // Convert '.' to '__' ('.' will cause can.Observe to try to update a path instead of just a key)
-    var name = el.attr('name').replace(/\./g, '__');
-    if (el.is('.hasDatepicker')) {
-      this.options.states.attr(name, moment(el.val(), 'MM/DD/YYYY'));
-    } else if (el.is(':checkbox') && !el.is(':checked')) {
-      this.options.states.removeAttr(name);
-    } else {
-      this.options.states.attr(name, el.val());
     }
     ev.stopPropagation();
   },
