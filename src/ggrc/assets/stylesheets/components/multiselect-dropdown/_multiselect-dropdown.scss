@@ -1,0 +1,43 @@
+/*
+ * Copyright (C) 2017 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.multiselect-dropdown {
+  &__input {
+    cursor: pointer !important;
+    // I guess we should use 100% width...
+    width: inherit;
+  }
+  &__body {
+    width: inherit;
+    top: 0px !important;
+    z-index: 2000;
+  }
+  &__list {
+    list-style-type: none;
+    margin-left: 0px;
+    margin-bottom: 0px;
+  }
+  &__element {
+    &:hover {
+      background-color: #40c4ff;
+    }
+  }
+  &__icon {
+    // fix position of icon!
+    opacity: 0.5;
+    position: absolute;
+    right: 3px;
+    top: 2px;
+  }
+  &__input-container {
+    position: relative;
+  }
+  &__label {
+    width: 90%;
+    margin: 0px 0px 0px 0px;
+    padding: 2px 0px 2px 5px;
+    font-size: 12px;
+  }
+ }

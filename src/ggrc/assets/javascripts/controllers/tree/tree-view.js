@@ -263,22 +263,13 @@
 
       this.options.attr('filter_states', [
         {
-          value: 'Active',
-          cssClass: 'attr-status',
-          id: 'statusActive-{{model.model_singular}}',
-          name: 'active'
+          value: 'Active'
         },
         {
-          value: 'Draft',
-          cssClass: 'attr-status',
-          id: 'statusDraft-{{model.model_singular}}',
-          name: 'draft'
+          value: 'Draft'
         },
         {
-          value: 'Deprecated',
-          cssClass: 'attr-status',
-          id: 'statusDeprecated-{{model.model_singular}}',
-          name: 'deprecated'
+          value: 'Deprecated'
         }
       ]);
 
@@ -420,11 +411,6 @@
                   }
                 });
               }));
-              // listen to changes in the state filter
-              can.bind.call(statusControl.find('input[type=checkbox]'),
-                'click',
-                this.saveTreeStates.bind(this)
-              );
             }.bind(this))));
       }
 
@@ -1173,13 +1159,12 @@
       savedStateList = this.display_prefs.getTreeViewStates(modelName);
       this.options.attr('selectStateList', savedStateList);
     },
-    saveTreeStates: function () {
-      var $checkState = this.element.parent().find('.attr-status');
-      var $selectedState = $checkState.filter(':checked');
+    saveTreeStates: function (selectedStates) {
       var stateToSave = [];
-      $selectedState.each(function () {
-        stateToSave.push(this.value);
+      selectedStates.forEach(function (state) {
+        stateToSave.push(state.value);
       });
+
       this.options.attr('selectStateList', stateToSave);
       this.display_prefs.setTreeViewStates(this.options.model.model_singular,
         stateToSave);
@@ -1287,7 +1272,8 @@
       this.refreshList();
     },
 
-    filter: function (filterString) {
+    filter: function (filterString, selectedStates) {
+      this.saveTreeStates(selectedStates);
       this.options.attr('paging.filter', filterString);
       this.options.attr('paging.current', 1);
       this.refreshList();

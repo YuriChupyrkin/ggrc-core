@@ -59,14 +59,14 @@ can.Control('GGRC.Controllers.TreeFilter', {}, {
     this.element.find('.tree-filter__expression-holder span i')
       .toggleClass('fa-check-circle-o', !isExpression);
   },
-  apply_filter: function (filterString) {
+  apply_filter: function (filterString, selectedStates) {
     var currentFilter = GGRC.query_parser.parse(filterString);
     var parentControl = this.element
       .closest('.cms_controllers_dashboard_widgets')
       .find('.cms_controllers_tree_view').control();
 
     this.toggle_indicator(currentFilter);
-    parentControl.filter(filterString);
+    parentControl.filter(filterString, selectedStates);
   },
   'input[type=reset] click': function (el, ev) {
     this.element.find('input[name=filter_query]').val('');
@@ -75,8 +75,9 @@ can.Control('GGRC.Controllers.TreeFilter', {}, {
   'input[type=submit] click': function (el, ev) {
     this.apply_filter(this.$txtFilter.val());
   },
-  'multiselect-dropdown multiselect:closed': function (el, ev, selected) {
-    this.apply_filter(this.$txtFilter.val());
+  'multiselect-dropdown multiselect:closed': function (el, ev, selectedStates) {
+    this.apply_filter(this.$txtFilter.val(), selectedStates);
+    ev.stopPropagation();
   },
   'input keyup': function (el, ev) {
     this.toggle_indicator(GGRC.query_parser.parse(el.val()));

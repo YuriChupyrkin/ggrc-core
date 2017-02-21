@@ -3,24 +3,36 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 
-<input type="text"readonly="readonly" class="multiselect-dropdown-input" value="{{displayValue}}"/>
-<div class="dropdown-menu dropdown-menu-form multiselect-dropdown-body">
-    <ul class="multiselect-dropdown-list">
-      {{#options}}
-      <li>
-        <label  class="checkbox-inline" >
-          <input type="checkbox"
-            {($checked)}="checked"
-            value="{{value}}"
-            name="{{name}}"
-            id="{{id}}"
-            class="multiselect-dropdown-checkbox {{cssClass}}"
-            />
-          {{value}}
-        </label>
-      </li>
-      {{/options}}
-    </ul>
+<div class="multiselect-dropdown__input-container">
+  <input ($click)="changeOpenCloseState($element, %event)"
+    type="text"
+    readonly="readonly" 
+    class="multiselect-dropdown__input" 
+    placeholder="{{placeholder}}" 
+    value="{{_displayValue}}"/>
+  <span class="multiselect-dropdown__icon">
+    <i class="fa fa-sort"></i>
+  </span>
+</div>
+<div class="dropdown-menu dropdown-menu-form multiselect-dropdown__body" 
+  ($click)="dropdownBodyClick(%event)" 
+  style="{{openCloseState}}">
+  <ul class="multiselect-dropdown__list">
+    {{#options}}
+    <li class="multiselect-dropdown__element">
+      <label class="multiselect-dropdown__label" >
+        <input type="checkbox"
+          {($checked)}="checked"
+          value="{{value}}"
+          name="{{name}}"
+          id="{{id}}"
+          class="multiselect-dropdown__checkbox {{cssClass}}"
+          />
+        {{value}}
+      </label>
+    </li>
+    {{/options}}
+  </ul>
 </div>
 
 

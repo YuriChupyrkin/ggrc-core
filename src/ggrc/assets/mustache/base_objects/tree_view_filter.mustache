@@ -30,7 +30,10 @@
           </div>
           <div class="tree-filter__status-wrap">
             {{#if statusFilterVisible}}
-            <multiselect-dropdown {options}="filter_states">
+            <multiselect-dropdown 
+              {options}="filter_states"
+              placeholder="Filter by State",
+              plural="States">
             </multiselect-dropdown>
             {{/if}}
           </div>
