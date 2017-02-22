@@ -4,40 +4,66 @@
  */
 
 .multiselect-dropdown {
-  &__input {
-    cursor: pointer !important;
-    // I guess we should use 100% width...
-    width: inherit;
+  input.multiselect-dropdown__input {
+    padding: 4px 24px 4px 4px;
+    margin: 0;
+    box-sizing: border-box;
+    height:28px;
+    line-height: 28px;
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
   }
-  &__body {
-    width: inherit;
-    top: 0px !important;
-    z-index: 2000;
-  }
-  &__list {
-    list-style-type: none;
-    margin-left: 0px;
-    margin-bottom: 0px;
-  }
-  &__element {
-    &:hover {
-      background-color: #40c4ff;
+
+  .multiselect-dropdown {
+    &__body {
+      position: relative;
+      top: -1px !important;
+      z-index: 2000;
+      float: none;
+      display: block;
+      border-radius: 0;
+    }
+
+    &__list {
+      list-style-type: none;
+      margin-left: 0px;
+      margin-bottom: 0px;
+    }
+
+    &__element {
+      &:hover {
+        background-color: #40c4ff;
+      }
+    }
+
+    &__icon {
+      position: absolute;
+      width: 24px;
+      height: 28px;
+      line-height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      right: 0;
+      top: 0;
+    }
+
+    &__input-container {
+      cursor: pointer;
+      line-height: 28px;
+      position: relative;
+    }
+
+    &__label {
+      width: 96%;
+      margin: 0px 0px 0px 0px;
+      padding: 2px 0px 2px 5px;
+      font-size: 12px;
+    }
+
+    &__checkbox {
+      margin: 0px 3px 0px 3px;
     }
   }
-  &__icon {
-    // fix position of icon!
-    opacity: 0.5;
-    position: absolute;
-    right: 3px;
-    top: 2px;
-  }
-  &__input-container {
-    position: relative;
-  }
-  &__label {
-    width: 90%;
-    margin: 0px 0px 0px 0px;
-    padding: 2px 0px 2px 5px;
-    font-size: 12px;
-  }
- }
+}

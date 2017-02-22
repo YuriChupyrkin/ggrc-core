@@ -12,6 +12,7 @@
       GGRC.mustache_path +
       '/components/dropdown/multiselect_dropdown.mustache'
     ),
+    leakScope: false,
     viewModel: {
       _previousDisplayValue: '',
       selected: [],
@@ -19,9 +20,33 @@
       placeholder: '@',
       element: '',
       define: {
+        elementWidth: {
+          type: 'number',
+          value: 240
+        },
         _displayValue: {
           get: function () {
             return this.getDisplayValue();
+          }
+        },
+        _selectedAll: {
+          type: 'boolean',
+          value: false,
+          get: function () {
+            var options = this.attr('options') || [];
+
+            return Array.prototype.every.call(options, function (item) {
+              return item.attr('checked');
+            });
+          },
+          set: function (value) {
+            var options = this.attr('options') || [];
+
+            options.forEach(function (option) {
+              option.attr('checked', value);
+            });
+
+            return value;
           }
         },
         isOpen: {
@@ -29,32 +54,18 @@
           value: false
         },
         openCloseState: {
-          type: 'string',
+          type: 'boolean',
           get: function () {
-            return this.attr('isOpen') ? 'display: block;' : 'display: none;';
+            return this.attr('isOpen');
           }
         },
         options: {
-          type: '*',
-          value: function () {
-            return [];
-          },
-          set: function (value) {
-            var selectAll = {
-              value: 'Select All',
-              selectAll: true
-            };
-
-            value.unshift(selectAll);
-            return value;
-          }
+          type: '*'
         }
       },
       updateSelected: function (item) {
         var selected = this.attr('selected');
         var index = -1;
-
-        this.checkSelectAll();
 
         if (item.checked) {
           selected.push(item);
@@ -69,47 +80,18 @@
           selected.splice(index, 1);
         }
       },
-      selectAll: function (selectAll) {
-        var options = this.attr('options');
-        var index = 1;
-
-        for (index; index < options.length; index++) {
-          options[index].attr('checked', selectAll);
-        }
-      },
-      checkSelectAll: function () {
-        var options = this.attr('options');
-        var checkedItems = options.filter(function (item) {
-          return item.attr('checked') && !item.attr('selectAll');
-        });
-
-        if (checkedItems.length === options.length - 1) {
-          options[0].attr('canUncheck', true);
-          options[0].attr('checked', true);
-        } else {
-          options[0].attr('canUncheck', false);
-          options[0].attr('checked', false);
-        }
-      },
       getDisplayValue: function () {
-        var self = this;
-        var displayValue = '';
-        var selected = self.attr('selected');
-        var options = self.attr('options');
+        var selected = this.attr('selected');
+        var options = this.attr('options');
 
-        if (selected.length > 3) {
-          return selected.length + ' of ' + options.length +
-            ' ' + this.plural + ' selected';
+        if (selected.attr('length') > 3) {
+          return selected.attr('length') + ' of ' + options.length +
+            ' ' + this.attr('plural') + ' selected';
         }
 
-        selected.forEach(function (item) {
-          if (item.value) {
-            displayValue += item.value + ', ';
-          }
-        });
-
-        // remove last space and comma
-        return displayValue.substr(0, displayValue.length - 2);
+        return selected.map(function (item) {
+          return item.attr('value');
+        }).join(', ');
       },
       dropdownClosed: function (el, ev, scope) {
         var displayValue = this.attr('_displayValue');
@@ -123,19 +105,26 @@
         can.trigger(el, 'multiselect:closed', [this.attr('selected')]);
       },
       changeOpenCloseState: function (el, ev) {
+        if (!this.attr('isOpen')) {
+          if (this.attr('canBeOpen')) {
+            this.attr('canBeOpen', false);
+            this.attr('isOpen', true);
+          }
+        } else {
+          this.attr('isOpen', false);
+          this.attr('canBeOpen', false);
+          this.dropdownClosed(this.element);
+        }
+      },
+      openDropdown: function (el, ev) {
         // we should save element of component.
         // it necessary for 'can.trigger'
         if (el && !this.element) {
           this.element = el;
         }
 
-        this.attr('isOpen', !this.attr('isOpen'));
-
-        if (!this.attr('isOpen')) {
-          this.dropdownClosed(this.element);
-        }
-
-        ev.stopPropagation();
+        // this attr needed when page has any components
+        this.attr('canBeOpen', true);
       },
       dropdownBodyClick: function (ev) {
         ev.stopPropagation();
@@ -146,28 +135,15 @@
       '{options} change': function (scope, ev, propertyName) {
         var target = ev.target;
 
+        // igore all propetries except 'checked'
         if (propertyName.indexOf('checked') === -1) {
-          return;
-        }
-
-        console.log('CHANGE');
-
-        if (target.selectAll) {
-          if (target.checked) {
-            this.viewModel.selectAll(true);
-          } else if (target.canUncheck) {
-            this.viewModel.selectAll(false);
-          }
-
           return;
         }
 
         this.viewModel.updateSelected(target);
       },
       '{window} click': function (el, ev) {
-        if (this.viewModel.attr('isOpen')) {
-          this.viewModel.changeOpenCloseState('', ev);
-        }
+        this.viewModel.changeOpenCloseState('', ev);
       }
     }
   });
