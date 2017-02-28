@@ -52,7 +52,7 @@
             objectToAdd = model.findInCacheById(defaultMapping.id);
             that.scope.instance
               .mark_for_addition('related_objects_as_source', objectToAdd, {});
-            that.scope.list.push(objectToAdd);
+            that.addListItem(objectToAdd);
           }
         });
 
@@ -68,7 +68,7 @@
             .refresh_instances()
             .then(function (list) {
               var currentList = this.scope.attr('list');
-              this.scope.attr('list', currentList.concat(can.map(list,
+              this.setListItems(currentList.concat(can.map(list,
                 function (binding) {
                   return binding.instance;
                 })));
@@ -82,7 +82,7 @@
             this.scope.parent_instance.attr('_transient.' + key,
               this.scope.list);
           } else {
-            this.scope.attr('list', this.scope.parent_instance._transient[key]);
+            this.setListItems(this.scope.parent_instance._transient[key]);
           }
         }
 
@@ -98,7 +98,7 @@
           person = CMS.Models.Person.findInCacheById(GGRC.current_user.id);
           this.scope.instance
             .mark_for_addition(this.scope.mapping, person, {});
-          this.scope.list.push(person);
+          this.addListItem(person);
         }
       },
       deferred_update: function () {
@@ -176,7 +176,7 @@
         // If it's owners and user isn't pre-added
         if (!(~['owners'].indexOf(this.scope.mapping) &&
           doesExist(this.scope.list, ui.item))) {
-          this.scope.list.push(ui.item);
+          this.addListItem(ui.item);
         }
         this.scope.attr('show_new_object_form', false);
       },
@@ -258,7 +258,7 @@
               obj.constructor.shortName);
           that.scope.instance.mark_for_addition(mapping, obj, extraAttrs);
         }
-        that.scope.list.push(obj);
+        that.addListItem(obj);
         that.scope.attr('attributes', {});
       },
       'a[data-object-source] modal:success': 'addMapings',
@@ -277,7 +277,8 @@
                 obj.constructor.shortName);
             this.scope.instance.mark_for_addition(mapping, obj);
           }
-          this.scope.list.push(obj);
+
+          this.addListItem(obj);
         }, this);
       },
       '.ui-autocomplete-input modal:success': function (el, ev, data, options) {
@@ -305,9 +306,71 @@
                 obj.constructor.shortName);
             that.scope.instance.mark_for_addition(mapping, obj, extraAttrs);
           }
-          that.scope.list.push(obj);
+          that.addListItem(obj);
           that.scope.attr('attributes', {});
         });
+      },
+      addListItem: function (item) {
+        var snapshotObject;
+        if (item.type === 'Snapshot' && item.snapshotObject) {
+          snapshotObject = item.snapshotObject;
+          item.attr('title', snapshotObject.title);
+          item.attr('class', snapshotObject.class);
+          item.attr('snapshot_object_class', 'snapshot-object');
+          item.attr('viewLink', snapshotObject.originalLink);
+        }
+
+        this.scope.list.push(item);
+      },
+      setListItems: function (items) {
+        var self = this;
+        items.forEach(function (item) {
+          var snapshotObject;
+
+          if (item.type === 'Snapshot') {
+            snapshotObject = self.snapshotToObject(item);
+
+            item.attr('class', snapshotObject.class);
+            item.attr('snapshot_object_class', 'snapshot-object');
+            item.attr('title', snapshotObject.title);
+            item.attr('viewLink', snapshotObject.originalLink);
+          }
+        });
+
+        this.scope.attr('list', items);
+      },
+      snapshotToObject: function (snapshot) {
+        var revision;
+        var childModel = CMS.Models[snapshot.child_type];
+        var snapshotObject;
+
+        if (snapshot.snapshotObject) {
+          snapshotObject = snapshot.snapshotObject;
+        } else if (snapshot.revision && snapshot.revision.id) {
+          // get content from revision
+          revision = CMS.Models.Revision.findInCacheById(snapshot.revision.id);
+
+          if (revision && revision.content) {
+            snapshotObject = revision.content;
+          }
+        }
+
+        if (!snapshotObject) {
+          return snapshot;
+        }
+
+        if (!snapshotObject.class) {
+          snapshotObject.class = {
+            table_singular: childModel.table_singular
+          };
+        }
+
+        if (!snapshotObject.originalLink) {
+          snapshotObject.originalLink = '/' + childModel.root_collection +
+            '/' + snapshot.child_id;
+        }
+
+        return snapshotObject;
       }
     },
     helpers: {

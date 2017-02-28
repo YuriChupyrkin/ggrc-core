@@ -76,7 +76,7 @@
             {{#each list}}
               <li class="tree-item task-item" data-object-type="{{class.table_singular}}"
                 {{#instance}}{{ data 'option' }}{{/instance}} data-id="{{ id }}">
-                  <div class="item-main">
+                  <div class="item-main {{snapshot_object_class}}">
                     <div class="item-wrap">
                       <div class="select">
                         <div class="item-data">
