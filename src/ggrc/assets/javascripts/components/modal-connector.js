@@ -37,6 +37,8 @@
       init: function () {
         var that = this;
         var key;
+        var sourceMappingSource;
+        var mapperGetter;
         this.scope.attr('controller', this);
         if (!this.scope.instance) {
           this.scope.attr('deferred', true);
@@ -62,17 +64,22 @@
         if (!this.scope.source_mapping_source) {
           this.scope.source_mapping_source = 'instance';
         }
-        if (this.scope[this.scope.source_mapping_source]) {
-          this.scope[this.scope.source_mapping_source]
-            .get_binding(this.scope.source_mapping)
-            .refresh_instances()
-            .then(function (list) {
-              var currentList = this.scope.attr('list');
-              this.setListItems(currentList.concat(can.map(list,
-                function (binding) {
-                  return binding.instance;
-                })));
+
+        sourceMappingSource = this.scope[this.scope.source_mapping_source];
+        mapperGetter = this.scope.mapping_getter;
+
+        if (sourceMappingSource) {
+          if (mapperGetter) {
+            mapperGetter.then(function (list) {
+              this.setListItems(list);
             }.bind(this));
+          } else {
+            sourceMappingSource.get_binding(this.scope.source_mapping)
+              .refresh_instances()
+              .then(function (list) {
+                this.setListItems(list);
+              }.bind(this));
+          }
           // this.scope.instance.attr("_transient." + this.scope.mapping, this.scope.list);
         } else {
           key = this.scope.instance_attr + '_' +
@@ -89,6 +96,13 @@
         this.options.parent_instance = this.scope.parent_instance;
         this.options.instance = this.scope.instance;
         this.on();
+      },
+      setListItems: function (list) {
+        var currentList = this.scope.attr('list');
+        this.scope.attr('list', currentList.concat(can.map(list,
+          function (binding) {
+            return binding.instance;
+          })));
       },
       '{scope} list': function () {
         var person;
@@ -321,56 +335,6 @@
         }
 
         this.scope.list.push(item);
-      },
-      setListItems: function (items) {
-        var self = this;
-        items.forEach(function (item) {
-          var snapshotObject;
-
-          if (item.type === 'Snapshot') {
-            snapshotObject = self.snapshotToObject(item);
-
-            item.attr('class', snapshotObject.class);
-            item.attr('snapshot_object_class', 'snapshot-object');
-            item.attr('title', snapshotObject.title);
-            item.attr('viewLink', snapshotObject.originalLink);
-          }
-        });
-
-        this.scope.attr('list', items);
-      },
-      snapshotToObject: function (snapshot) {
-        var revision;
-        var childModel = CMS.Models[snapshot.child_type];
-        var snapshotObject;
-
-        if (snapshot.snapshotObject) {
-          snapshotObject = snapshot.snapshotObject;
-        } else if (snapshot.revision && snapshot.revision.id) {
-          // get content from revision
-          revision = CMS.Models.Revision.findInCacheById(snapshot.revision.id);
-
-          if (revision && revision.content) {
-            snapshotObject = revision.content;
-          }
-        }
-
-        if (!snapshotObject) {
-          return snapshot;
-        }
-
-        if (!snapshotObject.class) {
-          snapshotObject.class = {
-            table_singular: childModel.table_singular
-          };
-        }
-
-        if (!snapshotObject.originalLink) {
-          snapshotObject.originalLink = '/' + childModel.root_collection +
-            '/' + snapshot.child_id;
-        }
-
-        return snapshotObject;
       }
     },
     helpers: {

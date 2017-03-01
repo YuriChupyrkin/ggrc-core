@@ -395,6 +395,63 @@
         this.refreshInstance();
         this._pane_preloaded = true;
       }
+    },
+    get_related_objects_as_source: function () {
+      var dfd = can.Deferred();
+      var self = this;
+      this.get_binding('related_objects_as_source')
+        .refresh_instances()
+        .then(function (list) {
+          list.forEach(function (item) {
+            var query;
+            var instance;
+            if (instance.type === 'Snapshot') {
+              query = self.getSnapshotQuery(instance);
+              instance = item.instance;
+
+              GGRC.Utils.QueryAPI
+                .makeRequest(query)
+                .done(function (responseArr) {
+                  var data = responseArr[0];
+                  var value = data.Snapshot.values[0];
+                  var object = GGRC.Utils.Snapshots.toObject(value);
+
+                  instance.attr('class', object.class);
+                  instance.attr('snapshot_object_class', 'snapshot-object');
+                  instance.attr('title', object.title);
+                  instance.attr('viewLink', object.originalLink);
+                });
+            }
+          });
+
+          dfd.resolve(list);
+        });
+      return dfd;
+    },
+    getSnapshotQuery: function (snapshot) {
+      var relevantFilters = [{
+        type: this.type,
+        id: this.id,
+        operation: 'relevant'
+      }];
+      var filters = {
+        expression: {
+          left: {
+            left: 'child_type',
+            op: {name: '='},
+            right: snapshot.child_type
+          },
+          op: {name: 'AND'},
+          right: {
+            left: 'child_id',
+            op: {name: '='},
+            right: snapshot.child_id
+          }
+        }
+      };
+      var query = GGRC.Utils.QueryAPI
+        .buildParam('Snapshot', {}, relevantFilters, [], filters);
+      return {data: [query]};
     }
   });
 })(window.can, window.GGRC, window.CMS);
