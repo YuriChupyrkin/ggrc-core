@@ -1312,7 +1312,7 @@
 
         response.forEach(function (item) {
           var count;
-          var propertyName = originalOrder.find(function (type) {
+          var propertyName = _.find(originalOrder, function (type) {
             return item[type];
           });
 
