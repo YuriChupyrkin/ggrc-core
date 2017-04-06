@@ -30,8 +30,18 @@
       },
       checkOriginal: function (revisionId) {
         var self = this;
-        var queryAPI = GGRC.Utils.QueryAPI;
-        var filter = {
+        var queryAPI;
+        var filter;
+        var params;
+        var cachedRevision = CMS.Models.Revision.cache[revisionId];
+
+        if (cachedRevision && cachedRevision.action) {
+          self.attr('originalDeleted', cachedRevision.action === 'deleted');
+          return;
+        }
+
+        queryAPI = GGRC.Utils.QueryAPI;
+        filter = {
           expression: {
             op: {name: '='},
             left: 'id',
@@ -39,7 +49,7 @@
           }
         };
 
-        var params = queryAPI.buildParam(
+        params = queryAPI.buildParam(
           'Revision', {}, undefined, undefined, filter);
 
         queryAPI.makeRequest({data: [params]})

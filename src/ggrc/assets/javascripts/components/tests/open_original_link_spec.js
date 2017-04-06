@@ -17,6 +17,10 @@ describe('GGRC.Components.openOriginalLink', function () {
       viewModel = GGRC.Components.getViewModel('openOriginalLink');
     });
 
+    afterEach(function () {
+      CMS.Models.Revision.cache = {};
+    });
+
     function setSpyOnForMakeRequest(returnValue) {
       spyOn(GGRC.Utils.QueryAPI, 'makeRequest')
         .and.returnValue(new can.Deferred().resolve(returnValue));
@@ -33,6 +37,22 @@ describe('GGRC.Components.openOriginalLink', function () {
           }
         }
       ];
+    }
+
+    function checkByCacheRevisions(actionName, expectedResult) {
+      var revision = {
+        action: actionName,
+        id: 2
+      }
+
+      CMS.Models.Revision.cache = {
+        '2': revision,
+        '1': {}
+      };
+
+      viewModel.attr('revisions', revisions);
+
+      expect(viewModel.attr('originalDeleted')).toBe(expectedResult);
     }
 
     it('originalDeleted should be false. "revisions" array is empty',
@@ -71,6 +91,18 @@ describe('GGRC.Components.openOriginalLink', function () {
           expect(viewModel.attr('originalDeleted')).toBe(true);
           done();
         }, 1);
+      }
+    );
+
+    it('originalDeleted should be true. Get last revision from cache',
+      function () {
+        checkByCacheRevisions('deleted', true);
+      }
+    );
+
+    it('originalDeleted should be false. Get last revision from cache',
+      function () {
+        checkByCacheRevisions('modified', false);
       }
     );
   });
