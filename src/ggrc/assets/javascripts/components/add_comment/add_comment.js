@@ -98,7 +98,7 @@
        * The component's click event (happens when the user clicks add comment),
        * takes care of saving the comment with appended evidence.
        */
-      '.btn-success click': function (el, ev) {
+      '.btn-green click': function (el, ev) {
         var description = $.trim(this.scope.description);
         var attachments = this.scope.attachments;
         var source = this.scope.source_mapping;

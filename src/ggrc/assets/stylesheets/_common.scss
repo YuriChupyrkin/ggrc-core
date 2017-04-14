@@ -14,6 +14,10 @@ select {
   padding: 0;
 }
 
+a {
+  color: $link;
+}
+
 .bottom-space {
   padding-bottom: 25px;
   p {
@@ -134,7 +138,7 @@ select {
 }
 .btn {
   @include btn-size();
-  font-weight: bold;
+  font-weight: normal;
   border: none;
   @include box-shadow(none);
   text-shadow: none;
@@ -702,7 +706,7 @@ p {
     display: inline-block;
     text-transform: none;
     color: $white;
-    font-weight: bold;
+    font-weight: normal;
   }
   .close-dropdown {
     padding: 0;

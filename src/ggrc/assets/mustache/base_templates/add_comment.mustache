@@ -26,13 +26,13 @@
                 <div class="objective-selector field-wrap top-spacing">
                   <input tabindex="3" type="text" name="instance" placeholder="Add URL">
                   <a href="javascript://" {{toggle_button}}><i class="fa fa-trash"></i></a>
-                  <a href="javascript://" class="btn btn-small btn-success no-float" data-toggle="submit" {{toggle_button "modal:success"}}>Add URL</a>
+                  <a href="javascript://" class="btn btn-small btn-green no-float" data-toggle="submit" {{toggle_button "modal:success"}}>Add URL</a>
                 </div>
                 <input type="hidden" name="role_name" value="Auditor" />
               {{/prune_context}}
             </ggrc-quick-add>
           {{else}}
-            <a href="javascript://" class="btn btn-draft btn-small {{toggle_button}}" data-type="url">
+            <a href="javascript://" class="btn btn-white btn-small {{toggle_button}}" data-type="url">
               <i class="fa fa-link"></i> Attach URL
             </a>
         {{/toggle}}
@@ -67,7 +67,7 @@
         {{^if isSaving}}
         <a
           href="javascript://"
-          class="btn btn-success btn-small pull-left"
+          class="btn btn-green btn-small pull-left"
           {{#if isSaving}}disabled="disabled"{{/if}}
           >Add</a>
 
