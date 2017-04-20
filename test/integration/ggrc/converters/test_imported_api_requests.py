@@ -36,7 +36,11 @@ class TestComprehensiveSheets(TestCase):
             if model_name not in WHITELIST]
 
   # limit found by trial and error, may need tweaking if models change
+<<<<<<< HEAD
   LIMIT = 36
+=======
+  LIMIT = 34
+>>>>>>> 648cbc7... Fix test after adding file attachment to Control
 
   @classmethod
   def setUpClass(cls):
