@@ -39,7 +39,12 @@
                 fragLeft.appendChild(fragRight);
                 revisions[1].instance.refresh_all('owners').then(function () {
                   target.find('.modal-body').html(fragLeft);
-                  that.highlightDifference(target);
+                  // temporaty solution.
+                  // files are loaded after comparison
+                  setTimeout(function () {
+                    that.highlightDifference(target);
+                  }, 1000);
+                  //that.highlightDifference(target);
                 });
               });
           }
@@ -86,7 +91,8 @@
        * @return {Object} - jQuery object
        */
       getAttributes: function ($infoPanes, index) {
-        var selector = '.row-fluid h6 + *, .row-fluid .state-value';
+        //var selector = '.row-fluid h6 + *, .row-fluid .state-value';
+        var selector = '.row-fluid h6 + *, .row-fluid .state-value, .attachment-list';
         return $($infoPanes[index]).find(selector);
       },
 

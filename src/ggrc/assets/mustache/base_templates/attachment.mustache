@@ -17,9 +17,10 @@
 
     {{#is_allowed 'update' parentInstance context='for'}}
       {{#instance}}
+        {{! Not work for comparer because parentInstace is null}}
         {{#if_helpers '\
-          #unless' instance.snapshot '\
-          and #unless' instance.isRevision}}
+          #unless' parentInstance.snapshot '\
+          and #unless' parentInstance.isRevision}}
           <span class="trash-control">
             <a href="javascript://" class="info-action unmap" data-toggle="unmap">
               <span class="result" {{data 'result'}}></span>
