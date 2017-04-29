@@ -37,15 +37,11 @@
                 var fragLeft = can.view(view, revisions[0]);
                 var fragRight = can.view(view, revisions[1]);
                 fragLeft.appendChild(fragRight);
-                revisions[1].instance.refresh_all('owners').then(function () {
-                  target.find('.modal-body').html(fragLeft);
-                  // temporaty solution.
-                  // files are loaded after comparison
-                  setTimeout(function () {
+                revisions[1].instance.refresh_all('owners')
+                  .then(function () {
+                    target.find('.modal-body').html(fragLeft);
                     that.highlightDifference(target);
-                  }, 1000);
-                  //that.highlightDifference(target);
-                });
+                  });
               });
           }
         }, this.updateRevision.bind(this));
@@ -58,6 +54,7 @@
       },
       prepareInstances: function (data) {
         return data.map(function (value) {
+          value = value.attr();
           var content = value.content;
           var model = CMS.Models[value.resource_type];
           content.attr('isRevision', true);

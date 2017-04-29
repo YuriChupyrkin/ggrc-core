@@ -251,7 +251,8 @@
     events: {
       '{viewModel} modal:success': function () {
         var instance = this.scope.instance;
-        if (instance instanceof CMS.Models.Assessment) {
+        if (instance instanceof CMS.Models.Assessment ||
+          instance instanceof CMS.Models.Control) {
           instance.dispatch('refreshInstance');
           return;
         }
