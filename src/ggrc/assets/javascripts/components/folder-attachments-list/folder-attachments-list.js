@@ -22,16 +22,17 @@
         denyNoFolder: {
           type: 'boolean',
           value: false
+        },
+        readonly: {
+          type: 'boolean',
+          value: false
         }
       },
       title: '@',
       tooltip: '@',
       subLabel: '@',
       instance: null,
-      readonlyFolder: function () {
-        return this.attr('instance.isRevision') ||
-               this.attr('instance.snapshot');
-      }
+      isFilesLoaded: false
     },
     events: {
       init: function () {}

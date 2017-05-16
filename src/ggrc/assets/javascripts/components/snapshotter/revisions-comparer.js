@@ -36,15 +36,44 @@
                 var revisions = that.prepareInstances(data);
                 var fragLeft = can.view(view, revisions[0]);
                 var fragRight = can.view(view, revisions[1]);
+                var loaded = that.isAttachmentsLoaded;
                 fragLeft.appendChild(fragRight);
                 revisions[1].instance.refresh_all('owners')
                   .then(function () {
                     target.find('.modal-body').html(fragLeft);
                     that.highlightDifference(target);
+
+                    if (that.isContainsAttachments(that.instance)) {
+                      $.when(loaded(revisions[0]), loaded(revisions[1]))
+                        .then(function () {
+                          that.highlightDifference(target);
+                        }
+                      );
+                    }
                   });
               });
           }
         }, this.updateRevision.bind(this));
+      },
+      isAttachmentsLoaded: function (revision) {
+        var dfd = new can.Deferred();
+        revision.attr('instance')
+          .bind('isAttachmentsLoaded', function (target, isLoaded) {
+            if (isLoaded) {
+              dfd.resolve();
+            } else {
+              dfd.reject();
+            }
+
+            revision.attr('instance').unbind('isAttachmentsLoaded');
+          }
+        );
+
+        return dfd;
+      },
+      isContainsAttachments: function (instance) {
+        return instance.type === 'Control' ||
+          instance.type === 'Issue';
       },
       getRevisions: function (currentRevisionID, newRevisionID) {
         return CMS.Models.Revision.findAll({
@@ -54,11 +83,11 @@
       },
       prepareInstances: function (data) {
         return data.map(function (value) {
-          value = value.attr();
           var content = value.content;
           var model = CMS.Models[value.resource_type];
           content.attr('isRevision', true);
           content.attr('type', value.resource_type);
+          content.attr('isAttachmentsLoaded', false);
 
           if (content.access_control_list) {
             content.access_control_list.forEach(function (item) {
@@ -67,7 +96,7 @@
             });
           }
 
-          return {instance: new model(content)};
+          return {instance: new model(content), isSnapshot: true};
         });
       },
       updateRevision: function () {
@@ -96,8 +125,9 @@
        * @return {Object} - jQuery object
        */
       getAttributes: function ($infoPanes, index) {
-        //var selector = '.row-fluid h6 + *, .row-fluid .state-value';
-        var selector = '.row-fluid h6 + *, .row-fluid .state-value, .attachment-list';
+        // var selector = '.row-fluid h6 + *, .row-fluid .state-value';
+        var selector = '.row-fluid h6 + *, .row-fluid .state-value' +
+          ', folder-attachments-list';
         return $($infoPanes[index]).find(selector);
       },
 
