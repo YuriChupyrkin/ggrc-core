@@ -9,7 +9,7 @@ from sqlalchemy.orm import validates
 
 from ggrc import db
 from ggrc.models import reflection
-from ggrc.models.object_document import Documentable
+from ggrc.models.object_document import PublicDocumentable
 from ggrc.access_control.roleable import Roleable
 from ggrc.models.audit_object import Auditable
 from ggrc.models.categorization import Categorizable
@@ -112,9 +112,10 @@ class AssertionCategorized(Categorizable):
 
 
 class Control(WithLastAssessmentDate, HasObjectState, Roleable, Relatable,
-              CustomAttributable, Personable, ControlCategorized, Documentable,
-              AssertionCategorized, Hierarchical, Timeboxed, Ownable,
-              Auditable, TestPlanned, BusinessObject, Indexed, db.Model):
+              CustomAttributable, Personable, ControlCategorized,
+              PublicDocumentable, AssertionCategorized, Hierarchical,
+              Timeboxed, Ownable, Auditable, TestPlanned, BusinessObject,
+              Indexed, db.Model):
   __tablename__ = 'controls'
 
   company_control = deferred(db.Column(db.Boolean), 'Control')
