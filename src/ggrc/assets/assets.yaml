@@ -279,6 +279,7 @@ dashboard-js-files:
   - components/assessment/mapped-objects/mapped-controls.js
   - components/assessment/mapped-objects/mapped-controls-popover.js
   - components/assessment/mapped-objects/mapped-related-information.js
+  - components/assessment/assessment-people.js
   - components/assessment/mapped-objects/mapped-comments.js
   - components/assessment/info-pane/info-pane.js
   - components/auto-save-form/auto-save-form.js
@@ -301,6 +302,12 @@ dashboard-js-files:
   - components/action-toolbar-control/action-toolbar-control.js
   - components/unmap-button/unmap-button.js
   - components/unmap-button/unmap-person-button.js
+  - components/people/editable-people-list-mapping.js
+  - components/people/deletable-people-group.js
+  - components/people/editable-people-group.js
+  - components/related-objects/related-people-mapping.js
+  - components/related-objects/related-people-access-control.js
+  - components/related-objects/related-people-access-control-group.js
 
 app-init-files:
   - apps/dashboard.js
@@ -323,6 +330,7 @@ dashboard-js-template-files:
   - components/assessment/mapped-objects/mapped-controls.mustache
   - components/assessment/mapped-objects/mapped-controls-popover.mustache
   - components/assessment/mapped-objects/mapped-related-information.mustache
+  - components/assessment/assessment-people.mustache
   - components/assessment/mapped-objects/mapped-comments.mustache
   - components/assessment/urls-list.mustache
   - components/assessment/attachments-list.mustache
@@ -433,6 +441,8 @@ dashboard-js-template-files:
   - controls/object_list.mustache
   - controls/tree-item-attr.mustache
   - assessments/modal_content.mustache
+  - assessments/modal_content_new.mustache
+  - assessments/modal_content_additional_fields.mustache
   - assessments/tree_add_item.mustache
   - assessments/info.mustache
   - assessments/related-assessments.mustache
@@ -639,6 +649,9 @@ dashboard-js-template-files:
   - quick_form/confirm_buttons.mustache
   - snapshots/dropdown_menu.mustache
   - snapshots/tree_add_item.mustache
+  - components/people/editable-people-list-mapping.mustache
+  - components/people/deletable-people-group.mustache
+  - components/people/editable-people-group.mustache
 
 dashboard-css-files:
   - dashboard.css

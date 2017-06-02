@@ -239,6 +239,11 @@
 
       var content_view = $trigger.data('template') || GGRC.mustache_path + '/' + $trigger.attr('data-object-plural') + '/modal_content.mustache';
 
+      var newDesignOfAssessment = true;
+      if (newDesignOfAssessment && $trigger.attr('data-object-plural') === 'assessments') {
+        content_view = $trigger.data('template') || GGRC.mustache_path + '/' + $trigger.attr('data-object-plural') + '/modal_content_new.mustache';
+      }
+
       $target
       .modal_form(option, $trigger)
       .ggrc_controllers_modals({

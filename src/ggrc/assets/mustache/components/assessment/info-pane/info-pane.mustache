@@ -59,6 +59,8 @@
                                                  (on-form-save)="onFormSave()"
                     ></assessment-controls-toolbar>
                 </div>
+                <assessment-people {instance}="instance">
+                </assessment-people>
                 <assessment-mapped-related-information
                         {instance}="instance"
                         {mapped-items}="relatedInformation"

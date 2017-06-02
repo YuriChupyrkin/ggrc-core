@@ -55,8 +55,10 @@
         <textarea tabindex="2" id="control_test_plan" class="span12 triple wysihtml5" name="test_plan" placeholder="Enter Test Plan">{{{test_plan}}}</textarea>
       </div>
     </div>
-    <div class="span6">
-      <people-list tabindex="11" instance="instance" editable="true" deferred="true" validate="true"></people-list>
+
+    <div class="span12">
+      <editable-people-list-relationships validate="true" {instance}="instance">
+      </editable-people-list-relationships>
     </div>
   </div>
 

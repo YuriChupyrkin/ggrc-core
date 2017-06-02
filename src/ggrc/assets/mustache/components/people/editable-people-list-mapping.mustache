@@ -1,0 +1,56 @@
+{{!
+    Copyright (C) 2017 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<div>
+  {{#instance.roleConflicts}}
+    <div class="centered">
+      <div class="alert alert-verifier">
+        <p>
+            Please be informed that Assignee and Verifier are the same person.
+        </p>
+      </div>
+    </div>
+  {{/instance.roleConflicts}}
+
+  <div class="deletable-people-groups">
+    {{#instance.class.assignable_list}}
+      <related-people-mapping
+        class="deletable-people-group"
+        deferred="deferred"
+        instance="instance"
+        mapping="mapping"
+        type="type"
+        heading="title"
+        {{#if required}}
+          required="true"
+          validate="validate"
+        {{/if}}>
+        <deletable-people-group
+          (unmap)="removeRole(%event)"
+          with-details="false"
+          {required}="required"
+          {group-id}="type"
+          {instance}="instance"
+          {people}="results">
+          <label>
+            {{title}}
+            {{#if required}}
+              <span class="required">*</span>
+            {{/if}}
+          </label>
+        </deletable-people-group>
+        <div>
+          {{#is_allowed 'update' instance}}
+            <autocomplete
+                search-items-type="Person"
+                (item-selected)="addRole(%event.selectedItem, @type)"
+                placeholder="Add person">
+            </autocomplete>
+          {{/is_allowed}}
+        </div>
+      </related-people-mapping>
+    {{/instance.class.assignable_list}}
+  </div>
+</div>
