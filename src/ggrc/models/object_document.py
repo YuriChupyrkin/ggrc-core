@@ -3,6 +3,8 @@
 
 """ Module for docuumentable mixins."""
 
+import collections
+
 from sqlalchemy import orm, case, and_, literal
 from sqlalchemy.ext.declarative import declared_attr
 
@@ -93,15 +95,38 @@ class Documentable(object):
 
   @staticmethod
   def _log_docs(documents):
-    return [create_stub(d) for d in documents if d]
+    return [d.log_json() for d in documents if d]
 
   def log_json(self):
     """Serialize to JSON"""
+    # This query is required to refresh related documents collection after
+    # they were mapped to an object. Otherwise python uses cached value,
+    # which might not contain newly created documents.
+    subquery = db.session.query(
+        Relationship.destination_id.label("document_id")
+    ).filter(
+        Relationship.source_id == self.id,
+        Relationship.source_type == self.type,
+        Relationship.destination_type == "Document",
+    ).union(
+        db.session.query(
+            Relationship.source_id.label("document_id")
+        ).filter(
+            Relationship.destination_id == self.id,
+            Relationship.destination_type == self.type,
+            Relationship.source_type == "Document",
+        )
+    ).subquery("document_ids")
+    query = Document.eager_query().filter(
+        Document.id == subquery.c.document_id)
+
+    document_dict = collections.defaultdict(list)
+    for document in query:
+      document_dict[document.document_type].append(document)
     out_json = super(Documentable, self).log_json()
-    if hasattr(self, "urls"):
-      out_json["urls"] = self._log_docs(self.urls)
-    if hasattr(self, "attachments"):
-      out_json["attachments"] = self._log_docs(self.urls)
+    out_json["document_url"] = self._log_docs(document_dict[Document.URL])
+    out_json["document_evidence"] = self._log_docs(
+        document_dict[Document.ATTACHMENT])
     return out_json
 
   @classmethod
