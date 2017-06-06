@@ -233,6 +233,7 @@
     },
     events: {
       '{viewModel.instance} refreshInstance': function () {
+        this.viewModel.initializeFormFields();
         this.viewModel.updateRelatedItems();
       }
     }
