@@ -45,10 +45,31 @@
           self.attr('documents').replace(documents);
           self.attr('isLoading', false);
         });
+      },
+      setDocuments: function () {
+        var instance = this.attr('instance');
+        var documentType = this.attr('documentType');
+        var documents = [];
+
+        if (!instance.snapshot && !instance.isRevision) {
+          this.loadDocuments();
+          return;
+        }
+
+        if (documentType) {
+          documents = documentType === CMS.Models.Document.EVIDENCE ?
+            instance.document_evidence :
+            instance.document_url;
+        } else {
+          documents = instance.document_url
+            .concat(instance.document_evidence);
+        }
+
+        this.attr('documents').replace(documents);
       }
     },
     init: function () {
-      this.viewModel.loadDocuments();
+      this.viewModel.setDocuments();
     }
   });
 })(window.can, window.can.$);
