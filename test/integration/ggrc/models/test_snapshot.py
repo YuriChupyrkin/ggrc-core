@@ -96,6 +96,11 @@ class TestSnapshot(TestCase):
       "modified_by_id",
 
       "attribute_object_id",
+
+      # revisions require complete data for documents,
+      # while api returns only basic data in stubs
+      "document_evidence",
+      "document_url",
   }
 
   def setUp(self):
