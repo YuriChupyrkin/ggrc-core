@@ -62,7 +62,6 @@ class TestSnapshot(TestCase):
       "audit_objects",
       "audits",
       "controls",
-      "object_owners",
       "object_people",
       "objects",
       "people",

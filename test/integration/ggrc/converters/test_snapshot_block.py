@@ -83,7 +83,6 @@ class TestSnapshotBlockConverter(TestCase):
             ('description', 'Description'),
             ('notes', 'Notes'),
             ('test_plan', 'Test Plan'),
-            ('owners', 'Admin'),
             ('start_date', 'Effective Date'),
             ('end_date', 'Stop Date'),
             ('status', 'State'),
