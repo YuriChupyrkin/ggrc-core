@@ -101,6 +101,8 @@ class TestSnapshot(TestCase):
       # while api returns only basic data in stubs
       "document_url",
       "document_evidence",
+
+      "access_control_list",  # TODO: remove this line (GGRC-2402)
   }
 
   def setUp(self):
