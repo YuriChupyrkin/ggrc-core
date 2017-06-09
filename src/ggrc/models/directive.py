@@ -7,7 +7,6 @@ from ggrc.models.deferred import deferred
 from ggrc.models.mixins import BusinessObject, Timeboxed, CustomAttributable
 from ggrc.fulltext.mixin import Indexed
 from .object_person import Personable
-from .object_owner import Ownable
 from .relationship import Relatable
 from .utils import validate_option
 
@@ -130,7 +129,7 @@ class Directive(HasObjectState, Timeboxed, BusinessObject, db.Model):
 
 # FIXME: For subclasses, restrict kind
 class Policy(Roleable, CustomAttributable, Relatable,
-             Personable, Ownable, Directive, Indexed):
+             Personable, Directive, Indexed):
   __mapper_args__ = {
       'polymorphic_identity': 'Policy'
   }
@@ -150,7 +149,7 @@ class Policy(Roleable, CustomAttributable, Relatable,
 
 
 class Regulation(Roleable, CustomAttributable, Relatable,
-                 Personable, Ownable, Directive, Indexed):
+                 Personable, Directive, Indexed):
   __mapper_args__ = {
       'polymorphic_identity': 'Regulation'
   }
@@ -170,7 +169,7 @@ class Regulation(Roleable, CustomAttributable, Relatable,
 
 
 class Standard(Roleable, CustomAttributable, Relatable,
-               Personable, Ownable, Directive, Indexed):
+               Personable, Directive, Indexed):
   __mapper_args__ = {
       'polymorphic_identity': 'Standard'
   }
@@ -190,7 +189,7 @@ class Standard(Roleable, CustomAttributable, Relatable,
 
 
 class Contract(Roleable, CustomAttributable, Relatable,
-               Personable, Ownable, Directive, Indexed):
+               Personable, Directive, Indexed):
   __mapper_args__ = {
       'polymorphic_identity': 'Contract'
   }
