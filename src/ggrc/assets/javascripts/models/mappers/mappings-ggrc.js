@@ -19,7 +19,7 @@
 
     // Governance
     Control: {
-      _mixins: ['related_object', 'personable', 'ownable'],
+      _mixins: ['related_object', 'personable'],
       related_business_objects: Multi([
         'related_data_assets', 'related_facilities', 'related_markets',
         'related_org_groups', 'related_vendors', 'related_processes',
@@ -37,7 +37,7 @@
       ])
     },
     Objective: {
-      _mixins: ['related_object', 'personable', 'ownable'],
+      _mixins: ['related_object', 'personable'],
       related_and_able_objects: Multi([
         'controls', 'objectives', 'related_objects', 'people',
         'sections', 'clauses'
@@ -48,10 +48,10 @@
       ])
     },
     Section: {
-      _mixins: ['related_object', 'personable', 'ownable']
+      _mixins: ['related_object', 'personable']
     },
     Clause: {
-      _mixins: ['related_object', 'personable', 'ownable']
+      _mixins: ['related_object', 'personable']
     },
     personable: {
       _canonical: {
@@ -59,10 +59,6 @@
       },
       people: Proxy(
         'Person', 'person', 'ObjectPerson', 'personable', 'object_people')
-    },
-    ownable: {
-      owners: Proxy(
-        'Person', 'person', 'ObjectOwner', 'ownable', 'object_owners')
     },
     documentable: {
       _canonical: {
@@ -166,16 +162,13 @@
             });
         }),
       program_owners: Cross('owner_authorizations', 'person'),
-      owners_via_object_owners: Proxy(
-        'Person', 'person', 'ObjectOwner', 'ownable', 'object_owners'),
-      owners: Multi(['program_owners', 'owners_via_object_owners']),
       orphaned_objects: Multi([
         'related_objects', 'people'
       ])
     },
     directive_object: {
       _mixins: [
-        'related_object', 'personable', 'ownable'
+        'related_object', 'personable'
       ],
       orphaned_objects: Multi([
         'people', 'controls', 'objectives', 'related_objects'
@@ -199,8 +192,7 @@
     // Business objects
     business_object: {
       _mixins: [
-        'related_object', 'personable',
-        'ownable'
+        'related_object', 'personable'
       ],
       orphaned_objects: Multi([
         'related_objects', 'people', 'controls', 'objectives', 'sections',
@@ -439,7 +431,7 @@
     },
     Assessment: {
       _mixins: [
-        'related_object', 'personable', 'ownable', 'documentable', 'assignable'
+        'related_object', 'personable', 'documentable', 'assignable'
       ],
       audits: TypeFilter('related_objects', 'Audit'),
       related_controls: TypeFilter('related_objects', 'Control'),
@@ -457,12 +449,12 @@
     },
     Issue: {
       _mixins: [
-        'related_object', 'personable', 'ownable', 'documentable', 'assignable'
+        'related_object', 'personable', 'documentable', 'assignable'
       ],
       audits: TypeFilter('related_objects', 'Audit')
     },
     Comment: {
-      _mixins: ['related_object', 'documentable', 'ownable'],
+      _mixins: ['related_object', 'documentable'],
       urls: TypeFilter('related_objects', 'Document'),
       documents_and_urls: Multi(['documents', 'urls'])
     },
