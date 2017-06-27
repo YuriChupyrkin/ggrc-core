@@ -147,8 +147,15 @@ class Assessment(Roleable, statusable.Statusable, AuditRelationship,
       'operationally',
       'audit',
       PublishOnly('archived'),
-      PublishOnly('object')
+      PublishOnly('object'),
+      PublishOnly('assessment_type'),
   ]
+
+  assessment_type = None
+
+  _custom_publish = {
+      "assessment_type": lambda _: "Control",
+  }
 
   _fulltext_attrs = [
       'archived',
