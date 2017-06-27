@@ -306,6 +306,7 @@ dashboard-js-files:
   - components/object-list-item/editable-document-object-list-item.js
   - components/related-objects/related-documents.js
   - components/assessment/attach-button.js
+  - components/assessment/assessment-object-type-dropdown.js
   - components/object-tasks/object-tasks.js
   - components/mapped-counter/mapped-counter.js
 
@@ -651,6 +652,7 @@ dashboard-js-template-files:
   - snapshots/tree_add_item.mustache
   - components/object-list-item/editable-document-object-list-item.mustache
   - components/assessment/attach-button.mustache
+  - components/assessment/assessment-object-type-dropdown.mustache
 
 dashboard-css-files:
   - dashboard.css
