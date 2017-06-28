@@ -12,7 +12,7 @@
 <simple-modal instance="snapshot" modal-title="modalTitle" state="state" extra-css-class="mapped-controls-info" replace-content="true">
     <div class="simple-modal__header flex-box flex-row">
         <div class="simple-modal__header-text flex-size-1">
-            Control:
+            {{assessmentType}}:
             <a target="_blank" href="{{instance.originalLink}}" title="{{instance.title}}">{{instance.title}}</a>
             <span class="state-value snapshot">
                 {{instance.type}} version as on {{date instance.updated_at}}
@@ -33,15 +33,17 @@
                                                 class="collapsible-panel-body__control_info">
             </detailed-business-object-list-item>
         </collapsible-panel>
-        <assessment-mapped-control-related-objects class="assessment-mapped-controls"
-                                                   title-text="Show Related Objectives ({{objectives.length}})"
-                                                   type="Objective"
-                                                   {items}="objectives">
-        </assessment-mapped-control-related-objects>
-        <assessment-mapped-control-related-objects class="assessment-mapped-controls"
-                                                   title-text="Show Related Regulations ({{regulations.length}})"
-                                                   type="Regulation"
-                                                   {items}="regulations">
-        </assessment-mapped-control-related-objects>
+        {{#is assessmentType 'Control'}}
+            <assessment-mapped-control-related-objects class="assessment-mapped-controls"
+                                                    title-text="Show Related Objectives ({{objectives.length}})"
+                                                    type="Objective"
+                                                    {items}="objectives">
+            </assessment-mapped-control-related-objects>
+            <assessment-mapped-control-related-objects class="assessment-mapped-controls"
+                                                    title-text="Show Related Regulations ({{regulations.length}})"
+                                                    type="Regulation"
+                                                    {items}="regulations">
+            </assessment-mapped-control-related-objects>
+        {{/is}}
     </div>
 </simple-modal>
