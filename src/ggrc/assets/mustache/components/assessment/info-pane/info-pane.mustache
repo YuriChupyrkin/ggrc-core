@@ -17,6 +17,24 @@
                     <read-more {text}="instance.test_plan"></read-more>
                 </div>
                 <div class="info-pane__section">
+                    <inline-form-control {(value)}="instance.test_plan" {instance}="instance">
+                            <inline-edit-new
+                                (inline-save)="save(%event)"
+                                (inline-cancel)="cancel(%event)"
+                                {is-loading}="isLoading"
+                                with-read-more="true"
+                                {value}="value"
+                                type="text">
+                                    <div class="info-pane__section-title">Test Plan</div>
+                            </inline-edit-new>
+                    </inline-form-control>
+                </div>
+                <inline-edit-new value="test input content" type="input">
+                    <label>Test label</label>
+                </inline-edit-new>
+
+
+                <div class="info-pane__section">
                     <div class="info-pane__section-title">
                         <div class="action-toolbar">
                             <div class="action-toolbar__content-item">Controls</div>
