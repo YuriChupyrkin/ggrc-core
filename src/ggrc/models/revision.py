@@ -138,6 +138,7 @@ class Revision(Base, db.Model):
         "secondary_assessor": reverted_roles_dict.get("Secondary Assignees"),
         "contact": reverted_roles_dict.get("Primary Contacts"),
         "secondary_contact": reverted_roles_dict.get("Secondary Contacts"),
+        "admin": reverted_roles_dict.get("Admin"),
     }
     exists_roles = {i["ac_role_id"] for i in access_control_list}
     for field, role_id in map_field_to_role.items():
@@ -158,6 +159,11 @@ class Revision(Base, db.Model):
           "object_id": self.resource_id,
           "modified_by_id": None,
           "person_id": person_id,
+          "person": {
+              "id": person_id,
+              "type": "Person",
+              "href": "/api/people/{}".format(person_id),
+          },
           "modified_by": None,
           "id": None,
       })
