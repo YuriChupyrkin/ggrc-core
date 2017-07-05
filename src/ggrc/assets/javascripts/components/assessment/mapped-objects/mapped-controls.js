@@ -146,20 +146,6 @@
           this.attr('isLoading', false);
         }.bind(this));
     },
-    toSnapshot: function (instance) {
-      var revision = instance.revision.content;
-      var model = CMS.Models[instance.child_type];
-      var type = instance.child_type;
-      return {
-        description: revision.description,
-        originalLink: '/' + model.root_collection + '/' + instance.child_id,
-        type: type,
-        title: revision.display_name,
-        notes: revision.notes,
-        slug: revision.slug,
-        updated_at: new Date(revision.updated_at)
-      };
-    },
     attributesToFormFields: function (snapshot) {
       var attributes;
       attributes = GGRC.Utils.CustomAttributes.prepareCustomAttributes(
@@ -185,7 +171,8 @@
           attributes = this.viewModel.attributesToFormFields(
             item.attr('revision.content'));
           this.viewModel.attr('customAttributes', attributes);
-          this.viewModel.attr('snapshot', this.viewModel.toSnapshot(item));
+          this.viewModel.attr('snapshot',
+            GGRC.Utils.Snapshots.toObject(item));
           this.viewModel.attr('state.open', true);
         }
       }

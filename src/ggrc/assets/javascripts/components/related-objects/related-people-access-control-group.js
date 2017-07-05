@@ -206,7 +206,10 @@
           [];
 
         var people = currentGroup.map(function (item) {
-          return item.person;
+          if (item.person) {
+            return item.person;
+          }
+          return new CMS.Models.Person({id: item.person_id});
         });
 
         this.attr('people').replace(people);
