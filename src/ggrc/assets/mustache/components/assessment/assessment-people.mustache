@@ -89,6 +89,7 @@
       <div class="people-groups">
         {{#accessControlGroups}}
           <related-people-access-control-group
+            {required}="required"
             {group-id}="groupId"
             {title}="title"
             {people}="people"
@@ -98,6 +99,7 @@
           <div>
             {{#if infoPaneMode}}
               <editable-people-group
+                {required}="required"
                 (unmap)="removePerson(%event)"
                 (change-editable-mode)="changeEditableGroup(%event)"
                 (save-changes)="saveChanges()"
@@ -113,6 +115,7 @@
             {{else}}
               <deletable-people-group
                 show-empty-message="false"
+                {required}="required"
                 (unmap)="removePerson(%event)"
                 {can-unmap}="canEdit"
                 {is-loading}="isUpdating"

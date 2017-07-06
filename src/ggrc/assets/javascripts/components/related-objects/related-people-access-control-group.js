@@ -41,6 +41,7 @@
       editableMode: false,
       isPendingGrant: false,
       isDirty: false,
+      required: false,
 
       refreshInstanceAfterCancel: function (groupId) {
         this.attr('editableMode', false);
@@ -213,10 +214,7 @@
           [];
 
         var people = currentGroup.map(function (item) {
-          if (item.person) {
-            return item.person;
-          }
-          return new CMS.Models.Person({id: item.person_id});
+          return item.person;
         });
 
         this.attr('people').replace(people);

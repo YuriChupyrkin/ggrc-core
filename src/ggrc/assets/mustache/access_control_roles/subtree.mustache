@@ -15,7 +15,7 @@
   <td>
     <ul class="tree-action-list">
       <li>
-        {{#is name 'Admin'}}
+        {{#if mandatory}}
           <span>Predefined</span>
         {{else}}
           <a
@@ -31,7 +31,7 @@
             <i class="fa fa-pencil-square-o"></i>
             Edit
           </a>
-        {{/is}}
+        {{/if}}
       </li>
     </ul>
   </td>

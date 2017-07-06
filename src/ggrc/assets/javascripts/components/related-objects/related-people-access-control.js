@@ -32,17 +32,15 @@
         group = roleAssignments[groupId];
         people = group ?
           group.map(function (groupItem) {
-            if (groupItem.person) {
-              return groupItem.person;
-            }
-            return new CMS.Models.Person({id: groupItem.person_id});
+            return groupItem.person;
           }) :
           [];
 
         return {
           title: title,
           groupId: groupId,
-          people: people
+          people: people,
+          required: role.mandatory
         };
       },
       getRoleList: function () {
@@ -68,6 +66,9 @@
         }.bind(this))
         .filter(function (group) {
           return typeof group !== 'undefined';
+        })
+        .sort(function (item) {
+          return item.required ? -1 : 1;
         });
 
         return groups;
