@@ -40,12 +40,13 @@
       backUpAccessControlList: [],
       editableMode: false,
       isPendingGrant: false,
+      isDirty: false,
 
       refreshInstanceAfterCancel: function (groupId) {
         this.attr('editableMode', false);
+        this.attr('isDirty', false);
         this.attr('instance.access_control_list')
           .replace(this.attr('backUpAccessControlList'));
-        this.attr('instance').dispatch('refreshInstance');
       },
       // only one group can be editable
       changeEditableGroup: function (args) {
@@ -63,23 +64,29 @@
       saveChanges: function () {
         var self = this;
         this.attr('editableMode', false);
-        this.attr('isPendingGrant', true);
-        this.attr('instance').save()
-          .then(function () {
-            self.attr('instance').dispatch('refreshInstance');
-            self.attr('isPendingGrant', false);
-          });
+
+        if (this.attr('isDirty')) {
+          this.attr('isPendingGrant', true);
+          this.attr('isDirty', false);
+          this.attr('instance').save()
+            .then(function () {
+              self.attr('instance').dispatch('refreshInstance');
+              self.attr('isPendingGrant', false);
+            });
+        }
       },
       personSelected: function (args) {
         this.addPerson(args.person, args.groupId);
       },
       addPerson: function (person, groupId) {
+        this.attr('isDirty', true);
         this.grantRole(person, groupId);
       },
       removePerson: function (args) {
         var groupId = args.groupId;
         var person = args.person;
 
+        this.attr('isDirty', true);
         this.revokeRole(person, groupId);
       },
       _save: function (isAdding) {

@@ -11,7 +11,7 @@
 
   <!-- Title Row -->
   <div class="row-fluid">
-    <div class="span6 {{#instance.computed_errors.title}}field-failure{{/instance.computed_errors.title}}">
+    <div class="{{#instance.computed_errors.title}}field-failure{{/instance.computed_errors.title}}">
       <label>
         Title
         <span class="required">*</span>
@@ -24,7 +24,7 @@
 
   <!-- Description & contact block  -->
   <div class="row-fluid">
-    <div data-id="description_hidden" class="span6 hidable">
+    <div data-id="description_hidden" class="hidable">
       <label>
         Description
         <i class="fa fa-question-circle" rel="tooltip" title="Provide more details on the purpose of this {{model.model_singular}} and provide context for how and when this {{model.model_singular}} might be used."></i>
@@ -41,12 +41,9 @@
       <access-control-list-admin-helper
         {instance}="."
         {is-new-instance}="new_object_form">
-        <access-control-list
-          {instance}="instance"
-          {is-new-instance}="isNewInstance"
-          top-wrapper-class="'span12'"
-          role-block-class="'span6'">
-        </access-control-list>
+          <custom-roles {instance}="instance"
+            {is-new-instance}="new_object_form">
+          </custom-roles>
       </access-control-list-admin-helper>
     </div>
   </div>
