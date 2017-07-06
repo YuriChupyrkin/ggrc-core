@@ -25,7 +25,7 @@
   {{/if}}
 </label>
 {{#unless editableMode}}
-  <object-list ({items})="people" {empty-message}="emptyListMessage">
+  <object-list {items}="people" {empty-message}="emptyListMessage">
     <person-list-item person="{.}" {with-details}="withDetails">
     </person-list-item>
   </object-list>
@@ -34,7 +34,7 @@
       <div class="inline-edit__content editable-people-group__inline">
         <div class="editable-people-group__inline-content">
           <object-list
-            ({items})="people"
+            {items}="people"
             {is-disabled}="isLoading"
             {empty-message}="emptyListMessage">
             <person-list-item person="{.}" {with-details}="withDetails">

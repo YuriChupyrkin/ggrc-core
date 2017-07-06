@@ -10,17 +10,23 @@
 <div class="flex-box">
   <related-people-access-control
     class="width-100"
+    {is-modal}="isModal"
     {is-new-instance}="isNewInstance"
     {instance}="instance">
       <div class="people-groups">
-        {{#accessControlGroups}}
+        {{#groups}}
           <related-people-access-control-group
+            {is-modal}="isModal"
+            (add-role)="addPerson(%event)"
+            (remove-role)="removePerson(%event)"
+            (save-roles)="saveRoles(%event)"
             {required}="required"
             {group-id}="groupId"
             {title}="title"
             {people}="people"
             {instance}="instance"
             class="people-group"
+            {updatable-group-id}="updatableGroupId"
           >
           <div>
             {{#if infoPaneMode}}
@@ -33,7 +39,7 @@
                 {editable-mode}="editableMode"
                 {can-unmap}="canEdit"
                 {can-edit}="canEdit"
-                {is-loading}="isUpdating"
+                {is-loading}="isLoading"
                 {group-id}="groupId"
                 {instance}="instance"
                 {title}="title"
@@ -45,7 +51,7 @@
                 {required}="required"
                 (unmap)="removePerson(%event)"
                 {can-unmap}="canEdit"
-                {is-loading}="isUpdating"
+                {is-loading}="isLoading"
                 {group-id}="groupId"
                 {instance}="instance"
                 {people}="people">
@@ -69,7 +75,7 @@
             {{/if}}
           </div>
           </related-people-access-control-group>
-        {{/accessControlGroups}}
+        {{/groups}}
       </div>
   </related-people-access-control>
 </div>

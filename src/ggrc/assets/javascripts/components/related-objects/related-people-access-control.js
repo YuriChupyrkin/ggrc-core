@@ -11,13 +11,138 @@
     viewModel: {
       instance: {},
       includeRoles: [],
-      define: {
-        accessControlGroups: {
-          get: function () {
-            return this.getRoleList();
-          }
-        }
+      groups: [],
+      updatableGroupId: null,
+      isModal: false,
+      isNewInstance: false,
+      autosave: false,
+
+      saveRoles: function (args) {
+        var self = this;
+        var people = args.people;
+        var roleId = args.roleId;
+        this.attr('updatableGroupId', roleId);
+
+        this.updateAccessContolList(people, roleId);
+
+        this.attr('instance').save()
+          .then(function () {
+            self.attr('instance').dispatch('refreshInstance');
+            self.attr('updatableGroupId', null);
+            self.attr('groups', self.getRoleList());
+          });
       },
+      updateAccessContolList: function (people, roleId) {
+        var instance = this.attr('instance');
+
+        // remove all people with current role
+        var listWithoutRole = instance
+          .attr('access_control_list').filter(function (item) {
+            return item.ac_role_id !== roleId;
+          });
+
+        // push update people with current role
+        people.forEach(function (person) {
+          listWithoutRole.push({
+            ac_role_id: roleId,
+            person: {id: person.id, type: 'Person'}
+          });
+        });
+
+        instance.attr('access_control_list')
+          .replace(listWithoutRole);
+      },
+      addPerson: function (args) {
+        var person = args.person;
+        var groupId = args.groupId;
+
+        this.grantRole(person, groupId);
+      },
+      removePerson: function (args) {
+        var person = args.person;
+        var groupId = args.groupId;
+
+        this.revokeRole(person, groupId);
+      },
+
+      /**
+       * Grant role to user on the model instance.
+       *
+       * If the user already has this role assigned on the model instance,
+       * nothing happens.
+       *
+       * @param {CMS.Models.Person} person - the user to grant a role to
+       * @param {Number} roleId - ID if the role to grant
+       */
+      grantRole: function (person, roleId) {
+        var roleEntry;
+
+        if (this.attr('updatableGroupId')) {
+          return;
+        }
+
+        this.attr('updatableGroupId', roleId);
+
+        roleEntry = _.find(
+          this.attr('instance.access_control_list'),
+          {person: {id: person.id}, ac_role_id: roleId}
+        );
+
+        if (roleEntry) {
+          console.warn(
+            'User ', person.id, 'already has role', roleId, 'assigned');
+          this.attr('updatableGroupId', null);
+          return;
+        }
+
+        if (!this.attr('instance.access_control_list')) {
+          this.attr('instance.access_control_list', []);
+        }
+
+        can.batch.start();
+        roleEntry = {
+          person: {id: person.id, type: 'Person'},
+          ac_role_id: roleId};
+        this.attr('instance.access_control_list').push(roleEntry);
+
+        this._save(true);
+      },
+
+      /**
+       * Revoke role from user on the model instance.
+       *
+       * If the user already does not have this role assigned on the model
+       * instance, nothing happens.
+       *
+       * @param {CMS.Models.Person} person - the user to grant a role to
+       * @param {Number} roleId - ID if the role to grant
+       */
+      revokeRole: function (person, roleId) {
+        var idx;
+
+        if (this.attr('updatableGroupId')) {
+          return;
+        }
+
+        this.attr('updatableGroupId', roleId);
+
+        idx = _.findIndex(
+          this.attr('instance.access_control_list'),
+          {person: {id: person.id}, ac_role_id: roleId}
+        );
+
+        if (idx < 0) {
+          console.warn('Role ', roleId, 'not found for user', person.id);
+          this.attr('updatableGroupId', null);
+          return;
+        }
+
+        can.batch.start();
+        this.attr('instance.access_control_list').splice(idx, 1);
+
+        this._save();
+      },
+
       buildGroups: function (role, roleAssignments) {
         var includeRoles = this.attr('includeRoles');
         var groupId = role.id;
@@ -32,7 +157,10 @@
         group = roleAssignments[groupId];
         people = group ?
           group.map(function (groupItem) {
-            return groupItem.person;
+            return {
+              id: groupItem.person.id,
+              type: 'Person'
+            };
           }) :
           [];
 
@@ -72,6 +200,36 @@
         });
 
         return groups;
+      },
+      _save: function (isAdding) {
+        var successMessage = 'User role ' +
+          (isAdding ? 'added.' : 'removed.');
+        var errorMessage = isAdding ? 'Adding' : 'Removing' +
+          ' user role failed.';
+
+        if (!this.autosave) {
+          this.attr('updatableGroupId', null);
+          can.batch.stop();
+          return;
+        }
+
+        this.attr('instance').save()
+          .done(function () {
+            GGRC.Errors.notifier('success', successMessage);
+          })
+          .fail(function () {
+            GGRC.Errors.notifier('error', errorMessage);
+          })
+          .always(function () {
+            this.attr('updatableGroupId', null);
+            can.batch.stop();
+          }.bind(this));
+      }
+    },
+    events: {
+      inserted: function () {
+        this.viewModel.attr('groups',
+          this.viewModel.getRoleList());
       }
     }
   });
