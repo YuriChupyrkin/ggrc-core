@@ -20,6 +20,7 @@
       setInProgress: null,
       editMode: false,
       type: '@',
+      hideEdit: false,
       onStateChangeDfd: can.Deferred().resolve(),
       openInlineEdit: function (el) {
         this.attr('onStateChangeDfd').then(function () {
@@ -49,10 +50,15 @@
       }
     },
     events: {
+      inserted: function () {
+        var archived = this.viewModel.attr('instance.archived');
+        this.viewModel.attr('hideEdit', archived);
+      },
       '{.inline-edit-icon} mousedown': function (el, ev) {
         var viewModel = this.viewModel;
+        var editIcon = $(ev.target).hasClass('inline-edit-icon');
 
-        if (!viewModel.isInProgress()) {
+        if (editIcon && !viewModel.isInProgress()) {
           viewModel.showConfirm();
           ev.preventDefault();
           return false;

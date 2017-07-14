@@ -19,6 +19,8 @@
       dropdownOptions: [],
       dropdownClass: '@',
       dropdownNoValue: false,
+      withReadMore: false,
+      isEditableLabel: false,
       save: function (args) {
         var value = args.value;
 

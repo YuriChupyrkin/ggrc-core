@@ -20,6 +20,8 @@
       dropdownOptions: [],
       dropdownClass: '@',
       dropdownNoValue: false,
+      withReadMore: false,
+      isEditableLabel: false,
       onStateChangeDfd: can.Deferred().resolve()
     }
   });

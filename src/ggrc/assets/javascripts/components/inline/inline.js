@@ -28,6 +28,9 @@
       dropdownClass: '@',
       dropdownNoValue: false,
       isAllowEdit: true,
+      // need for updating of titles
+      isEditableLabel: false,
+      hideEdit: true,
       context: {
         value: null
       },

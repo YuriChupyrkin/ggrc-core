@@ -4,6 +4,7 @@
 }}
 
 <section class="assessment-module info info-pane{{#is_info_pin}} sticky-info-panel assignable{{/is_info_pin}}">
+  <inline-form-control {instance}="instance">
   {{#is_info_pin}}
       <info-pin-buttons class="details-wrap" maximized="maximized" on-change-maximized-state="@onChangeMaximizedState"
                         on-close="@onClose"></info-pin-buttons>
@@ -13,8 +14,15 @@
         <div class="assessment-info-pane info-pane__body">
             <div class="assessment-attributes info-pane__main-content info-pane__main-content-with-sidebar">
                 <div class="info-pane__section">
-                    <div class="info-pane__section-title">Test Plan</div>
-                    <read-more {text}="instance.test_plan"></read-more>
+                   <assessment-inline-item
+                        type="text"
+                        prop-name="test_plan"
+                        with-read-more="true"
+                        {on-state-change-dfd}="onStateChangeDfd"
+                        {value}="instance.test_plan"
+                        {instance}="instance">
+                            <div class="info-pane__section-title">Test Plan</div>
+                    </assessment-inline-item>
                 </div>
                 <div class="info-pane__section">
                     <div class="info-pane__section-title">
@@ -283,4 +291,5 @@
             </tab-container>
         </div>
     </div><!-- tier-content end -->
+  </inline-form-control>
 </section>

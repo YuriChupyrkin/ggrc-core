@@ -4,25 +4,31 @@
 }}
 
 <div class="inline">
-  <div class="inline__header action-toolbar">
-    {{#unless editMode}}
+  {{#unless editMode}}
+    <div class="inline__header action-toolbar">
       <spinner class="inline__header-spinner" {toggle}="isLoading"></spinner>
-    {{/unless}}
 
-    <!-- header (laber/h1-6) -->
-    <content></content>
+      <!-- header (laber/h1-6) -->
+      <div>
+        <content></content>
+      </div>
 
-    <!-- display edit icon when isLoading == false and editMode == false -->
-    {{#unless editMode}}
+      <!-- display edit icon when isLoading == false and editMode == false -->
       {{#unless isLoading}}
-        <div class="action-toolbar__controls">
-          <action-toolbar-control>
-            <i class="fa fa-pencil inline-edit-icon"></i>
-          </action-toolbar-control>
-        </div>
+        {{#unless hideEdit}}
+          <div class="action-toolbar__controls">
+            <action-toolbar-control>
+              <i class="fa fa-pencil inline-edit-icon"></i>
+            </action-toolbar-control>
+          </div>
+        {{/unless}}
       {{/unless}}
+    </div>
+  {{else}}
+    {{#unless isEditableLabel}}
+      <content></content>
     {{/unless}}
-  </div>
+  {{/unless}}
 
   {{#if editMode}}
     <div class="inline__content-wrapper">
@@ -43,14 +49,29 @@
         </ul>
       </div>
     </div>
+
+    <!-- Need for saving of width and height -->
+    {{#if isEditableLabel}}
+      <div class="inline__content-wrapper">
+        <div class="inline__content {{#if editMode}}inline--hidden{{/if}}">
+          <readonly-inline-content
+            {with-read-more}="withReadMore"
+            {value}="context.value">
+          </readonly-inline-content>
+        </div>
+      </div>
+    {{/if}}
   {{/if}}
 
-  <div class="inline__content-wrapper">
-    <div class="inline__content {{#if editMode}}inline--hidden{{/if}}">
-      <readonly-inline-content
-        {with-read-more}="withReadMore"
-        {value}="context.value">
-      </readonly-inline-content>
+  <!-- Need for saving of width and height -->
+  {{#unless isEditableLabel}}
+    <div class="inline__content-wrapper">
+      <div class="inline__content {{#if editMode}}inline--hidden{{/if}}">
+        <readonly-inline-content
+          {with-read-more}="withReadMore"
+          {value}="context.value">
+        </readonly-inline-content>
+      </div>
     </div>
-  </div>
+  {{/unless}}
 </div>
