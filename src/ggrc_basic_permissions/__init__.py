@@ -933,6 +933,17 @@ def handle_audit_post(sender, objects=None, sources=None):
 
 @signals.Restful.model_deleted.connect
 def handle_resource_deleted(sender, obj=None, service=None):
+  """Handle removing of any resource"""
+  # pylint: disable=unused-argument
+  if obj and hasattr(obj, 'access_control_list') and obj.access_control_list:
+    admins = {acl.person_id for acl in obj.access_control_list
+              if acl.ac_role.name == "Admin"}
+    if admins:
+      db.session.query(UserRole) \
+        .filter(UserRole.person_id.in_(admins)) \
+        .update({"default_to_current_user": False},
+                synchronize_session=False)
+
   if obj.context \
      and obj.context.related_object_id \
      and obj.id == obj.context.related_object_id \

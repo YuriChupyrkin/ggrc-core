@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from ggrc.access_control.list import AccessControlList
+from ggrc.access_control.role import get_custom_roles_for
 from ggrc.fulltext.attributes import CustomRoleAttr
 from ggrc import db
 
@@ -65,7 +66,9 @@ class Roleable(object):
     }
 
     self._remove_values(old_values - new_values)
-    self._add_values(new_values - old_values)
+    added_values = new_values - old_values
+    self._add_values(added_values)
+    self._update_default_to_user(added_values)
 
   def _add_values(self, values):
     """Attach new custom role values to current object."""
@@ -84,6 +87,19 @@ class Roleable(object):
     }
     for value in values:
       self._access_control_list.remove(values_map[value])
+
+  def _update_default_to_user(self, added_values):
+    """Update default_to_current_user field of UserRoles"""
+    from ggrc_basic_permissions import UserRole
+    admin_acrs = [id for id, name in get_custom_roles_for(self.type).items()
+                  if name == "Admin"]
+
+    person_to_add = {person_id for ac_role_id, person_id in added_values
+                     if ac_role_id in admin_acrs}
+    db.session.query(UserRole) \
+              .filter(UserRole.person_id.in_(person_to_add)) \
+              .update({"default_to_current_user": True},
+                      synchronize_session=False)
 
   @classmethod
   def eager_query(cls):

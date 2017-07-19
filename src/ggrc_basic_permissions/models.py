@@ -119,12 +119,14 @@ class UserRole(Base, db.Model):
       db.Integer(), db.ForeignKey('people.id'), nullable=False)
   person = db.relationship(
       'Person', backref=backref('user_roles', cascade='all, delete-orphan'))
+  default_to_current_user = db.Column(
+      db.Boolean, nullable=False, default=False)
 
   @staticmethod
   def _extra_table_args(cls):
     return (db.Index('ix_user_roles_person', 'person_id'),)
 
-  _publish_attrs = ['role', 'person']
+  _publish_attrs = ['role', 'person', 'default_to_current_user']
 
   @classmethod
   def role_assignments_for(cls, context):
