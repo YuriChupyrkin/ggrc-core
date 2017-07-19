@@ -32,6 +32,8 @@ class AccessControlRole(Indexed, attributevalidator.AttributeValidator,
   delete = db.Column(db.Boolean, nullable=False, default=True)
   my_work = db.Column(db.Boolean, nullable=False, default=True)
   mandatory = db.Column(db.Boolean, nullable=False, default=False)
+  default_to_current_user = db.Column(
+      db.Boolean, nullable=False, default=False)
 
   access_control_list = db.relationship(
       'AccessControlList', backref='ac_role', cascade='all, delete-orphan')
@@ -57,6 +59,7 @@ class AccessControlRole(Indexed, attributevalidator.AttributeValidator,
       "delete",
       "my_work",
       "mandatory",
+      "default_to_current_user",
   ]
 
   @sa.orm.validates("name", "object_type")
