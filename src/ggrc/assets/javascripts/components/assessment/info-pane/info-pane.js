@@ -121,10 +121,10 @@
         type = type || '';
         this.attr('isUpdating' + can.capitalize(type), true);
         GGRC.Utils.QueryAPI
-          .batchRequests(query)
+          .makeRequest({data: [query]})
           .done(function (response) {
-            var type = Object.keys(response)[0];
-            var values = response[type].values;
+            var type = Object.keys(response[0])[0];
+            var values = response[0][type].values;
             dfd.resolve(values);
           })
           .fail(function () {
@@ -292,6 +292,21 @@
       '{viewModel.instance} refreshInstance': function () {
         this.viewModel.attr('mappedSnapshots')
           .replace(this.viewModel.loadSnapshots());
+      },
+      '{viewModel.instance} infoPaneOpend': function () {
+        this.clearItems();
+        this.viewModel.initializeFormFields();
+        this.viewModel.updateRelatedItems();
+      },
+      clearItems: function () {
+        this.viewModel.attr('mappedSnapshots')
+          .replace([]);
+        this.viewModel.attr('comments')
+          .replace([]);
+        this.viewModel.attr('evidences')
+          .replace([]);
+        this.viewModel.attr('urls')
+          .replace([]);
       }
     }
   });
