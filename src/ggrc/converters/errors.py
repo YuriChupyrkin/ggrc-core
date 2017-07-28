@@ -130,3 +130,7 @@ UNMODIFIABLE_COLUMN = ("Line {line}: Column '{column_name}' can not be "
 
 ARCHIVED_IMPORT_ERROR = (u"Line {line}: Importing archived instance is "
                          u"prohibited. The line will be ignored.")
+
+SINGLE_AUDIT_RESTRICTION = (u"Line {line}: You can not map {mapped_type} to "
+                            u"{object_type}, because this {object_type} is "
+                            u"already mapped to an {mapped_type}")

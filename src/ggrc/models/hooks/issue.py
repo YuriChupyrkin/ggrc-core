@@ -26,7 +26,9 @@ def init_hook():
     in the context"""
 
     for obj, src in izip(objects, sources):
-      audit = src.get("audit")
+      audit = src.pop("audit", None)
       assessment = src.get("assessment")
-      common.map_objects(obj, audit)
-      common.map_objects(obj, assessment)
+      if assessment:
+        common.map_objects(obj, assessment)
+      else:
+        common.map_objects(obj, audit)

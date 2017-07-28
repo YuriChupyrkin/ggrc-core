@@ -102,7 +102,6 @@ def parse_import_request():
 
 
 def handle_import_request():
-  try:
     dry_run, csv_data = parse_import_request()
     converter = Converter(dry_run=dry_run, csv_data=csv_data)
     converter.import_csv()
@@ -110,9 +109,6 @@ def handle_import_request():
     response_json = json.dumps(response_data)
     headers = [("Content-Type", "application/json")]
     return current_app.make_response((response_json, 200, headers))
-  except:  # pylint: disable=bare-except
-    logger.exception("Import failed")
-  raise BadRequest("Import failed due to server error.")
 
 
 def init_converter_views():
