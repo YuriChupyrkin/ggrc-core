@@ -500,7 +500,7 @@ class TestWithSimilarityScore(TestCase):
           audit=audit, assessment_type=asmnt_type
       )
       assessment2 = factories.AssessmentFactory(audit=audit)
-      issue = factories.IssueFactory(audit=audit)
+      issue = factories.IssueFactory()
 
       snapshot = factories.SnapshotFactory(
           parent=audit,

@@ -11,7 +11,7 @@ class TestUtilsFunctions(unittest.TestCase):
   @unittest.skip("Audit-scope objects can't be mapped from outside")
   def test_mapping_rules(self):
     """ Test that all mappings go both ways """
-    mappings = utils.rules.get_mapping_rules()
+    mappings = utils.rules.MappingRules.map_rules
     verificationErrors = []
 
     for object_name, object_mappings in mappings.items():

@@ -5,8 +5,10 @@
 
 import sqlalchemy as sa
 
+from ggrc.automapper import AutomapperGenerator
 from ggrc import db
 from ggrc.models import all_models
+from ggrc.models.inflector import get_model
 
 
 def ensure_field_not_changed(obj, field_name):
@@ -30,9 +32,13 @@ def map_objects(src, dst):
     return
   if 'id' not in dst or 'type' not in dst:
     return
-  db.session.add(all_models.Relationship(
+  destination = get_model(dst["type"]).query.get(dst["id"])
+  new_rel = all_models.Relationship(
       source=src,
-      destination_id=dst["id"],
-      destination_type=dst["type"],
+      destination=destination,
       context_id=src.context_id,
-  ))
+  )
+  db.session.add(new_rel)
+  db.session.flush()
+  automapper = AutomapperGenerator(use_benchmark=False)
+  automapper.generate_automappings(new_rel)
