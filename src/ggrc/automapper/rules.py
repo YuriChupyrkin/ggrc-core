@@ -10,10 +10,11 @@ from ggrc import models
 Attr = namedtuple('Attr', ['name'])
 
 
-type_ordering = [['Audit'], ['Program'],
+type_ordering = [['Program'],
                  ['Regulation', 'Policy', 'Standard', 'Contract'],
                  ['Section', 'Clause'], ['Objective'], ['Control']]
 
+type_ordering += [["Issue"], ["Assessment"], ["Audit"], ["Snapshot"]]
 
 # pylint: disable=invalid-name
 logger = getLogger(__name__)
@@ -168,4 +169,10 @@ rules = RuleSet(count_limit=10000, rule_list=[
         {'Control'},
     ),
 
+    Rule(
+        "mappings for 'raise an issue' on assessment page",
+        {"Issue"},
+        {"Assessment"},
+        {"Audit", "Snapshot"},
+    ),
 ])

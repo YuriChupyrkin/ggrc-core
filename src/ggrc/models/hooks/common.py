@@ -7,6 +7,7 @@ import sqlalchemy as sa
 
 from ggrc import db
 from ggrc.models import all_models
+from ggrc.models.inflector import get_model
 
 
 def ensure_field_not_changed(obj, field_name):
@@ -30,9 +31,9 @@ def map_objects(src, dst):
     return
   if 'id' not in dst or 'type' not in dst:
     return
+  destination = get_model(dst["type"]).query.get(dst["id"])
   db.session.add(all_models.Relationship(
       source=src,
-      destination_id=dst["id"],
-      destination_type=dst["type"],
+      destination=destination,
       context_id=src.context_id,
   ))

@@ -11,7 +11,7 @@ from ggrc.access_control import roleable
 from ggrc.converters import column_handlers
 from ggrc.converters import import_helper
 from ggrc.converters.import_helper import get_object_column_definitions
-from ggrc.utils.rules import get_mapping_rules, get_unmapping_rules
+from ggrc.utils import rules
 from ggrc.utils import title_from_camelcase
 from ggrc_risks import models as r_models
 from ggrc_risk_assessments import models as ra_models
@@ -22,7 +22,7 @@ from integration.ggrc.generator import ObjectGenerator
 
 def get_mapping_names(class_name):
   """Get mapping column names."""
-  mapping_rules = get_mapping_rules().get(class_name)
+  mapping_rules = rules.MappingRules.map_rules.get(class_name)
   if mapping_rules is not None:
     pretty_mapping_rules = (title_from_camelcase(r) for r in mapping_rules)
     mapping_names = {"map:{}".format(n) for n in pretty_mapping_rules}
@@ -33,7 +33,7 @@ def get_mapping_names(class_name):
 
 def get_unmapping_names(class_name):
   """Get unmapping column names."""
-  unmapping_rules = get_unmapping_rules().get(class_name)
+  unmapping_rules = rules.MappingRules.unmap_rules.get(class_name)
   if unmapping_rules is not None:
     pretty_unmapping_rules = (title_from_camelcase(r) for r in unmapping_rules)
     unmapping_names = {"unmap:{}".format(n) for n in pretty_unmapping_rules}
@@ -456,7 +456,6 @@ class TestGetObjectColumnDefinitions(TestCase):
         "Title",
         "Description",
         "Notes",
-        "Audit",
         "Remediation Plan",
         "Admin",
         "Reference URL",
@@ -475,16 +474,12 @@ class TestGetObjectColumnDefinitions(TestCase):
         "mandatory": {
             "Title",
             "Admin",
-            "Audit",
             "Code"
         },
         "unique": {
             "Code",
             "Title",
         },
-        "ignore_on_update": {
-            "Audit",
-        }
     }
     self._test_single_object(models.Issue, names, expected_fields)
 
