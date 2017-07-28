@@ -52,6 +52,9 @@
         evidences: {
           Value: can.List
         },
+        referenceUrls: {
+          Value: can.List
+        },
         editMode: {
           type: 'boolean',
           get: function () {
@@ -102,6 +105,13 @@
       getSnapshotQuery: function () {
         return this.getQuery('Snapshot');
       },
+      getReferenceUrlsQuery: function () {
+        var refType = CMS.Models.Document.REFERENCE_URL;
+        return this.getQuery(
+          'Document',
+          {sortBy: 'created_at', sortDirection: 'desc'},
+          this.getDocumentAdditionFilter(refType));
+      },
       getEvidenceQuery: function () {
         var evidenceType = CMS.Models.Document.EVIDENCE;
         return this.getQuery(
@@ -147,6 +157,10 @@
         var query = this.getEvidenceQuery();
         return this.requestQuery(query, 'evidences');
       },
+      loadReferenceUrls: function () {
+        var query = this.getReferenceUrlsQuery();
+        return this.requestQuery(query, 'referenceUrls');
+      },
       loadUrls: function () {
         var query = this.getUrlQuery();
         return this.requestQuery(query, 'urls');
@@ -188,6 +202,8 @@
           .replace(this.loadEvidences());
         this.attr('urls')
           .replace(this.loadUrls());
+        this.attr('referenceUrls')
+          .replace(this.loadReferenceUrls());
       },
       initializeFormFields: function () {
         this.attr('formFields',

@@ -35,6 +35,7 @@
       modal_title: "@",
       modal_button: "@",
       attributes: {},
+      urlType: '@',
       define: {
         deferred: {
           type: 'boolean',
@@ -50,7 +51,8 @@
           link: value,
           title: value,
           context: context,
-          document_type: CMS.Models.Document.URL,
+          document_type: this.viewModel.attr('urlType') ||
+            CMS.Models.Document.URL,
           owners: [{type: 'Person', id: GGRC.current_user.id}],
           created_at: new Date(),
           isDraft: true

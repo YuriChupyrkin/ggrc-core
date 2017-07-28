@@ -1,0 +1,12 @@
+/*
+ * Copyright (C) 2017 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.visible-items-limiter {
+  &__toolbar {
+    display: flex;
+    padding: 0;
+    margin: 0 0 16px 0;
+  }
+}
