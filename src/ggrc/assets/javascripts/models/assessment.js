@@ -175,6 +175,7 @@
         this.leaveUniqueAssignees(model, attributes, 'Creator');
       }
 
+      GGRC.Utils.BackupStorage.createBackup(model);
       return model;
     },
     leaveUniqueAssignees: function (model, attributes, type) {

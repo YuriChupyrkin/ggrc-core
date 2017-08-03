@@ -661,6 +661,9 @@
       } else {
         model = this._super(params);
       }
+
+      GGRC.Utils.BackupStorage.createBackup(model);
+
       return model;
     },
 
@@ -1281,6 +1284,78 @@
       this._dfd = new can.Deferred();
       GGRC.SaveQueue.enqueue(this, arguments);
       return this._dfd;
+    },
+    save2: function () {
+      var self = this;
+      var backupStorage = GGRC.Utils.BackupStorage;
+      var currentInstance = backupStorage
+        .buildObjByIncludFields(self);
+      var backup = backupStorage.getBackup(self);
+      var dfd = can.Deferred();
+
+      /* OLD SAVE */
+      Array.prototype.push.call(arguments, this._super);
+      this._dfd = new can.Deferred();
+      GGRC.SaveQueue.enqueue(this, arguments);
+      /* */
+
+      this._dfd.then(function (response) {
+        // successs
+        console.log('Success! Saved!');
+        dfd.resolve(response);
+      }, function (inst, response) {
+        console.log('ERROR');
+        if (response.status !== 409) {
+          dfd.reject(response);
+          return;
+        }
+        console.log('ERROR: 409');
+
+        self.constructor.findOne({id: self.id})
+          .then(function (lastRevision) {
+            var revisionDiff;
+            var changesDiff;
+            var hasIntersection;
+            // backup contains the latest version after 'findOne'
+            lastRevision = backupStorage.getBackup(self);
+
+            revisionDiff = backupStorage.getDiffField(lastRevision, backup);
+            changesDiff = backupStorage.getDiffField(backup, currentInstance);
+
+            hasIntersection = _.intersection(revisionDiff, changesDiff)
+              .length;
+
+            if (!hasIntersection) {
+              // merge
+              revisionDiff.forEach(function (attrName) {
+                self.attr(attrName, lastRevision[attrName]);
+              });
+
+              changesDiff.forEach(function (attrName) {
+                self.attr(attrName, currentInstance[attrName]);
+              });
+
+              // ACL issue! check!
+              self.dispatch('instanceMerged');
+
+              // recursive...
+              self.save2().then(function (response) {
+                console.log('Success! Saved after merge');
+                dfd.resolve(response);
+              }, function (response) {
+                console.log('Error! Rejected after merge');
+                dfd.reject(response);
+              });
+              
+            } else {
+              // show error banner with RESTART button
+              console.error('CONFLIT 409! Red banner and Restart link!');
+              dfd.reject(response);
+            }
+        });
+      });
+
+      return dfd;
     },
     refresh_all: function () {
       var props = Array.prototype.slice.call(arguments, 0);

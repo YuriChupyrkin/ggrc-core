@@ -33,7 +33,7 @@
         instance.attr(pendingChanges);
         this.attr('pendingChanges', {});
 
-        instance.save().then(function () {
+        instance.save2().then(function () {
           if (self.attr('autoSaveAfterSave')) {
             self.attr('autoSaveAfterSave', false);
             setTimeout(self.saveChange.bind(self));

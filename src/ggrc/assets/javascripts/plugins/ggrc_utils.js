@@ -579,6 +579,80 @@
         }
       });
       return userType;
+    },
+    BackupStorage: {
+      _backups: {},
+      _includeFields: {
+        Assessment: [
+          'title', 'access_control_list', 'assessment_type',
+          'assignees',
+          'description', 'design', 'end_date', 'finished_date',
+          'global_attributes', 'id', 'local_attributes',
+          'notes', 'operationally', 'os_state', 'slug', 'start_date',
+          'status', 'test_plan', 'type', 'verified'
+        ],
+        Contol: [
+          'title', 'access_control_list', 'attributes',
+          'description', 'end_date', 'folders',
+          'id', 'last_assessment_date', 'means',
+          'notes', 'object_folders', 'os_state',
+          'preconditions_failed', 'slug', 'start_date',
+          'status', 'test_plan', 'type', 'verify_frequency',
+          'version'
+        ]
+      },
+      _buildInstanceLine: function (instance) {
+        return instance.type + '_' + instance.id;
+      },
+      _backupble: function (instance) {
+        return instance.type && instance.id &&
+          this._includeFields[instance.type];
+      },
+      buildObjByIncludFields: function (instance) {
+        var obj = {};
+
+        if (!this._backupble(instance)) {
+          return instance;
+        }
+
+        this._includeFields[instance.type].forEach(function (field) {
+          obj[field] = instance.attr ?
+            instance.attr()[field] :
+            instance[field];
+        });
+
+        return obj;
+      },
+      createBackup: function (instance) {
+        var instanceString;
+
+        if (!this._backupble(instance)) {
+          return;
+        }
+
+        instanceString = this._buildInstanceLine(instance);
+        this._backups[instanceString] = this.buildObjByIncludFields(instance);
+      },
+      getBackup: function (instance) {
+        var instanceString;
+        if (!this._backupble(instance)) {
+          return;
+        }
+
+        instanceString = this._buildInstanceLine(instance);
+        return this._backups[instanceString];
+      },
+      getDiffField: function (a, b) {
+        var self = this;
+        return _.reduce(a, function (result, value, key) {
+          if (self._includeFields[a.type].indexOf(key) > -1) {
+            return _.isEqual(value, b[key]) ?
+              result : result.concat(key);
+          }
+
+          return true;
+        }, []);
+      }
     }
   };
 

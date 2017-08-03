@@ -266,12 +266,12 @@
         var caValues = this.attr('instance.global_attributes');
         this.updateAttributes(caValues, globalAttributes);
 
-        return this.attr('instance').save();
+        return this.attr('instance').save2();
       },
       saveFormFields: function (formFields) {
         var caValues = this.attr('instance.local_attributes');
         this.updateAttributes(caValues, formFields);
-        return this.attr('instance').save();
+        return this.attr('instance').save2();
       },
       showRequiredInfoModal: function (e, field) {
         var scope = field || e.field;
@@ -310,6 +310,14 @@
       this.viewModel.initializeFormFields();
       this.viewModel.initGlobalAttributes();
       this.viewModel.updateRelatedItems();
+    },
+    events: {
+      '{viewModel.instance} instanceMerged': function () {
+        console.log('event instanceMerged');
+        this.viewModel.initializeFormFields();
+        this.viewModel.initGlobalAttributes();
+        this.viewModel.updateRelatedItems();
+      }
     }
   });
 })(window.can, window.GGRC);
