@@ -6,13 +6,16 @@
 (function (can, GGRC) {
   'use strict';
 
-
   GGRC.Components('issueUnmapItem', {
     tag: 'issue-unmap-item',
-    template: '{{#if canUnmap}}<content></content>{{/if}}',
+    template: can.view(
+      GGRC.mustache_path +
+      '/components/issue/issue-unmap-item.mustache'
+    ),
     viewModel: {
       issueInstance: {},
       target: {},
+      showRelatedObjects: false,
       canUnmap: function () {
         return GGRC.Utils.allowed_to_map(this.attr('issueInstance'),
           this.attr('target'), {}, true);
@@ -20,12 +23,15 @@
       unmap: function () {
         if (this.attr('target.type') === 'Audit' &&
           !this.attr('issueInstance.allow_unmap_from_audit')) {
-            console.error('allow_unmap_from_audit!!!!');
-            // todo: show banner with list of snapshots and assessments
-            return;
+          console.error('allow_unmap_from_audit!!!!');
+          this.attr('showRelatedAssessments', true);
+          return;
         }
 
         this.dispatch('unmapIssue');
+      },
+      modalClossed: function () {
+        this.attr('showRelatedAssessments', false);
       }
     },
     events: {
