@@ -349,6 +349,8 @@ dashboard-js-files:
   - components/issue/issue-unmap.js
   - components/issue/issue-unmap-item.js
   - components/custom-attributes/global-custom-attributes.js
+  - components/issue/issue-unmap-related-assessments.js
+  - components/issue/issue-unmap-dropdown-item.js
 
 app-init-files:
   - apps/dashboard.js
@@ -712,6 +714,9 @@ dashboard-js-template-files:
   - components/assessment/info-pane/inline-item.mustache
   - components/loading/loading-status.mustache
   - components/issue/issue-unmap.mustache
+  - components/issue/issue-unmap-item.mustache
+  - components/issue/issue-unmap-related-assessments.mustache
+  - components/issue/issue-unmap-dropdown-item.mustache
 
 dashboard-css-files:
   - dashboard.css
