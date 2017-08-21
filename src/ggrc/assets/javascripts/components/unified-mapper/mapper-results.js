@@ -343,6 +343,7 @@ import '../object-selection/object-selection';
       buildRelatedData: function (relatedData, type) {
         var deferredList = this.attr('deferredList');
         var ids;
+        var empty = {};
 
         if (!deferredList || !deferredList.length) {
           return relatedData;
@@ -363,7 +364,11 @@ import '../object-selection/object-selection';
             });
 
           if (!ids.length) {
-            return relatedData;
+            // return empty data
+            empty[type] = {
+              ids: []
+            };
+            return empty;
           }
         }
 
