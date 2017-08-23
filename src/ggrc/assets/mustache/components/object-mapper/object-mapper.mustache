@@ -20,6 +20,7 @@
   </div>
   {{/if}}
 
+
   <div class="object-controls">
     <advanced-search-wrapper
       {model-name}="model.singular"
@@ -102,6 +103,7 @@
             {{/each}}
             <advanced-search-mapping-container
               {(items)}="mappingItems"
+              {available-attributes}="availableAttributes"
               {model-name}="modelName">
             </advanced-search-mapping-container>
           </div>
@@ -125,7 +127,7 @@
       base-instance="parentInstance"
       {(is-loading)}="is_loading"
       object="object"
-      type="type"
+      {type}="type"
       selected="selected"
       submit-cbs="submitCbs"
       {^paging.total}="*totalObjects"
