@@ -454,16 +454,6 @@
             return '';
         }
       }
-    },
-    helpers: {
-      extraClass: function (type) {
-        switch (type()) {
-          case 'checkbox':
-            return 'inline-reverse';
-          default:
-            return '';
-        }
-      }
     }
   });
 })(window.can, window.GGRC, window.CMS);

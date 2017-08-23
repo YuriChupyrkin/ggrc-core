@@ -146,7 +146,7 @@
         this.attr('refreshItems', true);
       },
       prepareRelevantQuery: function () {
-        var relevantList = this.attr('relevantTo');
+        var relevantList = this.attr('relevantTo') || [];
         var filters = relevantList.map(function (relevant) {
           return {
             type: relevant.type,
