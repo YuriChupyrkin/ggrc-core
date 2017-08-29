@@ -352,13 +352,15 @@
      * @param {Number} filterInfo.filter -
      * @param {Object} filter -
      * @param {Object} request - Collection of QueryAPI sub-requests
+     * @param {Boolean} transforToSnapshot - Transform query to Snapshot
      * @return {Promise} Deferred Object
      */
     function loadFirstTierItems(modelName,
                                 parent,
                                 filterInfo,
                                 filter,
-                                request) {
+                                request,
+                                transforToSnapshot) {
       var params = QueryAPI.buildParam(
         modelName,
         filterInfo,
@@ -369,8 +371,9 @@
       var requestedType;
       var requestData = request.slice() || can.List();
 
-      if (SnapshotUtils.isSnapshotScope(parent) &&
-        SnapshotUtils.isSnapshotModel(modelName)) {
+      if ((SnapshotUtils.isSnapshotScope(parent) &&
+        SnapshotUtils.isSnapshotModel(modelName)) ||
+        transforToSnapshot) {
         params = SnapshotUtils.transformQuery(params);
       }
 
@@ -404,6 +407,7 @@
         operation: 'relevant'
       };
       var showMore = false;
+      var objectVersionsUtils = GGRC.Utils.ObjectVersions;
 
       return _buildSubTreeCountMap(models, relevant, filter)
         .then(function (result) {
@@ -411,16 +415,29 @@
           var dfds;
           var mappedDfd;
           var resultDfd;
+          var transforToSnapshot = false;
 
           loadedModels = Object.keys(countMap);
           showMore = result.showMore;
 
           dfds = loadedModels.map(function (model) {
-            var subTreeFields = getSubTreeFields(type, model);
-            var pageInfo = {
+            var originalModelName;
+            var subTreeFields;
+            var pageInfo;
+            var params;
+            if (objectVersionsUtils.parentHasObjectVersions(type)) {
+              originalModelName = GGRC.Utils.ObjectVersions
+                .buildObjectVersionData(model)
+                .originalModelName;
+
+              transforToSnapshot = !!originalModelName;
+              model = originalModelName || model;
+            }
+
+            subTreeFields = getSubTreeFields(type, model);
+            pageInfo = {
               filter: filter
             };
-            var params;
 
             if (countMap[model]) {
               pageInfo.current = 1;
@@ -435,7 +452,8 @@
 
             if (SnapshotUtils.isSnapshotRelated(
                 relevant.type,
-                params.object_name)) {
+                params.object_name) ||
+                transforToSnapshot) {
               params = SnapshotUtils.transformQuery(params);
             }
 
@@ -461,6 +479,13 @@
 
           loadedModels.forEach(function (modelName, index) {
             var values;
+            var loadItemsModelName;
+            if (objectVersionsUtils.parentHasObjectVersions(type)) {
+              modelName = objectVersionsUtils
+                .buildObjectVersionData(modelName)
+                .originalModelName ||
+                modelName;
+            }
 
             if (SnapshotUtils.isSnapshotModel(modelName) &&
               response[index].Snapshot) {
@@ -528,6 +553,7 @@
       var countQuery;
       var result;
       var countMap = {};
+      var objectVersionsUtils = GGRC.Utils.ObjectVersions;
 
       if (_isFullSubTree(relevant.type)) {
         models.forEach(function (model) {
@@ -538,15 +564,39 @@
           showMore: false
         });
       } else {
-        countQuery = QueryAPI.buildCountParams(models, relevant, filter)
-          .map(function (param) {
+        if (objectVersionsUtils.parentHasObjectVersions(relevant.type)) {
+          countQuery = [];
+          models.forEach(function (model) {
+            var originalModelName = objectVersionsUtils
+              .buildObjectVersionData(model)
+              .originalModelName;
+            var query;
+
+            model = originalModelName || model;
+            query = QueryAPI
+              .buildCountParams([model], relevant, filter);
+
             if (SnapshotUtils.isSnapshotRelated(
-                relevant.type,
-                param.object_name)) {
-              param = SnapshotUtils.transformQuery(param);
+              relevant.type,
+              model) ||
+              !!originalModelName) {
+              query = SnapshotUtils.transformQuery(query[0]);
+              countQuery.push(query);
+            } else {
+              countQuery.push(query[0]);
             }
-            return param;
           });
+        } else {
+          countQuery = QueryAPI.buildCountParams(models, relevant, filter)
+            .map(function (param) {
+              if (SnapshotUtils.isSnapshotRelated(
+                  relevant.type,
+                  param.object_name)) {
+                param = SnapshotUtils.transformQuery(param);
+              }
+              return param;
+            });
+        }
 
         result = QueryAPI.makeRequest({data: countQuery})
           .then(function (response) {
