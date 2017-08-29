@@ -51,6 +51,21 @@
           return this.attr('model').shortName;
         }
       },
+      optionsData: {
+        get: function () {
+          var modelName = this.attr('modelName');
+          if (!this.attr('options.objectVersion')) {
+            return {
+              originalModelName: modelName,
+              loadItemsModelName: modelName,
+              widget: modelName
+            };
+          }
+
+          return GGRC.Utils.ObjectVersions
+            .buildObjectVersionData(modelName, true);
+        }
+      },
       statusFilterVisible: {
         type: Boolean,
         get: function () {
@@ -114,7 +129,9 @@
       addItem: {
         type: String,
         get: function () {
-          return this.attr('options').add_item_view ||
+          return this.attr('options.objectVersion') ?
+            false :
+            this.attr('options').add_item_view ||
             this.attr('model').tree_view_options.add_item_view;
         }
       },
@@ -125,8 +142,9 @@
           var parentInstance = this.attr('parent_instance');
           var model = this.attr('model');
 
-          return Snapshots.isSnapshotScope(parentInstance) &&
-            Snapshots.isSnapshotModel(model.model_singular);
+          return (Snapshots.isSnapshotScope(parentInstance) &&
+            Snapshots.isSnapshotModel(model.model_singular)) ||
+            this.attr('options.objectVersion');
         }
       },
       showGenerateAssessments: {
@@ -198,7 +216,9 @@
     refreshLoaded: true,
     canOpenInfoPin: true,
     loadItems: function () {
-      var modelName = this.attr('modelName');
+      var optionsData = this.attr('optionsData');
+      var isObjectVersion = this.attr('options.objectVersion');
+      var originalModelName = optionsData.originalModelName;
       var pageInfo = this.attr('pageInfo');
       var sortingInfo = this.attr('sortingInfo');
       var parent = this.attr('parent_instance');
@@ -215,11 +235,12 @@
       this.attr('loading', true);
 
       return TreeViewUtils
-        .loadFirstTierItems(modelName, parent, page, filter, request)
+        .loadFirstTierItems(originalModelName, parent, page, filter,
+          request, isObjectVersion)
         .then(function (data) {
           var total = data.total;
-          var modelName = this.attr('modelName');
-          var countsName = this.attr('options').countsName || modelName;
+          var widget = optionsData.widget;
+          var countsName = this.attr('options').countsName || widget;
 
           this.attr('showedItems', data.values);
           this.attr('pageInfo.total', total);
@@ -234,7 +255,7 @@
 
           if (this._getFilterByName('status')) {
             CurrentPageUtils
-              .initCounts([modelName], parent.type, parent.id);
+              .initCounts([widget], parent.type, parent.id);
           }
         }.bind(this));
     },
@@ -256,6 +277,7 @@
     },
     setColumnsConfiguration: function () {
       var columns = TreeViewUtils.getColumnsForModel(
+        // todo: Fix of col config
         this.attr('model').model_singular,
         this.attr('displayPrefs'),
         true
@@ -268,6 +290,7 @@
     },
     onUpdateColumns: function (event) {
       var selectedColumns = event.columns;
+      // todo: fix
       var columns = TreeViewUtils.setColumnsForModel(
         this.attr('model').model_singular,
         selectedColumns,
@@ -315,7 +338,7 @@
       var $el = this.attr('$el');
       var counts = CurrentPageUtils.getCounts();
       var countsName = this.attr('options').countsName ||
-        this.attr('model').shortName;
+        this.attr('optionsData.widget');
 
       if ($el) {
         can.trigger($el, 'updateCount', [counts.attr(countsName)]);
@@ -359,7 +382,7 @@
       this._triggerListeners(true);
     },
     _widgetShown: function () {
-      var modelName = this.attr('modelName');
+      var modelName = this.attr('optionsData').widget;
       var loaded = this.attr('loaded');
       var total = this.attr('pageInfo.total');
       var counts = _.get(CurrentPageUtils.getCounts(), modelName);

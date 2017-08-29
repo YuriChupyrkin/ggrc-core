@@ -126,6 +126,13 @@
       var defaults = getDefaultWidgets(widgetList, path);
 
       return defaults.map(function (widgetName) {
+        var isObjectVersion = GGRC.Utils.ObjectVersions
+          .isObjectVersion(widgetName);
+
+        if (isObjectVersion) {
+          return widgetName;
+        }
+
         return widgetList[widgetName]
           .content_controller_options.model.shortName;
       });
@@ -167,8 +174,16 @@
           var expression = GGRC.Utils.TreeView
             .makeRelevantExpression(widgetType, type, id);
           var param = {};
-
-          if (SnapshotUtils.isSnapshotRelated(type, widgetType)) {
+          var objectVersionsUtils = GGRC.Utils.ObjectVersions;
+          var data = objectVersionsUtils
+            .buildObjectVersionData(widgetType);
+          var originalModelName = data.originalModelName;
+          if (objectVersionsUtils.isObjectVersion(widgetType)) {
+            expression = GGRC.Utils.TreeView
+              .makeRelevantExpression(originalModelName, type, id);
+            param = QueryAPI.buildParam('Snapshot', {}, expression, null,
+              GGRC.query_parser.parse('child_type = ' + originalModelName));
+          } else if (SnapshotUtils.isSnapshotRelated(type, widgetType)) {
             param = QueryAPI.buildParam('Snapshot', {}, expression, null,
               GGRC.query_parser.parse('child_type = ' + widgetType));
           } else if (typeof widgetType === 'string') {
@@ -191,11 +206,21 @@
       }).then(function (data) {
         var countsMap = {};
         data.forEach(function (info, i) {
+          var objectVersionsUtils = GGRC.Utils.ObjectVersions;
+          var isObjectVersion = objectVersionsUtils.isObjectVersion(widgets[i]);
           var widget = widgets[i];
-          var name = typeof widget === 'string' ? widget : widget.name;
-          var countsName = typeof widget === 'string' ?
-            widget : (widget.countsName || widget.name);
-          if (SnapshotUtils.isSnapshotRelated(type, name)) {
+          var name;
+          var countsName;
+          if (isObjectVersion) {
+            countsName = objectVersionsUtils
+              .buildObjectVersionData(widgets[i]).widget;
+          } else {
+            name = typeof widget === 'string' ? widget : widget.name;
+            countsName = typeof widget === 'string' ?
+              widget : (widget.countsName || widget.name);
+          }
+
+          if (SnapshotUtils.isSnapshotRelated(type, name) || isObjectVersion) {
             name = 'Snapshot';
           }
           countsMap[countsName] = info[name].total;

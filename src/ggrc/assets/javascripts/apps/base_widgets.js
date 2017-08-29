@@ -52,6 +52,11 @@
   };
   // Items allowed for mapping via snapshot.
   var snapshotWidgetsConfig = GGRC.config.snapshotable_objects || [];
+  var objectVersions = [
+    'Control_versions',
+    'Vendor_versions'
+  ];
+
   // Items allowed for relationship mapping
   var excludeMappingConfig = [
     'AssessmentTemplate'
@@ -67,6 +72,12 @@
 
   var filteredTypes = _.difference(allCoreTypes, excludeMappingConfig);
   // Audit is excluded and created a separate logic for it
+
+  var objectVersionWidgets = {
+    Control_version: ['Control'],
+    Vendor_version: ['Vendor']
+  };
+
   baseWidgetsByType = {
     AccessGroup: _.difference(filteredTypes, ['AccessGroup']),
     Audit: [].concat(snapshotWidgetsConfig, excludeMappingConfig,
@@ -79,7 +90,7 @@
     AssessmentTemplate: ['Audit'],
     DataAsset: filteredTypes,
     Facility: filteredTypes,
-    Issue: filteredTypes.sort(),
+    Issue: objectVersions.concat(filteredTypes.sort()),
     Market: filteredTypes,
     Objective: filteredTypes,
     OrgGroup: filteredTypes,
@@ -100,6 +111,8 @@
     Threat: filteredTypes,
     Vendor: filteredTypes
   };
+
+  baseWidgetsByType = _.extend(baseWidgetsByType, objectVersionWidgets);
 
   GGRC.tree_view = GGRC.tree_view || new can.Map();
   GGRC.tree_view.attr('base_widgets_by_type', baseWidgetsByType);

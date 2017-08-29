@@ -857,5 +857,70 @@
       getParentUrl: getParentUrl
     };
   })();
+
+  /**
+   * Util methods for work with Object versions.
+   */
+  GGRC.Utils.ObjectVersions = (function () {
+    var cachedObjectVersions = {};
+    var modelsIncludeVersions = [
+      'Issue'
+    ];
+
+    function isObjectVersion(modelName) {
+      return !modelName ?
+        false :
+        modelName.indexOf('_version') > -1;
+    }
+
+    function parentHasObjectVersions(parentModelName) {
+      return modelsIncludeVersions.indexOf(parentModelName) > -1;
+    }
+
+    function buildObjectVersionData(modelName, forceBuildFromBaseModel) {
+      var originalModelName;
+      var objectVersion = {};
+      if (!forceBuildFromBaseModel) {
+        if (!isObjectVersion(modelName)) {
+          return objectVersion;
+        }
+
+        if (cachedObjectVersions[modelName]) {
+          return cachedObjectVersions[modelName];
+        }
+
+        originalModelName = modelName.split('_')[0];
+
+        objectVersion = {
+          originalModelName: originalModelName,
+          widget: modelName,
+          widgetId: modelName.toLocaleLowerCase(),
+          widgetName: can.capitalize(originalModelName) + ' Versions',
+          loadItemsModelName: 'Snapshot'
+        };
+      } else {
+        if (cachedObjectVersions[modelName]) {
+          return cachedObjectVersions[modelName];
+        }
+
+        objectVersion = {
+          originalModelName: modelName,
+          widget: modelName + '_versions',
+          widgetId: modelName.toLocaleLowerCase() + '_versions',
+          widgetName: can.capitalize(modelName) + ' Versions',
+          loadItemsModelName: 'Snapshot'
+        };
+      }
+
+      cachedObjectVersions[modelName] = objectVersion;
+      return objectVersion;
+    }
+
+    return {
+      isObjectVersion: isObjectVersion,
+      buildObjectVersionData: buildObjectVersionData,
+      parentHasObjectVersions: parentHasObjectVersions
+    };
+  })();
 })(jQuery, window.GGRC = window.GGRC || {}, window.moment, window.Permission,
   window.CMS = window.CMS || {});
