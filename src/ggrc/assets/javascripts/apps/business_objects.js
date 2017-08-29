@@ -121,20 +121,39 @@
       can.each(modelNames, function (name) {
         var w_list;
         var child_model_list = [];
+        var objectVersionUtils = GGRC.Utils.ObjectVersions;
+        var objectData;
 
-        GGRC.tree_view.basic_model_list.push({
-          model_name: name,
-          display_name: CMS.Models[name].title_singular
-        });
+        if (objectVersionUtils.isObjectVersion(name)) {
+          objectData = objectVersionUtils.buildObjectVersionData(name);
+          name = objectData.originalModelName;
+          GGRC.tree_view.basic_model_list.push({
+            model_name: name,
+            display_name: objectData.widget
+          });
+        } else {
+          GGRC.tree_view.basic_model_list.push({
+            model_name: name,
+            display_name: CMS.Models[name].title_singular
+          });
+        }
         // Initialize child_model_list, and child_display_list each model_type
         w_list = baseWidgetsByType[name];
 
         can.each(w_list, function (item) {
           if (possibleModelType.indexOf(item) !== -1) {
-            child_model_list.push({
-              model_name: item,
-              display_name: CMS.Models[item].title_singular
-            });
+            if (objectVersionUtils.isObjectVersion(item)) {
+              objectData = objectVersionUtils.buildObjectVersionData(item);
+              child_model_list.push({
+                model_name: objectData.originalModelName,
+                display_name: objectData.widget
+              });
+            } else {
+              child_model_list.push({
+                model_name: item,
+                display_name: CMS.Models[item].title_singular
+              });
+            }
           }
         });
         GGRC.tree_view.sub_tree_for.attr(name, {
@@ -746,6 +765,14 @@
       }
 
       can.each(farModels, function (model_name) {
+        var objectVersionUtils = GGRC.Utils.ObjectVersions;
+        var objectData = {};
+
+        if (objectVersionUtils.isObjectVersion(model_name)) {
+          objectData = objectVersionUtils.buildObjectVersionData(model_name);
+          model_name = objectData.originalModelName
+        }
+
         if ((overriddenModels.all && overriddenModels.all.hasOwnProperty(model_name) && !overriddenModels[model_name]) || (overriddenModels[object.constructor.shortName] && overriddenModels[object.constructor.shortName].hasOwnProperty(model_name) && !overriddenModels[object.constructor.shortName][model_name]))
           return;
         var sources = [],
@@ -754,7 +781,7 @@
 
         far_model = CMS.Models[model_name];
         if (far_model) {
-          widget_id = far_model.table_singular;
+          widget_id = objectData.widget || far_model.table_singular;
           descriptor = {
             instance: object,
             far_model: far_model,
