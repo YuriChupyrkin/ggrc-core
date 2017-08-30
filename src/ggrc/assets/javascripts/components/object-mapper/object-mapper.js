@@ -35,17 +35,22 @@
       '/components/object-mapper/object-mapper.mustache'),
     viewModel: function (attrs, parentViewModel) {
       var config = {
-        general: parentViewModel.attr('generalConfig'),
-        special: parentViewModel.attr('specialConfigs')
+        general: parentViewModel.attr('general'),
+        special: parentViewModel.attr('special')
       };
 
+      var resolvedConfig = GGRC.VM.ObjectOperationsBaseVM.extractConfig(
+        config.general.type,
+        config
+      );
+
       return GGRC.VM.ObjectOperationsBaseVM.extend({
-        join_object_id: config.general['join-object-id'] ||
-          (GGRC.page_instance() && GGRC.page_instance().id),
-        object: config.general.object,
-        type: getDefaultType(config.general.type, config.general.object),
+        join_object_id: resolvedConfig['join-object-id'] ||
+           (GGRC.page_instance() && GGRC.page_instance().id),
+        object: resolvedConfig.object,
+        type: getDefaultType(resolvedConfig.type, resolvedConfig.object),
         config: config,
-        useSnapshots: config.general.useSnapshots,
+        useSnapshots: resolvedConfig.useSnapshots,
         isLoadingOrSaving: function () {
           return this.attr('is_saving') ||
           //  disable changing of object type while loading

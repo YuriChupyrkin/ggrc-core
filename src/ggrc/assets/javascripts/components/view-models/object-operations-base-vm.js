@@ -5,8 +5,49 @@
 
 (function (can, $) {
   'use strict';
+  /**
+   *  @typedef SpecialConfig
+   *  @type {Object}
+   *  @property {String[]} types - An array contains typenames for which is set a
+   *                               special config.
+   *  @property {Object} config - Has fields with special values for viewModel.
+   */
+
+  /**
+   *  @typedef SpecialConfig
+   *  @type {Object}
+   *  @property {String[]} types - An array contains typenames for which is set a
+   *                               special config.
+   *  @property {Object} config - Has fields with special values for viewModel.
+   */
 
   can.Map.extend('GGRC.VM.ObjectOperationsBaseVM', {
+    /**
+     * Extract certain config for passed type from config.
+     * If there is special config for type then return it else return
+     * general config.
+     *
+     * @param {String} type - Type for search.
+     * @param {SpecialConfig} config - Config with general and special config cases.
+     * @param {Object} config.general - Default config.
+     * @param {SpecialConfig[]} config.special - Has array of special configs.
+     * @return {Object} - extracted config.
+     */
+    extractConfig: function (type, config) {
+      var resultConfig;
+      var special = _.result(
+        _.find(
+          config.special,
+          function (special) {
+            return _.contains(special.types, type);
+          }),
+        'config'
+      );
+
+      resultConfig = !_.isEmpty(special) ? special : config.general;
+      return resultConfig;
+    }
+  }, {
     define: {
       parentInstance: {
         get: function () {
@@ -28,22 +69,15 @@
         set: function (mapType) {
           var config = this.attr('config') || {};
           var type = this.attr('type');
-          var resultConfig;
           var configHandler;
-          var special = _.result(
-            _.find(
-              config.attr('special'),
-              function (special) {
-                return _.contains(special.types, mapType);
-              }),
-            'config'
+          var resultConfig = GGRC.VM.ObjectOperationsBaseVM.extractConfig(
+            mapType,
+            config.serialize()
           );
-
-          resultConfig = !_.isEmpty(special) ? special : config.attr('general');
 
           // We remove type because update action can make recursion (when we set
           // type)
-          resultConfig.removeAttr('type');
+          delete resultConfig.type;
 
           // if we set type first time then update config immediately
           if (!type) {
@@ -52,7 +86,7 @@
             configHandler = this.prepareConfig.bind(this);
           }
 
-          configHandler(resultConfig.serialize());
+          configHandler(resultConfig);
           if (_.isNull(this.attr('freezedConfigTillSubmit'))) {
             this.attr('freezedConfigTillSubmit', resultConfig);
           }
@@ -63,14 +97,6 @@
         }
       }
     },
-    /**
-     *  @typedef SpecialConfig
-     *  @type {Object}
-     *  @property {String[]} types - An array contains typenames for which is set a
-     *                               special config.
-     *  @property {Object} config - Has fields with special values for viewModel.
-     */
-
     /**
      * Config is an object with general and special settings.
      *

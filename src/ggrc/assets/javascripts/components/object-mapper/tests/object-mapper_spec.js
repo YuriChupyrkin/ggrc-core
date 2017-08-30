@@ -22,10 +22,10 @@ describe('GGRC.Components.objectMapper', function () {
     var parentViewModel;
     beforeEach(function () {
       parentViewModel = new can.Map({
-        generalConfig: {
+        general: {
           useSnapshots: false
         },
-        specialConfigs: []
+        special: []
       });
     });
     it('returns object with function "isLoadingOrSaving"', function () {
@@ -36,7 +36,7 @@ describe('GGRC.Components.objectMapper', function () {
     describe('initializes useSnapshots flag', function () {
       it('with true if set with help a general config', function () {
         var result;
-        parentViewModel.generalConfig.useSnapshots = true;
+        parentViewModel.general.useSnapshots = true;
         result = Component.prototype.viewModel({}, parentViewModel)();
         expect(result.attr('useSnapshots')).toEqual(true);
       });
