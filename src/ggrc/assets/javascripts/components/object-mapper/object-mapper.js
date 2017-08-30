@@ -45,7 +45,6 @@
         object: config.general.object,
         type: getDefaultType(config.general.type, config.general.object),
         config: config,
-        pendingConfigQueue: [],
         useSnapshots: config.general.useSnapshots,
         isLoadingOrSaving: function () {
           return this.attr('is_saving') ||
@@ -57,42 +56,46 @@
         deferred_list: [],
         deferred: false,
         allowedToCreate: function () {
-          // Don't allow to create new instances for "In Scope" Objects
+          // Don't allow to create new instances for "In Scope" Objects that
+          // are snapshots
+          var snapUtils = utils.Snapshots;
           var isInScopeModel =
-            GGRC.Utils.Snapshots.isInScopeModel(this.attr('object'));
-          return !isInScopeModel;
+            snapUtils.isInScopeModel(this.attr('object'));
+          var allow =
+            !isInScopeModel || (
+               isInScopeModel &&
+               !snapUtils.isSnapshotModel(this.attr('type'))
+            );
+          return allow;
+        },
+        showAsSnapshots: function () {
+          if (this.attr('freezedConfigTillSubmit.useSnapshots')) {
+            return true;
+          }
+          return false;
         },
         showWarning: function () {
+          var isMappedSnapshotable =
+            utils.Snapshots.isSnapshotModel(this.attr('type'));
+
+          var condition;
           // Never show warning for In Scope Objects
-          if (GGRC.Utils.Snapshots.isInScopeModel(this.attr('object'))) {
+          if (utils.Snapshots.isInScopeModel(this.attr('object'))) {
             return false;
           }
-          return GGRC.Utils.Snapshots.isSnapshotParent(this.attr('object')) ||
-            GGRC.Utils.Snapshots.isSnapshotParent(this.attr('type'));
-        },
-        prepareConfig: function (config) {
-          /**
-           * We don't want to apply config immediately
-           * (Because CanJs will be rerender mustache template immediately).
-           * For the reason we add config in pending queue.
-           */
-          this.pendingConfigQueue.push(config);
 
-          // But we want to render mapping immediately
-          this.update({
-            relevantTo: config.relevantTo
-          });
+          condition =
+            utils.Snapshots.isSnapshotParent(this.attr('object')) ||
+            utils.Snapshots.isSnapshotParent(this.attr('type'));
+
+          if (condition && !isMappedSnapshotable) {
+            return false;
+          }
+
+          return condition;
         },
         onSubmit: function () {
-          var queue = can.makeArray(
-            this.attr('pendingConfigQueue')
-          ).map(function (config) {
-            return config.serialize();
-          });
-
-          var resolvedConfigQueue = utils.resolveQueue(queue, true);
-
-          this.update(resolvedConfigQueue);
+          this.attr('freezedConfigTillSubmit', this.attr('currConfig'));
           // calls base version
           this._super.apply(this, arguments);
         }
@@ -101,9 +104,11 @@
 
     events: {
       '.create-control modal:success': function (el, ev, model) {
-        this.viewModel.attr('showResults', true);
+        this.viewModel.onSubmit();
         this.viewModel.attr('newEntries').push(model);
-        this.element.find('mapper-results').viewModel().showNewEntries();
+        this.element.find('mapper-results')
+          .viewModel()
+          .showNewEntries();
       },
       '.create-control modal:added': function (el, ev, model) {
         this.viewModel.attr('newEntries').push(model);

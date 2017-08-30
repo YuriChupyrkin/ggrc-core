@@ -65,21 +65,21 @@
                     </a>
                   </div>
                 {{else}}
-                  {{^if showWarning}}
-                    <div class="col create">
-                      <a
-                        class="btn btn-link create-control"
-                        href="javascript://"
-                        data-toggle="modal-ajax-form"
-                        data-unique-id="{{join_object_id}}"
-                        data-modal-class="modal-wide"
-                        data-object-singular="{{model.singular}}"
-                        data-object-plural="{{model.plural}}"
-                        data-join-object-id="{{join_object_id}}">
-                        + Create New
-                      </a>
-                    </div>
-                  {{/if}}
+                    {{^if showWarning}}
+                      <div class="col create">
+                        <a
+                          class="btn btn-link create-control"
+                          href="javascript://"
+                          data-toggle="modal-ajax-form"
+                          data-unique-id="{{join_object_id}}"
+                          data-modal-class="modal-wide"
+                          data-object-singular="{{model.singular}}"
+                          data-object-plural="{{model.plural}}"
+                          data-join-object-id="{{join_object_id}}">
+                          + Create New
+                        </a>
+                      </div>
+                    {{/if}}
                 {{/if_equals}}
               {{/is_allowed}}
             {{/if}}
@@ -123,7 +123,7 @@
 <div class="modal-footer {{#if showResults}}expanded{{/if}}">
   <collapsible-panel {soft-mode}="true" {title-text}="'Search Results ({{*totalObjects}})'" {(expanded)}="showResults">
     <mapper-results
-      class="{{#useSnapshots}}snapshot-list{{/useSnapshots}}"
+      class="{{#if showAsSnapshots}}snapshot-list{{/if}}"
       base-instance="parentInstance"
       {(is-loading)}="is_loading"
       object="object"
