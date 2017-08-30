@@ -52,7 +52,6 @@ import '../components/unified-mapper/mapper-results';
     openMapper: function (data, disableMapper, btn) {
       var self = this;
       var isSearch = /unified-search/ig.test(data.toggle);
-      var specialConfigs;
 
       if (disableMapper || isMapperOpen) {
         return;
@@ -65,31 +64,30 @@ import '../components/unified-mapper/mapper-results';
         throw new Error(OBJECT_REQUIRED_MESSAGE);
       }
 
-      specialConfigs = [{
-        types: ['Issue'],
-        // set config like for common objects
-        config: getConfigForCommonObjects(data).generalConfig
-      }];
-
       if (GGRC.Utils.Snapshots
           .isInScopeModel(data.join_object_type) && !isSearch) {
         // each object type will be perceived as a snapshot, except types with
         // special config
-        openForSnapshots(data, specialConfigs);
         isMapperOpen = true;
+        openForSnapshots(data);
       } else {
         openForCommonObjects(data, isSearch);
       }
 
-      function openForSnapshots(data, specialConfigs) {
-        var config = getBaseConfig();
+      function openForSnapshots(data) {
         var inScopeObject;
+        var config = getBaseConfig();
+        var special = [{
+          types: ['Issue'],
+          // set config like for common objects
+          config: getConfigForCommonObjects(data).general
+        }];
 
-        _.extend(config.generalConfig, {useSnapshots: true});
-        _.extend(config, {specialConfigs: specialConfigs || {}});
+        _.extend(config.general, {useSnapshots: true});
+        _.extend(config.special, special);
 
         if (data.is_new) {
-          _.extend(config.generalConfig, {
+          _.extend(config.general, {
             object: data.join_object_type,
             type: data.join_option_type,
             relevantTo: [{
@@ -122,7 +120,7 @@ import '../components/unified-mapper/mapper-results';
             return;
           }
 
-          _.extend(config.generalConfig, {
+          _.extend(config.general, {
             object: data.join_object_type,
             'join-object-id': data.join_object_id,
             type: data.join_option_type,
@@ -150,7 +148,7 @@ import '../components/unified-mapper/mapper-results';
 
       function getBaseConfig() {
         return {
-          generalConfig: {
+          general: {
             useSnapshots: false,
             object: '',
             type: '',
@@ -159,14 +157,14 @@ import '../components/unified-mapper/mapper-results';
             // relevantTo object (for example, snapshots relevant to Audit (at 08/2017))
             relevantTo: null
           },
-          specialConfigs: []
+          special: []
         };
       }
 
       function getConfigForCommonObjects(data) {
         var base = getBaseConfig();
 
-        _.extend(base.generalConfig, {
+        _.extend(base.general, {
           object: data.join_object_type,
           type: data.join_option_type,
           'join-object-id': data.join_object_id
