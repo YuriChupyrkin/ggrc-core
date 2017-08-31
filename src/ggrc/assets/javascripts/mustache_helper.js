@@ -2699,4 +2699,14 @@ Example:
           return options.fn(options.contexts.add({hasRole: hasRole}));
         }, hasRoleForContextDfd);
     });
+  Mustache.registerHelper('isNotObjectVersion',
+    function (widgetName, options) {
+      widgetName = Mustache.resolve(widgetName);
+      if (widgetName.indexOf('Versions') > -1) {
+        return options.inverse(options.contexts);
+      }
+
+      return options.fn(options.contexts);
+    }
+  );
 })(this, jQuery, can);
