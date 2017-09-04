@@ -39,6 +39,3 @@ def map_objects(src, dst):
       context_id=src.context_id,
   )
   db.session.add(new_rel)
-  db.session.flush()
-  automapper = AutomapperGenerator(use_benchmark=False)
-  automapper.generate_automappings(new_rel)

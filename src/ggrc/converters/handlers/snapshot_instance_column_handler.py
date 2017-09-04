@@ -116,12 +116,6 @@ class SnapshotInstanceColumnHandler(MappingColumnHandler):
       elif self.unmap and mapping:
         db.session.delete(mapping)
     db.session.flush(relationships)
-    # it is safe to reuse this automapper since no other objects will be
-    # created while creating automappings and cache reuse yields significant
-    # performance boost
-    automapper = AutomapperGenerator(use_benchmark=False)
-    for relation in relationships:
-      automapper.generate_automappings(relation)
     self.dry_run = True
 
   def get_value(self):
