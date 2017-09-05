@@ -16,6 +16,7 @@
       ></tree-filter-input>
       {{#if statusFilterVisible}}
         <tree-status-filter {model-name}="modelName"
+                            {widget-id}="optionsData.widgetId"
                             {register-filter}="@registerFilter"
                             (filter)="onFilter"
                             {disabled}="advancedSearch.filter"
