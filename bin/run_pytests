@@ -2,20 +2,29 @@
 # Copyright (C) 2017 Google Inc.
 # Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 
+set -o errexit
+
 SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
 HOST=${GGRC_DATABASE_HOST-"127.0.0.1"}
 cd "${SCRIPTPATH}/../test"
 find . -iname "*.pyc" -delete
-mysql -uroot -proot -h$HOST -e "DROP DATABASE IF EXISTS ggrcdevtest; CREATE DATABASE ggrcdevtest CHARACTER SET utf8; USE ggrcdevtest;"
+#mysql -uroot -proot -h$HOST -e "DROP DATABASE IF EXISTS ggrcdevtest; CREATE DATABASE ggrcdevtest CHARACTER SET utf8; USE ggrcdevtest;"
 export GGRC_SETTINGS_MODULE="testing \
   ggrc_basic_permissions.settings.development \
   ggrc_risk_assessments.settings.development \
   ggrc_risks.settings.development \
   ggrc_workflows.settings.development \
   ggrc_gdrive_integration.settings.development"
-db_migrate
+#db_migrate
 
-echo -e "\nRunning unit tests"
-nosetests unit --logging-clear-handlers ${@:1}
+#echo -e "\nRunning unit tests"
+#nosetests unit --logging-clear-handlers ${@:1}
 echo -e "\nRunning integration tests"
-nosetests integration --logging-clear-handlers ${@:1}
+echo ./integration/ggrc_basic_permissions/test_creator_audit.py
+nosetests ./integration/ggrc_basic_permissions/test_creator_audit.py --logging-clear-handlers
+echo ./integration/ggrc_basic_permissions/test_audit_rbac.py
+nosetests ./integration/ggrc_basic_permissions/test_audit_rbac.py --logging-clear-handlers
+echo ./integration/ggrc/converters/test_import_helpers.py
+nosetests ./integration/ggrc/converters/test_import_helpers.py --logging-clear-handlers
+echo ./integration/ggrc/services/test_query/test_basic.py
+nosetests ./integration/ggrc/services/test_query/test_basic.py --logging-clear-handlers
