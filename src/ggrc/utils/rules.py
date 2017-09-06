@@ -7,7 +7,7 @@ import collections
 import functools
 
 
-class BasicRule(collections.Mapping):
+class ImmutableDict(collections.Mapping):
   """An immutable wrapper for defaultdict with False by default."""
 
   __slots__ = ("_dict", "_hash")
@@ -28,11 +28,11 @@ class BasicRule(collections.Mapping):
 
   def __iter__(self):
     """Passthrough to internal dict."""
-    return self._dict.__iter__
+    return self._dict.__iter__()
 
   def __len__(self):
     """Passthrough to internal dict."""
-    return self._dict.__len__
+    return self._dict.__len__()
 
   def __hash__(self):
     """Hash of own values (computed lazily)."""
@@ -44,6 +44,10 @@ class BasicRule(collections.Mapping):
     """True if other is instance of self.__class__ and has same _dict."""
     return isinstance(other, self.__class__) and self._dict == other._dict
 
+  def __repr__(self):
+    return "{cls}(**{arg})".format(cls=self.__class__.__name__,
+                                   arg=dict(self._dict))
+
 
 class Labels(object):
   """Enum with labels used as MappingRule keys."""
@@ -54,36 +58,58 @@ class Labels(object):
   UNMAP_SNAPSHOT = "unmap_snapshot"
 
 
-class MappingRule(BasicRule):
-  """A set of boolean flags for different aspects of mappings."""
+class BasicRule(ImmutableDict):
+  """Passes cls.VALUE to ImmutableDict."""
 
-  def __init__(self, type_, map_=True, unmap=True):
-    super(MappingRule, self).__init__()
-    self._update({Labels.TYPE: type_,
-                  Labels.MAP: map_,
-                  Labels.UNMAP: unmap})
+  VALUE = {}
+
+  def __init__(self, type_):
+    value = {Labels.TYPE: type_}
+    value.update(self.VALUE)
+    super(BasicRule, self).__init__(**value)
+
+
+class MappingRule(BasicRule):
+  """Boolean flags for mappings."""
+
+  VALUE = {Labels.MAP: True,
+           Labels.UNMAP: True}
+
+
+class StaticMappingRule(BasicRule):
+  """Boolean flags to only show mapped objects."""
+
+  VALUE = {Labels.MAP: True}
 
 
 class SnapshotMappingRule(MappingRule):
-  """A set of boolean flags for snapshot-related mappings."""
+  """Boolean flags to map/unmap snapshots."""
 
-  def __init__(self, map_snapshot=None, unmap_snapshot=None, **kwargs):
-    super(SnapshotMappingRule, self).__init__(**kwargs)
+  VALUE = {Labels.MAP_SNAPSHOT: True,
+           Labels.UNMAP_SNAPSHOT: True}
 
-    if map_snapshot is None:
-      map_snapshot = self[Labels.MAP]
-    if unmap_snapshot is None:
-      unmap_snapshot = self[Labels.UNMAP]
-    self._update({Labels.MAP_SNAPSHOT: map_snapshot,
-                  Labels.UNMAP_SNAPSHOT: unmap_snapshot})
+
+class StaticSnapshotMappingRule(MappingRule):
+  """Boolean flags to only show mapped snapshots."""
+
+  VALUE = {Labels.MAP_SNAPSHOT: True}
+
+
+class IssueMappingRule(MappingRule):
+  """Boolean flags to allow to map/unmap original objects and snapshots."""
+
+  VALUE = {Labels.MAP: True,
+           Labels.UNMAP: True,
+           Labels.MAP_SNAPSHOT: True,
+           Labels.UNMAP_SNAPSHOT: True}
 
 
 def wrap_rules(func):
-  """Transform result {key: {MappingRule | str}} -> {key: {MappingRule}}."""
+  """Transform str-type rules into MappingRule(str)."""
   def make_rules(items):
-    """Transform [str | MappingRule] to [MappingRule(type_=str)]."""
+    """For all non-BasicRule items, replace them with MappingRule(item)."""
     for item in items:
-      if not isinstance(item, MappingRule):
+      if not isinstance(item, BasicRule):
         item = MappingRule(type_=item)
       yield item
 
@@ -176,19 +202,14 @@ class MappingRules(object):
     # Assessment has a special Audit field instead of map:audit
 
     all_rules.update({
-        "Audit": {"Assessment", "Issue"} | {
-            SnapshotMappingRule(type_=type_, map_=False, unmap=False,
-                                map_snapshot=True, unmap_snapshot=False)
-            for type_ in snapshots
+        "Audit": {StaticMappingRule("Assessment"), "Issue"} | {
+            StaticSnapshotMappingRule(type_) for type_ in snapshots
         },
         "Assessment": {"Issue"} | {
-            SnapshotMappingRule(type_=type_, map_=False, unmap=False,
-                                map_snapshot=True, unmap_snapshot=False)
-            for type_ in snapshots
+            StaticSnapshotMappingRule(type_) for type_ in snapshots
         },
         "Issue": {"Assessment", "Audit"} | {
-            SnapshotMappingRule(type_=type_)
-            for type_ in snapshots
+            IssueMappingRule(type_) for type_ in snapshots
         },
     })
 

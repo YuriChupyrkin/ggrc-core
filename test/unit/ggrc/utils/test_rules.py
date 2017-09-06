@@ -248,6 +248,11 @@ class TestSnapshotMappingRules(BaseTestMappingRules):
                       "OrgGroup", "Policy", "Process", "Product",
                       "Regulation", "Section", "Standard", "System",
                       "Vendor", "Risk", "Threat"]
+  audit_rules = ["AccessGroup", "Clause", "Contract", "Control",
+                 "DataAsset", "Facility", "Market", "Objective",
+                 "OrgGroup", "Policy", "Process", "Product",
+                 "Regulation", "Section", "Standard", "System",
+                 "Vendor", "Risk", "Threat"]
   issue_rules = ["AccessGroup", "Clause", "Contract", "Control",
                  "DataAsset", "Facility", "Market", "Objective",
                  "OrgGroup", "Policy", "Process", "Product",
@@ -256,7 +261,7 @@ class TestSnapshotMappingRules(BaseTestMappingRules):
 
   @data(("AccessGroup", all_rules),
         ("Assessment", assessment_rules),
-        ("Audit", all_rules),
+        ("Audit", audit_rules),
         ("Clause", all_rules),
         ("Contract", all_rules),
         ("Control", all_rules),
