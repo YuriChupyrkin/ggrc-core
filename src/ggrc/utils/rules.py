@@ -178,7 +178,8 @@ class MappingRules(object):
     all_rules.update({
         "Audit": {"Assessment", "Issue"} | {
             SnapshotMappingRule(type_=type_, map_=False, unmap=False,
-                                map_snapshot=True, unmap_snapshot=False),
+                                map_snapshot=True, unmap_snapshot=False)
+            for type_ in snapshots
         },
         "Assessment": {"Issue"} | {
             SnapshotMappingRule(type_=type_, map_=False, unmap=False,
