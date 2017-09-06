@@ -156,7 +156,6 @@ import '../../components/prev-next-buttons/prev-next-buttons';
 import '../../components/loading/loading-status';
 import '../../components/lazy-render/lazy-render';
 import '../../components/local-custom-attributes/local-custom-attributes-field-view';
-import '../../components/form/form-validation-icon';
 import '../../components/form/fields/checkbox-form-field';
 import '../../components/form/fields/date-form-field';
 import '../../components/form/fields/dropdown-form-field';
@@ -164,6 +163,10 @@ import '../../components/form/fields/person-form-field';
 import '../../components/form/fields/rich-text-form-field';
 import '../../components/form/fields/text-form-field';
 import '../../components/custom-attributes/global-custom-attributes';
+import '../../components/issue/issue-unmap-item';
+import '../../components/issue/issue-unmap-dropdown-item';
+import '../../components/issue/issue-unmap-related-assessments';
+import '../../components/issue/issue-unmap';
 
 import '../../dashboard';
 
