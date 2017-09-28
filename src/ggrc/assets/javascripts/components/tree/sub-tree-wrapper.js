@@ -111,6 +111,7 @@ import template from './templates/sub-tree-wrapper.mustache';
     directlyItems: [],
     notDirectlyItems: [],
     _loader: null,
+    _collapseAfterUnmapCallBack: null,
     expandNotDirectlyRelated: function () {
       var isExpanded = this.attr('notDirectlyExpanded');
       this.attr('notDirectlyExpanded', !isExpanded);
@@ -148,10 +149,35 @@ import template from './templates/sub-tree-wrapper.mustache';
           if (!result.directlyItems.length && !result.notDirectlyItems.length) {
             this.attr('notResult', true);
           }
+
+          // bind 'destinationUnmapped' event
+          this.attr('directlyItems').forEach(function (item) {
+            if (item) {
+              item.bind('destinationUnmapped',
+                this.attr('_collapseAfterUnmapCallBack'));
+            }
+          }.bind(this));
         }.bind(this));
     },
     makeResult: function (instance) {
       return this.attr('_loader').getResultFromMapping(instance);
+    },
+    collapseAfterUnmap: function () {
+      console.log('CollapseAfterUnmap');
+
+      // unbind 'destinationUnmapped' event
+      this.attr('directlyItems').forEach(function (item) {
+        if (item) {
+          item.unbind('destinationUnmapped', this.attr('_collapseAfterUnmapCallBack'));
+        }
+      }.bind(this));
+
+      this.attr('dataIsReady', false);
+      this.attr('isOpen', false);
+      this.dispatch('collapseSubtree');
+    },
+    init: function () {
+      this.attr('_collapseAfterUnmapCallBack', this.collapseAfterUnmap.bind(this));
     }
   });
 

@@ -458,6 +458,9 @@ import template from './templates/tree-widget-container.mustache';
           if (!self.attr('$el').closest('.cms_controllers_info_pin').length) {
             $('.cms_controllers_info_pin').control().unsetInstance();
           }
+        } else {
+          // reinit mapped instances (subTree uses mapped instances)
+          GGRC.Utils.CurrentPage.initMappedInstances();
         }
       }
 

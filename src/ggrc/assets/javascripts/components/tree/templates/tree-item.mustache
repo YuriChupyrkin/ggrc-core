@@ -99,6 +99,7 @@
                         {child-models}="selectedChildModels"
                         {get-depth-filter}="@getDepthFilter"
                         {is-open}="expanded"
+                        (collapse-subtree)="collapseSubtree()"
       ></sub-tree-wrapper>
     </div>
   </lazy-render>

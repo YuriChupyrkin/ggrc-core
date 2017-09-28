@@ -59,7 +59,11 @@ import template from './templates/sub-tree-item.mustache';
       }
     },
     itemSelector: '.sub-item-content',
-    extraCss: '@'
+    extraCss: '@',
+    collapseSubtree: function () {
+      console.log('collapse SUBTREE!!!!!!'); 
+      this.attr('expanded', false);
+    }
   });
 
   GGRC.Components('subTreeItem', {

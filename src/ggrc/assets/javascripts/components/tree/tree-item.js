@@ -50,10 +50,13 @@ import template from './templates/tree-item.mustache';
         }
       }
     },
+    collapseSubtree: function () {
+      this.attr('expanded', false);
+    },
     selectedColumns: [],
     mandatory: [],
     disableConfiguration: null,
-    itemSelector: '.tree-item-content'
+    itemSelector: '.tree-item-content',
   });
 
   /**

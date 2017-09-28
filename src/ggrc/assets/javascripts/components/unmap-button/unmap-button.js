@@ -25,6 +25,7 @@
               .then(function () {
                 self.dispatch('unmapped');
                 self.attr('destination').dispatch('refreshInstance');
+                self.attr('destination').dispatch('destinationUnmapped');
                 self.dispatch('afterUnmap');
               });
           });
