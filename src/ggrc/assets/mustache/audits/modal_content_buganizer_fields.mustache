@@ -1,0 +1,54 @@
+<div>
+    <div class="row-fluid">
+        <div class="span12">
+          <label>Buganizer</label>
+          <label class="input--inline">
+              <input type="checkbox" can-value="instance.buganizer">
+                <span>
+                  Buganizer Link (If it turned on, one bug will be generated for each assessment generated)
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <label>Hotlist ID</label>
+            <input type="text"
+              class="input-block-level"
+              name="hotlist_id"
+              tabindex="12"
+              placeholder="Enter Hotlist ID"
+              {$value}="instance.hotlist_id"/>
+        </div>
+        <div class="span4">
+            <label>Component ID</label>
+            <input type="text"
+              class="input-block-level"
+              name="component_id"
+              tabindex="13"
+              placeholder="Enter Component ID"
+              {$value}="instance.component_id"/>
+        </div>
+        <div class="span4">
+            <label>Issue Type</label>
+            {{instance.issue_type}}
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">
+            <label>Issue Priority</label>
+            <dropdown tabindex="14"
+                options-list="instance.issue_priorities"
+                name="instance.issue_priority">
+          </dropdown>
+        </div>
+        <div class="span4">
+            <label>Issue Severity</label>
+            <dropdown tabindex="14"
+                options-list="instance.issue_severities"
+                name="instance.issue_severity">
+          </dropdown>
+        </div>
+    </div>
+</div>

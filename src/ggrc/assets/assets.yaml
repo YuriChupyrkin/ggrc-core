@@ -340,3 +340,5 @@ dashboard-js-template-files:
   - components/inline/base-inline-control-title.mustache
   - components/assessment/info-pane/inline-item.mustache
   - components/loading/loading-status.mustache
+  - audits/info-buganizer-fields.mustache
+  - audits/modal_content_buganizer_fields.mustache

@@ -1,0 +1,55 @@
+<div class="row-fluid wrap-row">
+  <div class="span12">
+    <h6>Buganizer</h6>
+    <label class="input--inline">
+        <input type="checkbox" can-value="instance.buganizer">
+          <span>
+            Buganizer Link (If it turned on, one bug will be generated for each assessment generated)
+          </span>
+      </label>
+  </div>
+</div>
+<div class="row-fluid wrap-row">
+  <div class="span4">
+    <h6>Hotlist ID</h6>
+    {{#if instance.hotlist_id}}
+      {{instance.hotlist_id}}
+    {{else}}
+      <span class="empty-message">None</span>
+    {{/if}}
+  </div>
+  <div class="span4">
+    <h6>Component ID</h6>
+    {{#if instance.component_id}}
+      {{instance.component_id}}
+    {{else}}
+      <span class="empty-message">None</span>
+    {{/if}}
+  </div>
+  <div class="span4">
+    <h6>Issue Type</h6>
+    {{#if instance.issue_type}}
+      {{instance.issue_type}}
+    {{else}}
+      <span class="empty-message">None</span>
+    {{/if}}
+  </div>
+</div>
+<div class="row-fluid wrap-row">
+  <div class="span4">
+    <h6>Issue Priority</h6>
+    {{#if instance.issue_priority}}
+      {{instance.issue_priority}}
+    {{else}}
+      <span class="empty-message">None</span>
+    {{/if}}
+  </div>
+  <div class="span4">
+    <h6>Issue Severity</h6>
+    {{#if instance.issue_severity}}
+      {{instance.issue_severity}}
+    {{else}}
+      <span class="empty-message">None</span>
+    {{/if}}
+  </div>
+</div>

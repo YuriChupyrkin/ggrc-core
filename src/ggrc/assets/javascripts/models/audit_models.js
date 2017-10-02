@@ -79,7 +79,17 @@
       custom_attribute_values: 'CMS.Models.CustomAttributeValue.stubs'
     },
     defaults: {
-      status: 'Planned'
+      status: 'Planned',
+
+      // TODO: get from server
+      issue_priorities: ['P1', 'P2', 'P3'],
+      issue_priority: 'P2',
+      issue_severities: ['S1', 'S2', 'S3'],
+      issue_severity: 'S3',
+      issue_type: 'Process',
+
+      hotlist_id: '111',
+      component_id: '222'
     },
     statuses: ['Planned', 'In Progress', 'Manager Review',
       'Ready for External Review', 'Completed'],
