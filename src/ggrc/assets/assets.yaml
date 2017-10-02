@@ -343,3 +343,4 @@ dashboard-js-template-files:
   - audits/info-buganizer-fields.mustache
   - audits/modal_content_buganizer_fields.mustache
   - assessments/modal_content_buganizer_fields.mustache
+  - components/assessment/info-pane/info-pane-buganizer-fields.mustache

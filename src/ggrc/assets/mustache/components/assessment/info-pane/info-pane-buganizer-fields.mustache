@@ -1,0 +1,104 @@
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
+    <assessment-inline-item
+      type="checkbox"
+      prop-name="buganizer"
+      with-read-more="true"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.buganizer"
+      {instance}="instance">
+        <div class="ggrc-form__title">Buganizer</div>
+    </assessment-inline-item>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="input"
+      prop-name="hotlist_id"
+      with-read-more="true"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.hotlist_id"
+      {instance}="instance">
+        <div class="ggrc-form__title">Hotlist ID</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="input"
+      prop-name="component_id"
+      with-read-more="true"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.component_id"
+      {instance}="instance">
+        <div class="ggrc-form__title">Component ID</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <!-- use "inline-edit-control" for save styles... -->
+    <inline-edit-control>
+      <div class="inline">
+        <base-inline-control-title
+          class="inline__header"
+          is-edit-icon-denied="true">
+            <div class="ggrc-form__title">Issue Type</div>
+        </base-inline-control-title>
+        <span>{{instance.issue_type}}</span>
+      </div>
+    </inline-edit-control>
+  </div>
+</div>
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="dropdown"
+      prop-name="issue_priority"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {dropdown-options}="instance.issue_priorities"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.issue_priority"
+      {instance}="instance">
+        <div class="ggrc-form__title">Issue Priority</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="dropdown"
+      prop-name="issue_severity"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {dropdown-options}="instance.issue_severities"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.issue_severity"
+      {instance}="instance">
+        <div class="ggrc-form__title">Issue Severity</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="input"
+      prop-name="issue_title"
+      with-read-more="true"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.issue_title"
+      {instance}="instance">
+        <div class="ggrc-form__title">Issue Title</div>
+    </assessment-inline-item>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__row">
+     <div style="color: red">TODO: Person picker</div>
+  </div>
+</div>

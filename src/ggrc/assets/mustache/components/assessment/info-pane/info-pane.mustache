@@ -447,6 +447,26 @@
                         </div>
                     </div>
                 </div>
+                {{#if instance.audit_buganizer}}
+                    <div class="expanded-area">
+                        <div class="info-expand">
+                            <a class="show-hidden-fields info-show-hide active" href="javascript://">
+                                <span class="out">
+                                    <i class="fa fa-caret-right"></i>
+                                    SHOW
+                                </span>
+                                <span class="in">
+                                    <i class="fa fa-caret-down"></i>
+                                    HIDE
+                                </span>
+                                BUGANIZER INFO
+                            </a>
+                        </div>
+                        <div class="hidden-fields-area">
+                            {{>'/static/mustache/components/assessment/info-pane/info-pane-buganizer-fields.mustache'}}
+                        </div>
+                    </div>
+                {{/if}}
             </div>
             </div>
           </tab-panel>
