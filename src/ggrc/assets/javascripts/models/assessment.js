@@ -21,6 +21,20 @@
     is_custom_attributable: true,
     isRoleable: true,
     defaults: {
+      // todo: get from server
+      issue_priorities: ['P1', 'P2', 'P3'],
+      issue_priority: 'P2',
+      issue_severities: ['S1', 'S2', 'S3'],
+      issue_severity: 'S3',
+      issue_type: 'Process',
+
+      hotlist_id: '111',
+      component_id: '222',
+      buganizer: false,
+      audit_buganizer: true,
+      issue_title: 'Issue title here...',
+
+
       assessment_type: 'Control',
       status: 'Not Started',
       send_by_default: true,  // notifications when a comment is added

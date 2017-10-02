@@ -82,7 +82,7 @@
         <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
           <checkbox-to-list property="recipients" instance="instance" class="flex-box">
             <div class="ggrc-form-item__checkbox-item">
-              <label class="input--inline">
+              <label class="input--inline ggrc-form-item__checkbox-label">
                   <input
                     tabindex="4"
                     type="checkbox"
@@ -92,19 +92,19 @@
                 </label>
             </div>
             <div class="ggrc-form-item__checkbox-item">
-              <label class="input--inline">
+              <label class="input--inline ggrc-form-item__checkbox-label">
                     <input tabindex="5" type="checkbox" can-value="values.Creator">
                     Notify creator(s)
                 </label>
             </div>
             <div class="ggrc-form-item__checkbox-item">
-              <label class="input--inline">
+              <label class="input--inline ggrc-form-item__checkbox-label">
                     <input tabindex="6" type="checkbox" can-value="values.Assessor">
                     Notify assignee(s)
               </label>
             </div>
             <div class="ggrc-form-item__checkbox-item">
-              <label class="input--inline">
+              <label class="input--inline ggrc-form-item__checkbox-label">
                     <input tabindex="7" type="checkbox" can-value="values.Verifier">
                     Notify verifier(s)
                 </label>
@@ -285,6 +285,27 @@
           {{>'/static/mustache/assessments/modal_content_additional_fields.mustache'}}
         </div>
       </div>
+
+      {{#if instance.audit_buganizer}}
+        <div class="additional-fields">
+          <div class="expand-buganizer-link">
+            <a class="show-hidden-fields info-show-hide active" href="javascript://">
+              <span class="out">
+                <i class="fa fa-caret-right"></i>
+                SHOW
+              </span>
+              <span class="in">
+                <i class="fa fa-caret-down"></i>
+                HIDE
+              </span>
+              BUGANIZER INFO
+            </a>
+          </div>
+          <div class="hidden-buganizer-fields-area">
+              {{>'/static/mustache/assessments/modal_content_buganizer_fields.mustache'}}
+          </div>
+        </div>
+      {{/if}}
 
     </form>
     {{/instance}}

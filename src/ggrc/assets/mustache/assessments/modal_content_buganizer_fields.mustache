@@ -1,0 +1,91 @@
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
+    <div class="ggrc-form-item__checkbox-item">
+      <label class="ggrc-form-item__label">
+        Buganizer
+      </label>
+      <label class="ggrc-form-item__checkbox-label input--inline">
+        <input tabindex="19" type="checkbox" can-value="instance.buganizer"/>
+        Buganizer Link (If it turned on, one bug will be generated for each assessment generated)
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Hotlist ID
+    </label>
+    <input data-id="code_txtbx"
+      tabindex="20"
+      class="input-block-level"
+      name="hotlist_id"
+      placeholder="Enter Hotlist ID"
+      type="text"
+      {$value}="instance.hotlist_id">
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Component ID
+    </label>
+    <input data-id="code_txtbx"
+      tabindex="21"
+      class="input-block-level"
+      name="component_id"
+      placeholder="Enter Component ID"
+      type="text"
+      {$value}="instance.component_id">
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Type
+    </label>
+    <div>
+      {{instance.issue_type}}
+    </div>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Priority
+    </label>
+    <dropdown tabindex="22"
+              options-list="instance.issue_priorities"
+              name="instance.issue_priority">
+    </dropdown>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Severity
+    </label>
+    <dropdown tabindex="23"
+              options-list="instance.issue_severities"
+              name="instance.issue_severity">
+    </dropdown>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+      <label class="ggrc-form-item__label">
+        Issue Title
+      </label>
+      <input data-id="code_txtbx"
+        tabindex="24"
+        class="input-block-level"
+        name="issue_title"
+        placeholder="Enter Issue Title"
+        type="text"
+        {$value}="instance.issue_title">
+    </div>
+</div>
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue CCS
+    </label>
+    <div style="color: red;">
+      TODO: PEOPLE PICKER
+    </div>
+  </div>
+</div>

@@ -40,12 +40,15 @@
   }
 
   .additional-fields {
+
+    .hidden-buganizer-fields-area,
     .hidden-fields-area {
       padding: 0;
       border: 0;
       margin-top: 20px;
     }
 
+    .expand-buganizer-link,
     .expand-link {
       margin-top: 25px;
 
@@ -88,7 +91,7 @@
         max-width: 350px;
         margin-right: 30px;
 
-        label {
+        .ggrc-form-item__checkbox-label {
           font-size: 14px;
           white-space: nowrap;
           font-weight: normal;
