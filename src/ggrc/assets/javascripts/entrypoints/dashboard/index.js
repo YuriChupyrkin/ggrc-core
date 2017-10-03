@@ -164,6 +164,8 @@ import '../../components/issue/issue-unmap-item';
 import '../../components/issue/issue-unmap-dropdown-item';
 import '../../components/issue/issue-unmap';
 
+import '../../components/dropdown/boolean-dropdown-helper';
+
 // This modal should be loaded here as it requires some components
 import '../../bootstrap/modal-ajax';
 
