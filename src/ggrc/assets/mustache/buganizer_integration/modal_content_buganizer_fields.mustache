@@ -1,0 +1,73 @@
+{{!
+  Copyright (C) 2017 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
+    <div class="ggrc-form-item__checkbox-item">
+      <label class="ggrc-form-item__label">
+        Buganizer
+      </label>
+      <label class="ggrc-form-item__checkbox-label input--inline">
+        <input type="checkbox" can-value="instance.buganizer_integrated"/>
+        Buganizer Link (If it turned on, one bug will be generated for each assessment generated)
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Hotlist ID
+    </label>
+    <input data-id="code_txtbx"
+      class="input-block-level"
+      name="buganizer_hotlist_id"
+      placeholder="Enter Hotlist ID"
+      type="text"
+      {$value}="instance.buganizer_hotlist_id">
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Component ID
+    </label>
+    <input data-id="code_txtbx"
+      class="input-block-level"
+      name="buganizer_component_id"
+      placeholder="Enter Component ID"
+      type="text"
+      {$value}="instance.buganizer_component_id">
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Type
+    </label>
+    <div>
+      {{instance.buganizer_issue_type}}
+    </div>
+  </div>
+</div>
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Priority
+    </label>
+    <dropdown
+      options-list="instance.buganizer_issue_priorities"
+      name="instance.buganizer_issue_priority">
+    </dropdown>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <label class="ggrc-form-item__label">
+      Issue Severity
+    </label>
+    <dropdown
+      instance="instance"
+      options-list="instance.buganizer_issue_severities"
+      name="instance.buganizer_issue_severity">
+    </dropdown>
+  </div>
+</div>
