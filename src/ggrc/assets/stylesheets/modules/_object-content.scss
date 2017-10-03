@@ -159,3 +159,33 @@
     }
   }
 }
+
+.expanded-area {
+  .hidden-fields-area {
+    padding: 0;
+    border: 0;
+    margin: 20px 0 15px 0;
+  }
+
+  .expand-link,
+  .info-expand {
+    margin-top: 25px;
+    border: 0;
+
+    .show-hidden-fields  {
+      &.active {
+        border: 0;
+      }
+
+      color: black;
+      font-size: 12px;
+      border: 0;
+      font-weight: bold;
+  
+      i {
+        opacity: 1;
+        margin-right: 5px;
+      }
+    }
+  }
+}

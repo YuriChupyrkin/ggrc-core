@@ -62,7 +62,8 @@
       'unique_title',
       'ca_update',
       'timeboxed',
-      'mapping-limit'
+      'mapping-limit',
+      'buganizerable',
     ],
     is_custom_attributable: true,
     is_clonable: true,
@@ -79,7 +80,9 @@
       custom_attribute_values: 'CMS.Models.CustomAttributeValue.stubs'
     },
     defaults: {
-      status: 'Planned'
+      status: 'Planned',
+      buganizer_issue_priority: 'P0',
+      buganizer_issue_severity: 'S0',
     },
     statuses: ['Planned', 'In Progress', 'Manager Review',
       'Ready for External Review', 'Completed'],

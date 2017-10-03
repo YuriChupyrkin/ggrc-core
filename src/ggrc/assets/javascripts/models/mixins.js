@@ -211,6 +211,14 @@
       return GGRC.config.snapshotable_objects || [];
     }
   }, {});
+
+  can.Model.Mixin('buganizerable', { }, {
+    buganizer_issue_priorities: ['P0', 'P1', 'P2', 'P3', 'P4'],
+    buganizer_issue_severities: ['S0', 'S1', 'S2', 'S3', 'S4'],
+    buganizer_issue_type: 'Process',
+    buganizer_integrated: false,
+  });
+
   /**
    * A mixin to use for objects that can have their status automatically
    * changed when they are edited.
