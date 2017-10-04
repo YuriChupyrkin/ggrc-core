@@ -355,7 +355,8 @@
     mixins: [
       'mapping-limit',
       'inScopeObjects',
-      'refetchHash'
+      'refetchHash',
+      'issueTrackerIntegratable',
     ],
     findOne: 'GET /api/assessment_templates/{id}',
     findAll: 'GET /api/assessment_templates',
@@ -390,6 +391,10 @@
         {value: 'other', title: 'Others...'}
       ],
       showCaptainAlert: false,
+      issue_tracker: {
+        hotlist_id: '',
+        component_id: '',
+      },
     },
     statuses: ['Draft', 'Deprecated', 'Active'],
     tree_view_options: {
@@ -416,6 +421,16 @@
         'verifiersList',
         function () {
           return this.attr('default_people.verifiers') === 'other';
+        }
+      );
+      this.validate(
+        'issue_tracker.component_id',
+        function () {
+          if (this.attr('issue_tracker.audit_enabled') &&
+            this.attr('issue_tracker.enabled') &&
+            !this.attr('issue_tracker.component_id')) {
+            return 'Enter Component ID';
+          }
         }
       );
     }
