@@ -35,6 +35,12 @@ import '../../object-change-state/object-change-state';
         referenceUrls: CMS.Models.Document.REFERENCE_URL
       },
       define: {
+        showProcedureSection: {
+          get: function () {
+            return this.instance.attr('test_plan') ||
+              this.instance.attr('issue_tracker.issue_url');
+          },
+        },
         isSaving: {
           type: 'boolean',
           value: false

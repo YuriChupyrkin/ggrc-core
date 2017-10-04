@@ -26,6 +26,7 @@
         hotlist_id: '',
         component_id: '',
         title: '',
+        issue_url: '',
       },
 
       assessment_type: 'Control',
@@ -107,6 +108,10 @@
         attr_title: 'Archived',
         attr_name: 'archived',
         order: 17,
+      }, {
+        attr_title: 'Buganizer Link',
+        attr_name: 'issue_url',
+        order: 18,
       },],
       display_attr_names: ['title', 'status', 'assignees', 'verifiers',
       'start_date', 'updated_at'],
