@@ -147,4 +147,14 @@
       }
     }
   }
+
+  .expanded-area {
+    .info-expand {
+      margin-top: 0;
+    }
+
+    .hidden-fields-area small {
+      font-size: 11px;
+    }
+  }
 }

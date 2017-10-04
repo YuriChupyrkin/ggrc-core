@@ -342,3 +342,4 @@ dashboard-js-template-files:
   - components/loading/loading-status.mustache
   - buganizer_integration/modal-content-buganizer-fields.mustache
   - buganizer_integration/info-buganizer-fields.mustache
+  - components/assessment/info-pane/info-pane-buganizer-fields.mustache

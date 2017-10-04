@@ -1,0 +1,120 @@
+{{!
+  Copyright (C) 2017 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="dropdown"
+      prop-name="buganizer_integrated"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {dropdown-options}="instance.buganizer_integrated_values"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.buganizer_integrated"
+      {instance}="instance">
+        <div>
+          <div class="ggrc-form__title">Buganizer</div>
+            <div class="ggrc-form-item__small-text">
+              <small>
+                <em>If turned on, one bug will be created for each assessment.</em>
+              </small>
+            </div>
+        </div>
+    </assessment-inline-item>
+  </div>
+</div>
+
+{{#is instance.buganizer_integrated "true"}}
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="input"
+      prop-name="buganizer_hotlist_id"
+      with-read-more="true"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.buganizer_hotlist_id"
+      {instance}="instance">
+        <div class="ggrc-form__title">Hotlist ID</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <!-- use "inline-edit-control" to save styles... -->
+    <inline-edit-control>
+      <div class="inline">
+        <base-inline-control-title
+          class="inline__header"
+          is-edit-icon-denied="true">
+            <div class="ggrc-form__title">Component ID</div>
+        </base-inline-control-title>
+        {{#if instance.buganizer_component_id}}
+          <span>{{instance.buganizer_component_id}}</span>
+        {{else}}
+          <span class="empty-message">None</span>
+        {{/if}}
+      </div>
+    </inline-edit-control>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <!-- use "inline-edit-control" to save styles... -->
+    <inline-edit-control>
+      <div class="inline">
+        <base-inline-control-title
+          class="inline__header"
+          is-edit-icon-denied="true">
+            <div class="ggrc-form__title">Issue Type</div>
+        </base-inline-control-title>
+        <span>{{instance.buganizer_issue_type}}</span>
+      </div>
+    </inline-edit-control>
+  </div>
+</div>
+<div class="ggrc-form-item">
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="dropdown"
+      prop-name="buganizer_issue_priority"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {dropdown-options}="instance.buganizer_issue_priorities"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.buganizer_issue_priority"
+      {instance}="instance">
+        <div class="ggrc-form__title">Issue Priority</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <assessment-inline-item
+      type="dropdown"
+      prop-name="buganizer_issue_severity"
+      {set-in-progress}="@setInProgressState"
+      {on-state-change-dfd}="onStateChangeDfd"
+      {dropdown-options}="instance.buganizer_issue_severities"
+      {is-edit-icon-denied}="isEditDenied"
+      {value}="instance.buganizer_issue_severity"
+      {instance}="instance">
+        <div class="ggrc-form__title">Issue Severity</div>
+    </assessment-inline-item>
+  </div>
+  <div class="ggrc-form-item__multiple-row">
+    <!-- use "inline-edit-control" to save styles... -->
+    <inline-edit-control>
+      <div class="inline">
+        <base-inline-control-title
+          class="inline__header"
+          is-edit-icon-denied="true">
+            <div class="ggrc-form__title">Issue Title</div>
+        </base-inline-control-title>
+        {{#if instance.buganizer_issue_title}}
+          <span>{{instance.buganizer_issue_title}}</span>
+        {{else}}
+          <span class="empty-message">None</span>
+        {{/if}}
+      </div>
+    </inline-edit-control>
+  </div>
+</div>
+{{/is}}
