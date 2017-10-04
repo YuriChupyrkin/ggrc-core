@@ -217,7 +217,7 @@
     <div class="spacing-top row-fluid hidable">
       <label>Custom Attributes</label>
       <div class="custom-attr-wrap define-attr">
-        <div class="hidden-fields-area">
+        <div>
           <div class="row-fluid">
             <div class="custom-attr-list span12">
               <assessment-template-attributes fields="instance.custom_attribute_definitions">
@@ -271,6 +271,29 @@
           </div>
         </div>
       </div><!-- custom-attr-wrap end -->
+    </div>
+
+    <div class="row-fluid">
+      <div class="expanded-area">
+        <div class="expand-link">
+          <a class="show-hidden-fields info-show-hide active" href="javascript://">
+            <span class="out">
+              <i class="fa fa-caret-right"></i>
+              SHOW
+            </span>
+            <span class="in">
+              <i class="fa fa-caret-down"></i>
+              HIDE
+            </span>
+            BUGANIZER INFO
+          </a>
+        </div>
+        <div class="hidden-fields-area">
+          <div class="ggrc-form">
+            {{>'/static/mustache/buganizer_integration/modal-content-buganizer-fields.mustache'}}
+          </div>
+        </div>
+      </div>
     </div>
  </form>
  </wrapper-assessment-template>

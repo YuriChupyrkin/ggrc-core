@@ -336,7 +336,8 @@
     mixins: [
       'mapping-limit',
       'inScopeObjects',
-      'refetchHash'
+      'refetchHash',
+      'buganizerable',
     ],
     findOne: 'GET /api/assessment_templates/{id}',
     findAll: 'GET /api/assessment_templates',
@@ -369,7 +370,9 @@
         {value: 'Primary Contacts', title: 'Primary Contacts'},
         {value: 'Secondary Contacts', title: 'Secondary Contacts'},
         {value: 'other', title: 'Others...'}
-      ]
+      ],
+      buganizer_issue_priority: 'P0',
+      buganizer_issue_severity: 'S0',
     },
     statuses: ['Draft', 'Deprecated', 'Active'],
     tree_view_options: {
@@ -396,6 +399,16 @@
         'verifiersList',
         function () {
           return this.attr('default_people.verifiers') === 'other';
+        }
+      );
+      this.validate(
+        'buganizer_component_id',
+        function () {
+          if (this.attr('audit_buganizer_integrated') &&
+            this.attr('buganizer_integrated') === 'true' &&
+            !this.attr('buganizer_component_id')) {
+            return 'Enter Component ID';
+          }
         }
       );
     }
