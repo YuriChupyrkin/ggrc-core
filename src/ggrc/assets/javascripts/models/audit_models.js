@@ -373,6 +373,7 @@
       ],
       buganizer_issue_priority: 'P0',
       buganizer_issue_severity: 'S0',
+      audit_buganizer_integrated: true,
     },
     statuses: ['Draft', 'Deprecated', 'Active'],
     tree_view_options: {

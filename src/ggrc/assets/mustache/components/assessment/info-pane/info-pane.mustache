@@ -16,6 +16,13 @@
           <tab-panel {(panels)}="panels" title-text="Assessment">
         <div class="assessment-info-pane info-pane__body">
             <div class="assessment-attributes info-pane__main-content info-pane__main-content-with-sidebar">
+            {{#if instance.buganizer_link}}
+                <div class="info-pane__section info-pane__buganizer-link">
+                    <a href="{{instance.buganizer_link}}" target="_blank">
+                        Buganizer Link
+                    </a>
+                </div>
+            {{/if}}
             {{#if instance.test_plan}}
                <div class="info-pane__section">
                     <assessment-inline-item

@@ -68,6 +68,15 @@
     {{{firstnonempty instance.title instance.description_inline instance.name instance.email ''}}}
     </span>
   {{/case}}
+  {{#case 'buganizer_link'}}
+    {{#if instance.buganizer_link}}
+      <a href="{{instance.buganizer_link}}" target="_blank">Open Info</a>
+    {{else}}
+      <span>
+        ---
+      </span>
+    {{/if}}
+  {{/case}}
 
   {{#default}}
       {{#if_helpers '\

@@ -25,6 +25,8 @@
       buganizer_issue_priority: 'P0',
       buganizer_issue_severity: 'S0',
       buganizer_issue_title: '',
+      buganizer_link: 'http://google.com',
+      audit_buganizer_integrated: true,
 
       assessment_type: 'Control',
       status: 'Not Started',
@@ -97,6 +99,10 @@
         attr_title: 'Created Date',
         attr_name: 'created_at',
         order: 8
+      }, {
+        attr_title: 'Buganizer Link',
+        attr_name: 'buganizer_link',
+        order: 16
       }],
       display_attr_names: ['title', 'status', 'assignees', 'verifiers',
         'updated_at']
