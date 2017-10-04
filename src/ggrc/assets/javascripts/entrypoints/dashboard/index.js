@@ -164,6 +164,8 @@ import '../../components/form/fields/rich-text-form-field';
 import '../../components/form/fields/text-form-field';
 import '../../components/global-custom-attributes/global-custom-attributes';
 
+import '../../components/buganizer-integration/buganizer-fields-pre-population';
+
 // This modal should be loaded here as it requires some components
 import '../../bootstrap/modal-ajax';
 

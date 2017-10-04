@@ -74,5 +74,27 @@
         name="instance.buganizer_issue_severity">
       </dropdown>
     </div>
+
+    {{#if_instance_of instance "Assessment"}}
+      <div class="ggrc-form-item__multiple-row {{#instance.computed_errors.buganizer_issue_title}}field-failure{{/instance.computed_errors.buganizer_issue_title}}">
+        <label class="form-label required-label ggrc-form-item__label">
+          Issue Title
+          <i class="fa fa-asterisk"></i>
+        </label>
+        <buganizer-fields-pre-population
+          {instance}="instance"
+          {from-value}="instance.title"
+          {^to-value)}="instance.buganizer_issue_title"
+        >
+          <input data-id="code_txtbx"
+            class="input-block-level"
+            name="buganizer_issue_title"
+            placeholder="Enter Issue Title"
+            type="text"
+            {$value}="instance.buganizer_issue_title"
+          />
+        </buganizer-fields-pre-population>
+      </div>
+    {{/if}}
   </div>
 {{/is}}

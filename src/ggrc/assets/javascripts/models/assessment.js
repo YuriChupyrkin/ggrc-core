@@ -16,11 +16,16 @@
     mixins: [
       'ownable', 'unique_title',
       'autoStatusChangeable', 'timeboxed', 'mapping-limit',
-      'inScopeObjects', 'accessControlList', 'refetchHash'
+      'inScopeObjects', 'accessControlList', 'refetchHash',
+      'buganizerable',
     ],
     is_custom_attributable: true,
     isRoleable: true,
     defaults: {
+      buganizer_issue_priority: 'P0',
+      buganizer_issue_severity: 'S0',
+      buganizer_issue_title: '',
+
       assessment_type: 'Control',
       status: 'Not Started',
       send_by_default: true,  // notifications when a comment is added
@@ -132,6 +137,27 @@
       this.validatePresenceOf('audit');
       this.validateNonBlank('title');
 
+
+      this.validate(
+        'buganizer_issue_title',
+        function () {
+          if (this.attr('audit_buganizer_integrated') &&
+            this.attr('buganizer_integrated') === 'true' &&
+            !this.attr('buganizer_issue_title')) {
+            return 'Enter Issue Title';
+          }
+        }
+      );
+      this.validate(
+        'buganizer_component_id',
+        function () {
+          if (this.attr('audit_buganizer_integrated') &&
+            this.attr('buganizer_integrated') === 'true' &&
+            !this.attr('buganizer_component_id')) {
+            return 'Enter Component ID';
+          }
+        }
+      );
       this.validate(
         'validate_creator',
         function () {

@@ -286,6 +286,27 @@
         </div>
       </div>
 
+      {{#if instance.audit_buganizer_integrated}}
+        <div class="additional-fields">
+          <div class="expand-buganizer-link">
+            <a class="show-hidden-fields info-show-hide active" href="javascript://">
+              <span class="out">
+                <i class="fa fa-caret-right"></i>
+                SHOW
+              </span>
+              <span class="in">
+                <i class="fa fa-caret-down"></i>
+                HIDE
+              </span>
+              BUGANIZER INFO
+            </a>
+          </div>
+          <div class="hidden-buganizer-fields-area">
+            {{>'/static/mustache/buganizer_integration/modal-content-buganizer-fields.mustache'}}
+          </div>
+        </div>
+      {{/if}}
+
     </form>
     {{/instance}}
   </div>
