@@ -1,4 +1,4 @@
-/*!
+/*
  Copyright (C) 2017 Google Inc.
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
@@ -16,11 +16,18 @@
     mixins: [
       'ownable', 'unique_title',
       'autoStatusChangeable', 'timeboxed', 'mapping-limit',
-      'inScopeObjects', 'accessControlList', 'refetchHash'
+      'inScopeObjects', 'accessControlList', 'refetchHash',
+      'issueTrackerIntegratable',
     ],
     is_custom_attributable: true,
     isRoleable: true,
     defaults: {
+      issue_tracker: {
+        hotlist_id: '',
+        component_id: '',
+        title: '',
+      },
+
       assessment_type: 'Control',
       status: 'Not Started',
       send_by_default: true,  // notifications when a comment is added
@@ -100,7 +107,7 @@
         attr_title: 'Archived',
         attr_name: 'archived',
         order: 17,
-      }],
+      },],
       display_attr_names: ['title', 'status', 'assignees', 'verifiers',
       'start_date', 'updated_at'],
     },
@@ -143,6 +150,27 @@
       this.validatePresenceOf('audit');
       this.validateNonBlank('title');
 
+
+      this.validate(
+        'issue_tracker.title',
+        function () {
+          if (this.attr('issue_tracker.audit_enabled') &&
+            this.attr('issue_tracker.enabled') &&
+            !this.attr('issue_tracker.title')) {
+            return 'Enter Issue Title';
+          }
+        }
+      );
+      this.validate(
+        'issue_tracker.component_id',
+        function () {
+          if (this.attr('issue_tracker.audit_enabled') &&
+            this.attr('issue_tracker.enabled') &&
+            !this.attr('issue_tracker.component_id')) {
+            return 'Enter Component ID';
+          }
+        }
+      );
       this.validate(
         'validate_creator',
         function () {

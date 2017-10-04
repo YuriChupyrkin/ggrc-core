@@ -281,6 +281,27 @@
         </div>
       </div>
 
+      {{#if instance.issue_tracker.audit_enabled}}
+        <div class="additional-fields">
+          <div class="expand-issue-tracker-link">
+            <a class="show-hidden-fields info-show-hide active" href="javascript://">
+              <span class="out">
+                <i class="fa fa-caret-right"></i>
+                SHOW
+              </span>
+              <span class="in">
+                <i class="fa fa-caret-down"></i>
+                HIDE
+              </span>
+              BUGANIZER INFO
+            </a>
+          </div>
+          <div class="hidden-issue-tracker-fields-area">
+            {{>'/static/mustache/issue_tracker/modal-issue-tracker-fields.mustache'}}
+          </div>
+        </div>
+      {{/if}}
+
     </form>
     {{/instance}}
   </div>
