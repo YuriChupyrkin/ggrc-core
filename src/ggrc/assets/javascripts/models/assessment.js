@@ -27,6 +27,7 @@
         component_id: '',
         title: '',
         issue_url: '',
+        enabled: true,
       },
 
       assessment_type: 'Control',
@@ -159,7 +160,7 @@
       this.validate(
         'issue_tracker.title',
         function () {
-          if (this.attr('issue_tracker.audit_enabled') &&
+          if (this.attr('can_use_issue_tracker') &&
             this.attr('issue_tracker.enabled') &&
             !this.attr('issue_tracker.title')) {
             return 'Enter Issue Title';
@@ -169,7 +170,7 @@
       this.validate(
         'issue_tracker.component_id',
         function () {
-          if (this.attr('issue_tracker.audit_enabled') &&
+          if (this.attr('can_use_issue_tracker') &&
             this.attr('issue_tracker.enabled') &&
             !this.attr('issue_tracker.component_id')) {
             return 'Enter Component ID';
@@ -362,6 +363,10 @@
         } else {
           markForAddition(this, auditLead, 'Assessor');
           markForAddition(this, currentUser, 'Creator');
+        }
+
+        if (this.audit.issue_tracker) {
+          this.attr('can_use_issue_tracker', this.audit.issue_tracker.enabled);
         }
 
         return this.audit.findAuditors().then(function (list) {

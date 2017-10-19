@@ -84,6 +84,7 @@
       issue_tracker: {
         hotlist_id: '',
         component_id: '',
+        enabled: false,
       },
     },
     statuses: ['Planned', 'In Progress', 'Manager Review',
@@ -394,6 +395,7 @@
       issue_tracker: {
         hotlist_id: '',
         component_id: '',
+        enabled: true,
       },
     },
     statuses: ['Draft', 'Deprecated', 'Active'],
@@ -426,7 +428,7 @@
       this.validate(
         'issue_tracker.component_id',
         function () {
-          if (this.attr('issue_tracker.audit_enabled') &&
+          if (this.attr('can_use_issue_tracker') &&
             this.attr('issue_tracker.enabled') &&
             !this.attr('issue_tracker.component_id')) {
             return 'Enter Component ID';
@@ -448,6 +450,7 @@
      *
      */
     form_preload: function (isNewObject) {
+      let pageInstance = GGRC.page_instance();
       if (!this.custom_attribute_definitions) {
         this.attr('custom_attribute_definitions', new can.List());
       }
@@ -455,6 +458,14 @@
 
       this._updateDropdownEnabled('assessors');
       this._updateDropdownEnabled('verifiers');
+
+      if (pageInstance && pageInstance.type === 'Audit' && !this.audit) {
+        this.audit = pageInstance;
+      }
+
+      if (this.audit.issue_tracker) {
+        this.attr('can_use_issue_tracker', this.audit.issue_tracker.enabled);
+      }
     },
 
     /**
