@@ -27,7 +27,7 @@
         component_id: '',
         title: '',
         issue_url: '',
-        enabled: true,
+        enabled: false,
       },
 
       assessment_type: 'Control',
@@ -299,6 +299,10 @@
         this._super.apply(this, arguments);
       }
       this.bind('refreshInstance', this.refresh.bind(this));
+
+      this.bind('issue_tracker.enabled', () => {
+        this.prepareIssueTrackerFields();
+      });
     },
     before_create: function () {
       if (!this.audit) {
@@ -334,12 +338,33 @@
       this._transformBackupProperty(['design', 'operationally', '_disabled']);
       return this._super(checkAssociations);
     },
+
+    /**
+     * Set 'issue tracker' properties from Audit if issue tracker
+     * is turned on first time
+     */
+    prepareIssueTrackerFields: function () {
+      let isEnabled = this.attr('issue_tracker.enabled');
+      let currentComponentId = this.attr('issue_tracker.component_id');
+      let issueTitle = this.attr('issue_tracker.title') ||
+        this.attr('title');
+
+      if (this.audit) {
+        // dropdown issue. isEnabled can be string
+        if (isEnabled === true && !currentComponentId) {
+          // set from Audit
+          this.attr('issue_tracker', this.audit.issue_tracker.attr());
+          this.attr('issue_tracker.title', issueTitle);
+        }
+      }
+    },
     form_preload: function (newObjectForm) {
       var pageInstance = GGRC.page_instance();
       var currentUser = CMS.Models.get_instance('Person',
         GGRC.current_user.id, GGRC.current_user);
       var auditLead;
       var self = this;
+      let issueTracker;
 
       if (pageInstance && (!this.audit || !this.audit.id || !this.audit.type)) {
         if (pageInstance.type === 'Audit') {
@@ -365,8 +390,15 @@
           markForAddition(this, currentUser, 'Creator');
         }
 
-        if (this.audit.issue_tracker) {
-          this.attr('can_use_issue_tracker', this.audit.issue_tracker.enabled);
+        issueTracker = this.audit.issue_tracker;
+
+        if (issueTracker) {
+          this.attr('can_use_issue_tracker', issueTracker.enabled);
+
+          if (issueTracker.enabled) {
+            // turn ON issue tracker when CREATE new instance
+            this.attr('issue_tracker', issueTracker.attr());
+          }
         }
 
         return this.audit.findAuditors().then(function (list) {

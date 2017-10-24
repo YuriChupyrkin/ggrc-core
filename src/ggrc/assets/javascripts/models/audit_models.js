@@ -395,7 +395,7 @@
       issue_tracker: {
         hotlist_id: '',
         component_id: '',
-        enabled: true,
+        enabled: false,
       },
     },
     statuses: ['Draft', 'Deprecated', 'Active'],
@@ -437,6 +437,15 @@
       );
     }
   }, {
+    init: function () {
+      if (this._super) {
+        this._super.apply(this, arguments);
+      }
+      this.bind('issue_tracker.enabled', () => {
+        this.prepareIssueTrackerFields();
+      });
+    },
+
     /**
      * An event handler when the add/edit form is about to be displayed.
      *
@@ -463,8 +472,32 @@
         this.audit = pageInstance;
       }
 
-      if (this.audit.issue_tracker) {
+      if (this.audit && this.audit.issue_tracker) {
         this.attr('can_use_issue_tracker', this.audit.issue_tracker.enabled);
+
+        if (this.audit.issue_tracker.enabled) {
+          // turn ON issue tracker when CREATE new instance
+          this.attr('issue_tracker', this.audit.issue_tracker.attr());
+        }
+      }
+    },
+
+    /**
+     * Set 'issue tracker' properties from Audit if issue tracker
+     * is turned on first time
+     */
+    prepareIssueTrackerFields: function () {
+      let isEnabled = this.attr('issue_tracker.enabled');
+      let currentComponentId = this.attr('issue_tracker.component_id');
+      let issueTracker;
+
+      if (this.audit) {
+        issueTracker = this.audit.reify().issue_tracker;
+        // dropdown issue. isEnabled can be string
+        if (isEnabled === true && !currentComponentId && issueTracker) {
+          // set from Audit
+          this.attr('issue_tracker', issueTracker.attr());
+        }
       }
     },
 
