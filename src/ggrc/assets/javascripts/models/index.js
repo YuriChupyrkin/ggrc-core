@@ -48,6 +48,4 @@ import './control';
 import './section';
 import './system';
 import './join_models';
-
-
-
+import './proposal';

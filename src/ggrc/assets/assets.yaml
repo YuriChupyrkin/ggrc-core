@@ -187,3 +187,4 @@ dashboard-js-template-files:
   - snapshots/tree_add_item.mustache
   - components/inline/simple-readonly-text.mustache
   - partials/modal-ajax-test-plan.mustache
+  - modals/create_proposal.mustache
