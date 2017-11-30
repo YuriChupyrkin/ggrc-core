@@ -17,6 +17,8 @@ import '../components/object-list-item/document-object-list-item';
 import '../components/object-list-item/editable-document-object-list-item';
 import '../components/show-related-assessments-button/show-related-assessments-button';
 import '../components/proposal/create-proposal-button';
+import '../components/related-objects/related-proposals';
+import '../components/related-objects/related-proposals-item';
 import '../components/unarchive_link';
 import * as TreeViewUtils from '../plugins/utils/tree-view-utils';
 import {confirm} from '../plugins/utils/modals';

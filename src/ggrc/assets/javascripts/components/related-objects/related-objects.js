@@ -47,6 +47,7 @@ import Pagination from '../base-objects/pagination';
       orderBy: {},
       initialOrderBy: '@',
       selectedItem: {},
+      totalItems: '',
       objectSelectorEl: '.grid-data__action-column button',
       getFilters: function (id, type, isAssessment) {
         var predefinedFilter = this.attr('predefinedFilter');
@@ -64,6 +65,13 @@ import Pagination from '../base-objects/pagination';
           };
         }
         return filters;
+      },
+      updateTotalItems(totalItems) {
+        this.attr('totalItems', totalItems);
+        this.dispatch({
+          type: 'totalItemsChanged',
+          count: totalItems,
+        });
       },
       getParams: function () {
         var id;
@@ -95,6 +103,11 @@ import Pagination from '../base-objects/pagination';
         var params = this.getParams();
         this.attr('isLoading', true);
 
+        // if (this.attr('relatedItemsType') === 'Proposal') {
+        //   dfd = this.fakeLoadProposals(params);
+        //   return dfd;
+        // }
+
         makeRequest(params)
           .done(function (responseArr) {
             var relatedType = this.attr('relatedItemsType');
@@ -107,6 +120,7 @@ import Pagination from '../base-objects/pagination';
             });
             // Update paging object
             this.attr('paging.total', data[relatedType].total);
+            this.updateTotalItems(data[relatedType].total);
             dfd.resolve(result);
           }.bind(this))
           .fail(function () {
@@ -115,6 +129,105 @@ import Pagination from '../base-objects/pagination';
           .always(function () {
             this.attr('isLoading', false);
           }.bind(this));
+        return dfd;
+      },
+      fakeLoadProposals: function (params) {
+        console.log('fake proposals load');
+        console.log(params);
+
+        let proposals = [
+          {
+            id: 1,
+            status: 'proposed',
+            agenda: 'Commnet for first revision Commnet for first revision Commnet for first revision Commnet for first revision Commnet for first revision Commnet for first revision Commnet for first revision Commnet for first revision ',
+            content: {
+              fields: [
+                {
+                  attr: 'title',
+                  currentValue: 'title A',
+                  revisedValue: 'title B',
+                },
+                {
+                  attr: 'description',
+                  currentValue: 'Description ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription ADescription A',
+                  revisedValue: 'Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_Description_B_',
+                },
+              ],
+            },
+            decline_reason: '',
+            decline_datetime: '',
+            declined_by: null,
+            apply_reason: '',
+            apply_datetime: '',
+            applied_by: null,
+            created_by: {id: 2, href: '/api/people/2', type: 'Person'},
+            created_at: '2017-05-30T22:05:19',
+          },
+          {
+            id: 2,
+            status: 'declined',
+            agenda: 'My comment',
+            content: {
+              fields: [
+                {
+                  attr: 'title',
+                  currentValue: 'title A',
+                  revisedValue: 'title B',
+                },
+                {
+                  attr: 'effective_date',
+                  currentValue: '5/5/1990',
+                  revisedValue: '6/5/1990',
+                },
+              ],
+            },
+            decline_reason: 'bad proposal... very bad proposal',
+            decline_datetime: '2017-11-28T12:01:09',
+            declined_by: {id: 3, href: '/api/people/3', type: 'Person'},
+            apply_reason: '',
+            apply_datetime: '',
+            applied_by: null,
+            created_by: {id: 1, href: '/api/people/1', type: 'Person'},
+            created_at: '2017-05-30T22:05:19',
+          },
+          {
+            id: 3,
+            status: 'applied',
+            agenda: 'Comment of approved proposal',
+            content: {
+              fields: [
+                {
+                  attr: 'title',
+                  currentValue: 'title A',
+                  revisedValue: 'title B',
+                },
+                {
+                  attr: 'note',
+                  currentValue: 'note note...',
+                  revisedValue: 'this note',
+                },
+              ],
+            },
+            decline_reason: '',
+            decline_datetime: '',
+            declined_by: null,
+            apply_reason: 'looks nice...',
+            apply_datetime: '2017-08-05T12:11:19',
+            applied_by: {id: 4, href: '/api/people/4', type: 'Person'},
+            created_by: {id: 3, href: '/api/people/3', type: 'Person'},
+            created_at: '2017-05-30T22:05:19',
+          },
+        ];
+
+        let dfd = can.Deferred();
+
+        setTimeout(() => {
+          dfd.resolve(proposals);
+          this.attr('isLoading', false);
+          this.attr('paging.total', 30);
+          this.updateTotalItems(36);
+        }, 500);
+
         return dfd;
       },
       getSortingInfo: function () {
