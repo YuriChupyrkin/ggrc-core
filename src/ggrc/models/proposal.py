@@ -3,6 +3,8 @@
 
 """Defines a Revision model for storing snapshots."""
 
+import sqlalchemy as sa
+
 from ggrc import db
 from ggrc import models
 
@@ -57,4 +59,22 @@ class Proposal(models.mixins.Stateful,
   def _extra_table_args(_):
     return (
         db.Index("fk_instance", "instance_id", "instance_type"),
+    )
+
+
+class Proposalable(object):
+
+  @sa.ext.declarative.declared_attr
+  def _proposals(cls):  # pylint: disable=no-self-argument
+
+    def join_function():
+      return sa.and_(
+          sa.orm.foreign(Proposal.object_type) == cls.__name__,
+          sa.orm.foreign(Proposal.object_id) == cls.id,
+      )
+
+    return sa.orm.relationship(
+        Proposal,
+        primaryjoin=join_function,
+        backref=Proposal.INSTANCE_TMPL.format(cls.__name__),
     )
