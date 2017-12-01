@@ -6,16 +6,20 @@
 import sqlalchemy as sa
 
 from ggrc import db
-from ggrc import models
+from ggrc.models import mixins
+from ggrc.models import reflection
+from ggrc.models import types
+from ggrc.models import utils
+# from ggrc.models import all_models
 from ggrc import login
 
 
-class Proposal(models.mixins.Stateful,
-               models.mixins.Base,
+class Proposal(mixins.Stateful,
+               mixins.Base,
                db.Model):
   """Revision object holds a JSON snapshot of the object at a time."""
 
-  __tablename__ = 'proposal'
+  __tablename__ = 'proposals'
 
   class STATES(object):
     PROPOSED = "proposed"
@@ -26,42 +30,38 @@ class Proposal(models.mixins.Stateful,
 
   instance_id = db.Column(db.Integer, nullable=False)
   instance_type = db.Column(db.String, nullable=False)
-  content = db.Column('content', models.types.LongJsonType, nullable=False)
+  content = db.Column('content', types.LongJsonType, nullable=False)
   agenda = db.Column(db.Text, nullable=False, default=u"")
   decline_reason = db.Column(db.Text, nullable=False, default=u"")
   decline_datetime = db.Column(db.DateTime, nullable=True)
-  declined_by= db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
+  declined_by = db.Column(db.Integer,
+                          db.ForeignKey('people.id'),
+                          nullable=True)
   apply_reason = db.Column(db.Text, nullable=False, default=u"")
   apply_datetime = db.Column(db.DateTime, nullable=True)
-  applied_by= db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
+  applied_by = db.Column(db.Integer,
+                         db.ForeignKey('people.id'),
+                         nullable=True)
 
   INSTANCE_TMPL = "{}_proposalable"
 
-  instance = models.utils.PolymorphicRelationship("instance_id",
-                                                  "instance_type",
-                                                  INSTANCE_TMPL)
+  instance = utils.PolymorphicRelationship("instance_id",
+                                           "instance_type",
+                                           INSTANCE_TMPL)
 
-  _api_attrs = models.reflection.ApiAttributes(
-      models.reflection.Attribute("instance", update=False),
-      models.reflection.Attribute("content", update=False),
-      models.reflection.Attribute("agenda", update=False),
+  _api_attrs = reflection.ApiAttributes(
+      reflection.Attribute("instance", update=False),
+      reflection.Attribute("content", update=False),
+      reflection.Attribute("agenda", update=False),
       # ignore create proposal in specific state to be shure
       # new proposal will be only in proposed state
-      models.reflection.Attribute('status', create=False),
-      models.reflection.Attribute('decline_reason', create=False),
-      models.reflection.Attribute('decline_datetime',
-                                  create=False,
-                                  update=False),
-      models.reflection.Attribute('declined_by',
-                                  create=False,
-                                  update=False),
-      models.reflection.Attribute('apply_reason', create=False),
-      models.reflection.Attribute('apply_datetime',
-                                  create=False,
-                                  update=False),
-      models.reflection.Attribute('applied_by',
-                                  create=False,
-                                  update=False),
+      reflection.Attribute('status', create=False),
+      reflection.Attribute('decline_reason', create=False),
+      reflection.Attribute('decline_datetime', create=False, update=False),
+      reflection.Attribute('declined_by', create=False, update=False),
+      reflection.Attribute('apply_reason', create=False),
+      reflection.Attribute('apply_datetime', create=False, update=False),
+      reflection.Attribute('applied_by', create=False, update=False),
   )
 
   @staticmethod
@@ -75,15 +75,15 @@ class Proposal(models.mixins.Stateful,
     return "generated link"
 
   def add_comment(self, text):
-    if not isinstance(self.instance, models.comment.Commentable):
+    if not isinstance(self.instance, all_models.Commentable):
       return
-    comment = models.Comment(
+    comment = all_models.Comment(
         description=u"{} \n link:{}".format(text, self.link),
         modified_by_id=login.get_current_user_id())
-    models.Relationship(source=self.instance, destination=comment)
+    all_models.Relationship(source=self.instance, destination=comment)
 
   def send_notification(self, text):
-    if not isinstance(self.instance, models.mixins.Notifiable):
+    if not isinstance(self.instance, all_models.mixins.Notifiable):
       return
     # get notification type
     # create notification
@@ -113,7 +113,7 @@ class Proposal(models.mixins.Stateful,
 class Proposalable(object):
 
   @sa.ext.declarative.declared_attr
-  def _proposals(cls):  # pylint: disable=no-self-argument
+  def proposals(cls):  # pylint: disable=no-self-argument
 
     def join_function():
       return sa.and_(
