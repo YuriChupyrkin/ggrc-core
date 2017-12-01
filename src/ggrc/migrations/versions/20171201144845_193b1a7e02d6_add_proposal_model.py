@@ -11,6 +11,7 @@ Create Date: 2017-12-01 14:48:45.907914
 
 import sqlalchemy as sa
 
+from sqlalchemy.dialects import mysql
 from alembic import op
 
 # revision identifiers, used by Alembic.
@@ -21,18 +22,18 @@ down_revision = '3d505e157ab7'
 def upgrade():
   """Upgrade database schema and/or data, creating a new revision."""
   op.create_table(
-      'proposal',
+      'proposals',
       sa.Column('id', sa.Integer(), nullable=False),
       sa.Column('instance_id', sa.Integer(), nullable=False),
       sa.Column('instance_type', sa.String(length=250), nullable=False),
-      sa.Column('content', sa.LongJsonType(), nullable=False),
+      sa.Column('content', mysql.LONGTEXT, nullable=False),
       sa.Column('agenda', sa.Text(), nullable=False),
       sa.Column('decline_reason', sa.Text(), nullable=False),
       sa.Column('decline_datetime', sa.DateTime(), nullable=True),
-      sa.Column('declined_by', sa.Integer(), nullable=False),
+      sa.Column('declined_by', sa.Integer(), nullable=True),
       sa.Column('apply_reason', sa.Text(), nullable=False),
       sa.Column('apply_datetime', sa.DateTime(), nullable=True),
-      sa.Column('applied_by', sa.Integer(), nullable=False),
+      sa.Column('applied_by', sa.Integer(), nullable=True),
       sa.Column('status', sa.String(length=250), nullable=False),
       sa.Column('updated_at', sa.DateTime(), nullable=False),
       sa.Column('modified_by_id', sa.Integer(), nullable=True),
@@ -44,22 +45,22 @@ def upgrade():
       sa.PrimaryKeyConstraint('id')
   )
   op.create_index('fk_instance',
-                  'proposal',
+                  'proposals',
                   ['instance_id', 'instance_type'],
                   unique=False)
   op.create_index('fk_proposal_contexts',
-                  'proposal',
+                  'proposals',
                   ['context_id'],
                   unique=False)
   op.create_index('ix_proposal_updated_at',
-                  'proposal',
+                  'proposals',
                   ['updated_at'],
                   unique=False)
 
 
 def downgrade():
   """Downgrade database schema and/or data back to the previous revision."""
-  op.drop_index('ix_proposal_updated_at', table_name='proposal')
-  op.drop_index('fk_proposal_contexts', table_name='proposal')
-  op.drop_index('fk_instance', table_name='proposal')
-  op.drop_table('proposal')
+  op.drop_index('ix_proposal_updated_at', table_name='proposals')
+  op.drop_index('fk_proposal_contexts', table_name='proposals')
+  op.drop_index('fk_instance', table_name='proposals')
+  op.drop_table('proposals')
