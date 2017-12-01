@@ -30,8 +30,10 @@ class Proposal(models.mixins.Stateful,
   agenda = db.Column(db.Text, nullable=False, default=u"")
   decline_reason = db.Column(db.Text, nullable=False, default=u"")
   decline_datetime = db.Column(db.DateTime, nullable=True)
+  declined_by= db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
   apply_reason = db.Column(db.Text, nullable=False, default=u"")
   apply_datetime = db.Column(db.DateTime, nullable=True)
+  applied_by= db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
 
   INSTANCE_TMPL = "{}_proposalable"
 
@@ -50,8 +52,14 @@ class Proposal(models.mixins.Stateful,
       models.reflection.Attribute('decline_datetime',
                                   create=False,
                                   update=False),
+      models.reflection.Attribute('declined_by',
+                                  create=False,
+                                  update=False),
       models.reflection.Attribute('apply_reason', create=False),
       models.reflection.Attribute('apply_datetime',
+                                  create=False,
+                                  update=False),
+      models.reflection.Attribute('applied_by',
                                   create=False,
                                   update=False),
   )
