@@ -449,6 +449,16 @@ class ThreatFactory(TitledFactory):
     model = risk_models.Threat
 
 
+class ProposalFactory(ModelFactory):
+
+  class Meta:
+    model = models.Proposal
+
+  instance_type = None
+  instance_id = None
+  content = None
+
+
 def get_model_factory(model_name):
   """Get object factory for provided model name"""
   from integration.ggrc_workflows.models import factories as wf_factories
@@ -487,5 +497,6 @@ def get_model_factory(model_name):
       "Risk": RiskFactory,
       "Threat": ThreatFactory,
       "Workflow": wf_factories.WorkflowFactory,
+      "Proposal": ProposalFactory,
   }
   return model_factories[model_name]
