@@ -34,7 +34,6 @@ class TestProposalApi(TestCase):
     self.assertDictEqual({"field": "a"}, data["content"])
     self.assertEqual("agenda content", data["agenda"])
 
-
   def test_simple_create_proposal(self):
     new_title = "2"
     control = factories.ControlFactory(title="1")
@@ -47,12 +46,49 @@ class TestProposalApi(TestCase):
                 "id": control.id,
                 "type": control.type,
             },
-            # "full_instance_content": control.log_json(),
+            # "content": {"123": 123},
+            "full_instance_content": control.log_json(),
             "agenda": "update title from 1 to 2",
+            "context": None,
         }})
-    print resp
-    self.assert200(resp)
+    self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
     self.assertEqual({"fields": {"title": "2"}},
                      control.proposals[0].content)
+
+  def test_simple_apply_status(self):
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1")
+      proposal = factories.ProposalFactory(
+          instance=control,
+          content={"fields": {"title": "2"}},
+          agenda="agenda content")
+    control_id = control.id
+    proposal_id = proposal.id
+    self.assertEqual(proposal.STATES.PROPOSED, proposal.status)
+    resp = self.api.put(proposal,
+                        {"proposal": {"status": proposal.STATES.APPLIED}})
+    self.assert200(resp)
+    control = all_models.Control.query.get(control_id)
+    proposal = all_models.Proposal.query.get(proposal_id)
+    self.assertEqual(proposal.STATES.APPLIED, proposal.status)
+    self.assertEqual("2", control.title)
+
+  def test_simple_decline_status(self):
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1")
+      proposal = factories.ProposalFactory(
+          instance=control,
+          content={"fields": {"title": "2"}},
+          agenda="agenda content")
+    control_id = control.id
+    proposal_id = proposal.id
+    self.assertEqual(proposal.STATES.PROPOSED, proposal.status)
+    resp = self.api.put(proposal,
+                        {"proposal": {"status": proposal.STATES.DECLINED}})
+    self.assert200(resp)
+    control = all_models.Control.query.get(control_id)
+    proposal = all_models.Proposal.query.get(proposal_id)
+    self.assertEqual(proposal.STATES.DECLINED, proposal.status)
+    self.assertEqual("1", control.title)
