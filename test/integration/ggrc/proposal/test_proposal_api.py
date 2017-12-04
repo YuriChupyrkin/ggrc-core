@@ -39,6 +39,7 @@ class TestProposalApi(TestCase):
     control = factories.ControlFactory(title="1")
     control_id = control.id
     control.title = new_title
+    self.assertEqual(0, len(control.comments))
     resp = self.api.post(
         all_models.Proposal,
         {"proposal": {
@@ -56,6 +57,9 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertEqual({"fields": {"title": "2"}},
                      control.proposals[0].content)
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("update title from 1 to 2",
+                     control.comments[0].description)
 
   def test_simple_apply_status(self):
     with factories.single_commit():
@@ -72,8 +76,15 @@ class TestProposalApi(TestCase):
         all_models.Revision.resource_id == control.id
     ).all()
     self.assertEqual(1, len(revisions))
-    resp = self.api.put(proposal,
-                        {"proposal": {"status": proposal.STATES.APPLIED}})
+    self.assertEqual(0, len(control.comments))
+    resp = self.api.put(
+        proposal,
+        {
+            "proposal": {
+                "status": proposal.STATES.APPLIED,
+                "apply_reason": "approved",
+            }
+        })
     self.assert200(resp)
     control = all_models.Control.query.get(control_id)
     proposal = all_models.Proposal.query.get(proposal_id)
@@ -85,6 +96,9 @@ class TestProposalApi(TestCase):
     ).all()
     self.assertEqual(2, len(revisions))
     self.assertEqual("2", revisions[-1].content['title'])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("approved",
+                     control.comments[0].description)
 
   def test_simple_decline_status(self):
     with factories.single_commit():
@@ -95,11 +109,31 @@ class TestProposalApi(TestCase):
           agenda="agenda content")
     control_id = control.id
     proposal_id = proposal.id
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
     self.assertEqual(proposal.STATES.PROPOSED, proposal.status)
-    resp = self.api.put(proposal,
-                        {"proposal": {"status": proposal.STATES.DECLINED}})
+    self.assertEqual(1, len(revisions))
+    self.assertEqual(0, len(control.comments))
+    resp = self.api.put(
+        proposal,
+        {
+            "proposal": {
+                "status": proposal.STATES.DECLINED,
+                "decline_reason": "declined bla",
+            }
+        })
     self.assert200(resp)
     control = all_models.Control.query.get(control_id)
     proposal = all_models.Proposal.query.get(proposal_id)
     self.assertEqual(proposal.STATES.DECLINED, proposal.status)
     self.assertEqual("1", control.title)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(1, len(revisions))
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("declined bla",
+                     control.comments[0].description)
