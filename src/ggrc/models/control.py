@@ -25,6 +25,7 @@ from ggrc.models.utils import validate_option
 from ggrc.fulltext.mixin import Indexed
 from ggrc.fulltext import attributes
 from ggrc.models import reflection
+from ggrc.models import proposal
 
 
 class ControlCategory(CategoryBase):
@@ -153,6 +154,7 @@ class Control(WithLastAssessmentDate,
               mixins.BusinessObject,
               Indexed,
               mixins.Folderable,
+              proposal.Proposalable,
               db.Model):
   __tablename__ = 'controls'
 

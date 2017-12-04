@@ -117,8 +117,8 @@ class Proposalable(object):
 
     def join_function():
       return sa.and_(
-          sa.orm.foreign(Proposal.object_type) == cls.__name__,
-          sa.orm.foreign(Proposal.object_id) == cls.id,
+          sa.orm.foreign(Proposal.instance_type) == cls.__name__,
+          sa.orm.foreign(Proposal.instance_id) == cls.id,
       )
 
     return sa.orm.relationship(

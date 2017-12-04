@@ -20,9 +20,19 @@ class TestProposalApi(TestCase):
     with factories.single_commit():
       control = factories.ControlFactory()
       proposal = factories.ProposalFactory(instance=control,
-                                           content={"field": "a"})
-    resp = self.api.get(proposal, proposal.id)
+                                           content={"field": "a"},
+                                           agenda="agenda content")
+    instance_dict = {"id": control.id, "type": control.type}
+    resp = self.api.get(all_models.Proposal, proposal.id)
     self.assert200(resp)
+    self.assertIn("proposal", resp.json)
+    data = resp.json["proposal"]
+    self.assertIn("content", data)
+    self.assertIn("instance", data)
+    self.assertIn("agenda", data)
+    self.assertDictEqual(instance_dict, data["instance"])
+    self.assertDictEqual({"field": "a"}, data["content"])
+    self.assertEqual("agenda content", data["agenda"])
 
 
   def test_simple_create_proposal(self):
@@ -37,9 +47,10 @@ class TestProposalApi(TestCase):
                 "id": control.id,
                 "type": control.type,
             },
-            "full_instance_content": control.log_json(),
+            # "full_instance_content": control.log_json(),
             "agenda": "update title from 1 to 2",
         }})
+    print resp
     self.assert200(resp)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
