@@ -67,6 +67,11 @@ class TestProposalApi(TestCase):
     control_id = control.id
     proposal_id = proposal.id
     self.assertEqual(proposal.STATES.PROPOSED, proposal.status)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(1, len(revisions))
     resp = self.api.put(proposal,
                         {"proposal": {"status": proposal.STATES.APPLIED}})
     self.assert200(resp)
@@ -74,6 +79,12 @@ class TestProposalApi(TestCase):
     proposal = all_models.Proposal.query.get(proposal_id)
     self.assertEqual(proposal.STATES.APPLIED, proposal.status)
     self.assertEqual("2", control.title)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(2, len(revisions))
+    self.assertEqual("2", revisions[-1].content['title'])
 
   def test_simple_decline_status(self):
     with factories.single_commit():
