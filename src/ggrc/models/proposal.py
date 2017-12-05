@@ -12,7 +12,6 @@ from ggrc.models import reflection
 from ggrc.models import types
 from ggrc.models import utils
 from ggrc.utils import referenced_objects
-from ggrc import login
 
 
 class JsonPolymorphicRelationship(utils.PolymorphicRelationship):
@@ -119,41 +118,6 @@ class Proposal(mixins.Stateful, mixins.Base, db.Model):
   @property
   def link(self):
     return "generated link"
-
-  def add_comment(self, text):
-    if not isinstance(self.instance, all_models.Commentable):
-      return
-    comment = all_models.Comment(
-        description=u"{} \n link:{}".format(text, self.link),
-        modified_by_id=login.get_current_user_id())
-    all_models.Relationship(source=self.instance, destination=comment)
-
-  def send_notification(self, text):
-    if not isinstance(self.instance, all_models.mixins.Notifiable):
-      return
-    # get notification type
-    # create notification
-
-  def propose_action(self):
-    assert self.status == self.STATES.PROPOSED
-    self.send_notification(self.agenda)
-    self.add_comment(self.agenda)
-
-  def decline_action(self):
-    assert self.status == self.STATES.DECLINED
-    self.send_notification(self.decline_reason)
-    self.add_comment(self.decline_reason)
-
-  def apply_action(self):
-    assert self.status == self.STATES.APPLIED
-    self.send_notification(self.apply_reason)
-    self.add_comment(self.apply_reason)
-    for field, value in self.content.iteritems():
-      if hasattr(self.instance, field):
-        setattr(self.instance, field, value)
-    # create revision
-
-    # send
 
 
 class Proposalable(object):
