@@ -44,6 +44,10 @@ export default GGRC.Components('tabPanel', {
     titleText: '@',
     panels: [],
     tabIndex: null,
+    canDisplayWarning: false,
+    warningState: false,
+    warningText: '@',
+    extraClasses: '@',
     addPanel: function () {
       var panels = this.attr('panels');
       var isAlreadyAdded = panels.indexOf(this) > -1;
@@ -69,7 +73,10 @@ export default GGRC.Components('tabPanel', {
         panels.splice(indexToRemove, 1);
         panels.dispatch('panelRemoved');
       }
-    }
+    },
+    updateWarningState(event) {
+      this.attr('warningState', event.warning);
+    },
   },
   events: {
     /**
