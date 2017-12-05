@@ -11,6 +11,8 @@ from ggrc.models import mixins
 from ggrc.models import reflection
 from ggrc.models import types
 from ggrc.models import utils
+from ggrc.fulltext import mixin as ft_mixin
+from ggrc.fulltext import attributes
 from ggrc.utils import referenced_objects
 
 
@@ -57,7 +59,7 @@ class FullInstanceContentFased(utils.FasadeProperty):
     return {"fields": fields}
 
 
-class Proposal(mixins.Stateful, mixins.Base, db.Model):
+class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
   """Revision object holds a JSON snapshot of the object at a time."""
 
   __tablename__ = 'proposals'
@@ -89,6 +91,26 @@ class Proposal(mixins.Stateful, mixins.Base, db.Model):
   instance = JsonPolymorphicRelationship("instance_id",
                                          "instance_type",
                                          INSTANCE_TMPL)
+
+  _fulltext_attrs = [
+      "instance_id",
+      "instance_type",
+      "agenda",
+      "decline_reason",
+      "decline_datetime",
+      "apply_reason",
+      "apply_datetime",
+      attributes.FullTextAttr(
+          "declined_by",
+          "declined_by",
+          ["email", "name"]
+      ),
+      attributes.FullTextAttr(
+          "applied_by",
+          "applied_by",
+          ["email", "name"]
+      ),
+  ]
 
   _api_attrs = reflection.ApiAttributes(
       reflection.Attribute("instance", update=False),
