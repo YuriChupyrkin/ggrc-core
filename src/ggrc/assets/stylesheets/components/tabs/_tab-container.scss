@@ -8,6 +8,17 @@
       cursor: pointer;
     }
   }
+
+  .nav-tab-count {
+    background: $gray;
+    border-radius: 10px;
+    color: #ffffff;
+    display: inline-block;
+    line-height: 12px;
+    text-align: center;
+    padding: 3px;
+    min-width: 12px;
+  }
 }
 .related-assessments__tab-container {
   .nav {

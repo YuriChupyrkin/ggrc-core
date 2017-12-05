@@ -11,6 +11,14 @@ export default can.Component.extend({
   template,
   viewModel: {
     baseInstance: {},
-    relatedProposals: null,
+    totalProposals: '',
+    totalProposalsChanged(event) {
+      const count = event.count;
+      this.attr('totalProposals', count);
+      this.dispatch({
+        type: 'proposalsCountRefresh',
+        count: count,
+      });
+    },
   },
 });

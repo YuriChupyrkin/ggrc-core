@@ -77,3 +77,9 @@
     font-style: italic;
   }
 }
+
+.related-proposals-count {
+  .nav-tab-count {
+    background: $status-proposed;
+  }
+}

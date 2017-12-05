@@ -7,7 +7,7 @@
   <related-objects
     class="related-proposals"
     {base-instance}="baseInstance"
-    {predefined-filter}="relatedProposals"
+    (total-items-changed)="totalProposalsChanged(%event)"
     related-items-type="Proposal">
 
     <div class="grid-data__toolbar flex-box">

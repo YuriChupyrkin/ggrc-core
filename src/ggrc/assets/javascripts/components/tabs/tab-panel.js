@@ -44,6 +44,9 @@ export default GGRC.Components('tabPanel', {
     titleText: '@',
     panels: [],
     tabIndex: null,
+    displayCount: false,
+    itemsCount: '',
+    tabPanelExtraClasses: '@',
     addPanel: function () {
       var panels = this.attr('panels');
       var isAlreadyAdded = panels.indexOf(this) > -1;
@@ -69,7 +72,10 @@ export default GGRC.Components('tabPanel', {
         panels.splice(indexToRemove, 1);
         panels.dispatch('panelRemoved');
       }
-    }
+    },
+    updateCount(event) {
+      this.attr('itemsCount', event.count);
+    },
   },
   events: {
     /**

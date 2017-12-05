@@ -6,10 +6,17 @@
 <div class="tab-container {{^if showTabs}}tab-container_hidden-tabs{{/if}}">
   <ul class="nav nav-tabs">
     {{#each panels}}
-    <li {{#if active}}class="active"{{/if}}>
+    <li class="{{tabPanelExtraClasses}} {{#if active}}active{{/if}}">
       <a ($click)='setActive'
         tabindex="{{@index}}">
         {{titleText}}
+        {{#if displayCount}}
+          {{#if itemsCount}}
+            <div class="nav-tab-count">
+              {{itemsCount}}
+            </div>
+          {{/if}}
+        {{/if}}
       </a>
     </li>
     {{/each}}
