@@ -7,6 +7,7 @@ from sqlalchemy import inspect
 
 from ggrc.services import signals
 from ggrc.models import all_models
+from ggrc.models import mixins
 from ggrc.models import comment
 from ggrc import login
 from ggrc import db
@@ -61,6 +62,26 @@ def apply_acl_proposal(obj):
         db.session.delete(instance_acl_dict[(role_id, delete)])
 
 
+def apply_cav_proposal(obj):
+  if not isinstance(obj.instance,
+                    mixins.customattributable.CustomAttributable):
+    return
+  cad_dict = {d.id: d for d in obj.instance.custom_attribute_definitions}
+  cav_dict = {i.custom_attribute_id: i
+              for i in obj.instance.custom_attribute_values}
+  proposals = obj.content.get("custom_attribute_values", {})
+  for cad_id, value in proposals.iteritems():
+    cad_id = int(cad_id)
+    if cad_id in cav_dict:
+      cav_dict[cad_id].attribute_value = value
+    else:
+      all_models.CustomAttributeValue(
+          custom_attribute=cad_dict[cad_id],
+          attributable=obj.instance,
+          attribute_value=value
+      )
+
+
 def apply_proposal(
     sender, obj=None, src=None, service=None,
     event=None, initial_state=None):  # noqa
@@ -70,6 +91,7 @@ def apply_proposal(
     if hasattr(obj.instance, field):
       setattr(obj.instance, field, value)
   apply_acl_proposal(obj)
+  apply_cav_proposal(obj)
   add_comment_to(obj.instance, obj.apply_reason or "")
 
 
