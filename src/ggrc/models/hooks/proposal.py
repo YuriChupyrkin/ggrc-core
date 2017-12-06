@@ -9,6 +9,7 @@ from ggrc.services import signals
 from ggrc.models import all_models
 from ggrc.models import comment
 from ggrc import login
+from ggrc import db
 
 
 def is_status_changed_to(required_status, obj):
@@ -31,14 +32,44 @@ def build_text_comment(txt, proposal_link):
   return "{} \n\n link:{}".format(txt or "", proposal_link)
 
 
+def apply_acl_proposal(obj):
+  instance_acl_dict = {(l.ac_role_id, l.person_id): l
+                       for l in obj.instance.access_control_list}
+  person_ids = set()
+  for role_id, data in obj.content.get("access_control_list", {}).iteritems():
+    person_ids |= set(data["added"] + data["deleted"])
+  person_dict = {p.id: p for p in all_models.Person.query.filter(
+      all_models.Person.id.in_(person_ids))
+  }
+  acr_dict = {
+      i.id: i for i in all_models.AccessControlRole.query.filter(
+          all_models.AccessControlRole.object_type == obj.instance_type)
+  }
+  for role_id, data in obj.content.get("access_control_list", {}).iteritems():
+    role_id = int(role_id)
+    for add in data["added"]:
+      if (role_id, add) not in instance_acl_dict:
+        # add ACL if it hasn't added yet
+        acl = all_models.AccessControlList(
+            person=person_dict[add],
+            ac_role=acr_dict[int(role_id)],
+            object=obj.instance,
+        )
+        instance_acl_dict[(role_id, add)] = acl
+    for delete in data["deleted"]:
+      if (role_id, delete) in instance_acl_dict:
+        db.session.delete(instance_acl_dict[(role_id, delete)])
+
+
 def apply_proposal(
     sender, obj=None, src=None, service=None,
     event=None, initial_state=None):  # noqa
   if not is_status_changed_to(obj.STATES.APPLIED, obj):
     return
-  for field, value in obj.content["fields"].iteritems():
+  for field, value in obj.content.get("fields", {}).iteritems():
     if hasattr(obj.instance, field):
       setattr(obj.instance, field, value)
+  apply_acl_proposal(obj)
   add_comment_to(obj.instance, obj.apply_reason or "")
 
 
