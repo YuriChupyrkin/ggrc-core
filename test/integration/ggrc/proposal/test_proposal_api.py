@@ -58,12 +58,8 @@ class TestProposalApi(TestCase):
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
-    self.assertEqual(
-        {
-            "fields": {"title": "2"},
-            "access_control_list": {},
-        },
-        control.proposals[0].content)
+    self.assertIn("fields", control.proposals[0].content)
+    self.assertEqual({"title": "2"}, control.proposals[0].content["fields"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update title from 1 to 2",
                      control.comments[0].description)
@@ -172,17 +168,9 @@ class TestProposalApi(TestCase):
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
-    self.assertEqual(
-        {
-            "access_control_list": {
-                unicode(role_id): {
-                    "added": [person_id],
-                    "deleted": [],
-                },
-            },
-            "fields": {},
-        },
-        control.proposals[0].content)
+    self.assertIn("access_control_list", control.proposals[0].content)
+    self.assertEqual({unicode(role_id): {"added": [person_id], "deleted": []}},
+                     control.proposals[0].content["access_control_list"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update access control roles",
                      control.comments[0].description)
@@ -226,17 +214,9 @@ class TestProposalApi(TestCase):
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
-    self.assertEqual(
-        {
-            "access_control_list": {
-                unicode(role_id): {
-                    "added": [],
-                    "deleted": [person_id],
-                },
-            },
-            "fields": {},
-        },
-        control.proposals[0].content)
+    self.assertIn("access_control_list", control.proposals[0].content)
+    self.assertEqual({unicode(role_id): {"added": [], "deleted": [person_id]}},
+                     control.proposals[0].content["access_control_list"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("delete access control roles",
                      control.comments[0].description)
@@ -336,3 +316,65 @@ class TestProposalApi(TestCase):
     self.assertEqual(set([]), result_dict[role_4_id])
     self.assertEqual({person_1_id, person_2_id, person_3_id},
                      result_dict[role_5_id])
+
+  def test_change_cad(self):
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1")
+      cad = factories.CustomAttributeDefinitionFactory(
+          definition_type="control")
+      factories.CustomAttributeValueFactory(
+          custom_attribute=cad,
+          attributable=control,
+          attribute_value="123")
+    control_id = control.id
+    cad_id = cad.id
+    data = control.log_json()
+    data["custom_attribute_values"][0]["attribute_value"] = "321"
+    resp = self.api.post(
+        all_models.Proposal,
+        {"proposal": {
+            "instance": {
+                "id": control.id,
+                "type": control.type,
+            },
+            # "content": {"123": 123},
+            "full_instance_content": data,
+            "agenda": "update cav",
+            "context": None,
+        }})
+    self.assertEqual(201, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual(1, len(control.proposals))
+    self.assertIn("custom_attribute_values", control.proposals[0].content)
+    self.assertEqual({unicode(cad_id): u"321"},
+                     control.proposals[0].content["custom_attribute_values"])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("update cav", control.comments[0].description)
+
+  def test_apply_cad(self):
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1")
+      cad = factories.CustomAttributeDefinitionFactory(
+          definition_type="control")
+    control_id = control.id
+    proposal = factories.ProposalFactory(
+        instance=control,
+        content={"custom_attribute_values": {cad.id: "321"}},
+        agenda="agenda content")
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(1, len(revisions))
+    resp = self.api.put(
+        proposal, {"proposal": {"status": proposal.STATES.APPLIED}})
+    self.assert200(resp)
+    control = all_models.Control.query.get(control_id)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(2, len(revisions))
+    self.assertEqual(
+        "321",
+        control.custom_attribute_values[0].attribute_value)
