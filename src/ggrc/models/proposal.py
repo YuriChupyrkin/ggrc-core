@@ -76,6 +76,7 @@ class FullInstanceContentFased(utils.FasadeProperty):
         f: full_instance_content[f]
         for f in updateable_fields
         if (f in full_instance_content and
+            f in current_data and
             current_data[f] != full_instance_content[f])
     }
     return {
