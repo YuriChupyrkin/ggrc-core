@@ -4,13 +4,14 @@
 """Defines a Revision model for storing snapshots."""
 
 import sqlalchemy as sa
-import deepdiff
+import collections
 
 from ggrc import db
 from ggrc.models import mixins
 from ggrc.models import reflection
 from ggrc.models import types
 from ggrc.models import utils
+from ggrc.models import revision
 from ggrc.fulltext import mixin as ft_mixin
 from ggrc.fulltext import attributes
 from ggrc.utils import referenced_objects
@@ -31,6 +32,28 @@ class FullInstanceContentFased(utils.FasadeProperty):
 
   FIELD_NAME = "content"
 
+  @staticmethod
+  def generate_acl_diff(proposed, revisioned):
+    proposed_acl = collections.defaultdict(set)
+    revision_acl = collections.defaultdict(set)
+    acl_ids = set()
+    for acl in proposed:
+      proposed_acl[acl["ac_role_id"]].add(acl["person"]["id"])
+      acl_ids.add(acl["ac_role_id"])
+    for acl in revisioned:
+      revision_acl[acl["ac_role_id"]].add(acl["person"]["id"])
+      acl_ids.add(acl["ac_role_id"])
+    acl_dict = {}
+    for role_id in acl_ids:
+      deleted_person_ids = revision_acl[role_id] - proposed_acl[role_id]
+      added_person_ids = proposed_acl[role_id] - revision_acl[role_id]
+      if added_person_ids or deleted_person_ids:
+        acl_dict[role_id] = {
+            u"added": sorted(list(added_person_ids)),
+            u"deleted": sorted(list(deleted_person_ids)),
+        }
+    return acl_dict
+
   def prepare(self, src):
     src = super(FullInstanceContentFased, self).prepare(src)
     instance = referenced_objects.get(src["instance"]["type"],
@@ -42,21 +65,26 @@ class FullInstanceContentFased(utils.FasadeProperty):
             "_api_attrs").iteritems()
         if v.update
     }
-    current_data = {
-        k: v for k, v in instance.log_json().iteritems()
-        if k in updateable_fields
+    current_data = revision.Revision.query.filter(
+        revision.Revision.resource_id == instance.id,
+        revision.Revision.resource_type == instance.type
+    ).order_by(
+        revision.Revision.created_at.desc()
+    ).first().content
+    full_instance_content = src["full_instance_content"]
+    diff_data = {
+        f: full_instance_content[f]
+        for f in updateable_fields
+        if (f in full_instance_content and
+            current_data[f] != full_instance_content[f])
     }
-    proposed_data = {
-        k: v for k, v in src["full_instance_content"].iteritems()
-        if k in updateable_fields
+    return {
+        "fields": diff_data,
+        "access_control_list": self.generate_acl_diff(
+            diff_data.pop("access_control_list", []),
+            current_data.get("access_control_list", []),
+        ),
     }
-    diff = deepdiff.DeepDiff(current_data, proposed_data)["values_changed"]
-    fields = {}
-    for field, diff in diff.iteritems():
-      if field.startswith("root['"):
-        field = field[6:-2]
-      fields[field] = diff["new_value"]
-    return {"fields": fields}
 
 
 class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
