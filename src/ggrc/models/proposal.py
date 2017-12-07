@@ -61,6 +61,8 @@ class FullInstanceContentFased(utils.FasadeProperty):
     custom_attributes = {int(k): v for k, v in custom_attributes.iteritems()}
     cavs = []
     for cad in cads:
+      if cad.id not in custom_attributes:
+        continue
       object_type = cad.attribute_type[4:].strip()
       if cad.attribute_type.startswith("Map:"):
         object_id = custom_attributes[cad.id].split(":", 1)[1].strip()
