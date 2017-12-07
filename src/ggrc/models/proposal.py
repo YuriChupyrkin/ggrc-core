@@ -15,6 +15,7 @@ from ggrc.models import revision
 from ggrc.fulltext import mixin as ft_mixin
 from ggrc.fulltext import attributes
 from ggrc.utils import referenced_objects
+from ggrc.rbac import permissions
 
 
 class JsonPolymorphicRelationship(utils.PolymorphicRelationship):
@@ -178,6 +179,25 @@ class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
   instance = JsonPolymorphicRelationship("instance_id",
                                          "instance_type",
                                          INSTANCE_TMPL)
+
+  class CustomPermissionModel(object):
+
+    @staticmethod
+    def has_custom_read_permissions(proposal):
+      return permissions.is_allowed_read_for(proposal.instance)
+
+    @staticmethod
+    def has_custom_create_permissions(proposal):
+      return permissions.is_allowed_read_for(proposal.instance)
+
+    @staticmethod
+    def has_custom_update_permissions(proposal):
+      return permissions.is_allowed_update_for(proposal.instance)
+
+    @staticmethod
+    def has_custom_delete_permissions(_):
+      # it's not allowed to delete proposal
+      return False
 
   _fulltext_attrs = [
       "instance_id",
