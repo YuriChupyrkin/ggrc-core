@@ -388,6 +388,7 @@ export default can.Control({
 
   draw: function (content, header, footer, customAttributes) {
     var modalTitle = this.options.modal_title;
+    var isProposal = this.options.isProposal;
     var isObjectModal = modalTitle && (modalTitle.indexOf('Edit') === 0 ||
       modalTitle.indexOf('New') === 0);
     var $form;
@@ -421,7 +422,7 @@ export default can.Control({
       this.options.$footer.html(footer);
     }
 
-    if (customAttributes != null && isObjectModal) {
+    if (customAttributes != null && (isObjectModal || isProposal)) {
       this.options.$content.append(customAttributes);
     }
     this.setup_wysihtml5();
