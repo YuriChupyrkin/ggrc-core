@@ -89,6 +89,7 @@ def apply_proposal(
     event=None, initial_state=None):  # noqa
   if not is_status_changed_to(obj.STATES.APPLIED, obj):
     return
+  obj.applied_by_id = login.get_current_user_id()
   for field, value in obj.content.get("fields", {}).iteritems():
     if hasattr(obj.instance, field):
       setattr(obj.instance, field, value)
@@ -102,6 +103,7 @@ def decline_proposal(
     event=None, initial_state=None):  # noqa
   if not is_status_changed_to(obj.STATES.DECLINED, obj):
     return
+  obj.declined_by_id = login.get_current_user_id()
   add_comment_to(obj.instance, obj.decline_reason or "")
 
 

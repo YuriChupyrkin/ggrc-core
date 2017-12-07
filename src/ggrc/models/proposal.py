@@ -165,14 +165,14 @@ class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
   agenda = db.Column(db.Text, nullable=False, default=u"")
   decline_reason = db.Column(db.Text, nullable=False, default=u"")
   decline_datetime = db.Column(db.DateTime, nullable=True)
-  declined_by = db.Column(db.Integer,
-                          db.ForeignKey('people.id'),
-                          nullable=True)
+  declined_by_id = db.Column(db.Integer,
+                             db.ForeignKey('people.id'),
+                             nullable=True)
   apply_reason = db.Column(db.Text, nullable=False, default=u"")
   apply_datetime = db.Column(db.DateTime, nullable=True)
-  applied_by = db.Column(db.Integer,
-                         db.ForeignKey('people.id'),
-                         nullable=True)
+  applied_by_id = db.Column(db.Integer,
+                            db.ForeignKey('people.id'),
+                            nullable=True)
 
   INSTANCE_TMPL = "{}_proposalable"
 
