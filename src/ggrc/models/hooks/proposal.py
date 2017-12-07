@@ -73,12 +73,14 @@ def apply_cav_proposal(obj):
   for cad_id, value in proposals.iteritems():
     cad_id = int(cad_id)
     if cad_id in cav_dict:
-      cav_dict[cad_id].attribute_value = value
+      cav_dict[cad_id].attribute_value = value["attribute_value"]
+      cav_dict[cad_id].attribute_object_id = value["attribute_object_id"]
     else:
       all_models.CustomAttributeValue(
           custom_attribute=cad_dict[cad_id],
           attributable=obj.instance,
-          attribute_value=value
+          attribute_value=value["attribute_value"],
+          attribute_object_id=value["attribute_object_id"],
       )
 
 

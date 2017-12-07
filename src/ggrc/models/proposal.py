@@ -55,11 +55,41 @@ class FullInstanceContentFased(utils.FasadeProperty):
     return acl_dict
 
   @staticmethod
-  def generate_cav_diff(instance, proposed, revisioned):
-    proposed_cavs = {int(i["custom_attribute_id"]): i["attribute_value"]
-                     for i in proposed}
-    revisioned_cavs = {int(i["custom_attribute_id"]): i["attribute_value"]
-                       for i in revisioned}
+  def populate_cavs(custom_attribute_values, custom_attributes, cads):
+    if not custom_attributes:
+      return custom_attribute_values
+    custom_attributes = {int(k): v for k, v in custom_attributes.iteritems()}
+    cavs = []
+    for cad in cads:
+      object_type = cad.attribute_type[4:].strip()
+      if cad.attribute_type.startswith("Map:"):
+        object_id = custom_attributes[cad.id].split(":", 1)[1].strip()
+        object_id = None if object_id == 'None' else int(object_id)
+        cavs.append({
+            "attribute_value": object_type,
+            "attribute_object_id": object_id,
+            "custom_attribute_id": cad.id,
+        })
+      else:
+        cavs.append({
+            "attribute_value": custom_attributes[cad.id],
+            "custom_attribute_id": cad.id,
+            "attribute_object_id": None,
+        })
+    return cavs
+
+  @classmethod
+  def generate_cav_diff(cls, instance, proposed, revisioned, old_cavs):
+    proposed = cls.populate_cavs(
+        proposed, old_cavs, instance.custom_attribute_definitions)
+    proposed_cavs = {
+        int(i["custom_attribute_id"]): (i["attribute_value"],
+                                        i["attribute_object_id"])
+        for i in proposed}
+    revisioned_cavs = {
+        int(i["custom_attribute_id"]): (i["attribute_value"],
+                                        i["attribute_object_id"])
+        for i in revisioned}
     diff = {}
     for cad in instance.custom_attribute_definitions:
       if cad.id not in proposed_cavs:
@@ -67,7 +97,10 @@ class FullInstanceContentFased(utils.FasadeProperty):
       proposed_val = proposed_cavs[cad.id]
       cad_not_setuped = cad.id not in revisioned_cavs
       if cad_not_setuped or proposed_val != revisioned_cavs[cad.id]:
-        diff[cad.id] = proposed_val
+        diff[cad.id] = {
+            "attribute_value": proposed_val[0],
+            "attribute_object_id": proposed_val[1],
+        }
     return diff
 
   def prepare(self, src):
@@ -95,6 +128,7 @@ class FullInstanceContentFased(utils.FasadeProperty):
             f in current_data and
             current_data[f] != full_instance_content[f])
     }
+
     return {
         "fields": diff_data,
         "access_control_list": self.generate_acl_diff(
@@ -105,6 +139,7 @@ class FullInstanceContentFased(utils.FasadeProperty):
             instance,
             diff_data.pop("custom_attribute_values", []),
             current_data.get("custom_attribute_values", []),
+            full_instance_content.get("custom_attributes", []),
         )
     }
 
