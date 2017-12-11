@@ -533,3 +533,45 @@ class TestProposalApi(TestCase):
     self.assertIsNone(control.proposals[0].content["mapping_field"]["kind"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update kind", control.comments[0].description)
+
+  def test_apply_empty_mapping(self):
+    setuped_kind = all_models.Option.query.filter(
+        all_models.Option.role == "control_kind"
+    ).first()
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1", kind=setuped_kind)
+      proposal = factories.ProposalFactory(
+          instance=control,
+          content={"mapping_field": {"kind": None}},
+          agenda="agenda content")
+    control_id = control.id
+    proposal_id = proposal.id
+    self.assertEqual(proposal.STATES.PROPOSED, proposal.status)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(1, len(revisions))
+    self.assertEqual(0, len(control.comments))
+    resp = self.api.put(
+        proposal,
+        {
+            "proposal": {
+                "status": proposal.STATES.APPLIED,
+                "apply_reason": "approved",
+            }
+        })
+    self.assert200(resp)
+    control = all_models.Control.query.get(control_id)
+    self.assertIsNone(control.kind)
+    proposal = all_models.Proposal.query.get(proposal_id)
+    self.assertEqual(proposal.STATES.APPLIED, proposal.status)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(2, len(revisions))
+    self.assertIn("kind", revisions[-1].content)
+    self.assertIsNone(revisions[-1].content["kind"])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("approved", control.comments[0].description)
