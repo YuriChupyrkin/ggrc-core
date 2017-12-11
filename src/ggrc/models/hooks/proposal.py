@@ -3,6 +3,8 @@
 
 """AccessControlList creation hooks."""
 
+import collections
+
 from sqlalchemy import inspect
 
 from ggrc.services import signals
@@ -84,6 +86,29 @@ def apply_cav_proposal(obj):
       )
 
 
+def apply_mapping(obj):
+  relations = inspect(obj.instance.__class__).relationships
+  rel_names = [r.key for r in relations if not r.uselist]
+  mapping_fields = obj.content.get("mapping_field", {})
+
+  all_models_dict = {m.__name__: m for m in all_models.all_models}
+  update_field = collections.defaultdict(list)
+  for value in mapping_fields.values():
+    if value:
+      update_field[all_models_dict[value["type"]]].append(value["id"])
+  field_cache = {}
+  for model, ids in update_field.iteritems():
+    for instance in model.query.filter(model.id.in_(ids)):
+      field_cache[(instance.type, instance.id)] = instance
+  for key, value in mapping_fields.iteritems():
+    if key in rel_names:
+      if value:
+        instance = field_cache.get((value["type"], value["id"]))
+      else:
+        instance = None
+      setattr(obj.instance, key, instance)
+
+
 def apply_proposal(
     sender, obj=None, src=None, service=None,
     event=None, initial_state=None):  # noqa
@@ -95,6 +120,7 @@ def apply_proposal(
       setattr(obj.instance, field, value)
   apply_acl_proposal(obj)
   apply_cav_proposal(obj)
+  apply_mapping(obj)
   add_comment_to(obj.instance, obj.apply_reason or "")
 
 
