@@ -422,3 +422,35 @@ class TestProposalApi(TestCase):
                      control.proposals[0].content["custom_attribute_values"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update cav", control.comments[0].description)
+
+  def test_change_mapping(self):
+    setuped_kind, update_kind = all_models.Option.query.filter(
+        all_models.Option.role == "control_kind"
+    )[:2]
+    control = factories.ControlFactory(title="1", kind=setuped_kind)
+    control_id = control.id
+    data = control.log_json()
+    update_kind_id = update_kind.id
+    data["kind"]["id"] = update_kind_id
+    resp = self.api.post(
+        all_models.Proposal,
+        {"proposal": {
+            "instance": {
+                "id": control.id,
+                "type": control.type,
+            },
+            # "content": {"123": 123},
+            "full_instance_content": data,
+            "agenda": "update kind",
+            "context": None,
+        }})
+    self.assertEqual(201, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual(1, len(control.proposals))
+    self.assertIn("mapping_field", control.proposals[0].content)
+    self.assertIn("kind", control.proposals[0].content["mapping_field"])
+    self.assertEqual(
+        {"type": "Option", "id": update_kind_id},
+        control.proposals[0].content["mapping_field"]["kind"])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("update kind", control.comments[0].description)
