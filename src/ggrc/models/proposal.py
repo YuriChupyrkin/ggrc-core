@@ -121,10 +121,13 @@ class FullInstanceContentFased(utils.FasadeProperty):
             "id": None,
             "type": None,
         }
-      if int(diff_data[key]["id"]) == current_data[key]["id"]:
-        continue
       diff = diff_data.pop(key)
-      field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
+      if diff is None and current_data.get(key) is not None:
+        field_objects[key] = None
+      elif current_data.get(key) is None and diff:
+        field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
+      elif int(current_data[key]["id"]) != int(diff["id"]):
+        field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
     return field_objects
 
   def prepare(self, src):
