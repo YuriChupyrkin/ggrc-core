@@ -13,7 +13,6 @@ from ggrc.models import types
 from ggrc.models import utils
 from ggrc.models import revision
 from ggrc.fulltext import mixin as ft_mixin
-from ggrc.fulltext import attributes
 from ggrc.utils import referenced_objects
 from ggrc.rbac import permissions
 
@@ -106,6 +105,28 @@ class FullInstanceContentFased(utils.FasadeProperty):
         }
     return diff
 
+  @staticmethod
+  def generate_mapping_dicts(instance, diff_data, current_data):
+
+    relations = sa.inspection.inspect(instance.__class__).relationships
+    relations_dict = collections.defaultdict(set)
+    for rel in relations:
+      relations_dict[rel.uselist].add(rel.key)
+    field_objects = {}
+    for key in relations_dict[False]:
+      if key not in diff_data:
+        continue
+      if current_data.get(key) is None:
+        current_data[key] = {
+            "id": None,
+            "type": None,
+        }
+      if int(diff_data[key]["id"]) == current_data[key]["id"]:
+        continue
+      diff = diff_data.pop(key)
+      field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
+    return field_objects
+
   def prepare(self, src):
     src = super(FullInstanceContentFased, self).prepare(src)
     instance = referenced_objects.get(src["instance"]["type"],
@@ -131,7 +152,6 @@ class FullInstanceContentFased(utils.FasadeProperty):
             f in current_data and
             current_data[f] != full_instance_content[f])
     }
-
     return {
         "fields": diff_data,
         "access_control_list": self.generate_acl_diff(
@@ -143,11 +163,20 @@ class FullInstanceContentFased(utils.FasadeProperty):
             diff_data.pop("custom_attribute_values", []),
             current_data.get("custom_attribute_values", []),
             full_instance_content.get("custom_attributes", []),
-        )
+        ),
+        "mapping_field": self.generate_mapping_dicts(
+            instance,
+            diff_data,
+            current_data,
+        ),
     }
 
 
-class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
+class Proposal(mixins.person_relation_factory("applied_by"),
+               mixins.person_relation_factory("declined_by"),
+               mixins.Stateful, mixins.Base,
+               ft_mixin.Indexed,
+               db.Model):
   """Revision object holds a JSON snapshot of the object at a time."""
 
   __tablename__ = 'proposals'
@@ -165,14 +194,8 @@ class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
   agenda = db.Column(db.Text, nullable=False, default=u"")
   decline_reason = db.Column(db.Text, nullable=False, default=u"")
   decline_datetime = db.Column(db.DateTime, nullable=True)
-  declined_by_id = db.Column(db.Integer,
-                             db.ForeignKey('people.id'),
-                             nullable=True)
   apply_reason = db.Column(db.Text, nullable=False, default=u"")
   apply_datetime = db.Column(db.DateTime, nullable=True)
-  applied_by_id = db.Column(db.Integer,
-                            db.ForeignKey('people.id'),
-                            nullable=True)
 
   INSTANCE_TMPL = "{}_proposalable"
 
@@ -207,16 +230,6 @@ class Proposal(mixins.Stateful, mixins.Base, ft_mixin.Indexed, db.Model):
       "decline_datetime",
       "apply_reason",
       "apply_datetime",
-      attributes.FullTextAttr(
-          "declined_by",
-          "declined_by",
-          ["email", "name"]
-      ),
-      attributes.FullTextAttr(
-          "applied_by",
-          "applied_by",
-          ["email", "name"]
-      ),
   ]
 
   _api_attrs = reflection.ApiAttributes(
