@@ -447,11 +447,11 @@ class TestProposalApi(TestCase):
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
-    self.assertIn("mapping_field", control.proposals[0].content)
-    self.assertIn("kind", control.proposals[0].content["mapping_field"])
+    self.assertIn("mapping_fields", control.proposals[0].content)
+    self.assertIn("kind", control.proposals[0].content["mapping_fields"])
     self.assertEqual(
         {"type": "Option", "id": update_kind_id},
-        control.proposals[0].content["mapping_field"]["kind"])
+        control.proposals[0].content["mapping_fields"]["kind"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update kind", control.comments[0].description)
 
@@ -464,7 +464,7 @@ class TestProposalApi(TestCase):
       proposal = factories.ProposalFactory(
           instance=control,
           content={
-              "mapping_field": {
+              "mapping_fields": {
                   "kind": {
                       "id": update_kind.id,
                       "type": update_kind.type,
@@ -528,9 +528,9 @@ class TestProposalApi(TestCase):
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
-    self.assertIn("mapping_field", control.proposals[0].content)
-    self.assertIn("kind", control.proposals[0].content["mapping_field"])
-    self.assertIsNone(control.proposals[0].content["mapping_field"]["kind"])
+    self.assertIn("mapping_fields", control.proposals[0].content)
+    self.assertIn("kind", control.proposals[0].content["mapping_fields"])
+    self.assertIsNone(control.proposals[0].content["mapping_fields"]["kind"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update kind", control.comments[0].description)
 
@@ -542,7 +542,7 @@ class TestProposalApi(TestCase):
       control = factories.ControlFactory(title="1", kind=setuped_kind)
       proposal = factories.ProposalFactory(
           instance=control,
-          content={"mapping_field": {"kind": None}},
+          content={"mapping_fields": {"kind": None}},
           agenda="agenda content")
     control_id = control.id
     proposal_id = proposal.id
@@ -575,3 +575,72 @@ class TestProposalApi(TestCase):
     self.assertIsNone(revisions[-1].content["kind"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("approved", control.comments[0].description)
+
+  def test_change_mapping_list(self):
+    with factories.single_commit():
+      cat = factories.ControlCategoryFactory()
+      control = factories.ControlFactory(title="1")
+    data = control.log_json()
+    control_id = control.id
+    data["categories"] = [{"id": cat.id, "type": cat.type}]
+    cat_id = cat.id
+    resp = self.api.post(
+        all_models.Proposal,
+        {"proposal": {
+            "instance": {
+                "id": control.id,
+                "type": control.type,
+            },
+            # "content": {"123": 123},
+            "full_instance_content": data,
+            "agenda": "update categories",
+            "context": None,
+        }})
+    self.assertEqual(201, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual(1, len(control.proposals))
+    self.assertIn("mapping_list_fields", control.proposals[0].content)
+    fields = control.proposals[0].content["mapping_list_fields"]
+    self.assertIn("categories", fields)
+    self.assertEqual(
+        {"added": [{"id": cat_id, "type": "ControlCategory"}],
+         "deleted": []},
+        fields["categories"])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("update categories", control.comments[0].description)
+
+  def test_change_empty_mapping_list(self):
+    with factories.single_commit():
+      category = factories.ControlCategoryFactory()
+      control = factories.ControlFactory()
+      control.categories.append(category)
+    with factories.single_commit():
+      pass
+    data = control.log_json()
+    category_id = category.id
+    control_id = control.id
+    data["categories"] = []
+    resp = self.api.post(
+        all_models.Proposal,
+        {"proposal": {
+            "instance": {
+                "id": control.id,
+                "type": control.type,
+            },
+            # "content": {"123": 123},
+            "full_instance_content": data,
+            "agenda": "update categories",
+            "context": None,
+        }})
+    self.assertEqual(201, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual(1, len(control.proposals))
+    self.assertIn("mapping_list_fields", control.proposals[0].content)
+    fields = control.proposals[0].content["mapping_list_fields"]
+    self.assertIn("categories", fields)
+    self.assertEqual(
+        {"added": [],
+         "deleted": [{"id": category_id, "type": "ControlCategory"}]},
+        fields["categories"])
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("update categories", control.comments[0].description)
