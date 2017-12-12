@@ -212,6 +212,24 @@ class Revision(Base, db.Model):
     folders = self._content.get("folders") or [{"id": ""}]
     return {"folder": folders[0]["id"]}
 
+  def populate_categoies(self, key_name):
+    """Fix revision logger.
+
+    On controls in category field was loged categorization instances."""
+    if self.resource_type != "Control":
+      return {}
+    result = []
+    for categorization in self._content.get(key_name) or []:
+      if "category_id" in categorization:
+        result.append({
+            "id": categorization["category_id"],
+            "type": categorization["category_type"],
+            "name": categorization["display_name"],
+        })
+      else:
+        result.append(categorization)
+    return {key_name: result}
+
   @builder.simple_property
   def content(self):
     """Property. Contains the revision content dict.
@@ -222,6 +240,8 @@ class Revision(Base, db.Model):
     populated_content.update(self.populate_acl())
     populated_content.update(self.populate_reference_url())
     populated_content.update(self.populate_folder())
+    populated_content.update(self.populate_categoies("categories"))
+    populated_content.update(self.populate_categoies("assertions"))
     return populated_content
 
   @content.setter
