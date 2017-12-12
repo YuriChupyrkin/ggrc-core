@@ -4,6 +4,7 @@
 """AccessControlList creation hooks."""
 
 import collections
+import itertools
 
 from sqlalchemy import inspect
 
@@ -89,24 +90,39 @@ def apply_cav_proposal(obj):
 def apply_mapping(obj):
   relations = inspect(obj.instance.__class__).relationships
   rel_names = [r.key for r in relations if not r.uselist]
-  mapping_fields = obj.content.get("mapping_field", {})
-
+  mapping_fields = obj.content.get("mapping_fields", {})
+  mapping_list_field = obj.content.get("mapping_list_fields", {})
   all_models_dict = {m.__name__: m for m in all_models.all_models}
+  all_items = itertools.chain(*[itertools.chain(v['added'], v['deleted'])
+                                for v in mapping_list_field.values()])
+  all_items = itertools.chain(mapping_fields.values(), all_items)
   update_field = collections.defaultdict(list)
-  for value in mapping_fields.values():
+  for value in all_items:
     if value:
       update_field[all_models_dict[value["type"]]].append(value["id"])
-  field_cache = {}
-  for model, ids in update_field.iteritems():
-    for instance in model.query.filter(model.id.in_(ids)):
-      field_cache[(instance.type, instance.id)] = instance
+  field_cache = {(i.type, i.id): i
+                 for m, ids in update_field.iteritems()
+                 for i in m.query.filter(m.id.in_(ids))}
   for key, value in mapping_fields.iteritems():
     if key in rel_names:
-      if value:
-        instance = field_cache.get((value["type"], value["id"]))
-      else:
-        instance = None
-      setattr(obj.instance, key, instance)
+      setattr(obj.instance,
+              key,
+              field_cache.get((value["type"], value["id"])) if value else None)
+  for key, value in mapping_list_field.iteritems():
+    attr = getattr(obj.instance, key)
+    exist_items = {(i.type, i.id) for i in attr}
+    for item in value["added"]:
+      key = (item["type"], item["id"])
+      if key in exist_items:
+        continue
+      instance = field_cache[key]
+      attr.append(instance)
+    for item in value["deleted"]:
+      key = (item["type"], item["id"])
+      if key not in exist_items:
+        continue
+      instance = field_cache[key]
+      attr.remove(instance)
 
 
 def apply_proposal(
