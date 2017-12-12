@@ -614,8 +614,6 @@ class TestProposalApi(TestCase):
       category = factories.ControlCategoryFactory()
       control = factories.ControlFactory()
       control.categories.append(category)
-    with factories.single_commit():
-      pass
     data = control.log_json()
     category_id = category.id
     control_id = control.id
@@ -644,3 +642,103 @@ class TestProposalApi(TestCase):
         fields["categories"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update categories", control.comments[0].description)
+
+  def test_apply_empty_mapping_list(self):
+    with factories.single_commit():
+      category = factories.ControlCategoryFactory()
+      control = factories.ControlFactory()
+      control.categories.append(category)
+    control_id = control.id
+    category_id = category.id
+    with factories.single_commit():
+      proposal = factories.ProposalFactory(
+          instance=control,
+          content={
+              "mapping_list_fields": {
+                  "categories": {
+                      "added": [],
+                      "deleted": [
+                          {"id": category_id, "type": "ControlCategory"},
+                      ]
+                  }
+              }
+          },
+          agenda="agenda content")
+    proposal_id = proposal.id
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(2, len(revisions))
+    resp = self.api.put(
+        proposal,
+        {
+            "proposal": {
+                "status": proposal.STATES.APPLIED,
+                "apply_reason": "approved",
+            }
+        })
+    self.assertEqual(200, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    proposal = all_models.Proposal.query.get(proposal_id)
+    self.assertEqual(proposal.STATES.APPLIED, proposal.status)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual([], control.categories)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(3, len(revisions))
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("approved",
+                     control.comments[0].description)
+
+  def test_apply_mapping_list(self):
+    with factories.single_commit():
+      category = factories.ControlCategoryFactory()
+      control = factories.ControlFactory()
+    control_id = control.id
+    category_id = category.id
+    with factories.single_commit():
+      proposal = factories.ProposalFactory(
+          instance=control,
+          content={
+              "mapping_list_fields": {
+                  "categories": {
+                      "deleted": [],
+                      "added": [
+                          {"id": category_id, "type": "ControlCategory"},
+                      ]
+                  }
+              }
+          },
+          agenda="agenda content")
+    proposal_id = proposal.id
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(2, len(revisions))
+    resp = self.api.put(
+        proposal,
+        {
+            "proposal": {
+                "status": proposal.STATES.APPLIED,
+                "apply_reason": "approved",
+            }
+        })
+    self.assertEqual(200, resp.status_code)
+    control = all_models.Control.query.get(control_id)
+    proposal = all_models.Proposal.query.get(proposal_id)
+    self.assertEqual(proposal.STATES.APPLIED, proposal.status)
+    control = all_models.Control.query.get(control_id)
+    self.assertEqual([all_models.ControlCategory.query.get(category_id)],
+                     control.categories)
+    revisions = all_models.Revision.query.filter(
+        all_models.Revision.resource_type == control.type,
+        all_models.Revision.resource_id == control.id
+    ).all()
+    self.assertEqual(3, len(revisions))
+    self.assertEqual(1, len(control.comments))
+    self.assertEqual("approved",
+                     control.comments[0].description)
