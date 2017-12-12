@@ -106,29 +106,71 @@ class FullInstanceContentFased(utils.FasadeProperty):
     return diff
 
   @staticmethod
-  def generate_mapping_dicts(instance, diff_data, current_data):
+  def __mappting_key_function(object_dict):
+    return object_dict["id"]
+
+  @classmethod
+  def _generate_list_mappings(cls, keys, diff_data, current_data):
+    result = {}
+    for key in keys:
+      if key not in diff_data:
+        continue
+      current = current_data.get(key) or []
+      current_key_dict = {int(i["id"]): i for i in current}
+      diff = diff_data.pop(key, None) or []
+      diff_key_set = {int(i["id"]) for i in diff}
+      current_diff_set = set(current_key_dict)
+      deleted_ids = current_diff_set - diff_key_set
+      added_ids = diff_key_set - current_diff_set
+      if deleted_ids or added_ids:
+        result[key] = {
+            u"added": sorted(
+                [i for i in diff if int(i["id"]) in added_ids],
+                key=cls.__mappting_key_function
+            ),
+            u"deleted": sorted(
+                [{"id": int(i["id"]), "type": i["type"]}
+                 for i in current if int(i["id"]) in deleted_ids],
+                key=cls.__mappting_key_function
+            ),
+        }
+    return result
+
+  @classmethod
+  def _generate_single_mappings(cls, keys, diff_data, current_data):
+    result = {}
+    for key in keys:
+      if key not in diff_data:
+        continue
+      current = current_data.get(key, None) or {"id": None, "type": None}
+      diff = diff_data.pop(key, None) or {"id": None, "type": None}
+      if current == diff:
+        continue
+      if diff["id"] is None:
+        result[key] = None
+      elif int(diff["id"]) != int(current["id"]):
+        result[key] = {"id": int(diff["id"]), "type": diff["type"]}
+    return result
+
+  @classmethod
+  def generate_mapping_dicts(cls, instance, diff_data, current_data):
 
     relations = sa.inspection.inspect(instance.__class__).relationships
     relations_dict = collections.defaultdict(set)
     for rel in relations:
       relations_dict[rel.uselist].add(rel.key)
-    field_objects = {}
-    for key in relations_dict[False]:
-      if key not in diff_data:
-        continue
-      if current_data.get(key) is None:
-        current_data[key] = {
-            "id": None,
-            "type": None,
-        }
-      diff = diff_data.pop(key)
-      if diff is None and current_data.get(key) is not None:
-        field_objects[key] = None
-      elif current_data.get(key) is None and diff:
-        field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
-      elif int(current_data[key]["id"]) != int(diff["id"]):
-        field_objects[key] = {"id": int(diff["id"]), "type": diff["type"]}
-    return field_objects
+    descriptors = sa.inspection.inspect(instance.__class__).all_orm_descriptors
+    for key, proxy in dict(descriptors).iteritems():
+      if proxy.extension_type is sa.ext.associationproxy.ASSOCIATION_PROXY:
+        relations_dict[True].add(key)
+    return {
+        "single_objects": cls._generate_single_mappings(relations_dict[False],
+                                                        diff_data,
+                                                        current_data),
+        "list_objects": cls._generate_list_mappings(relations_dict[True],
+                                                    diff_data,
+                                                    current_data),
+    }
 
   def prepare(self, src):
     src = super(FullInstanceContentFased, self).prepare(src)
@@ -145,7 +187,8 @@ class FullInstanceContentFased(utils.FasadeProperty):
         revision.Revision.resource_id == instance.id,
         revision.Revision.resource_type == instance.type
     ).order_by(
-        revision.Revision.created_at.desc()
+        revision.Revision.created_at.desc(),
+        revision.Revision.id.desc(),
     ).first().content
     full_instance_content = src["full_instance_content"]
     diff_data = {
@@ -155,23 +198,25 @@ class FullInstanceContentFased(utils.FasadeProperty):
             f in current_data and
             current_data[f] != full_instance_content[f])
     }
+    acl = self.generate_acl_diff(
+        diff_data.pop("access_control_list", []),
+        current_data.get("access_control_list", []),
+    )
+    cav = self.generate_cav_diff(
+        instance,
+        diff_data.pop("custom_attribute_values", []),
+        current_data.get("custom_attribute_values", []),
+        diff_data.pop("custom_attributes", []),
+    )
+    generated_mapptings = self.generate_mapping_dicts(instance,
+                                                      diff_data,
+                                                      current_data)
     return {
         "fields": diff_data,
-        "access_control_list": self.generate_acl_diff(
-            diff_data.pop("access_control_list", []),
-            current_data.get("access_control_list", []),
-        ),
-        "custom_attribute_values": self.generate_cav_diff(
-            instance,
-            diff_data.pop("custom_attribute_values", []),
-            current_data.get("custom_attribute_values", []),
-            full_instance_content.get("custom_attributes", []),
-        ),
-        "mapping_field": self.generate_mapping_dicts(
-            instance,
-            diff_data,
-            current_data,
-        ),
+        "access_control_list": acl,
+        "custom_attribute_values": cav,
+        "mapping_fields": generated_mapptings["single_objects"],
+        "mapping_list_fields": generated_mapptings["list_objects"],
     }
 
 
