@@ -960,6 +960,16 @@ def person_relation_factory(relation_name, fulltext_attr=None, api_attr=None):
                               nullable=True),
                     "Person")
 
+  @classmethod
+  def indexed_query(cls):
+    return super(cls, cls).indexed_query().options(
+        orm.Load(cls).joinedload(
+            "relation_name"
+        ).load_only(
+            "name", "email", "id"
+        ),
+    )
+
   def attr_declaration(cls):
     return db.relationship(
         'Person',
