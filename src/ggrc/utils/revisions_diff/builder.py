@@ -8,10 +8,10 @@ import sqlalchemy as sa
 import collections
 
 from ggrc.models import reflection
-from ggrc.models import revision
 
 
 def get_latest_revision_for(instance):
+  from ggrc.models import revision
   return revision.Revision.query.filter(
       revision.Revision.resource_id == instance.id,
       revision.Revision.resource_type == instance.type
