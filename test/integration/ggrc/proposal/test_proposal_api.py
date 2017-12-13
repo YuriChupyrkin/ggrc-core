@@ -149,7 +149,7 @@ class TestProposalApi(TestCase):
       role = factories.AccessControlRoleFactory(name="role")
       person = factories.PersonFactory()
     control_id = control.id
-    role_id = role.id
+    role_id = unicode(role.id)
     person_id = person.id
     control_content = control.log_json()
     control_content["access_control_list"] = [
@@ -171,8 +171,16 @@ class TestProposalApi(TestCase):
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
     self.assertIn("access_control_list", control.proposals[0].content)
-    self.assertEqual({unicode(role_id): {"added": [person_id], "deleted": []}},
-                     control.proposals[0].content["access_control_list"])
+    acl = control.proposals[0].content["access_control_list"]
+    self.assertIn(role_id, acl)
+    role = control.proposals[0].content["access_control_list"][role_id]
+    person = all_models.Person.query.get(person_id)
+    self.assertEqual(
+        {
+            "added": [{"id": person_id, "email": person.email}],
+            "deleted": [],
+        },
+        role)
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update access control roles",
                      control.comments[0].description)
@@ -197,7 +205,7 @@ class TestProposalApi(TestCase):
       latest_revision.content = control.log_json()
 
     control_id = control.id
-    role_id = role.id
+    role_id = unicode(role.id)
     person_id = person.id
     control_content = control.log_json()
     control_content["access_control_list"] = []
@@ -217,8 +225,16 @@ class TestProposalApi(TestCase):
     control = all_models.Control.query.get(control_id)
     self.assertEqual(1, len(control.proposals))
     self.assertIn("access_control_list", control.proposals[0].content)
-    self.assertEqual({unicode(role_id): {"added": [], "deleted": [person_id]}},
-                     control.proposals[0].content["access_control_list"])
+    acl = control.proposals[0].content["access_control_list"]
+    self.assertIn(role_id, acl)
+    role = control.proposals[0].content["access_control_list"][role_id]
+    person = all_models.Person.query.get(person_id)
+    self.assertEqual(
+        {
+            "added": [],
+            "deleted": [{"id": person_id, "email": person.email}],
+        },
+        role)
     self.assertEqual(1, len(control.comments))
     self.assertEqual("delete access control roles",
                      control.comments[0].description)
