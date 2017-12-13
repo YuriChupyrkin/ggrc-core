@@ -137,7 +137,7 @@ def _generate_single_mappings(keys, diff_data, current_data):
       continue
     if diff["id"] is None:
       result[key] = None
-    elif int(diff["id"]) != int(current["id"]):
+    elif current["id"] is None or diff["id"] != current["id"]:
       result[key] = {"id": int(diff["id"]), "type": diff["type"]}
   return result
 
