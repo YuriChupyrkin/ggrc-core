@@ -40,7 +40,9 @@ class FullInstanceContentFased(utils.FasadeProperty):
 
 class Proposal(mixins.person_relation_factory("applied_by"),
                mixins.person_relation_factory("declined_by"),
-               mixins.Stateful, mixins.Base,
+               mixins.person_relation_factory("proposed_by"),
+               mixins.Stateful,
+               mixins.Base,
                ft_mixin.Indexed,
                db.Model):
   """Revision object holds a JSON snapshot of the object at a time."""
@@ -115,6 +117,7 @@ class Proposal(mixins.person_relation_factory("applied_by"),
                            create=True,
                            update=False,
                            read=False),
+      reflection.Attribute('proposed_by', create=False, update=False),
   )
 
   full_instance_content = FullInstanceContentFased()

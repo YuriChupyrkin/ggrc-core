@@ -39,9 +39,11 @@ def upgrade():
       sa.Column('modified_by_id', sa.Integer(), nullable=True),
       sa.Column('created_at', sa.DateTime(), nullable=False),
       sa.Column('context_id', sa.Integer(), nullable=True),
+      sa.Column('proposed_by_id', sa.Integer(), nullable=True),
       sa.ForeignKeyConstraint(['applied_by_id'], ['people.id'], ),
       sa.ForeignKeyConstraint(['context_id'], ['contexts.id'], ),
       sa.ForeignKeyConstraint(['declined_by_id'], ['people.id'], ),
+      sa.ForeignKeyConstraint(['proposed_by_id'], ['people.id'], ),
       sa.PrimaryKeyConstraint('id')
   )
   op.create_index('fk_instance',
