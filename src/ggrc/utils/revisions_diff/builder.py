@@ -118,8 +118,7 @@ def _generate_list_mappings(keys, diff_data, current_data):
               key=__mappting_key_function
           ),
           u"deleted": sorted(
-              [{"id": int(i["id"]), "type": i["type"]}
-               for i in current if int(i["id"]) in deleted_ids],
+              [i for i in current if int(i["id"]) in deleted_ids],
               key=__mappting_key_function
           ),
       }
