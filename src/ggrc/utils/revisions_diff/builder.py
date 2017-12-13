@@ -7,18 +7,27 @@ instance state and proposed content."""
 import sqlalchemy as sa
 import collections
 
+from flask import g
+
 from ggrc.models import reflection
 
 
-def get_latest_revision_for(instance):
+def get_latest_revision_content(instance):
   from ggrc.models import revision
-  return revision.Revision.query.filter(
-      revision.Revision.resource_id == instance.id,
-      revision.Revision.resource_type == instance.type
-  ).order_by(
-      revision.Revision.created_at.desc(),
-      revision.Revision.id.desc(),
-  ).first()
+  if not hasattr(g, "latest_revision_content"):
+    g.latest_revision_content = {}
+  key = (instance.type, instance.id)
+  content = g.latest_revision_content.get(key)
+  if not content:
+    content = revision.Revision.query.filter(
+        revision.Revision.resource_id == instance.id,
+        revision.Revision.resource_type == instance.type
+    ).order_by(
+        revision.Revision.created_at.desc(),
+        revision.Revision.id.desc(),
+    ).first().content
+    g.latest_revision_content[key] = content
+  return content
 
 
 def generate_acl_diff(proposed, revisioned):
@@ -165,7 +174,7 @@ def prepare(instance, content):
   api_attrs = reflection.AttributeInfo.gather_attr_dicts(instance.__class__,
                                                          "_api_attrs")
   updateable_fields = {k for k, v in api_attrs.iteritems() if v.update}
-  current_data = get_latest_revision_for(instance).content
+  current_data = get_latest_revision_content(instance)
   diff_data = {f: content[f]
                for f in updateable_fields
                if (f in current_data and
