@@ -93,14 +93,12 @@ def apply_mapping(instance, content):
       key = (item["type"], item["id"])
       if key in exist_items:
         continue
-      instance = field_cache[key]
-      attr.append(instance)
+      attr.append(field_cache[key])
     for item in value["deleted"]:
       key = (item["type"], item["id"])
       if key not in exist_items:
         continue
-      instance = field_cache[key]
-      attr.remove(instance)
+      attr.remove(field_cache[key])
 
 
 def apply(instance, content):
