@@ -13,21 +13,35 @@ from ggrc.models import reflection
 
 
 def get_latest_revision_content(instance):
-  from ggrc.models import revision
+  from ggrc.models import all_models
   if not hasattr(g, "latest_revision_content"):
     g.latest_revision_content = {}
   key = (instance.type, instance.id)
   content = g.latest_revision_content.get(key)
   if not content:
-    content = revision.Revision.query.filter(
-        revision.Revision.resource_id == instance.id,
-        revision.Revision.resource_type == instance.type
+    content = all_models.Revision.query.filter(
+        all_models.Revision.resource_id == instance.id,
+        all_models.Revision.resource_type == instance.type
     ).order_by(
-        revision.Revision.created_at.desc(),
-        revision.Revision.id.desc(),
+        all_models.Revision.created_at.desc(),
+        all_models.Revision.id.desc(),
     ).first().content
     g.latest_revision_content[key] = content
   return content
+
+
+def get_person_email(person_id):
+  if not hasattr(g, "person_email_cache"):
+    from ggrc.models import all_models
+    query = all_models.Person.query.values(all_models.Person.id,
+                                           all_models.Person.email)
+    g.person_email_cache = dict(query)
+  return g.person_email_cache[person_id]
+
+
+def generate_person_list(person_ids):
+  person_ids = sorted([int(p) for p in person_ids])
+  return [{"id": i, "email": get_person_email(i)} for i in person_ids]
 
 
 def generate_acl_diff(proposed, revisioned):
@@ -46,8 +60,8 @@ def generate_acl_diff(proposed, revisioned):
     added_person_ids = proposed_acl[role_id] - revision_acl[role_id]
     if added_person_ids or deleted_person_ids:
       acl_dict[role_id] = {
-          u"added": sorted(list(added_person_ids)),
-          u"deleted": sorted(list(deleted_person_ids)),
+          u"added": generate_person_list(added_person_ids),
+          u"deleted": generate_person_list(deleted_person_ids),
       }
   return acl_dict
 
