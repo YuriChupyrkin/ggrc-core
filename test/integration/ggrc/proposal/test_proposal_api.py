@@ -4,8 +4,10 @@
 """ """
 import ddt
 import collections
+import json
 
 from ggrc.models import all_models
+from ggrc import utils
 from integration.ggrc import TestCase
 from integration.ggrc.api_helper import Api
 from integration.ggrc.models import factories
@@ -632,13 +634,14 @@ class TestProposalApi(TestCase):
         }})
     self.assertEqual(201, resp.status_code)
     control = all_models.Control.query.get(control_id)
+    category = all_models.ControlCategory.query.get(category_id)
     self.assertEqual(1, len(control.proposals))
     self.assertIn("mapping_list_fields", control.proposals[0].content)
     fields = control.proposals[0].content["mapping_list_fields"]
     self.assertIn("categories", fields)
     self.assertEqual(
         {"added": [],
-         "deleted": [{"id": category_id, "type": "ControlCategory"}]},
+         "deleted": [json.loads(utils.as_json(category.log_json()))]},
         fields["categories"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update categories", control.comments[0].description)
