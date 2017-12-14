@@ -73,7 +73,33 @@ const buildModifiedACL = (instance, modifiedRoles) => {
 };
 // #endregion
 
+// #region list-fields
+const buildModifiedListField = (currentField, modifiedItem) => {
+  let modifiedField;
+  let shouldBeAdded;
+
+  if (!currentField) {
+    currentField = [];
+  }
+
+  modifiedField = currentField.slice();
+
+  shouldBeAdded = modifiedItem.added.filter((item) =>
+    _.findIndex(currentField, {id: item.id}) === -1);
+
+  // push added items
+  modifiedField.push(...shouldBeAdded);
+
+  // remove deleted items
+  _.remove(modifiedField, (item) =>
+    _.findIndex(modifiedItem.deleted, {id: item.id}) > -1);
+
+  return modifiedField;
+};
+// #endregion
+
 export {
   buildRoleACL,
   buildModifiedACL,
+  buildModifiedListField,
 };
