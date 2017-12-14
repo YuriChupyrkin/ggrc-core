@@ -14,6 +14,7 @@ from ggrc.fulltext import mixin as ft_mixin
 from ggrc.utils import referenced_objects
 from ggrc.rbac import permissions
 from ggrc.utils.revisions_diff import builder
+from ggrc import settings
 
 
 class JsonPolymorphicRelationship(utils.PolymorphicRelationship):
@@ -49,6 +50,11 @@ class Proposal(mixins.person_relation_factory("applied_by"),
 
   __tablename__ = 'proposals'
 
+  class NotificationContext(object):
+    DIGEST_TITLE = "Proposal Digest"
+    DIGEST_TMPL = settings.JINJA2.get_template(
+        "notifications/proposal_digest.html")
+
   class STATES(object):
     PROPOSED = "proposed"
     APPLIED = "applied"
@@ -64,6 +70,7 @@ class Proposal(mixins.person_relation_factory("applied_by"),
   decline_datetime = db.Column(db.DateTime, nullable=True)
   apply_reason = db.Column(db.Text, nullable=False, default=u"")
   apply_datetime = db.Column(db.DateTime, nullable=True)
+  proposed_notified_datetime = db.Column(db.DateTime, nullable=True)
 
   INSTANCE_TMPL = "{}_proposalable"
 

@@ -1,0 +1,55 @@
+{#
+Copyright (C) 2017 Google Inc.
+Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+{% import 'notifications/style.html' as style %}
+
+<html xmlns="http://www.w3.org/1999/xhtml" style="margin: 0; padding: 0;">
+<head>
+
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Google GRC Email: Proposal Digest</title>
+
+</head>
+
+<body>
+  {% for proposal in proposals %}
+  <h3>
+    {{ proposal.proposed_by_name }} proposed changes to {{ proposal.instance_slug }}
+  </h3>
+  <p>
+    {{ proposal.agenda }}
+  </p>
+  <table>
+    <tr><th>ATTRIBUTE</th><th>PROPOSED VALUE</th></tr>
+    {% for field, value in proposal.value_dict.items %}
+      <tr><td>{{ field }}</td><td>{{ value }}</td></tr>
+    {% endfor %}
+    {% for field, values in proposal.values_list_dict.items %}
+      <tr>
+        <td>{{ field }}</td>
+        <td>
+          {% for action, elements in values.items %}
+            <ul>
+              {{ action }}
+              {% for element in elements %}
+                <li>{{ element }}</li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  Go to GGRC got approve or decline this proposal
+  {% endfor %}
+</body>
+</html>
+
+

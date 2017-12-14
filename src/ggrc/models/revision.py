@@ -9,6 +9,8 @@ from ggrc.models.mixins import Base
 from ggrc.models import reflection
 from ggrc.access_control import role
 from ggrc.models.types import LongJsonType
+from ggrc.utils.revisions_diff import builder as revisions_diff
+from ggrc.utils import referenced_objects
 
 
 class Revision(Base, db.Model):
@@ -50,6 +52,7 @@ class Revision(Base, db.Model):
       'action',
       'content',
       'description',
+      'diff_with_current',
   )
 
   @classmethod
@@ -83,6 +86,12 @@ class Revision(Base, db.Model):
                  "destination_type",
                  "destination_id"]:
       setattr(self, attr, getattr(obj, attr, None))
+
+  @builder.simple_property
+  def diff_with_current(self):
+    return revisions_diff.prepare(
+        referenced_objects.get(self.resource_type, self.resource_id),
+        self.content)
 
   @builder.simple_property
   def description(self):
