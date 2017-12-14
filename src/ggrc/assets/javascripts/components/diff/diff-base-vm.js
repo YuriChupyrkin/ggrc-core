@@ -21,4 +21,16 @@ export default can.Map({
 
     return displayName || name;
   },
+  getDisplayName(object) {
+    if (!object) {
+      return this.attr('emptyValue');
+    }
+
+    const displayName = object.display_name ||
+      object.title ||
+      object.name ||
+      this.attr('emptyValue');
+
+    return displayName;
+  },
 });
