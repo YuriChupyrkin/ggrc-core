@@ -452,8 +452,8 @@ class TestProposalApi(TestCase):
     control = factories.ControlFactory(title="1", kind=setuped_kind)
     control_id = control.id
     data = control.log_json()
-    update_kind_id = update_kind.id
-    data["kind"]["id"] = update_kind_id
+    update_kind_json = update_kind.log_json()
+    data["kind"] = update_kind_json
     resp = self.api.post(
         all_models.Proposal,
         {"proposal": {
@@ -471,9 +471,8 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertIn("mapping_fields", control.proposals[0].content)
     self.assertIn("kind", control.proposals[0].content["mapping_fields"])
-    self.assertEqual(
-        {"type": "Option", "id": update_kind_id},
-        control.proposals[0].content["mapping_fields"]["kind"])
+    self.assertEqual(json.loads(utils.as_json(update_kind_json)),
+                     control.proposals[0].content["mapping_fields"]["kind"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update kind", control.comments[0].description)
 
