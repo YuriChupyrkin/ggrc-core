@@ -3,6 +3,7 @@
 
 """AccessControlList creation hooks."""
 
+import datetime
 
 from sqlalchemy import inspect
 
@@ -39,6 +40,7 @@ def apply_proposal(
   if not is_status_changed_to(obj.STATES.APPLIED, obj):
     return
   obj.applied_by = login.get_current_user()
+  obj.apply_datetime = datetime.datetime.now()
   for field, value in obj.content.get("fields", {}).iteritems():
     if hasattr(obj.instance, field):
       setattr(obj.instance, field, value)
@@ -52,6 +54,7 @@ def decline_proposal(
   if not is_status_changed_to(obj.STATES.DECLINED, obj):
     return
   obj.declined_by = login.get_current_user()
+  obj.decline_datetime = datetime.datetime.now()
   add_comment_to(obj.instance, obj.decline_reason or "")
 
 
