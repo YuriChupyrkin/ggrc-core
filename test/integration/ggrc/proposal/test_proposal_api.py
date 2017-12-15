@@ -366,7 +366,7 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertIn("custom_attribute_values", control.proposals[0].content)
     self.assertEqual({unicode(cad_id): {"attribute_value": u"321",
-                                        "attribute_object_id": None}},
+                                        "attribute_object": None}},
                      control.proposals[0].content["custom_attribute_values"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update cav", control.comments[0].description)
@@ -383,7 +383,7 @@ class TestProposalApi(TestCase):
             "custom_attribute_values": {
                 cad.id: {
                     "attribute_value": "321",
-                    "attribute_object_id": None,
+                    "attribute_object": None,
                 },
             },
         },
@@ -436,7 +436,7 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertIn("custom_attribute_values", control.proposals[0].content)
     self.assertEqual({unicode(cad_id): {"attribute_value": u"321",
-                                        "attribute_object_id": None}},
+                                        "attribute_object": None}},
                      control.proposals[0].content["custom_attribute_values"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update cav", control.comments[0].description)
