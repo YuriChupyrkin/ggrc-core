@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import {REFRESH_PROPOSAL_DIFF} from '../../events/eventTypes';
 import RefreshQueue from '../../models/refresh_queue';
 import DiffBaseVM from './diff-base-vm';
 const tag = 'instance-mapping-fields-diff';
@@ -98,13 +99,19 @@ export default can.Component.extend({
   tag,
   viewModel: viewModel,
   events: {
-    inserted() {
+    buildDiff() {
       const instance = this.viewModel.attr('currentInstance');
       const modifiedFields = this.viewModel.attr('modifiedFields');
       if (!modifiedFields || !instance) {
         return;
       }
       this.viewModel.buildDiffObject();
+    },
+    inserted() {
+      this.buildDiff();
+    },
+    [`{viewModel.currentInstance} ${REFRESH_PROPOSAL_DIFF.type}`]() {
+      this.buildDiff();
     },
   },
 });
