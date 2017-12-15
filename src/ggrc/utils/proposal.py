@@ -129,7 +129,3 @@ def send_notification():
       proposal.proposed_notified_datetime = now
     if update_proposals:
       db.commit()
-
-
-def render_notification():
-
