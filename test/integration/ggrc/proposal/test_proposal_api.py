@@ -283,23 +283,27 @@ class TestProposalApi(TestCase):
           content={
               "access_control_list": {
                   role_1.id: {
-                      "added": [person_2.id],
+                      "added": [{"id": person_2.id, "email": person_2.email}],
                       "deleted": []
                   },
                   role_2.id: {
-                      "added": [person_1.id],
-                      "deleted": [person_2.id]
+                      "added": [{"id": person_1.id, "email": person_1.email}],
+                      "deleted": [{"id": person_2.id, "email": person_2.email}]
                   },
                   role_3.id: {
-                      "added": [person_3.id],
-                      "deleted": [person_2.id]
+                      "added": [{"id": person_3.id, "email": person_3.email}],
+                      "deleted": [{"id": person_2.id, "email": person_2.email}]
                   },
                   role_4.id: {
                       "added": [],
-                      "deleted": [person_1.id, person_2.id, person_3.id]
+                      "deleted": [{"id": person_1.id, "email": person_1.email},
+                                  {"id": person_2.id, "email": person_2.email},
+                                  {"id": person_3.id, "email": person_3.email}]
                   },
                   role_5.id: {
-                      "added": [person_1.id, person_2.id, person_3.id],
+                      "added": [{"id": person_1.id, "email": person_1.email},
+                                {"id": person_2.id, "email": person_2.email},
+                                {"id": person_3.id, "email": person_3.email}],
                       "deleted": [],
                   },
 

@@ -20,7 +20,7 @@ def apply_acl_proposal(instance, content):
                        for l in instance.access_control_list}
   person_ids = set()
   for role_id, data in content.get("access_control_list", {}).iteritems():
-    person_ids |= set(data["added"] + data["deleted"])
+    person_ids |= {i["id"] for i in data["added"] + data["deleted"]}
   person_dict = {p.id: p for p in all_models.Person.query.filter(
       all_models.Person.id.in_(person_ids))
   }
@@ -31,17 +31,17 @@ def apply_acl_proposal(instance, content):
   for role_id, data in content.get("access_control_list", {}).iteritems():
     role_id = int(role_id)
     for add in data["added"]:
-      if (role_id, add) not in instance_acl_dict:
+      if (role_id, add["id"]) not in instance_acl_dict:
         # add ACL if it hasn't added yet
         acl = all_models.AccessControlList(
-            person=person_dict[add],
+            person=person_dict[add["id"]],
             ac_role=acr_dict[int(role_id)],
             object=instance,
         )
-        instance_acl_dict[(role_id, add)] = acl
+        instance_acl_dict[(role_id, add["id"])] = acl
     for delete in data["deleted"]:
-      if (role_id, delete) in instance_acl_dict:
-        db.session.delete(instance_acl_dict[(role_id, delete)])
+      if (role_id, delete["id"]) in instance_acl_dict:
+        db.session.delete(instance_acl_dict[(role_id, delete["id"])])
 
 
 def apply_cav_proposal(instance, content):
@@ -53,15 +53,19 @@ def apply_cav_proposal(instance, content):
   proposals = content.get("custom_attribute_values", {})
   for cad_id, value in proposals.iteritems():
     cad_id = int(cad_id)
+    if value["attribute_object"]:
+      attribute_object_id = value["attribute_object"]["id"]
+    else:
+      attribute_object_id = None
     if cad_id in cav_dict:
       cav_dict[cad_id].attribute_value = value["attribute_value"]
-      cav_dict[cad_id].attribute_object_id = value["attribute_object_id"]
+      cav_dict[cad_id].attribute_object_id = attribute_object_id
     else:
       all_models.CustomAttributeValue(
           custom_attribute=cad_dict[cad_id],
           attributable=instance,
           attribute_value=value["attribute_value"],
-          attribute_object_id=value["attribute_object_id"],
+          attribute_object_id=attribute_object_id,
       )
 
 
