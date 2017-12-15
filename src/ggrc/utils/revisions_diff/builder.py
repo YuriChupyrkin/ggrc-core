@@ -39,9 +39,13 @@ def get_person_email(person_id):
   return g.person_email_cache[person_id]
 
 
+def person_obj_by_id(person_id):
+  return {"id": person_id, "email": get_person_email(person_id)}
+
+
 def generate_person_list(person_ids):
   person_ids = sorted([int(p) for p in person_ids])
-  return [{"id": i, "email": get_person_email(i)} for i in person_ids]
+  return [person_obj_by_id(i) for i in person_ids]
 
 
 def generate_acl_diff(proposed, revisioned):
@@ -111,10 +115,9 @@ def generate_cav_diff(instance, proposed, revisioned, old_cavs):
     proposed_val = proposed_cavs[cad.id]
     cad_not_setuped = cad.id not in revisioned_cavs
     if cad_not_setuped or proposed_val != revisioned_cavs[cad.id]:
-      diff[cad.id] = {
-          "attribute_value": proposed_val[0],
-          "attribute_object_id": proposed_val[1],
-      }
+      value, person_id = proposed_val
+      person = person_obj_by_id(person_id) if person_id else None
+      diff[cad.id] = {"attribute_value": value, "attribute_object": person}
   return diff
 
 
