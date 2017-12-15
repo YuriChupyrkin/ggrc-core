@@ -30,6 +30,7 @@ import Permission from '../../permission';
             return this.attr('instance.snapshot') ||
               this.attr('instance.isRevision') ||
               this.attr('instance.archived') ||
+              this.isReadOnlyForInstance(this.attr('instance')) ||
               !Permission.is_allowed_for('update', this.attr('instance'));
           },
         },
@@ -40,6 +41,10 @@ import Permission from '../../permission';
        * @type {can.List}
        */
       items: [],
+      isReadOnlyForInstance(instance) {
+        const type = instance.type;
+        return type === 'Risk' || type === 'Control';
+      },
       initCustomAttributes: function () {
         var result = [];
 
