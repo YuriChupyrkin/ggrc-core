@@ -16,6 +16,7 @@ export default can.Component.extend({
           var instance = this.attr('instance');
           var canEdit = !isSnapshot(instance) &&
             !instance.attr('archived') &&
+            !this.attr('readOnly') &&
             !this.attr('updatableGroupId') &&
             (this.attr('isNewInstance') ||
               Permission.is_allowed_for('update', instance));
@@ -41,6 +42,7 @@ export default can.Component.extend({
     backUpPeople: [],
     autoUpdate: false,
     updatableGroupId: null,
+    readOnly: false,
 
     changeEditableGroup: function (args) {
       if (args.editableMode) {
