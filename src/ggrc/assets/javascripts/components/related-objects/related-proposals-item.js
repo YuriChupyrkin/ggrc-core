@@ -9,6 +9,8 @@ import '../diff/instance-acl-diff';
 import '../diff/instance-gca-diff';
 import '../diff/instance-mapping-fields-diff';
 import '../diff/instance-list-fields-diff';
+import '../object-history/fields-diff-items';
+import '../object-history/list-fields-diff-items';
 import template from './templates/related-proposals-item.mustache';
 const tag = 'related-proposals-item';
 
