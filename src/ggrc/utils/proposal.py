@@ -5,12 +5,15 @@
 
 import collections
 import datetime
+from werkzeug import exceptions
+
 from ggrc.models import all_models
 from ggrc.access_control import roleable
 
 from google.appengine.api import mail
 from ggrc import settings
 from ggrc import db
+from ggrc import rbac
 
 
 EmailProposalContext = collections.namedtuple(
@@ -129,3 +132,11 @@ def send_notification():
       proposal.proposed_notified_datetime = now
     if update_proposals:
       db.commit()
+
+
+def present_notifications():
+  if not rbac.permissions.is_admin():
+    raise exceptions.Forbidden()
+  generator = ("<h1> email to {}</h1>\n".format(addressee.email, body)
+               for addressee, _, body in addressee_proposal_body_generator())
+  return "".join(generator)
