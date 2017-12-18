@@ -71,7 +71,10 @@ def generate_acl_diff(proposed, revisioned):
 
 
 def populate_cavs(custom_attribute_values, custom_attributes, cads):
-  if not custom_attributes:
+  # custom_attributes same as custom_attribute_values in revisions
+  # custom_attributes empty on new api
+  # in all that cases you shoul return custom_attribute_values
+  if not custom_attributes or custom_attributes == custom_attribute_values:
     return custom_attribute_values
   custom_attributes = {int(k): v for k, v in custom_attributes.iteritems()}
   cavs = []
@@ -96,10 +99,12 @@ def populate_cavs(custom_attribute_values, custom_attributes, cads):
   return cavs
 
 
-def generate_cav_diff(instance, proposed, revisioned, old_cavs):
+def generate_cav_diff(instance, proposed, revisioned, old_style_cavs):
   proposed = populate_cavs(proposed,
-                           old_cavs,
+                           old_style_cavs,
                            instance.custom_attribute_definitions)
+  diff = {}
+  remove_cav = bool(old_style_cavs is not None and proposed != old_style_cavs)
   proposed_cavs = {
       int(i["custom_attribute_id"]): (i["attribute_value"],
                                       i["attribute_object_id"])
@@ -108,7 +113,6 @@ def generate_cav_diff(instance, proposed, revisioned, old_cavs):
       int(i["custom_attribute_id"]): (i["attribute_value"],
                                       i["attribute_object_id"])
       for i in revisioned}
-  diff = {}
   for cad in instance.custom_attribute_definitions:
     if cad.id not in proposed_cavs:
       continue
@@ -117,7 +121,11 @@ def generate_cav_diff(instance, proposed, revisioned, old_cavs):
     if cad_not_setuped or proposed_val != revisioned_cavs[cad.id]:
       value, person_id = proposed_val
       person = person_obj_by_id(person_id) if person_id else None
-      diff[cad.id] = {"attribute_value": value, "attribute_object": person}
+      diff[cad.id] = {
+          "attribute_value": value,
+          "attribute_object": person,
+          "remove_cav": remove_cav,
+      }
   return diff
 
 
@@ -203,7 +211,7 @@ def prepare(instance, content):
       instance,
       diff_data.pop("custom_attribute_values", []),
       current_data.get("custom_attribute_values", []),
-      diff_data.pop("custom_attributes", []),
+      diff_data.pop("custom_attributes", None),
   )
   generated_mapptings = generate_mapping_dicts(instance,
                                                diff_data,

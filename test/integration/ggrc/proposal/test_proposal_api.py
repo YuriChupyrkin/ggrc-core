@@ -370,12 +370,14 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertIn("custom_attribute_values", control.proposals[0].content)
     self.assertEqual({unicode(cad_id): {"attribute_value": u"321",
-                                        "attribute_object": None}},
+                                        "attribute_object": None,
+                                        "remove_cav": False}},
                      control.proposals[0].content["custom_attribute_values"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update cav", control.comments[0].description)
 
-  def test_apply_cad(self):
+  @ddt.data(True, False)
+  def test_apply_cad(self, remove_cav):
     with factories.single_commit():
       control = factories.ControlFactory(title="1")
       cad = factories.CustomAttributeDefinitionFactory(
@@ -388,6 +390,7 @@ class TestProposalApi(TestCase):
                 cad.id: {
                     "attribute_value": "321",
                     "attribute_object": None,
+                    "remove_cav": remove_cav,
                 },
             },
         },
@@ -409,6 +412,47 @@ class TestProposalApi(TestCase):
     self.assertEqual(
         "321",
         control.custom_attribute_values[0].attribute_value)
+
+  @ddt.data(True, False)
+  def test_apply_mapping_cad(self, remove_cav):
+    with factories.single_commit():
+      control = factories.ControlFactory(title="1")
+      cad = factories.CustomAttributeDefinitionFactory(
+          definition_type="control",
+          attribute_type="Map:Person"
+      )
+      person = factories.PersonFactory()
+      cav = factories.CustomAttributeValueFactory(
+          custom_attribute=cad,
+          attributable=control,
+          attribute_object_id=person.id,
+          attribute_value="Person",
+      )
+    self.assertEqual(person,
+                     control.custom_attribute_values[0].attribute_object)
+    control_id = control.id
+    proposal = factories.ProposalFactory(
+        instance=control,
+        content={
+            "custom_attribute_values": {
+                cad.id: {
+                    "attribute_value": "Person",
+                    "attribute_object": None,
+                    "remove_cav": remove_cav,
+                },
+            },
+        },
+        agenda="agenda content")
+    resp = self.api.put(
+        proposal, {"proposal": {"status": proposal.STATES.APPLIED}})
+    self.assert200(resp)
+    control = all_models.Control.query.get(control_id)
+    if remove_cav:
+      self.assertFalse(control.custom_attribute_values)
+    else:
+      cav = control.custom_attribute_values[0]
+      self.assertEqual("Person", cav.attribute_value)
+      self.assertIsNone(cav.attribute_object_id)
 
   def test_change_cad_oldstile(self):
     with factories.single_commit():
@@ -440,7 +484,8 @@ class TestProposalApi(TestCase):
     self.assertEqual(1, len(control.proposals))
     self.assertIn("custom_attribute_values", control.proposals[0].content)
     self.assertEqual({unicode(cad_id): {"attribute_value": u"321",
-                                        "attribute_object": None}},
+                                        "attribute_object": None,
+                                        "remove_cav": True}},
                      control.proposals[0].content["custom_attribute_values"])
     self.assertEqual(1, len(control.comments))
     self.assertEqual("update cav", control.comments[0].description)

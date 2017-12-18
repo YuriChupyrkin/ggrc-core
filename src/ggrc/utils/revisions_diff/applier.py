@@ -52,17 +52,26 @@ def apply_cav_proposal(instance, content):
               for i in instance.custom_attribute_values}
   proposals = content.get("custom_attribute_values", {})
   for cad_id, value in proposals.iteritems():
-    cad_id = int(cad_id)
+    cad = cad_dict.get(int(cad_id))
+    if not cad:
+      # looks like CAD was removed
+      continue
     if value["attribute_object"]:
       attribute_object_id = value["attribute_object"]["id"]
+      remove_cav = False
     else:
       attribute_object_id = None
-    if cad_id in cav_dict:
-      cav_dict[cad_id].attribute_value = value["attribute_value"]
-      cav_dict[cad_id].attribute_object_id = attribute_object_id
-    else:
+      remove_cav = (cad.attribute_type.startswith("Map:") and
+                    value.get("remove_cav"))
+    cav = cav_dict.get(cad.id)
+    if remove_cav and cav:
+      instance.custom_attribute_values.remove(cav)
+    elif not remove_cav and cav:
+      cav.attribute_value = value["attribute_value"]
+      cav.attribute_object_id = attribute_object_id
+    elif not remove_cav:
       all_models.CustomAttributeValue(
-          custom_attribute=cad_dict[cad_id],
+          custom_attribute=cad,
           attributable=instance,
           attribute_value=value["attribute_value"],
           attribute_object_id=attribute_object_id,
