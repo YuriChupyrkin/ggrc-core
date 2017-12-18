@@ -10,7 +10,6 @@ import itertools
 from ggrc.access_control import roleable
 from ggrc.models import all_models
 from ggrc.models import mixins
-from ggrc import db
 
 
 def apply_acl_proposal(instance, content):
@@ -38,10 +37,11 @@ def apply_acl_proposal(instance, content):
             ac_role=acr_dict[int(role_id)],
             object=instance,
         )
-        instance_acl_dict[(role_id, add["id"])] = acl
+        instance.access_control_list.append(acl)
     for delete in data["deleted"]:
       if (role_id, delete["id"]) in instance_acl_dict:
-        db.session.delete(instance_acl_dict[(role_id, delete["id"])])
+        acl = instance_acl_dict[(role_id, delete["id"])]
+        instance.access_control_list.remove(acl)
 
 
 def apply_cav_proposal(instance, content):
