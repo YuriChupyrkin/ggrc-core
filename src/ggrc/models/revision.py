@@ -52,7 +52,7 @@ class Revision(Base, db.Model):
       'action',
       'content',
       'description',
-      'diff_with_current',
+      reflection.Attribute('diff_with_current', create=False, update=False),
   )
 
   @classmethod
@@ -89,9 +89,9 @@ class Revision(Base, db.Model):
 
   @builder.simple_property
   def diff_with_current(self):
-    return revisions_diff.prepare(
-        referenced_objects.get(self.resource_type, self.resource_id),
-        self.content)
+    instance = referenced_objects.get(self.resource_type, self.resource_id)
+    if instance:
+      return revisions_diff.prepare(instance, self.content)
 
   @builder.simple_property
   def description(self):

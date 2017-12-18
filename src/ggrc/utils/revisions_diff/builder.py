@@ -10,6 +10,7 @@ import collections
 from flask import g
 
 from ggrc.models import reflection
+from ggrc.models import mixins
 
 
 def get_latest_revision_content(instance):
@@ -100,6 +101,8 @@ def populate_cavs(custom_attribute_values, custom_attributes, cads):
 
 
 def generate_cav_diff(instance, proposed, revisioned, old_style_cavs):
+  if not isinstance(instance, mixins.customattributable.CustomAttributable):
+    return {}
   proposed = populate_cavs(proposed,
                            old_style_cavs,
                            instance.custom_attribute_definitions)
