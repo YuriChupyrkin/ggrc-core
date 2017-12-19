@@ -188,3 +188,4 @@ dashboard-js-template-files:
   - components/inline/simple-readonly-text.mustache
   - partials/modal-ajax-test-plan.mustache
   - modals/create_proposal.mustache
+  - modals/restore_revision.mustache
