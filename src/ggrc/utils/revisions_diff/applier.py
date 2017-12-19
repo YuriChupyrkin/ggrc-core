@@ -70,12 +70,14 @@ def apply_cav_proposal(instance, content):
       cav.attribute_value = value["attribute_value"]
       cav.attribute_object_id = attribute_object_id
     elif not remove_cav:
-      all_models.CustomAttributeValue(
+      cav = all_models.CustomAttributeValue(
           custom_attribute=cad,
           attributable=instance,
           attribute_value=value["attribute_value"],
           attribute_object_id=attribute_object_id,
       )
+      instance.custom_attribute_values.append(cav)
+
 
 
 def apply_mapping(instance, content):
