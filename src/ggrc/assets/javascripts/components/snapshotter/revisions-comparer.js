@@ -14,23 +14,43 @@ export default can.Component.extend({
     instance: null,
     leftRevisionId: null,
     rightRevisions: [],
+    rightRevision: null,
+    title: '@',
+    isRestoreRevision: false,
     compareIt: function () {
       var view = this.attr('instance.view');
       var that = this;
+      var title = this.attr('title') ||
+        'Compare with the latest version';
       var currentRevisionID = this.attr('leftRevisionId');
-      var rightRevisions = this.attr('rightRevisions');
-      var revisionsLength = rightRevisions.length;
-      var newRevisionID = rightRevisions[revisionsLength - 1].id;
+      var rightRevisions;
+      var revisionsLength;
+      var newRevisionID;
+      var buttonView = `${GGRC.mustache_path}/modals/prompt_buttons.mustache`;
+
+      if (this.attr('isRestoreRevision')) {
+        buttonView = `${GGRC.mustache_path}/modals/restore_revision.mustache`;
+      }
+
+      if (!this.attr('rightRevision')) {
+        rightRevisions = this.attr('rightRevisions');
+        revisionsLength = rightRevisions.length;
+        this.attr('rightRevision', rightRevisions[revisionsLength - 1]);
+      }
+
+      newRevisionID = this.attr('rightRevision.id');
+
       confirm({
-        modal_title: 'Compare with the latest version',
+        modal_title: title,
         modal_description: 'Loading...',
         header_view: GGRC.mustache_path +
                       '/modals/modal_compare_header.mustache',
         modal_confirm: 'Update',
         skip_refresh: true,
         extraCssClass: 'compare-modal',
-        button_view: GGRC.mustache_path +
-                      '/modals/prompt_buttons.mustache',
+        button_view: buttonView,
+        instance: this.attr('instance'),
+        rightRevision: this.attr('rightRevision'),
         afterFetch: function (target) {
           that.getRevisions(currentRevisionID, newRevisionID)
             .then(function (data) {
@@ -149,7 +169,7 @@ export default can.Component.extend({
       }
 
       return result.then(function (revisions) {
-        return new can.List(_.sortBy(revisions, 'id'));
+        return new can.List(revisions);
       });
     },
     prepareInstances: function (data) {

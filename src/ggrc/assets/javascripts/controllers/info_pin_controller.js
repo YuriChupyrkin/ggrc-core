@@ -20,6 +20,7 @@ import '../components/proposal/create-proposal-button';
 import '../components/related-objects/proposals/related-proposals';
 import '../components/related-objects/proposals/related-proposals-item';
 import '../components/related-objects/revisions/related-revisions';
+import '../components/revision-history/restore-revision';
 import '../components/unarchive_link';
 import * as TreeViewUtils from '../plugins/utils/tree-view-utils';
 import {confirm} from '../plugins/utils/modals';

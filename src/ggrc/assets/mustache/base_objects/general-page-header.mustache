@@ -19,7 +19,7 @@
         {{#if snapshot.archived}}
           <span class="state-value state-archived">Archived</span>
         {{/if}}
-        {{^if snapshot}}
+        {{^if isSnapshot}}
           <span class="create-proposal">
             <create-proposal-button {instance}="instance">
             </create-proposal-button>

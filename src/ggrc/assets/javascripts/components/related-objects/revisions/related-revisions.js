@@ -18,6 +18,12 @@ export default can.Component.extend({
           return new Pagination({pageSizeSelect: [5, 10, 15]});
         },
       },
+      lastRevision: {
+        get() {
+          // get first because revisions have desc sorting
+          return _.first(this.attr('revisions'));
+        },
+      },
     },
     instance: {},
     visibleRevisions: [],

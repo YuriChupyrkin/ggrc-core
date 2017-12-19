@@ -47,6 +47,15 @@
           <button ($click)="review()" class="btn btn-small btn-white">
             Review &amp; Restore
           </button>
+
+          <revisions-comparer
+            title="Restore Version: Compare to Current"
+            is-restore-revision="true"
+            {instance}="instance"
+            {left-revision-id}="lastRevision.id"
+            {right-revision}="revision">
+              <a href="javascript://" can-click="compareIt">Update 1</a>
+          </revisions-comparer>
         </div>
     </div>
   {{/is_allowed}}
