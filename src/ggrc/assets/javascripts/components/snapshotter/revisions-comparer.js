@@ -152,7 +152,7 @@ export default can.Component.extend({
       }
 
       return result.then(function (revisions) {
-        return new can.List(_.sortBy(revisions, 'id'));
+        return new can.List(revisions);
       });
     },
     prepareInstances: function (data) {
