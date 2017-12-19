@@ -9,6 +9,8 @@ from ggrc.models.mixins import Base
 from ggrc.models import reflection
 from ggrc.access_control import role
 from ggrc.models.types import LongJsonType
+from ggrc.utils.revisions_diff import builder as revisions_diff
+from ggrc.utils import referenced_objects
 
 
 class Revision(Base, db.Model):
@@ -50,6 +52,7 @@ class Revision(Base, db.Model):
       'action',
       'content',
       'description',
+      reflection.Attribute('diff_with_current', create=False, update=False),
   )
 
   @classmethod
@@ -83,6 +86,12 @@ class Revision(Base, db.Model):
                  "destination_type",
                  "destination_id"]:
       setattr(self, attr, getattr(obj, attr, None))
+
+  @builder.simple_property
+  def diff_with_current(self):
+    instance = referenced_objects.get(self.resource_type, self.resource_id)
+    if instance:
+      return revisions_diff.prepare(instance, self.content)
 
   @builder.simple_property
   def description(self):
@@ -212,6 +221,24 @@ class Revision(Base, db.Model):
     folders = self._content.get("folders") or [{"id": ""}]
     return {"folder": folders[0]["id"]}
 
+  def populate_categoies(self, key_name):
+    """Fix revision logger.
+
+    On controls in category field was loged categorization instances."""
+    if self.resource_type != "Control":
+      return {}
+    result = []
+    for categorization in self._content.get(key_name) or []:
+      if "category_id" in categorization:
+        result.append({
+            "id": categorization["category_id"],
+            "type": categorization["category_type"],
+            "name": categorization["display_name"],
+        })
+      else:
+        result.append(categorization)
+    return {key_name: result}
+
   def populate_labels(self):
     """Add labels info for older revisions."""
     if "label" not in self._content:
@@ -230,6 +257,8 @@ class Revision(Base, db.Model):
     populated_content.update(self.populate_acl())
     populated_content.update(self.populate_reference_url())
     populated_content.update(self.populate_folder())
+    populated_content.update(self.populate_categoies("categories"))
+    populated_content.update(self.populate_categoies("assertions"))
     populated_content.update(self.populate_labels())
     return populated_content
 
