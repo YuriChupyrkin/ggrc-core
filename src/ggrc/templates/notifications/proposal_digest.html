@@ -17,38 +17,63 @@ Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 
 </head>
 
-<body>
+<body {{ style.body_style() }}>
+  <div {{ style.proposal_container() }} >
   {% for proposal in proposals %}
-  <h3>
-    {{ proposal.proposed_by_name }} proposed changes to {{ proposal.instance_slug }}
-  </h3>
-  <p>
-    {{ proposal.agenda }}
-  </p>
-  <table>
-    <tr><th>ATTRIBUTE</th><th>PROPOSED VALUE</th></tr>
-    {% for field, value in proposal.value_dict.items %}
-      <tr><td>{{ field }}</td><td>{{ value }}</td></tr>
-    {% endfor %}
-    {% for field, values in proposal.values_list_dict.items %}
+    <h1 {{ style.proposal_main_title() }} >
+    {{ proposal.proposed_by_name }} proposed changes to {{ proposal.instance.type|lower }}: {{ proposal.instance.slug }}
+    </h1>
+    <p {{ style.comment_content() }}>
+      {{ proposal.agenda }}
+    </p>
+    <table {{ style.proposal_table_full() }}>
+      <thead>
+        <tr>
+            <th {{ style.proposal_th() }}>ATTRIBUTE</th>
+            <th colspan=2 {{ style.proposal_th() }}>PROPOSED VALUE</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for field, value in proposal.values_dict.items() %}
       <tr>
-        <td>{{ field }}</td>
-        <td>
-          {% for action, elements in values.items %}
-            <ul>
-              {{ action }}
-              {% for element in elements %}
-                <li>{{ element }}</li>
-              {% endfor %}
-            </ul>
-          {% endfor %}
-        </td>
+          <td {{ style.proposal_td() }}>{{ field }}</td>
+          <td {{ style.proposal_td_value() }}colspan=2>{{ value }}</td>
       </tr>
-    {% endfor %}
-  </table>
+      {% endfor %}
+      {% for field, values in proposal.values_list_dict.items() %}
+        <tr>
+          <td {{ style.proposal_td() }}>{{ field }}</td>
+            {% for action, elements in values.items() %}
+                {% if loop.first %}
+                  <td {{ style.proposal_action_cell() }}>
+                      <span {{ style.proposal_action_cell() }}>
+                          {{ action|capitalize }}:
+                      </span>
+                  </td>
+                  <td {{ style.proposal_td() }}>
+                  <ul {{ style.list_wrap() }}>
 
-  Go to GGRC got approve or decline this proposal
+                {% endif %}
+                {% for element in elements %}
+                <li {{ style.proposal_list_item_no_bullet() }}>{{ element }}{% if not loop.last %},{% endif %}</li>
+                {% endfor %}
+                {% if loop.last %}
+                  </ul>
+                  </td>
+                {% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p {{ style.header_color() }}>
+        Go to GGRC got approve or decline this proposal
+    </p>
+    <a href="" {{ style.proposal_btn() }}>Open</a>
   {% endfor %}
+  </div>
+  <span {{ style.proposal_footer() }}> Google GRC </span>
 </body>
 </html>
 

@@ -20,7 +20,7 @@ EmailProposalContext = collections.namedtuple(
     "EmailProposalContext",
     ["agenda",
      "proposed_by_name",
-     "instance_slug",
+     "instance",
      "values_dict",
      "values_list_dict"]
 )
@@ -32,10 +32,11 @@ def _get_object_presentation(obj_dict):
                                                               obj_dict["id"])
 
 
-def get_fields_list_values(proposal, acr_dict, person_dict, ):
+def get_fields_list_values(proposal, acr_dict, person_dict):
+
   list_fields = {
-      acr_dict[acr_id]: {
-          action: [person_dict[i] for i in items]
+      acr_dict[int(acr_id)]: {
+          action: [person_dict[int(i["id"])] for i in items]
           for action, items in value.iteritems()
       }
       for acr_id, value in proposal.content["access_control_list"].iteritems()
@@ -53,7 +54,7 @@ def get_fields_list_values(proposal, acr_dict, person_dict, ):
 
 def get_field_single_values(proposal, person_dict, cads_dict):
   values_dict = {}
-  values_dict.update(proposal.content["fileds"])
+  values_dict.update(proposal.content["fields"])
 
   for cad_id, value_obj in proposal.content["custom_attribute_values"]:
     if value_obj["attribute_object_id"]:
@@ -105,13 +106,13 @@ def addressee_proposal_body_generator():
     body = all_models.Proposal.NotificationContext.DIGEST_TMPL.render(
         proposals=[
             EmailProposalContext(
-                proposal.agenda,
-                proposal.proposed_by.name or proposal.proposed_by.email,
-                proposal.instance.slug,
-                get_field_single_values(proposal, person_dict, cads_dict),
-                get_fields_list_values(proposal, acr_dict, person_dict),
+                p.agenda,
+                p.proposed_by.name or p.proposed_by.email,
+                p.instance,
+                get_field_single_values(p, person_dict, cads_dict),
+                get_fields_list_values(p, acr_dict, person_dict),
             )
-            for proposal in proposals
+            for p in proposals
         ]
     )
     yield (addressee, proposals, body)
@@ -137,6 +138,6 @@ def send_notification():
 def present_notifications():
   if not rbac.permissions.is_admin():
     raise exceptions.Forbidden()
-  generator = ("<h1> email to {}</h1>\n".format(addressee.email, body)
+  generator = ("<h1> email to {}</h1>\n {}".format(addressee.email, body)
                for addressee, _, body in addressee_proposal_body_generator())
   return "".join(generator)
