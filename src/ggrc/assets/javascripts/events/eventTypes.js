@@ -83,6 +83,18 @@ const REFRESH_TAB_CONTENT = {
   type: 'refreshTabContent',
 };
 
+/**
+ * Navigate to info-pane's tab
+ * @event navigateToTab
+ * @type {object}
+ * @property {string} type - Event name.
+ * @property {string} tabId - id of tab.
+ */
+const NAVIGATE_TO_TAB = {
+  type: 'navigateToTab',
+};
+
+
 export {
   REFRESH_RELATED,
   SAVE_CUSTOM_ROLE,
@@ -92,4 +104,5 @@ export {
   VALIDATION_ERROR,
   DESTINATION_UNMAPPED,
   REFRESH_TAB_CONTENT,
+  NAVIGATE_TO_TAB,
 };
