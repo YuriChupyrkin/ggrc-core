@@ -14,6 +14,7 @@ export default can.Component.extend({
     instance: null,
     leftRevisionId: null,
     rightRevision: null,
+    isProposal: false,
     buttonView: null,
     modalConfirm: null,
     modalTitle: null,
@@ -156,9 +157,12 @@ export default can.Component.extend({
       });
     },
     prepareInstances: function (data) {
-      return data.map(function (value) {
-        var content = value.content;
-        var model = CMS.Models[value.resource_type];
+      return data.map((value, index) => {
+        let content = value.content;
+        let revision = {};
+        const proposalContent = this.attr('rightRevision.content');
+        const model = CMS.Models[value.resource_type];
+
         content.attr('isRevision', true);
         content.attr('type', value.resource_type);
         content.attr('isRevisionFolderLoaded', false);
@@ -170,7 +174,27 @@ export default can.Component.extend({
           });
         }
 
-        return {instance: new model(content), isSnapshot: true};
+        if (!this.attr('isProposal')) {
+          return {instance: new model(content), isSnapshot: true};
+        }
+
+        revision.isSnapshot = true;
+        revision.instance = new model(content);
+        revision.instance.isRevision = true;
+
+        // set proposal content for second revision
+        if (index === 1) {
+          // new model method overrides modified fields
+          can.Map.keys(proposalContent).forEach((key) => {
+            if (Array.isArray(proposalContent[key])) {
+              revision.instance.attr(key).replace(proposalContent[key]);
+            } else {
+              revision.instance.attr(key, proposalContent[key]);
+            }
+          });
+        }
+
+        return revision;
       });
     },
     updateRevision: function () {

@@ -84,8 +84,9 @@ const buildModifiedListField = (currentField, modifiedItem) => {
 
   modifiedField = currentField.slice();
 
-  shouldBeAdded = modifiedItem.added.filter((item) =>
-    _.findIndex(currentField, {id: item.id}) === -1);
+  shouldBeAdded = modifiedItem.added
+    .filter((item) => _.findIndex(currentField, {id: item.id}) === -1)
+    .map((item) => new CMS.Models[item.type](item));
 
   // push added items
   modifiedField.push(...shouldBeAdded);
@@ -157,9 +158,22 @@ const buildModifiedAttValues = (values, definitions, modifiedAttrs) => {
 };
 // #endregion
 
+const getInstanceView = (instance) => {
+  let view;
+  let typeInfo;
+  if (instance.view) {
+    return instance.view;
+  }
+
+  typeInfo = instance.class.table_plural + '/info';
+  view = GGRC.mustache_path + '/' + typeInfo + '.mustache';
+  return view;
+};
+
 export {
   buildRoleACL,
   buildModifiedACL,
   buildModifiedListField,
   buildModifiedAttValues,
+  getInstanceView,
 };

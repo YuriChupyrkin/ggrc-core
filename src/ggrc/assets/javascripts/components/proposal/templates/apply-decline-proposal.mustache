@@ -22,6 +22,16 @@
       </button>
     </div>
   {{/if}}
+  <button ($click)="prepareComparerConfig()">PREPARE</button>
+  <revisions-comparer
+    {modal-title}="modalTitle"
+    {modal-confirm}="modalConfirm"
+    {button-view}="buttonView"
+    {instance}="instance"
+    {is-proposal}="true"
+    {right-revision}="rightRevision"
+    {left-revision-id}="leftRevisionId">
+  </revisions-comparer>
 </div>
 
 <simple-modal modal-title="title" state="modalState" replace-content="true" extra-css-class="proposal-confirm">
