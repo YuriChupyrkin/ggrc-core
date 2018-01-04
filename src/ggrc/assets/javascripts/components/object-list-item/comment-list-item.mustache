@@ -9,10 +9,21 @@
       {{/if}}
       <span class="comment-object-item__author_info">{{assignee_types commentAuthorType}} {{date commentCreationDate}}</span>
     </div>
-  {{#if hasRevision}}
+    {{#if header_url_link}}
+      {{#if isProposalHeaderLink}}
+        <a class="comment-object-item__proposal-link"
+          href="javascript:void(0)"
+          ($click)="openProposalTab()">
+            PROPOSAL
+        </a>
+      {{else}}
+        <a href="header_url_link">TODO: Name of header link</a>
+      {{/if}}
+    {{/if}}
+    {{#if hasRevision}}
       <div class="comment-list__ca-description">{{customAttributeData}}</div>
-  {{/if}}
+    {{/if}}
     <div class="comment-object-item__text">
-     <read-more {text}="commentText"></read-more>
+      <read-more {text}="commentText"></read-more>
     </div>
 </div>

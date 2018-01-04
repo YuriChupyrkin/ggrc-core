@@ -175,6 +175,9 @@
     max-height: 20px;
     margin: 0;
   }
+  .comment-object-item__proposal-link {
+    color: $proposalLink;
+  }
   .comment-object-item__author {
     display: flex;
     flex-direction: row;
