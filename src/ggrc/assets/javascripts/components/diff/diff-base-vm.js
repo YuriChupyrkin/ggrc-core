@@ -51,7 +51,7 @@ export default can.Map({
         reject();
       }
 
-      modelInstance = CMS.Models[type].store[id] || {};
+      modelInstance = CMS.Models[type].findInCacheById(id) || {};
 
       if (modelInstance && modelInstance.hasOwnProperty(requiredAttr)) {
         resolve(modelInstance);
