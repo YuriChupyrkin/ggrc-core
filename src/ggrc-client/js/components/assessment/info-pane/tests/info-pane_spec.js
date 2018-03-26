@@ -106,5 +106,40 @@ describe('GGRC.Components.assessmentInfoPane', function () {
         done();
       });
     });
+
+    it(`should call "refreshTreeContainers"
+      in case success the status changing`,
+      (done) => {
+        instanceSave.resolve();
+        spyOn(vm, 'refreshTreeContainers');
+
+        method({
+          status: 'FooBar',
+        }).then(() => {
+          expect(vm.refreshTreeContainers).toHaveBeenCalled();
+          done();
+        });
+      }
+    );
+
+    it(`should not call "refreshTreeContainers"
+      in case fail the status changing`,
+      (done) => {
+        instanceSave.reject({}, {
+          status: 409,
+          remoteObject: {
+            status: 'Foo',
+          },
+        });
+        spyOn(vm, 'refreshTreeContainers');
+
+        method({
+          status: 'FooBar',
+        }).fail(() => {
+          expect(vm.refreshTreeContainers).not.toHaveBeenCalled();
+          done();
+        });
+      }
+    );
   });
 });

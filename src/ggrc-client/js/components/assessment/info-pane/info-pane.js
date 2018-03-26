@@ -53,6 +53,7 @@ import {REFRESH_TAB_CONTENT,
 import Permission from '../../../permission';
 import template from './info-pane.mustache';
 import {CUSTOM_ATTRIBUTE_TYPE} from '../../../plugins/utils/custom-attribute/custom-attribute-config';
+import {getAllOpenedContainers} from '../../../plugins/utils/tree-view-utils';
 
 (function (can, GGRC, CMS) {
   'use strict';
@@ -424,6 +425,19 @@ import {CUSTOM_ATTRIBUTE_TYPE} from '../../../plugins/utils/custom-attribute/cus
             this.attr('instance').save().done(resolve).fail(reject);
           }.bind(this), 1000, true));
       },
+      refreshTreeContainers() {
+        const treeWidgetContainers = getAllOpenedContainers(true);
+        treeWidgetContainers.each((index, container) => {
+          const vm = $(container).viewModel();
+
+          if (
+            vm.model.model_singular === 'Control' ||
+            vm.model.model_singular === 'Objective'
+          ) {
+            vm.setRefreshFlag(true);
+          }
+        });
+      },
       onStateChange: function (event) {
         let isUndo = event.undo;
         let newStatus = event.state;
@@ -457,6 +471,7 @@ import {CUSTOM_ATTRIBUTE_TYPE} from '../../../plugins/utils/custom-attribute/cus
         return instance.save().then(() => {
           this.initializeFormFields();
           this.attr('onStateChangeDfd').resolve();
+          this.refreshTreeContainers();
           stopFn();
         }).always(() => instance.attr('isPending', false))
           .fail(resetStatusOnConflict);
