@@ -5,6 +5,12 @@
 
 import RefreshQueue from '../../models/refresh_queue';
 
+const MODELS_WITH_RELATED_ASSESSMENTS = // eslint-disable-line
+[
+  'Control',
+  'Objective',
+];
+
 const getModelInstance = (id, type, requiredAttr) => {
   const promise = new Promise((resolve, reject) => {
     let modelInstance;
@@ -37,6 +43,16 @@ const getModelInstance = (id, type, requiredAttr) => {
   return promise;
 };
 
+/**
+ * Check the model has Related Assessments
+ * @param {String} type - model type
+ * @return {Boolean}
+ */
+const hasRelatedAssessments = (type) => {
+  return _.contains(MODELS_WITH_RELATED_ASSESSMENTS, type);
+};
+
 export {
   getModelInstance,
+  hasRelatedAssessments,
 };
