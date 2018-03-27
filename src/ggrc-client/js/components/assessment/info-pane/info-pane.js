@@ -54,6 +54,7 @@ import Permission from '../../../permission';
 import template from './info-pane.mustache';
 import {CUSTOM_ATTRIBUTE_TYPE} from '../../../plugins/utils/custom-attribute/custom-attribute-config';
 import {getAllOpenedContainers} from '../../../plugins/utils/tree-view-utils';
+import {hasRelatedAssessments} from '../../../plugins/utils/models-utils';
 
 (function (can, GGRC, CMS) {
   'use strict';
@@ -430,10 +431,7 @@ import {getAllOpenedContainers} from '../../../plugins/utils/tree-view-utils';
         treeWidgetContainers.each((index, container) => {
           const vm = $(container).viewModel();
 
-          if (
-            vm.model.model_singular === 'Control' ||
-            vm.model.model_singular === 'Objective'
-          ) {
+          if (hasRelatedAssessments(vm.model.model_singular)) {
             vm.setRefreshFlag(true);
           }
         });
