@@ -583,6 +583,20 @@ function isDirectlyRelated(instance) {
 }
 
 /**
+ * Returns all opened tree-widget-containers.
+ * @param {Boolean} exceptCurrent - return all opened tree-widget-containers
+ * except for visible (currently opened).
+ * @return {$} - "tree-widget-container" DOM elements.
+ */
+function getAllOpenedContainers(exceptCurrent = false) {
+  const query = exceptCurrent ?
+    'tree-widget-container:not(:visible)' :
+    'tree-widget-container';
+
+  return $(query);
+}
+
+/**
  *
  * @param {Array} models - Type of model.
  * @param {Object} relevant - Relevant description
@@ -719,4 +733,5 @@ export {
   makeRelevantExpression,
   getVisibleColumnsConfig,
   isDirectlyRelated,
+  getAllOpenedContainers,
 };
