@@ -54,6 +54,7 @@ import Permission from '../../../permission';
 import template from './info-pane.mustache';
 import {CUSTOM_ATTRIBUTE_TYPE} from '../../../plugins/utils/custom-attribute/custom-attribute-config';
 import pubsub from '../../../pub-sub';
+import {relatedAssessmentsTypes} from '../../../plugins/utils/models-utils';
 
 (function (can, GGRC, CMS) {
   'use strict';
@@ -430,9 +431,7 @@ import pubsub from '../../../pub-sub';
           }.bind(this), 1000, true));
       },
       refetchWidgets() {
-        const haveRelatedAssessments = ['Control', 'Objective'];
-
-        haveRelatedAssessments.forEach((modelName) => {
+        relatedAssessmentsTypes.forEach((modelName) => {
           pubsub.dispatch({
             type: 'refetchOnce',
             modelName,
