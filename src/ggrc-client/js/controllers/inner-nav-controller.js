@@ -11,6 +11,7 @@ import {isDashboardEnabled} from '../plugins/utils/dashboards-utils';
 import {isObjectVersion} from '../plugins/utils/object-versions-utils';
 import router, {buildUrl} from '../router';
 import '../components/add-tab-button/add-tab-button';
+import pubSub from '../pub-sub';
 
 export default can.Control({
   defaults: {
@@ -26,6 +27,7 @@ export default can.Control({
     counts: null,
     hasHiddenWidgets: false,
     showAddTabButton: true,
+    refetchOnce: new Set(),
   },
 }, {
   init: function (options) {
@@ -46,6 +48,10 @@ export default can.Control({
 
       router.bind('widget', (ev, newVal)=>{
         this.route(newVal);
+      });
+
+      pubSub.bind('refetchOnce', (event) => {
+        this.options.attr('refetchOnce').add(event.modelName);
       });
 
       can.view(this.options.internav_view, this.options, (frag) => {
@@ -80,12 +86,33 @@ export default can.Control({
     return new $.Deferred().resolve();
   },
 
+  checkRefetchOnce(widgetSelector) {
+    const refetchOnce = this.options.attr('refetchOnce');
+
+    if (!refetchOnce.size) {
+      return false;
+    }
+
+    const widget = _.find(
+      this.options.widget_list,
+      (widget) => widget.selector === widgetSelector && widget.model
+    );
+
+    if (widget && refetchOnce.has(widget.model.model_singular)) {
+      refetchOnce.delete(widget.model.model_singular);
+      return true;
+    }
+
+    return false;
+  },
+
   display_widget: function (refetch) {
     let activeWidgetSelector = this.options.contexts.active_widget.selector;
     let $activeWidget = $(activeWidgetSelector);
     let widgetController = $activeWidget.control();
 
     if (widgetController && widgetController.display) {
+      refetch = this.checkRefetchOnce(activeWidgetSelector) || refetch;
       return widgetController.display(refetch);
     }
     return new $.Deferred().resolve();
