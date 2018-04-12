@@ -845,7 +845,6 @@ class Resource(ModelView):
     except KeyError:
       raise BadRequest('Required attribute "{0}" not found'.format(
           root_attribute))
-
     if 'context' not in src:
       raise BadRequest('context MUST be specified.')
 
@@ -957,6 +956,7 @@ class Resource(ModelView):
       objects = []
       sources = []
       for wrapped_src in body:
+
         src = self._unwrap_collection_post_src(wrapped_src)
         obj = self._get_model_instance(src, body)
         with benchmark("Deserialize object"):

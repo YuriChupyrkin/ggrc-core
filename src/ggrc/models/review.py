@@ -116,11 +116,11 @@ class Review(mixins.person_relation_factory("last_set_reviewed_by"),
   agenda = db.Column(db.Text, nullable=False, default="")
 
   _api_attrs = reflection.ApiAttributes(
-      reflection.Attribute('agenda'),
+    reflection.Attribute('notification_type'),
       reflection.Attribute('email_message'),
       reflection.Attribute('instance', update=False),
       reflection.Attribute('issuetracker_issue'),
-      reflection.Attribute('notification_type'),
+      reflection.Attribute('agenda', create=False, update=False),
   )
 
   _fulltext_attrs = [

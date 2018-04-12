@@ -49,6 +49,7 @@ def single_commit():
 
 class TitledFactory(ModelFactory):
   title = factory.LazyAttribute(lambda m: random_str(prefix='title '))
+  modified_by = factory.LazyAttribute(lambda _: PersonFactory())
 
 
 class WithACLandCAFactory(ModelFactory):
