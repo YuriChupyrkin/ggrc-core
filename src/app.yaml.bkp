@@ -1,0 +1,121 @@
+# # Copyright (C) 2018 Google Inc.
+# Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+#
+# See https://developers.google.com/appengine/docs/python/config/appconfig
+
+runtime: python27
+api_version: 1
+threadsafe: true
+instance_class: B4_1G
+
+basic_scaling:
+  max_instances: 4
+  idle_timeout: 10m
+
+handlers:
+
+
+  - url: /login
+    script: ggrc.app.app.wsgi_app
+    login: required
+    secure: always
+
+  - url: /_background_tasks/.*
+    script: ggrc.app.app.wsgi_app
+    login: admin
+    secure: always
+
+  - url: /notify_emaildigest
+    script: ggrc.app.app.wsgi_app
+    login: admin
+    secure: always
+
+#  - url: /notify_email_deferred
+#    script: ggrc.app.app.wsgi_app
+#    login: admin
+#    secure: always
+
+  - url: /_ah/queue/deferred
+    script: google.appengine.ext.deferred.deferred.application
+
+  - url: /maintenance/index
+    script: ggrc.maintenance.maintenance_app.wsgi_app
+    login: required
+    secure: always
+
+  - url: /maintenance/.*
+    script: ggrc.maintenance.maintenance_app.wsgi_app
+    secure: always
+
+  - url: /.*
+    script: ggrc.app.app.wsgi_app
+    secure: always
+
+libraries:
+  - name: MySQLdb
+    version: "latest"
+  - name: jinja2
+    version: "2.6"
+
+builtins:
+- remote_api: on
+- deferred: on
+
+# Don't upload some files
+#  - note the first 9 items are defaults, see:
+#    https://developers.google.com/appengine/docs/python/config/appconfig#Skipping_Files
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+# Custom GGRC excludes here
+- requirements\.txt
+- requirements\.txt\.md5
+- requirements-dev\.txt
+- requirements-selenium\.txt
+- migrations/.*
+- tests/.*
+- service_specs/.*
+- assets/.*
+- reports/.*
+- extras/deploy/.*
+
+# Define certain environment variables
+env_variables:
+  GGRC_SETTINGS_MODULE: "app_engine log"
+  GGRC_DATABASE_URI: "mysql+mysqldb://root@/ggrc_qa_db_pr?unix_socket=/cloudsql/ggrc-perf:us-central1:ggrc-perf-db-56-v2&charset=utf8"
+  GGRC_SECRET_KEY: "Something-very-secret-super"
+  GGRC_GOOGLE_ANALYTICS_ID: ""
+  GGRC_GOOGLE_ANALYTICS_DOMAIN: ""
+  GGRC_GAPI_KEY: "AIzaSyB9PA90hphAB0uFIXVeoPWs1DOHEV9LbiM"
+  GGRC_GAPI_CLIENT_ID: "639925823553-chq6igt2n7kclmod0d6ch2b5it98a5ac.apps.googleusercontent.com"
+  GGRC_GAPI_CLIENT_SECRET: "bTskJi_Bxa2uUbeWW6XIha5Y"
+  GGRC_GAPI_ADMIN_GROUP: "ggrc-perf@google.com"
+  GGRC_BOOTSTRAP_ADMIN_USERS: "arymasheuski@google.com mihaz@google.com apecar@google.com sabramov@google.com anovik@google.com"
+  GGRC_MIGRATOR: "Default Migrator <migrator@example.com>"
+  GGRC_RISK_ASSESSMENT_URL: "#"
+  APPENGINE_EMAIL: "mihaz@google.com"
+  GGRC_CUSTOM_URL_ROOT: ""
+  GGRC_ABOUT_URL: "#"
+  GGRC_ABOUT_TEXT: "About GGRC"
+  GGRC_EXTERNAL_HELP_URL: "#set_GGRC_EXTERNAL_HELP_URL_env_var"
+  GGRC_EXTERNAL_IMPORT_HELP_URL: "#set_GGRC_EXTERNAL_IMPORT_HELP_URL_env_var"
+  MAX_INSTANCES: "4"
+  AUTHORIZED_DOMAIN: ""
+  GGRC_Q_INTEGRATION_URL: ""
+  INTEGRATION_SERVICE_URL: ""
+  EXTERNAL_APP_USER: "External App <external@example.com>"
+  URLFETCH_SERVICE_ID: ""
+  ISSUE_TRACKER_ENABLED: ""
+  ISSUE_TRACKER_BUG_URL_TMPL: ""
+  DASHBOARD_INTEGRATION: ""
+  ALLOWED_QUERYAPI_APP_IDS: ""
+  ACCESS_TOKEN: "AAAAAAAAAAAAAeeEEAAA"
+  COMPANY: "Company, Inc."
+  COMPANY_LOGO_TEXT: "Company GRC"
