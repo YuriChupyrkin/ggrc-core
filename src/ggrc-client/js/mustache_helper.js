@@ -2386,3 +2386,16 @@ Mustache.registerHelper('user_roles', (person, parentInstance, options) => {
     rolesList: allRoleNames.join('\n'),
   });
 });
+
+Mustache.registerHelper('if_slug_allow',
+  (isNewObjectForm, isProposal, options) => {
+    isNewObjectForm = Mustache.resolve(isNewObjectForm);
+    isProposal = Mustache.resolve(isProposal);
+
+    if (isNewObjectForm || isProposal) {
+      return options.inverse(options.contexts);
+    }
+
+    return options.fn(options.contexts);
+  }
+);
