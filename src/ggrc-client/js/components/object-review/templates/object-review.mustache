@@ -1,0 +1,72 @@
+{{!
+  Copyright (C) 2018 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<div class="object-review">
+  <div class="object-review__header">
+    <div class="object-review__header-title">
+      Object Review
+    </div>
+    <div class="object-review__header-status">
+      <div class="state-value state-{{reviewStatus}}">
+        {{reviewStatus}}
+      </div>
+    </div>
+    <div class="object-review__header-spinner">
+      <spinner toggle="loading"></spinner>
+    </div>
+  </div>
+
+  {{^if isEmptySection}}
+    {{#if wasReviewed}}
+      <div class="object-review__body">
+        <div class="object-review__body-description">
+          Last reviewed by
+          {{review.last_set_reviewed_by}}
+          on
+          {{date review.last_set_reviewed_at}}
+        </div>
+
+        {{#if isDisplayUndo}}
+          <a class="object-review__body-undo" href="#" ($click)="changeReviewState(false)">
+            Undo
+          </a>
+        {{/if}}
+
+        <a class="object-review__body-undo" href="#" ($click)="changeReviewState(false)">DEV UNDO!!!</a>
+
+        <a class="object-review__body-history" href="#" ($click)="showHistory()">
+          Review History
+        </a>
+      </div>
+    {{/if}}
+
+    <div class="object-review__buttons">
+      {{#if isDisplayReviewerButtons}}
+        <button
+          {{#if loading}}disabled{{/if}}
+          ($click)="changeReviewState(true)"
+          class="btn btn-green btn-small">
+            Mark Reviewed
+        </button>
+        <button
+          {{#if loading}}disabled{{/if}}
+          ($click)="changeReviewers()"
+          class="btn btn-white btn-small">
+            Change Reviewers
+        </button>
+      {{/if}}
+      {{#if reviewIssueLink}}
+        <a href="{{reviewIssueLink}}">Open ticket</a>
+      {{/if}}
+    </div>
+  {{else}}
+    <!-- Empty description area and user without permissions to see buttons -->
+    <div class="object-review__body">
+      <div class="object-review__body-description">
+        None
+      </div>
+    </div>
+  {{/if}}
+</div>
