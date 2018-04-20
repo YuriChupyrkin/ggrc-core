@@ -47,6 +47,8 @@ import '../../components/custom-roles/custom-roles';
 import '../../components/custom-roles/custom-roles-modal';
 import '../../components/review-link/review-link';
 
+import '../../components/object-review/object-review';
+
 import '../../common-handlers';
 
 import '../modules';

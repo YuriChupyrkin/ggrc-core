@@ -1,0 +1,48 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.object-review {
+  &__header {
+    display: flex;
+    font-size: 11px;
+    line-height: 17px;
+    margin-bottom: 10px;
+
+    &-title {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    &-status {
+      margin-left: 8px;
+    }
+
+    &-spinner {
+      margin-left: 6px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    margin-bottom: 10px;
+
+    &-description {
+      font-style: italic;
+      opacity: 0.6;
+      margin-right: 10px;
+    }
+
+    &-undo{
+      margin-right: 10px;
+    }
+  }
+
+  &__buttons {
+    .btn {
+      margin-right: 10px;
+      line-height: 14px;
+    }
+  }
+}
