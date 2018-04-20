@@ -55,3 +55,4 @@ import './workflow';
 import './workflow_join_models';
 import './helpers';
 import './proposal';
+import './review';
