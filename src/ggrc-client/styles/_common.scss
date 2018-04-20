@@ -728,6 +728,12 @@ p {
     margin-top: 2px;
     padding-top: 2px;
   }
+  &.state-unreviewed {
+    background: $status-unreviewed;
+  }
+  &.state-reviewed {
+    background: $status-reviewed;
+  }
   &.state-proposed {
     background: $status-proposed;
   }
