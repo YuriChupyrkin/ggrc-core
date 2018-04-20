@@ -1,0 +1,20 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.object-review {
+  &__header {
+    display: flex;
+    font-size: 11px;
+    line-height: 17px;
+
+    &-title {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    &-status {
+      margin-left: 8px;
+    }
+  }
+}
