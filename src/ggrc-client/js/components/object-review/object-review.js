@@ -5,6 +5,7 @@
 
 import {createNewInstance} from '../../plugins/utils/object-review-utils';
 import Permission from '../../permission';
+import './reviewers-modal';
 
 import template from './templates/object-review.mustache';
 const tag = 'object-review';
@@ -68,6 +69,9 @@ export default can.Component.extend({
     review: null,
     canUndo: false,
     loading: false,
+    reviewersModalState: {
+      open: false,
+    },
     hasUpdatePermission() {
       return Permission.is_allowed_for('update', this.attr('instance'));
     },
@@ -130,6 +134,9 @@ export default can.Component.extend({
       }
 
       return createNewInstance(instance);
+    },
+    changeReviewers() {
+      this.attr('reviewersModalState.open', true);
     },
   },
   events: {
