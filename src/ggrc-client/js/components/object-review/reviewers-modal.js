@@ -23,6 +23,7 @@ export default can.Component.extend({
     notificationTypes,
     title: 'Assign Reviewer(s)',
     disabled: false,
+    loading: false,
     review: null,
     emptyComponentId: false,
     emptyAcl: false,
@@ -79,6 +80,7 @@ export default can.Component.extend({
       }
 
       const review = this.attr('review');
+      const isNewReview = review.isNew();
 
       if (this.attr('isEmailNotification')) {
         review.attr('issuetracker_issue', this.attr('originalIssueTracker'));
@@ -86,8 +88,26 @@ export default can.Component.extend({
         review.attr('email_message', this.attr('originalEmailComment'));
       }
 
-      console.log('SAVE');
-      console.log(review);
+      this.attr('loading', true);
+      this.attr('disabled', true);
+      review.save().then((reviewInstance) => {
+        if (isNewReview) {
+          /*
+            Workaround.
+            Create backup because 'POST' request doesn't return 'e-tag'.
+            Created backup helps to resolve conflicts in 'cacheable_conflict_resolution.js'
+          */
+          reviewInstance.backup();
+        }
+
+        this.attr('loading', false);
+        this.attr('disabled', false);
+        this.attr('modalState.open', false);
+        this.dispatch({
+          type: 'reviewersUpdated',
+          review,
+        });
+      });
     },
     validateForm() {
       const review = this.attr('review');
