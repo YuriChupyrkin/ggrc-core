@@ -140,6 +140,27 @@ export default can.Component.extend({
     changeReviewers() {
       this.attr('reviewersModalState.open', true);
     },
+    saveChangedReviewers(updatedReview) {
+      const review = this.getReviewOrDefault();
+      const isEmailNotification = updatedReview.notification_type === 'email';
+
+      if (isEmailNotification) {
+        review.attr('email_message', updatedReview.email_message);
+      } else {
+        review.attr('issuetracker_issue', updatedReview.issuetracker_issue);
+      }
+
+      review.attr('access_control_list', updatedReview.access_control_list);
+      review.attr('notification_type', updatedReview.notification_type);
+
+      this.attr('loading', true);
+      this.attr('reviewersModalState.open', false);
+
+      this.updateReview(review).then((reviewInstance) => {
+        this.attr('review', reviewInstance);
+        this.attr('loading', false);
+      });
+    },
   },
   events: {
     inserted() {

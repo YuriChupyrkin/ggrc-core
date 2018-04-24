@@ -71,5 +71,8 @@
   {{/if}}
 </div>
 
-<reviewers-modal {review}="review" {(modal-state)}="reviewersModalState">
+<reviewers-modal
+  (save-changed-reviewers)="saveChangedReviewers(%event)"
+  {review}="review"
+  {(modal-state)}="reviewersModalState">
 </reviewers-modal>
