@@ -3,6 +3,8 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import './reviewers-modal-acl';
+
 import template from './templates/reviewers-modal.mustache';
 const tag = 'reviewers-modal';
 
