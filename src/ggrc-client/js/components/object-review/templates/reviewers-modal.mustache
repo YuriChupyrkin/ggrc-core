@@ -20,21 +20,52 @@
     </button>
   </div>
 
-  <div class="simple-modal__body {{#if isLoading}}loading{{/if}}">
+  <div class="simple-modal__body">
     <div class="simple-modal__section">
       <reviewers-modal-acl {(access-control-list)}="accessControlList"></reviewers-modal-acl>
+
+      <div class="ggrc-form">
+        <div class="ggrc-form-item reviewers-modal__notification-type">
+          <div class="ggrc-form-item__multiple-row">
+            <dropdown
+              options-list="notificationTypes"
+              name="notificationType">
+            </dropdown>
+          </div>
+        </div>
+
+        {{#if isEmailNotification}}
+          <div class="ggrc-form-item">
+            <div class="ggrc-form-item__row">
+              <label class="ggrc-form-item__label">
+                Comment
+              </label>
+              <rich-text
+                  {hidden-toolbar}="true"
+                  {placeholder}="'Add comment...'"
+                  {(content)}="emailComment">
+              </rich-text>
+            </div>
+          </div>
+        {{else}}
+          <reviewers-modal-issue-tracker
+            (validate-form)="validateForm()"
+            {empty-component-id}="emptyComponentId"
+            {(issue-tracker)}="issueTracker">
+          </reviewers-modal-issue-tracker>
+        {{/if}}
+      </div>
     </div>
   </div>
 
   <div class="simple-modal__footer">
     <div class="simple-modal__toolbar">
-      <button class="btn btn-green reviewers-modal__button"
-        ($click)="save()"
-        {{#if isLoading}}disabled{{/if}}>
+      <button
+        {{#if disabled}}disabled{{/if}}
+        class="btn btn-green reviewers-modal__button"
+        ($click)="save()">
           Assign
       </button>
-      <spinner class="reviewers-modal__spinner" toggle="isLoading">
-      </spinner>
     </div>
   </div>
 </simple-modal>
