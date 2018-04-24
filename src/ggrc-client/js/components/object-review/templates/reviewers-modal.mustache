@@ -1,0 +1,78 @@
+{{!
+  Copyright (C) 2018 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<simple-modal
+  modal-title="title"
+  state="modalState"
+  replace-content="true"
+  extra-css-class="reviewers-modal"
+>
+  <div class="simple-modal__header flex-box flex-row">
+    <div class="simple-modal__header-text flex-size-1">
+      <div class="reviewers-modal__title">
+        {{title}}
+      </div>
+    </div>
+    <button class="btn btn-small btn-icon" ($click)="cancel()">
+      <i class="fa fa-times black"></i>
+    </button>
+  </div>
+
+  <div class="simple-modal__body {{#if isLoading}}loading{{/if}}">
+    <div class="simple-modal__section">
+      <div class="people-groups">
+
+          <related-people-access-control-group
+            class="people-group"
+            required="true"
+            {group-id}="'reviewers'"
+            {title}="'Reviewer(s)'"
+            {people}="accessControlList">
+              <deletable-people-group
+                show-empty-message="false"
+                (unmap)="removePerson(%event)"
+                {required}="required"
+                {group-id}="groupId"
+                {people}="people">
+                  <label class="people-group__title-content form-label required-label">
+                    <span class="people-group__title people-group__title--deletable">{{title}}</span>
+                    {{#if required}}
+                      <i class="fa fa-asterisk"></i>
+                    {{/if}}
+                  </label>
+              </deletable-people-group>
+              <div>
+                  {{^if_config_exist 'external_services.Person'}}
+                    <autocomplete
+                        (item-selected)="addPerson(%event.selectedItem, @groupId)"
+                        search-items-type="Person"
+                        placeholder="Add person">
+                    </autocomplete>
+                  {{else}}
+                    <external-data-autocomplete
+                      {type}="'Person'"
+                      {placeholder}="'Add person'"
+                      {min-length}="2"
+                      (item-selected)="addPerson(%event.selectedItem, @groupId)">
+                    </external-data-autocomplete>
+                  {{/if_config_exist}}
+              </div>
+          </related-people-access-control-group>
+      </div>
+    </div>
+  </div>
+
+  <div class="simple-modal__footer">
+    <div class="simple-modal__toolbar">
+      <button class="btn btn-green reviewers-modal__button"
+        ($click)="save()"
+        {{#if isLoading}}disabled{{/if}}>
+          Assign
+      </button>
+      <spinner class="reviewers-modal__spinner" toggle="isLoading">
+      </spinner>
+    </div>
+  </div>
+</simple-modal>
