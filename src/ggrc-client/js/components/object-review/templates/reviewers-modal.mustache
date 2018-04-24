@@ -1,0 +1,74 @@
+{{!
+  Copyright (C) 2018 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+<simple-modal
+  modal-title="title"
+  state="modalState"
+  replace-content="true"
+  extra-css-class="reviewers-modal"
+>
+  <div class="simple-modal__header flex-box flex-row">
+    <div class="simple-modal__header-text flex-size-1">
+      <div class="reviewers-modal__title">
+        {{title}}
+      </div>
+    </div>
+    <button class="btn btn-small btn-icon" ($click)="cancel()">
+      <i class="fa fa-times black"></i>
+    </button>
+  </div>
+
+  <div class="simple-modal__body">
+    <div class="simple-modal__section">
+      <custom-roles-modal
+        {{#if emptyAcl}}class="reviewers-modal__empty-people" {{/if}}
+        {instance}="review">
+      </custom-roles-modal>
+
+      <div class="ggrc-form">
+        <div class="ggrc-form-item reviewers-modal__notification-type">
+          <div class="ggrc-form-item__multiple-row">
+            <dropdown
+              options-list="notificationTypes"
+              name="review.notification_type">
+            </dropdown>
+          </div>
+        </div>
+
+        {{#if isEmailNotification}}
+          <div class="ggrc-form-item">
+            <div class="ggrc-form-item__row">
+              <label class="ggrc-form-item__label">
+                Comment
+              </label>
+              <rich-text
+                  {hidden-toolbar}="true"
+                  {placeholder}="'Add comment...'"
+                  {(content)}="review.email_message">
+              </rich-text>
+            </div>
+          </div>
+        {{else}}
+          <reviewers-modal-issue-tracker
+            {issue-tracker}="review.issuetracker_issue"
+            (validate-form)="validateForm()"
+            {empty-component-id}="emptyComponentId">
+          </reviewers-modal-issue-tracker>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="simple-modal__footer">
+    <div class="simple-modal__toolbar">
+      <button
+        {{#if disabled}}disabled{{/if}}
+        class="btn btn-green reviewers-modal__button"
+        ($click)="save()">
+          Assign
+      </button>
+    </div>
+  </div>
+</simple-modal>
