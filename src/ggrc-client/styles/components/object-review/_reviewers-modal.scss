@@ -27,4 +27,10 @@
   &__notification-type {
     margin-top: 30px;
   }
+
+  &__empty-people {
+    input[type="text"] {
+      border: 1px solid $red;
+    }
+  }
 }

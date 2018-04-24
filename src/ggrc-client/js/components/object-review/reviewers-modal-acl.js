@@ -12,4 +12,9 @@ export default can.Component.extend({
   viewModel: {
     accessControlList: [],
   },
+  events: {
+    '{viewModel.accessControlList} length'() {
+      this.viewModel.dispatch('validateForm');
+    },
+  },
 });

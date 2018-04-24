@@ -5,7 +5,7 @@
 
 <div class="people-groups">
   <related-people-access-control-group
-    class="people-group"
+    class="people-group {{#if emptyAcl}}reviewers-modal__empty-people{{/if}}"
     required="true"
     {group-id}="'reviewers'"
     {title}="'Reviewer(s)'"

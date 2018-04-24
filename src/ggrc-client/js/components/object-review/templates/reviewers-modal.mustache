@@ -22,7 +22,11 @@
 
   <div class="simple-modal__body">
     <div class="simple-modal__section">
-      <reviewers-modal-acl {(access-control-list)}="accessControlList"></reviewers-modal-acl>
+      <reviewers-modal-acl
+        (validate-form)="validateForm()"
+        {empty-acl}="emptyAcl"
+        {(access-control-list)}="accessControlList">
+      </reviewers-modal-acl>
 
       <div class="ggrc-form">
         <div class="ggrc-form-item reviewers-modal__notification-type">

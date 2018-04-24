@@ -28,6 +28,7 @@ export default can.Component.extend({
     disabled: false,
     review: null,
     emptyComponentId: false,
+    emptyAcl: false,
     define: {
       isEmailNotification: {
         get() {
@@ -55,7 +56,7 @@ export default can.Component.extend({
         return;
       }
 
-      // copy needed properties from Revie object
+      // copy needed properties from Review object
       if (review.attr('issuetracker_issue')) {
         this.attr('issueTracker', review.attr('issuetracker_issue').attr());
       } else {
@@ -71,6 +72,8 @@ export default can.Component.extend({
     cancel() {
       this.attr('modalState.open', false);
       this.attr('emptyComponentId', false);
+      this.attr('emptyAcl', false);
+      this.attr('disabled', false);
     },
     save() {
       if (!this.validateForm()) {
@@ -80,30 +83,31 @@ export default can.Component.extend({
       const updateReview = {
         access_control_list: this.attr('accessControlList').attr(),
         notification_type: this.attr('notificationType'),
+        email_message: this.attr('emailComment'),
+        issuetracker_issue: this.attr('issueTracker'),
       };
 
-      if (this.attr('isEmailNotification')) {
-        updateReview.email_message = this.attr('emailComment');
-      } else {
-        updateReview.issuetracker_issue = this.attr('issueTracker');
-      }
-
-      // TODO: save logic
-      console.log(updateReview);
+      this.dispatch({
+        type: 'saveChangedReviewers',
+        ...updateReview,
+      });
     },
     validateForm() {
-      let isFormInvalid = false;
+      let isFormInvalid;
+      let emptyComponentId = false;
+      let isEmptyAcl = !this.attr('accessControlList').length;
+      this.attr('emptyAcl', isEmptyAcl);
 
       if (!this.attr('isEmailNotification')) {
         const componentId = this.attr('issueTracker.component_id');
-        const emptyComponentId = Boolean(!componentId);
+        emptyComponentId = Boolean(!componentId);
         this.attr('emptyComponentId', emptyComponentId);
-
-        isFormInvalid = isFormInvalid || emptyComponentId;
       }
+
+      isFormInvalid = isEmptyAcl || emptyComponentId;
       this.attr('disabled', isFormInvalid);
 
-      return isFormInvalid;
+      return !isFormInvalid;
     },
   },
   events: {
