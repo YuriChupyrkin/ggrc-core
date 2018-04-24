@@ -72,6 +72,7 @@
 </div>
 
 <reviewers-modal
+  (reviewers-updated)="reviewersUpdated(%event)"
   {review}="review"
   {parent-instance}="instance"
   {(modal-state)}="reviewersModalState">

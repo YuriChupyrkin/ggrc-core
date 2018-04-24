@@ -20,7 +20,7 @@
     </button>
   </div>
 
-  <div class="simple-modal__body">
+  <div class="simple-modal__body {{#if loading}}reviewers-modal__disabled-body{{/if}}">
     <div class="simple-modal__section">
       <custom-roles-modal
         {{#if emptyAcl}}class="reviewers-modal__empty-people" {{/if}}
@@ -69,6 +69,7 @@
         ($click)="save()">
           Assign
       </button>
+      <spinner toggle="loading"></spinner>
     </div>
   </div>
 </simple-modal>

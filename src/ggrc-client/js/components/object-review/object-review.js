@@ -138,6 +138,9 @@ export default can.Component.extend({
     changeReviewers() {
       this.attr('reviewersModalState.open', true);
     },
+    reviewersUpdated(event) {
+      this.attr('review', event.review);
+    },
   },
   events: {
     inserted() {
