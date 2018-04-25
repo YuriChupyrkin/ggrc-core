@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2018 Google Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+ */
+
+.object-review-history {
+  .simple-modal__header {
+    border-bottom: none;
+  }
+
+  &__title {
+    font-size: 22px;
+  }
+
+  &__body {
+    max-width: 750px;
+    max-height: calc(100% - 80px);
+    margin-bottom: 30px;
+  }
+
+  &__item {
+    padding: 8px 0;
+  }
+
+  &__spinner {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__button {
+    line-height: 16px;
+  }
+}
