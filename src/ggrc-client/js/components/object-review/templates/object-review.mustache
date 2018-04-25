@@ -36,9 +36,8 @@
 
         <a class="object-review__body-undo" href="#" ($click)="changeReviewState(false)">DEV UNDO!!!</a>
 
-        <a class="object-review__body-history" href="#" ($click)="showHistory()">
-          Review History
-        </a>
+        <object-review-history {review}="review">
+        </object-review-history>
       </div>
     {{/if}}
 
