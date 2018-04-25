@@ -1,0 +1,44 @@
+{{!
+  Copyright (C) 2018 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+{{#if canDisplayLink}}
+  <a href="#" ($click)="showHistory()">
+    Review History
+  </a>
+{{/if}}
+
+<simple-modal
+  modal-title="title"
+  state="modalState"
+  replace-content="true"
+  extra-css-class="object-review-history"
+>
+  <div class="simple-modal__header flex-box flex-row">
+    <div class="simple-modal__header-text flex-size-1">
+      <div class="object-review-history__title">
+        {{title}}
+      </div>
+    </div>
+    {{^if isReviewed}}
+      <button ($click)="showLastChanges()" class="btn btn-white object-review-history__button">
+        Show last changes
+      </button>
+    {{/if}}
+    <button class="btn btn-small btn-icon" ($click)="cancel()">
+      <i class="fa fa-times black"></i>
+    </button>
+  </div>
+
+  <div class="simple-modal__body object-review-history__body">
+    <div class="simple-modal__section">
+      <spinner class="object-review-history__spinner" toggle="loading"></spinner>
+      {{#each historyContent}}
+        <div class="object-review-history__item">
+          {{agenda}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</simple-modal>
