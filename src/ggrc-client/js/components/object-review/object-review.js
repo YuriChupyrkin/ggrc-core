@@ -5,6 +5,7 @@
 
 import Permission from '../../permission';
 import './reviewers-modal';
+import './object-review-history';
 
 import template from './templates/object-review.mustache';
 const tag = 'object-review';
