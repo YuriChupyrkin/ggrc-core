@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import {createNewInstance} from '../../plugins/utils/object-review-utils';
 import Permission from '../../permission';
 
 import template from './templates/object-review.mustache';
@@ -128,16 +129,7 @@ export default can.Component.extend({
         return review;
       }
 
-      review = new CMS.Models.Review({
-        notification_type: 'email',
-        context: null,
-        instance: {
-          id: instance.attr('id'),
-          type: instance.attr('type'),
-        },
-      });
-
-      return review;
+      return createNewInstance(instance);
     },
   },
   events: {
