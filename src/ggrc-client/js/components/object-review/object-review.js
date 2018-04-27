@@ -65,6 +65,11 @@ export default can.Component.extend({
             !this.attr('isDisplayReviewerButtons');
         },
       },
+      hasReviewers: {
+        get() {
+          return this.attr('review.access_control_list.length');
+        },
+      },
     },
     instance: {},
     review: null,
