@@ -68,6 +68,14 @@
       </div>
     </div>
   {{/if}}
+  {{#if hasReviewers}}
+    <div class="object-review__reviewers">
+      <custom-roles
+        read-only="true"
+        {instance}="review">
+      </custom-roles>
+    </div>
+  {{/if}}
 </div>
 
 <reviewers-modal
