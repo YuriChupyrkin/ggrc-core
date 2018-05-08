@@ -10,7 +10,6 @@ dashboard-js-template-files:
   - base_objects/contacts.mustache
   - base_objects/create_objective_dropdown_option.mustache
   - base_objects/general-page-header.mustache
-  - base_objects/object-review.mustache
   - base_objects/description.mustache
   - base_objects/test_plan.mustache
   - base_objects/extended_info.mustache
@@ -209,7 +208,6 @@ dashboard-js-template-files:
   - base_objects/task_group_subtree_footer.mustache
   - base_objects/task_group_subtree_add_item.mustache
   - base_objects/task_group_subtree.mustache
-  - base_objects/approval_link.mustache
   - base_objects/repeat-on-button.mustache
   - base_objects/repeat-on-options.mustache
   - base_objects/repeat-on-summary.mustache
@@ -245,6 +243,5 @@ dashboard-js-template-files:
   - workflows/extended_info.mustache
   - wf_objects/autocomplete_result.mustache
   - task_groups/tier2_content.mustache
-  - wf_objects/approval_modal_content.mustache
   - workflows/clone_modal_content.mustache
   - task_groups/clone_modal_content.mustache
