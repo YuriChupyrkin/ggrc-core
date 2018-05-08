@@ -68,7 +68,12 @@
 
     <tab-container>
       <tab-panel {(panels)}="panels" title-text="Attributes">
-        {{>'/static/mustache/base_objects/object-review.mustache'}}
+
+          <div class="row-fluid wrap-row">
+            <object-review {instance}="instance">
+            </object-review>
+          </div>
+
           <div class="row-fluid wrap-row">
             <div class="span12">
               <custom-roles {instance}="instance"></custom-roles>
