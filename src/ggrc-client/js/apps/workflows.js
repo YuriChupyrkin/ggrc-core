@@ -203,15 +203,6 @@ import InfoWidget from '../controllers/info_widget_controller';
             );
           }
         ),
-
-        // This code needs to be reworked to figure out how to return the single
-        // most recent task entry with is_declining_review = true.
-        declining_cycle_task_entries: Search(function (binding) {
-          return CMS.Models.CycleTaskEntry.findAll({
-            cycle_task_group_object_task_id: binding.instance.id,
-            is_declining_review: 1,
-          });
-        }, 'Cycle'),
       },
 
       CycleTaskEntry: {
@@ -271,20 +262,10 @@ import InfoWidget from '../controllers/info_widget_controller';
           'task_group_objects',
           null
         ),
-        approval_tasks: Search(function (binding) {
-          return CMS.Models.CycleTaskGroupObjectTask.findAll({
-            object_approval: true,
-            // We only need to check destination_id/type because cycle tasks
-            // are allways mapped through destination
-            'related_destinations.destination_id': binding.instance.id,
-            'related_destinations.destination_type': binding.instance.type,
-          });
-        }),
         workflows: Cross('task_groups', 'workflow'),
         approval_workflows: CustomFilter('workflows', function (binding) {
           return binding.instance.attr('object_approval');
         }),
-        current_approval_cycles: Cross('approval_workflows', 'current_cycle'),
         _canonical: {
           workflows: 'Workflow',
           task_groups: 'TaskGroup',
@@ -297,12 +278,6 @@ import InfoWidget from '../controllers/info_widget_controller';
 
       CMS.Models[type].attributes.task_group_objects =
         'CMS.Models.TaskGroupObject.stubs';
-
-      // Also register a render hook for object approval
-      GGRC.register_hook(
-        type + '.info_widget_actions',
-        GGRC.mustache_path + '/base_objects/approval_link.mustache'
-      );
     });
     new GGRC.Mappings('ggrc_workflows', mappings);
   };
