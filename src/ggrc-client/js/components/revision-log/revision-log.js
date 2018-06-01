@@ -57,6 +57,13 @@ import {
       instance: null,
       isLoading: true,
       personLoadingDfd: can.Deferred,
+      fullHistory: [],
+      filtredHistory: [],
+      showLastReviewUpdates: false,
+      showLastUpdatesChanged(element) {
+        const isChecked = element.checked;
+        this.updateRevisionsFilter(isChecked);
+      },
 
       fetchItems: function () {
         const stopFn = tracker.start(
@@ -66,7 +73,7 @@ import {
 
         this._fetchRevisionsData()
           .done(function (revisions) {
-            let changeHistory;
+            let fullHistory;
             // calculate history of role changes
             this.attr('roleHistory',
               this._computeRoleChanges(revisions));
@@ -75,14 +82,20 @@ import {
             this._loadACLPeople(revisions.object);
 
             // combine all the changes and sort them by date descending
-            changeHistory = _([]).concat(
+            fullHistory = _([]).concat(
               can.makeArray(this._computeObjectChanges(revisions.object)),
               can.makeArray(this._computeMappingChanges(revisions.mappings)))
               .sortBy('updatedAt')
               .reverse()
               .value();
-            this.attr('changeHistory', changeHistory);
+            this.attr('fullHistory', fullHistory);
             stopFn();
+            // FULL HISTORTY
+            if (this.attr('showLastReviewUpdates')) {
+              this.filterByLastReview();
+            } else {
+              this.showFullHistory();
+            }
           }.bind(this))
           .fail(function () {
             stopFn(true);
@@ -815,6 +828,58 @@ import {
         }
         return 'none';
       },
+      getObjectReview() {
+        const review = this.attr('instance.review');
+
+        if (!review) {
+          return;
+        }
+
+        return review.reify();
+      },
+      getShowLastUpdates() {
+        let review = this.getObjectReview();
+
+        if (!review) {
+          return false;
+        }
+
+        return review.reify().getShowLastReviewUpdates();
+      },
+      updateRevisionsFilter(showLastReviewUpdates) {
+        const review = this.getObjectReview();
+        if (!review) {
+          return;
+        }
+
+        review.setShowLastReviewUpdates(showLastReviewUpdates);
+
+        if (showLastReviewUpdates) {
+          this.filterByLastReview();
+        } else {
+          this.showFullHistory();
+        }
+      },
+      filterByLastReview() {
+        console.log('FILTER');
+
+        if (!this.attr('fullHistory').length) {
+          console.log('history is empty');
+          return;
+        }
+
+        console.log('filter history');
+        // TODO: call func
+        const filtredHistory = this.attr('fullHistory').attr()[0];
+        let testData = [filtredHistory];
+
+        this.attr('changeHistory', testData);
+      },
+      showFullHistory() {
+        console.log('SHOW ALL REVIESIONS');
+        let fullHistory = this.attr('fullHistory').attr();
+        this.attr('changeHistory', fullHistory);
+      },
     },
     /**
      * The component's entry point. Invoked when a new component instance has
@@ -822,6 +887,12 @@ import {
      */
     init: function () {
       this.viewModel.fetchItems();
+      let showLastReviewUpdates = this.viewModel.getShowLastUpdates();
+
+      if (showLastReviewUpdates) {
+        this.viewModel.attr('showLastReviewUpdates', showLastReviewUpdates);
+        this.viewModel.filterByLastReview();
+      }
     },
     events: {
       '{viewModel.instance} refreshInstance': function () {

@@ -67,6 +67,7 @@ export default can.Component.extend({
     },
     showLastChanges() {
       this.cancel();
+      this.review.setShowLastReviewUpdates(true);
       this.attr('baseInstance').dispatch({
         ...NAVIGATE_TO_TAB,
         tabId: 'change-log',

@@ -23,4 +23,10 @@ export default can.Model.Cacheable('CMS.Models.Review', {
   save_error(error) {
     GGRC.Errors.notifier('error', error);
   },
+  setShowLastReviewUpdates(value) {
+    this._showLastReviewUpdates = value;
+  },
+  getShowLastReviewUpdates() {
+    return this._showLastReviewUpdates;
+  },
 });
