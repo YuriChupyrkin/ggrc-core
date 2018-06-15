@@ -130,12 +130,12 @@
 .people-group-modal {
   max-width: 800px;
 
-  .object-list__items {
+  .people-group-modal__list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 
-    .object-list__item:not(.object-list__item-empty) {
+    .people-list__item {
       background: #f3f3f3;
 
       padding: 6px 10px;
