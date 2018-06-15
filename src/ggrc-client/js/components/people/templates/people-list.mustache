@@ -1,0 +1,16 @@
+{{!
+  Copyright (C) 2018 Google Inc.
+  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+{{#if isEmptyList}}
+  <div class="people-group__empty-list">
+    {{emptyMessage}}
+  </div>
+{{else}}
+  {{#each people}}
+    <div class="people-list__item">
+      <content/>
+    </div>
+  {{/each}}
+{{/if}}
