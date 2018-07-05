@@ -300,7 +300,7 @@ export default can.Control({
     if (this.options.skip_refresh && instance) {
       return new $.Deferred().resolve(instance);
     } else if (instance) {
-      dfd = instance.refresh();
+      dfd = instance.actualize();
     } else if (this.options.model) {
       if (this.options.new_object_form) {
         if (this.options.extendNewInstance) {
@@ -320,7 +320,7 @@ export default can.Control({
         dfd = this.options.model.findAll(params).then(function (data) {
           if (data.length) {
             that.options.attr('instance', data[0]);
-            return data[0].refresh(); // have to refresh (get ETag) to be editable.
+            return data[0].actualize();
           }
           that.options.attr('new_object_form', true);
           that.options.attr('instance', new that.options.model(params));
