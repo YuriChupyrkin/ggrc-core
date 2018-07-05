@@ -48,8 +48,7 @@ export default can.Component.extend({
     confirm(isApply) {
       this.attr('isLoading', true);
 
-      // refresh for getting E-tag
-      this.attr('proposal').refresh().then(() => {
+      this.attr('proposal').actualize().then(() => {
         this.prepareDataAndSave(isApply);
       });
     },
