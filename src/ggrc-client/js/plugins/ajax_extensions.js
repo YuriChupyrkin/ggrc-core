@@ -59,6 +59,7 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
         return;
       }
       switch (options.type.toUpperCase()) {
+        case 'HEAD':
         case 'GET':
         case 'PUT':
           EtagStorage.set(

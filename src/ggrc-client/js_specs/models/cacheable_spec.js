@@ -10,6 +10,7 @@ import {
 } from '../spec_helpers';
 import CustomAttributeObject from '../../js/plugins/utils/custom-attribute/custom-attribute-object';
 import * as modelUtils from '../../js/plugins/utils/models-utils';
+import EtagStorage from '../../js/plugins/utils/etag-storage';
 
 describe('Cacheable model', function () {
   let origGcaDefs;
@@ -448,6 +449,123 @@ describe('Cacheable model', function () {
           'updateCaObjects');
         instance.updateCaObjects(caValues);
         expect(update).toHaveBeenCalledWith(caValues);
+      });
+    });
+  });
+
+  describe('refreshHeaders method()', () => {
+    let instance;
+
+    beforeEach(() => {
+      instance = new DummyModel({href: '/api/dummy_models/1'});
+    });
+
+    it('should NOT call CAN.AJAX when instance does NOT have HREF', (done) => {
+      instance.attr('selfLink', '');
+      instance.attr('href', '');
+
+      spyOn(can, 'ajax').and.callFake(
+        () => can.Deferred().resolve(instance.attr())
+      );
+
+      let dfd = instance.refreshHeaders();
+
+      dfd.fail(() => {
+        expect(can.ajax.calls.count()).toBe(0);
+        done();
+      });
+    });
+
+    it('throttles the requests to once per 500ms', (done) => {
+      spyOn(can, 'ajax').and.callFake(
+        () => {
+          let dfd = can.Deferred();
+          // wait for response from server...
+          setTimeout(() => {
+            dfd.resolve();
+          }, 300);
+          return dfd;
+        }
+      );
+
+      instance.refreshHeaders();
+      instance.refreshHeaders();
+
+      setTimeout(() => {
+        instance.refreshHeaders().then(() => {
+          expect(can.ajax.calls.count()).toBe(2);
+          done();
+        }, fail);
+      }, 500); // 500ms is enough to trigger a new call to the debounced function
+      instance.refreshHeaders().then(() => {
+        expect(can.ajax.calls.count()).toBe(1);
+      }, fail);
+    });
+  });
+
+  describe('actualize method()', () => {
+    let instance;
+
+    beforeEach(() => {
+      instance = new DummyModel({href: '/api/dummy_models/5'});
+
+      spyOn(instance, 'refresh')
+        .and.returnValue(can.Deferred().resolve(instance));
+    });
+
+    it('should NOT call refresh because etags are equal', (done) => {
+      let etagData = {
+        etag: 'yUChEtaG5',
+      };
+      spyOn(EtagStorage, 'getPrevious').and.returnValue(etagData);
+      spyOn(EtagStorage, 'get').and.returnValue(etagData);
+      spyOn(instance, 'refreshHeaders')
+        .and.returnValue(can.Deferred().resolve());
+
+      instance.actualize().then(() => {
+        expect(instance.refresh.calls.count()).toBe(0);
+        done();
+      });
+    });
+
+    it('should call refresh because previous etag is empty', (done) => {
+      spyOn(EtagStorage, 'getPrevious').and.returnValue({});
+      spyOn(instance, 'refreshHeaders')
+        .and.returnValue(can.Deferred().resolve());
+
+      instance.actualize().then(() => {
+        expect(instance.refresh.calls.count()).toBe(1);
+        done();
+      });
+    });
+
+    it('should call refresh because etags are NOT equal', (done) => {
+      let etagData = {
+        etag: 'yUChEtaG5',
+      };
+
+      let prevEtagData = {
+        etag: 'yUChEtaG4',
+      };
+
+      spyOn(EtagStorage, 'getPrevious').and.returnValue(prevEtagData);
+      spyOn(EtagStorage, 'get').and.returnValue(etagData);
+      spyOn(instance, 'refreshHeaders')
+        .and.returnValue(can.Deferred().resolve());
+
+      instance.actualize().then(() => {
+        expect(instance.refresh.calls.count()).toBe(1);
+        done();
+      });
+    });
+
+    it('should call refresh because "refreshHeaders" was failed', (done) => {
+      spyOn(instance, 'refreshHeaders')
+        .and.returnValue(can.Deferred().reject());
+
+      instance.actualize().then(() => {
+        expect(instance.refresh.calls.count()).toBe(1);
+        done();
       });
     });
   });

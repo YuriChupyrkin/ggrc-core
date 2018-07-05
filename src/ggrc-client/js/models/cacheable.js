@@ -19,6 +19,7 @@ import RefreshQueue from './refresh_queue';
 import tracker from '../tracker';
 import Mappings from './mappers/mappings';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
+import EtagStorage from '../plugins/utils/etag-storage';
 
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
@@ -862,7 +863,7 @@ export default can.Model('can.Model.Cacheable', {
   },
   refresh: function (params) {
     let dfd;
-    let href = this.selfLink || this.href;
+    let href = this.getHref();
     let that = this;
 
     if (!href) {
@@ -902,6 +903,65 @@ export default can.Model('can.Model.Cacheable', {
     }
     dfd = this._pending_refresh.dfd;
     this._pending_refresh.fn();
+    return dfd;
+  },
+  getHref() {
+    return this.selfLink || this.href;
+  },
+  actualize() {
+    let href = this.getHref();
+    let previousEtag = EtagStorage.getPrevious(href).etag;
+
+    if (!previousEtag) {
+      return this.refresh();
+    }
+
+    return this.refreshHeaders().then(() => {
+      // get prev etag again after refreshHeaders
+      previousEtag = EtagStorage.getPrevious(href).etag;
+
+      let etag = EtagStorage.get(href).etag;
+      let isUnchangedResource = previousEtag === etag;
+
+      if (isUnchangedResource) {
+        return this;
+      } else {
+        return this.refresh();
+      }
+    }).fail(() => {
+      return this.refresh();
+    });
+  },
+  refreshHeaders() {
+    let href = this.getHref();
+
+    if (!href) {
+      return can.Deferred().reject();
+    }
+
+    let ajaxOptions = {
+      url: href,
+      type: 'head',
+      dataType: 'json',
+    };
+
+    if (!this._pending_head) {
+      this._pending_head = {
+        dfd: can.Deferred(),
+        fn: _.throttle(() => {
+          let dfd = this._pending_head.dfd;
+          can.ajax(ajaxOptions)
+            .done(dfd.resolve)
+            .fail(dfd.reject)
+            .always(() => {
+              delete this._pending_head;
+            });
+        }, 500, {trailing: false}),
+      };
+    }
+
+    let dfd = this._pending_head.dfd;
+    this._pending_head.fn();
     return dfd;
   },
   // TODO: should be refactored and sliced on multiple functions
