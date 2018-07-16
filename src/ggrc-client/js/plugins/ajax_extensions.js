@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import EtagStorage from '../plugins/utils/etag-storage';
 import {
   notifier,
   notifierXHR,
@@ -19,10 +20,6 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
   );
 });
 
-// Set up all PUT requests to the server to respect ETags, to ensure that
-// we are not overwriting more recent data than was viewed by the user.
-const etags = {};
-
 $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
   let data = originalOptions.data;
   let resourceUrl = originalOptions.url.split('?')[0];
@@ -37,9 +34,10 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
     && /PUT|POST|DELETE/.test(options.type.toUpperCase())) {
     options.dataType = 'json';
     options.contentType = 'application/json';
-    jqXHR.setRequestHeader('If-Match', (etags[resourceUrl] || [])[0]);
-    jqXHR.setRequestHeader('If-Unmodified-Since',
-      (etags[resourceUrl] || [])[1]);
+
+    let urlEtagData = EtagStorage.get(resourceUrl);
+    jqXHR.setRequestHeader('If-Match', urlEtagData.etag);
+    jqXHR.setRequestHeader('If-Unmodified-Since', urlEtagData.lastModified);
 
     options.data = options.type.toUpperCase() === 'DELETE' ? ''
       : JSON.stringify(data);
@@ -63,24 +61,28 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
       switch (options.type.toUpperCase()) {
         case 'GET':
         case 'PUT':
-          etags[originalOptions.url] = [
-            xhr.getResponseHeader('ETag'),
-            xhr.getResponseHeader('Last-Modified'),
-          ];
+          EtagStorage.set(
+            originalOptions.url, {
+              etag: xhr.getResponseHeader('ETag'),
+              lastModified: xhr.getResponseHeader('Last-Modified'),
+            },
+          );
           break;
         case 'POST':
           for (let field in data) {
             if (data.hasOwnProperty(field) && data[field]
               && data[field].selfLink) {
-              etags[data[field].selfLink] = [
-                xhr.getResponseHeader('ETag'),
-                xhr.getResponseHeader('Last-Modified'),
-              ];
+              EtagStorage.set(
+                data[field].selfLink, {
+                  etag: xhr.getResponseHeader('ETag'),
+                  lastModified: xhr.getResponseHeader('Last-Modified'),
+                },
+              );
             }
           }
           break;
         case 'DELETE':
-          delete etags[originalOptions.url];
+          delete EtagStorage.delete(originalOptions.url);
           break;
       }
     });
