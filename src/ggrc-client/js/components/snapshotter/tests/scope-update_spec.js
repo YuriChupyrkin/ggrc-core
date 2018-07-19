@@ -36,8 +36,7 @@ describe('GGRC.Components.SnapshotScopeUpdater', function () {
     _.extend(updaterViewModel, {
       instance: new can.Map({
         title: 'TITLE',
-        refresh: jasmine
-          .createSpy('refresh'),
+        actualize: () => can.Deferred().resolve(),
         save: jasmine.createSpy('save'),
       }),
     });
@@ -118,25 +117,27 @@ describe('GGRC.Components.SnapshotScopeUpdater', function () {
 
   describe('_success() method', function () {
     let method;
-    let refreshDfd;
+    let actualizeDfd;
 
     beforeEach(function () {
-      method = updaterViewModel._success.bind(updaterViewModel);
-      refreshDfd = new $.Deferred();
-      updaterViewModel.instance.refresh.and.returnValue(refreshDfd);
+      actualizeDfd = can.Deferred();
+      spyOn(updaterViewModel.instance, 'actualize')
+        .and.returnValue(actualizeDfd);
       spyOn(updaterViewModel, '_showSuccessMsg');
       spyOn(updaterViewModel, '_showProgressWindow');
+
+      method = updaterViewModel._success.bind(updaterViewModel);
     });
 
-    it('refreshes the instance attached to the component', function () {
+    it('should actualize the instance attached to the component', () => {
       method();
-      expect(updaterViewModel.instance.refresh).toHaveBeenCalled();
+      expect(updaterViewModel.instance.actualize).toHaveBeenCalled();
     });
 
     describe('after instance refresh', function () {
       it('saves the instance attached to the component', function () {
         method();
-        refreshDfd.resolve();
+        actualizeDfd.resolve();
         expect(updaterViewModel.instance.save).toHaveBeenCalled();
       });
 
@@ -149,7 +150,7 @@ describe('GGRC.Components.SnapshotScopeUpdater', function () {
         };
         updaterViewModel.instance.attr('snapshots', wrongValue);
         method();
-        refreshDfd.resolve();
+        actualizeDfd.resolve();
         expect(updaterViewModel.instance.attr('snapshots'))
           .toEqual(
             jasmine.objectContaining(expectedResult)
@@ -159,14 +160,14 @@ describe('GGRC.Components.SnapshotScopeUpdater', function () {
       it('shows progress message',
         function () {
           method();
-          refreshDfd.resolve();
+          actualizeDfd.resolve();
           expect(updaterViewModel._showProgressWindow).toHaveBeenCalled();
         });
 
       it('shows success message',
         function () {
           method();
-          refreshDfd.resolve();
+          actualizeDfd.resolve();
           expect(updaterViewModel._showSuccessMsg).toHaveBeenCalled();
         });
     });

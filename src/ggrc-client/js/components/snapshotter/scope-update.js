@@ -59,7 +59,7 @@ import {notifier} from '../../plugins/utils/notifiers-utils';
 
         this._showProgressWindow();
         instance
-          .refresh()
+          .actualize()
           .then(function () {
             let data = {
               operation: 'upsert',

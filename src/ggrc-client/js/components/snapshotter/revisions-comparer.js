@@ -248,7 +248,7 @@ export default can.Component.extend({
         .first()
         .trigger('click');
 
-      instance.refresh()
+      instance.actualize()
         .then(function () {
           instance.attr('update_revision', 'latest');
           return instance.save();
