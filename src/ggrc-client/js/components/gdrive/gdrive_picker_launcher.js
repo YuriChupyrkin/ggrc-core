@@ -198,7 +198,7 @@ import {
         });
         // waiting for all docs promises
         return can.when(...dfdDocs).then(()=> {
-          this.attr('instance').refresh();
+          this.attr('instance').actualize();
           return can.makeArray(arguments);
         }, (xhr)=> {
           let message = (xhr.responseJSON && xhr.responseJSON.message) ?

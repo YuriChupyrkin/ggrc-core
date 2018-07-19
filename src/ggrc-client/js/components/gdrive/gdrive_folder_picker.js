@@ -56,7 +56,7 @@ import {
        *   folder has been successfully unlinked from it
        */
       unlinkFolder: function () {
-        return this.instance.refresh().then(function () {
+        return this.instance.actualize().then(function () {
           this.instance.attr('folder', null);
           return this.instance.save();
         }.bind(this));
@@ -69,7 +69,7 @@ import {
        *   folder has been successfully linked to it
        */
       linkFolder: function (folderId) {
-        return this.instance.refresh().then(function () {
+        return this.instance.actualize().then(function () {
           this.instance.attr('folder', folderId);
           return this.instance.save();
         }.bind(this));
