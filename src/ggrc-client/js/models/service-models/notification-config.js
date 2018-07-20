@@ -64,7 +64,7 @@ export default Cacheable('CMS.Models.NotificationConfig', {
           config.attr('enable_flag', enabled);
           return config.save();
         }
-        return config.refresh().then(function (refreshed_config) {
+        return config.actualize().then(function (refreshed_config) {
           refreshed_config.attr('enable_flag', enabled);
           return refreshed_config.save();
         });
