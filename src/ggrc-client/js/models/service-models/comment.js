@@ -39,9 +39,9 @@ export default Cacheable('CMS.Models.Comment', {
   updateDescription: function (instance, $el, ev) {
     let $body = $(document.body);
 
-    // for some reason the instance must be refreshed before saving to avoid
+    // for some reason the instance must be actualized before saving to avoid
     // the HTTP "precondition required" error
-    this.refresh()
+    this.actualize()
       .then(function () {
         this.attr('description', ev.newVal);
         return this.save();
