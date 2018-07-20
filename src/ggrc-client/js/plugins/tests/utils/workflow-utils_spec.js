@@ -74,39 +74,39 @@ describe('Workflow helpers', () => {
 
   describe('updateStatus() method', () => {
     let instance;
-    let refreshedInstance;
+    let actualizedInstance;
 
     beforeEach(function () {
-      refreshedInstance = new can.Map({
+      actualizedInstance = new can.Map({
         save: jasmine.createSpy('save'),
       });
       instance = new can.Map({
-        refresh: jasmine.createSpy('refresh')
-          .and.returnValue(refreshedInstance),
+        actualize: jasmine.createSpy('actualize')
+          .and.returnValue(actualizedInstance),
       });
     });
 
-    it('refreshes passed instance', async function (done) {
+    it('actualizes passed instance', async function (done) {
       await workflowHelpers.updateStatus(instance);
-      expect(instance.refresh).toHaveBeenCalled();
+      expect(instance.actualize).toHaveBeenCalled();
       done();
     });
 
-    it('sets passed status for refreshed instance before saving',
+    it('sets passed status for actualized instance before saving',
       async function (done) {
         const status = 'New Status';
-        spyOn(refreshedInstance, 'attr');
+        spyOn(actualizedInstance, 'attr');
         await workflowHelpers.updateStatus(instance, status);
-        expect(refreshedInstance.attr).toHaveBeenCalledWith('status', status);
-        expect(refreshedInstance.attr).toHaveBeenCalledBefore(
-          refreshedInstance.save
+        expect(actualizedInstance.attr).toHaveBeenCalledWith('status', status);
+        expect(actualizedInstance.attr).toHaveBeenCalledBefore(
+          actualizedInstance.save
         );
         done();
       });
 
     it('returns saved instance', async function (done) {
       const saved = {};
-      refreshedInstance.save.and.returnValue(saved);
+      actualizedInstance.save.and.returnValue(saved);
       const result = await workflowHelpers.updateStatus(instance);
       expect(result).toBe(saved);
       done();

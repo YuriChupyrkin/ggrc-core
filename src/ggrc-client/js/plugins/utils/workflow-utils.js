@@ -77,11 +77,11 @@ function generateCycle(workflow) {
 }
 
 async function updateStatus(instance, status) {
-  // we refresh the instance, because without this
+  // we actualize the instance, because without this
   // the server will return us 409 error
-  const refreshed = await instance.refresh();
-  refreshed.attr('status', status);
-  return refreshed.save();
+  const actualized = await instance.actualize();
+  actualized.attr('status', status);
+  return actualized.save();
 }
 
 function refreshTGRelatedItems(taskGroup) {
