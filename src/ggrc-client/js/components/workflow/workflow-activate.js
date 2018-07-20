@@ -16,7 +16,7 @@ const viewModel = can.Map.extend({
   instance: {},
   waiting: false,
   async initWorkflow(workflow) {
-    await workflow.refresh();
+    await workflow.actualize();
     workflow.attr({
       recurrences: true,
       status: 'Active',
@@ -56,7 +56,7 @@ const viewModel = can.Map.extend({
     this.attr('waiting', true);
     try {
       await generateCycle(workflow);
-      await workflow.refresh();
+      await workflow.actualize();
       await workflow.attr('status', 'Active').save();
     } catch (err) {
       return Promise.reject(err);

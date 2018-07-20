@@ -15,7 +15,7 @@ import {getPageInstance} from '../../plugins/utils/current-page-utils';
     events: {
       click: function () {
         let workflow = getPageInstance();
-        workflow.refresh().then(function (workflow) {
+        workflow.actualize().then((workflow) => {
           workflow.attr('recurrences', false).save();
         });
       },

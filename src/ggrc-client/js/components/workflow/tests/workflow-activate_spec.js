@@ -148,15 +148,15 @@ describe('GGRC.WorkflowActivate', function () {
     beforeEach(function () {
       workflow = new can.Map({});
       Object.assign(workflow, {
-        refresh: jasmine.createSpy('refresh'),
+        actualize: jasmine.createSpy('actualize'),
         save: jasmine.createSpy('save'),
       });
     });
 
-    it('refresh passed workflow', async function (done) {
+    it('actualize passed workflow', async function (done) {
       await viewModel.initWorkflow(workflow);
-      expect(workflow.refresh).toHaveBeenCalled();
-      expect(workflow.refresh).toHaveBeenCalledBefore(workflow.save);
+      expect(workflow.actualize).toHaveBeenCalled();
+      expect(workflow.actualize).toHaveBeenCalledBefore(workflow.save);
       done();
     });
 
@@ -254,29 +254,29 @@ describe('GGRC.WorkflowActivate', function () {
 
     beforeEach(function () {
       workflow = new can.Map();
-      workflow.refresh = jasmine.createSpy('refresh');
+      workflow.actualize = jasmine.createSpy('actualize');
       workflow.save = jasmine.createSpy('save');
       spyOn(helpers, 'generateCycle');
     });
 
-    it('should be in waiting state while refresh is in progress', function () {
+    it('should be in waiting state while actualize is in progress', () => {
       viewModel.repeatOffHandler(workflow);
       expect(viewModel.attr('waiting')).toBe(true);
     });
 
-    it('generates cycle for passed workflow before workflow refreshing',
+    it('generates cycle for passed workflow before workflow actualizing',
       async function (done) {
         await viewModel.repeatOffHandler(workflow);
         expect(helpers.generateCycle).toHaveBeenCalledWith(workflow);
         expect(helpers.generateCycle).toHaveBeenCalledBefore(
-          workflow.refresh
+          workflow.actualize
         );
         done();
       });
 
-    it('refreshes workflow', async function (done) {
+    it('actualizes workflow', async function (done) {
       await viewModel.repeatOffHandler(workflow);
-      expect(workflow.refresh).toHaveBeenCalled();
+      expect(workflow.actualize).toHaveBeenCalled();
       done();
     });
 
@@ -309,9 +309,9 @@ describe('GGRC.WorkflowActivate', function () {
         }
       });
 
-    it('should restore button when workflow refreshing fails',
+    it('should restore button when workflow actualizing fails',
       async function (done) {
-        workflow.refresh.and.returnValue(Promise.reject());
+        workflow.actualize.and.returnValue(Promise.reject());
         try {
           await viewModel.repeatOffHandler(workflow);
         } catch (err) {
