@@ -189,7 +189,7 @@ function _updateHandler(obj, pj) {
     if (boundObj.instance === pj.what ||
         boundObj.instance[blOptionAttr] === pj.what) {
       boundObj.get_mappings().forEach(function (mapping) {
-        dfds.push(mapping.refresh().then(function () {
+        dfds.push(mapping.actualize().then(function () {
           if (pj.extra) {
             mapping.attr(pj.extra);
           }
@@ -209,7 +209,7 @@ function _removeHandler(obj, pj) {
     if (boundObj.instance === pj.what ||
         boundObj.instance[blOptionAttr] === pj.what) {
       can.each(boundObj.get_mappings(), function (mapping) {
-        dfds.push(mapping.refresh().then(function () {
+        dfds.push(mapping.actualize().then(function () {
           mapping.destroy();
         }));
       });

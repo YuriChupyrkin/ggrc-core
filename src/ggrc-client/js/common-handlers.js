@@ -41,7 +41,7 @@ $body.on('click', 'a[data-toggle=unmap]', function (ev) {
     }
 
     can.each(mappings, function (mapping) {
-      mapping.refresh().done(function () {
+      mapping.actualize().done(function () {
         if (mapping instanceof CMS.Models.Control) {
           mapping.removeAttr('directive');
           mapping.save().then(notify);

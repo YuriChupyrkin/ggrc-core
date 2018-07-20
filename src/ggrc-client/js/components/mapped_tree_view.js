@@ -89,7 +89,7 @@ import {notifierXHR} from '../plugins/utils/notifiers-utils';
             mapping.instance.type === instance.type;
         });
         _.each(binding.get_mappings(), function (mapping) {
-          mapping.refresh()
+          mapping.actualize()
             .then(function () {
               return mapping.destroy();
             })
