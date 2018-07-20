@@ -33,7 +33,7 @@ import {
         ev.stopPropagation();
 
         this.scope.cycle
-          .refresh()
+          .actualize()
           .then(function (cycle) {
             return cycle.attr('is_current', false).save();
           })
@@ -54,7 +54,7 @@ import {
             ],
             pageInstance.type,
             pageInstance.id);
-          }.bind(this));
+          });
       },
     },
   });
