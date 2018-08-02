@@ -11,6 +11,7 @@
         <mapper-results-columns-configuration
           model-type="getDisplayModel.shortName"
           available-columns="columns.available"
+          (selected-columns-updated)="resetSelectedColumns()"
           {(selected-columns)}="columns.selected">
         </mapper-results-columns-configuration>
       {{/disableColumnsConfiguration}}

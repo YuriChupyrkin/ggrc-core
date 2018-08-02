@@ -63,6 +63,7 @@ export default can.Component.extend({
         );
 
       this.attr('selectedColumns', columns.selected);
+      this.dispatch('selectedColumnsUpdated');
     },
     stopPropagation(context, el, ev) {
       ev.stopPropagation();

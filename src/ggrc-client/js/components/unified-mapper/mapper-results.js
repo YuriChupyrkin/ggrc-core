@@ -76,6 +76,7 @@ export default can.Component.extend({
     objectGenerator: false,
     deferredList: [],
     disabledIds: [],
+    _columnsConfiguration: {},
     init: function () {
       let self = this;
       this.attr('submitCbs').add(this.onSearch.bind(this, true));
@@ -104,15 +105,32 @@ export default can.Component.extend({
           stopFn();
         });
     },
+    resetSelectedColumns() {
+      let modalSingular = this.getDisplayModel().model_singular;
+      this.attr(`_columnsConfiguration.${modalSingular}`, undefined);
+    },
     setColumnsConfiguration: function () {
+      let modelSingular = this.getDisplayModel().model_singular;
+      let cachedConfig = this.attr(`_columnsConfiguration.${modelSingular}`);
+
+      if (cachedConfig) {
+        this.attr('columns.available', cachedConfig.available);
+        this.attr('columns.selected', cachedConfig.selected);
+        this.attr('disableColumnsConfiguration',
+          cachedConfig.disableConfiguration);
+        return;
+      }
+
       let columns =
         TreeViewUtils.getColumnsForModel(
-          this.getDisplayModel().model_singular,
+          modelSingular,
           this.attr('displayPrefs')
         );
       this.attr('columns.available', columns.available);
       this.attr('columns.selected', columns.selected);
       this.attr('disableColumnsConfiguration', columns.disableConfiguration);
+
+      this.attr(`_columnsConfiguration.${modelSingular}`, columns);
     },
     setSortingConfiguration: function () {
       let sortingInfo = TreeViewUtils.getSortingForModel(

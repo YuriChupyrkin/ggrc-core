@@ -110,6 +110,7 @@ describe('mapper-results component', function () {
 
     beforeEach(function () {
       viewModel.attr('columns', {});
+      viewModel.attr('_columnsConfiguration', {});
       mockColumns = {
         available: 'mock1',
         selected: 'mock2',
@@ -139,6 +140,22 @@ describe('mapper-results component', function () {
       viewModel.attr('disableColumnsConfiguration', 'configuration');
       viewModel.setColumnsConfiguration();
       expect(viewModel.attr('disableColumnsConfiguration')).toEqual('mock3');
+    });
+
+    it('should NOT call "getColumnsForModel"' +
+    'if viewModel has cache for current model', () => {
+      viewModel.setColumnsConfiguration();
+      viewModel.setColumnsConfiguration();
+      expect(TreeViewUtils.getColumnsForModel.calls.count()).toBe(1);
+    });
+
+    it('should set value for "_columnsConfiguration" property', () => {
+      let columnConfig = viewModel.attr('_columnsConfiguration').attr();
+      expect(_.isEmpty(columnConfig)).toBeTruthy();
+      viewModel.setColumnsConfiguration();
+
+      columnConfig = viewModel.attr('_columnsConfiguration').attr();
+      expect(_.isEmpty(columnConfig)).toBeFalsy();
     });
   });
 
