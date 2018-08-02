@@ -10,6 +10,6 @@ export default Mixin('ca_update', {}, {
     this.dispatch('readyForRender');
   },
   info_pane_preload: function () {
-    this.refresh();
+    this.actualize();
   },
 });

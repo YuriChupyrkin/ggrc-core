@@ -710,7 +710,7 @@ export default can.Component.extend({
           }
 
           return newInstance
-            .refresh();
+            .actualize();
         }.bind(this))
         .then(function (newInstance) {
           if (!newInstance) {
