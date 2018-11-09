@@ -3,6 +3,12 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 (function ($, can) {
+  can.Model.validate = can.Map.validate = can.Map.prototype._validate;
+
+  can.Model.validationMessages = can.Model.validationMessages || {};
+
+  can.Map.validationMessages = can.Map.validationMessages || {};
+
   // a few core CanJS extensions below.
   // Core validation for fields not being "blank", i.e.
   // having no content when outside spaces are trimmed away.

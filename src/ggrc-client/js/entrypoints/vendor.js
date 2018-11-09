@@ -20,14 +20,43 @@ import 'bootstrap/js/bootstrap-tab.js';
 import 'bootstrap/js/bootstrap-tooltip.js';
 import 'bootstrap/js/bootstrap-popover.js';
 import 'clipboard';
-import 'canjs/amd/can';
-import 'can/construct/super';
-import 'can/construct/proxy';
-import 'can/control/plugin';
-import 'can/list/sort';
-import 'can/map/attributes';
-import 'can/map/backup';
-import 'can/map/validations';
+
+// import 'can/legacy';
+import 'can-component';
+import 'can-route';
+import 'can-stache';
+import 'can-stache-bindings';
+import 'can-compute';
+import 'can-event';
+import 'can-view-model';
+
+// Extra stuff
+import 'can-map';
+import 'can-list';
+import 'can-map-backup';
+import 'can-map-define';
+import 'can-connect/can/model/model';
+import 'can-ejs';
+import 'can-validate-legacy';
+
+// Legacy namespacing for these
+can.view.attr = can.view.callbacks.attr;
+can.view.tag = can.view.callbacks.tag;
+
+// import 'can/map/validations';
+import 'can-validate-legacy/map/validate/validate';
+import 'can-validate-legacy/shims/validatejs';
+
+// import 'can/construct/super';
+import 'can-construct-super';
+
+// import 'can/map/attributes';
+// import 'can/map/backup';
+
+// import 'can/construct/proxy';
+// import 'can/control/plugin';
+// import 'can/list/sort';
+
 import 'moment';
 import 'moment-timezone/builds/moment-timezone-with-data.min';
 import 'spin.js';

@@ -21,7 +21,7 @@ export default can.Construct.extend('can.Model.Mixin', {
         let oldfn;
 
         key = ~key.indexOf(':') ? key.substr(key.indexOf(':') + 1) : key;
-        if (fn !== can.Model.Mixin[key] && !~can.inArray(key, blockedKeys)) {
+        if (!~$.inArray(key, blockedKeys)) {
           oldfn = obj[key];
           // TODO support other ways of adding functions.
           //  E.g. "override" (doesn't call super fn at all)
@@ -60,7 +60,7 @@ export default can.Construct.extend('can.Model.Mixin', {
       };
     }
 
-    if (!~can.inArray(this, cls._mixins)) {
+    if (!~$.inArray(this, cls._mixins)) {
       cls._mixins = cls._mixins || [];
       cls._mixins.push(this);
       Object.keys(this).forEach(function (key) {

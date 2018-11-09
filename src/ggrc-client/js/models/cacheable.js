@@ -176,8 +176,7 @@ export default can.Model('can.Model.Cacheable', {
         throw new Error(
           'No default findPage() exists for subclasses of Cacheable');
       };
-    } else if ((!staticProps || !staticProps.findAll) &&
-      this.findAll === can.Model.Cacheable.findAll) {
+    } else if ((!staticProps || !staticProps.findAll)) {
       if (this.root_collection) {
         this.findAll = 'GET /api/' + this.root_collection;
       } else {
@@ -230,11 +229,11 @@ export default can.Model('can.Model.Cacheable', {
 
     let ret = this._super(...arguments);
     if (overrideFindAll) {
-      this.findAll = can.Model.Cacheable.findAll;
+      // this.findAll = can.Model.Cacheable.findAll;
     }
 
     // set up default attribute converters/serializers for all classes
-    can.extend(this.attributes, {
+    $.extend(this.attributes, {
       created_at: 'datetime',
       updated_at: 'datetime',
     });
@@ -733,7 +732,7 @@ export default can.Model('can.Model.Cacheable', {
       return this._super(...arguments);
     }
     /* Serialize only meaningful properties */
-    Object.keys(this._data).forEach(function (name) {
+    this._data && Object.keys(this._data).forEach(function (name) {
       if (name.startsWith && name.startsWith('_')) {
         return;
       }
@@ -925,9 +924,9 @@ export default can.Model('can.Model.Cacheable', {
 });
 
 /* TODO: hack on can.Observe should be removed or at least placed outside of Cacheable Model Class */
-let _oldAttr = can.Observe.prototype.attr;
-can.Observe.prototype.attr = function (key, val) {
-  if (key instanceof can.Observe) {
+let _oldAttr = can.Map.prototype.attr;
+can.Map.prototype.attr = function (key, val) {
+  if (key instanceof can.Map) {
     if (arguments[0] === this) {
       return this;
     }
