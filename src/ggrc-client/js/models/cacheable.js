@@ -17,6 +17,27 @@ import tracker from '../tracker';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
 
+var ViewModel = can.Map({
+  define: {
+    name: {
+      value: '',
+      validate: {
+        required: true,
+        custom: true,
+      },
+    },
+  },
+});
+var viewModel = new ViewModel({});
+
+viewModel.validate();
+
+viewModel.attr('name', 'ara');
+
+viewModel.validate();
+
+console.log('why!?');
+
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
   let ret;
@@ -289,16 +310,16 @@ export default can.Model('can.Model.Cacheable', {
     };
 
     // Register this type as a custom attributable type if it is one.
-    if (this.is_custom_attributable) {
-      this.validate(
-        '_gca_valid',
-        function () {
-          if (!this._gca_valid) {
-            return 'Missing required global custom attribute';
-          }
-        }
-      );
-    }
+    // if (this.is_custom_attributable) {
+    //   this.validate(
+    //     '_gca_valid',
+    //     function () {
+    //       if (!this._gca_valid) {
+    //         return 'Missing required global custom attribute';
+    //       }
+    //     }
+    //   );
+    // }
   },
 
   findInCacheById: function (id) {

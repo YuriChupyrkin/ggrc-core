@@ -64,7 +64,7 @@ export default Cacheable('CMS.Models.Workflow', {
 
   init: function () {
     this._super && this._super(...arguments);
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
   },
 }, {
   /**

@@ -76,7 +76,7 @@ export default Cacheable('CMS.Models.CustomAttributeDefinition', {
   },
 
   init: function () {
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
     // Besides multi_choice_options we need toset the validation on the
     // attribute_type field as well, even though its validation always

@@ -112,7 +112,7 @@ export default Cacheable('CMS.Models.Audit', {
       this._super(...arguments);
     }
     this.validatePresenceOf('program');
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
     this.validate(
       'issue_tracker_component_id',

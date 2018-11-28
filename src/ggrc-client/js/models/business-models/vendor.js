@@ -72,6 +72,6 @@ export default Cacheable('CMS.Models.Vendor', {
       this._super(...arguments);
     }
 
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
   },
 }, {});

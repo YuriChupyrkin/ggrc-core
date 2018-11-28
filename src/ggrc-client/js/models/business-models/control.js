@@ -110,7 +110,7 @@ export default Cacheable('CMS.Models.Control', {
   },
   statuses: ['Draft', 'Deprecated', 'Active'],
   init: function () {
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
     this.validate('assertions', function () {
       if (!this.attr('assertions') || !this.attr('assertions.length')) {

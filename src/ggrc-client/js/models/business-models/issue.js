@@ -88,7 +88,7 @@ export default Cacheable('CMS.Models.Issue', {
     if (this._super) {
       this._super(...arguments);
     }
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
     this.validate(
       'issue_tracker_component_id',

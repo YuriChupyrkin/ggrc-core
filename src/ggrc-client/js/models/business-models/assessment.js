@@ -152,7 +152,7 @@ export default Cacheable('CMS.Models.Assessment', {
       this._super(...arguments);
     }
     this.validatePresenceOf('audit');
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
 
     this.validate(

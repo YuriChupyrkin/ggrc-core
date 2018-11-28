@@ -3,43 +3,43 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 (function ($, can) {
-  can.Model.validate = can.Map.validate = can.Map.prototype._validate;
+  // can.Model.validate = can.Map.validate = can.Map.prototype._validate;
 
-  can.Model.validationMessages = can.Model.validationMessages || {};
+  // can.Model.validationMessages = can.Model.validationMessages || {};
 
-  can.Map.validationMessages = can.Map.validationMessages || {};
+  // can.Map.validationMessages = can.Map.validationMessages || {};
 
   // a few core CanJS extensions below.
   // Core validation for fields not being "blank", i.e.
   // having no content when outside spaces are trimmed away.
-  can.Model.validationMessages.non_blank =
-    can.Map.validationMessages.non_blank = 'cannot be blank';
+  // can.Model.validationMessages.non_blank =
+  //   can.Map.validationMessages.non_blank = 'cannot be blank';
 
-  can.Model.validateNonBlank =
-    can.Map.validateNonBlank = function (attrNames, options) {
-      this.validate(attrNames, options, function (value) {
-        if (_.isUndefined(value) ||
-            _.isNull(value) ||
-            _.isFunction(value.trim) && value.trim() === '') {
-          return this.constructor.validationMessages.non_blank;
-        }
-      });
-    };
-  can.Model.validateContact =
-    can.Map.validateContact = function (attrNames, options) {
-      this.validate(attrNames, options, function (newVal, prop) {
-        let reifiedContact = newVal && newVal.reify ? newVal.reify() : false;
-        let hasEmail = reifiedContact ? reifiedContact.email : false;
-        options = options || {};
-
-        // This check will not work until the bug introduced with commit 8a5f600c65b7b45fd34bf8a7631961a6d5a19638
-        // is resolved.
-        if (!hasEmail) {
-          return options.message ||
-            'No valid contact selected for assignee';
-        }
-      });
-    };
+  // can.Model.validateNonBlank =
+  //   can.Map.validateNonBlank = function (attrNames, options) {
+  //     this.validate(attrNames, options, function (value) {
+  //       if (_.isUndefined(value) ||
+  //           _.isNull(value) ||
+  //           _.isFunction(value.trim) && value.trim() === '') {
+  //         return this.constructor.validationMessages.non_blank;
+  //       }
+  //     });
+  //   };
+  // can.Model.validateContact =
+  //   can.Map.validateContact = function (attrNames, options) {
+  //     this.validate(attrNames, options, function (newVal, prop) {
+  //       let reifiedContact = newVal && newVal.reify ? newVal.reify() : false;
+  //       let hasEmail = reifiedContact ? reifiedContact.email : false;
+  //       options = options || {};
+  //
+  //       // This check will not work until the bug introduced with commit 8a5f600c65b7b45fd34bf8a7631961a6d5a19638
+  //       // is resolved.
+  //       if (!hasEmail) {
+  //         return options.message ||
+  //           'No valid contact selected for assignee';
+  //       }
+  //     });
+  //   };
 
   /**
    * Validate an autocomplete list field to be not blank.
@@ -56,19 +56,19 @@
    * validate function
    *
    */
-  can.Model.validateListNonBlank =
-    can.Map.validateListNonBlank = function (listFieldName, condition,
-      options) {
-      this.validate(listFieldName, options, function (newVal, prop) {
-        if (_.isUndefined(condition) || condition.call(this)) {
-          if (!newVal ||
-              !_.isFunction(newVal.attr) ||
-              _.isEmpty(newVal.attr())) {
-            return this.constructor.validationMessages.non_blank;
-          }
-        }
-      });
-    };
+  // can.Model.validateListNonBlank =
+  //   can.Map.validateListNonBlank = function (listFieldName, condition,
+  //     options) {
+  //     this.validate(listFieldName, options, function (newVal, prop) {
+  //       if (_.isUndefined(condition) || condition.call(this)) {
+  //         if (!newVal ||
+  //             !_.isFunction(newVal.attr) ||
+  //             _.isEmpty(newVal.attr())) {
+  //           return this.constructor.validationMessages.non_blank;
+  //         }
+  //       }
+  //     });
+  //   };
 
   // Adding reduce, a generally useful array comprehension.
   //  Bitovi decided against including it in core CanJS, but

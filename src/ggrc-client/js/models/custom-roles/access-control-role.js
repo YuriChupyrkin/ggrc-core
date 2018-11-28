@@ -26,7 +26,7 @@ export default Cacheable('CMS.Models.AccessControlRole', {
     'delete': true,
   },
   init: function () {
-    this.validateNonBlank('name');
+    // this.validateNonBlank('name');
     this._super(...arguments);
   },
 }, {

@@ -58,9 +58,9 @@ export default Cacheable('CMS.Models.RiskAssessment', {
   statuses: ['Draft', 'Deprecated', 'Active'],
   init: function () {
     this._super && this._super(...arguments);
-    this.validateNonBlank('title');
-    this.validateNonBlank('start_date');
-    this.validateNonBlank('end_date');
+    // this.validateNonBlank('title');
+    // this.validateNonBlank('start_date');
+    // this.validateNonBlank('end_date');
   },
 }, {
   save: function () {

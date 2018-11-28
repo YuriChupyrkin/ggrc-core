@@ -7,13 +7,13 @@ import Mixin from './mixin';
 
 export default Mixin({
   'after:init': function () {
-    this.validate(['title', '_transient.title'], function (newVal, prop) {
-      if (prop === 'title') {
-        return this.attr('_transient.title');
-      } else if (prop === '_transient.title') {
-        return newVal; // the title error is the error
-      }
-    });
+    // this.validate(['title', '_transient.title'], function (newVal, prop) {
+    //   if (prop === 'title') {
+    //     return this.attr('_transient.title');
+    //   } else if (prop === '_transient.title') {
+    //     return newVal; // the title error is the error
+    //   }
+    // });
   },
 }, {
   save_error: function (val) {

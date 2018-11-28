@@ -169,12 +169,12 @@ export default Cacheable('CMS.Models.CycleTaskGroupObjectTask', {
     let assigneeRole = getRole('CycleTaskGroupObjectTask', 'Task Assignees');
 
     this._super(...arguments);
-    this.validateNonBlank('title');
-    this.validateNonBlank('workflow');
-    this.validateNonBlank('cycle');
-    this.validateNonBlank('cycle_task_group');
-    this.validateNonBlank('start_date');
-    this.validateNonBlank('end_date');
+    // this.validateNonBlank('title');
+    // this.validateNonBlank('workflow');
+    // this.validateNonBlank('cycle');
+    // this.validateNonBlank('cycle_task_group');
+    // this.validateNonBlank('start_date');
+    // this.validateNonBlank('end_date');
 
     // instance.attr('access_control_list')
     //   .replace(...) doesn't raise change event

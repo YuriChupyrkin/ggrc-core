@@ -76,7 +76,7 @@ export default Cacheable('CMS.Models.Requirement', {
   statuses: ['Draft', 'Deprecated', 'Active'],
   init: function () {
     this._super(...arguments);
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
   },
 }, {
   created() {

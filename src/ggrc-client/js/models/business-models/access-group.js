@@ -70,6 +70,6 @@ export default Cacheable('CMS.Models.AccessGroup', {
       this._super(...arguments);
     }
 
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
   },
 }, {});

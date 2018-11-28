@@ -91,9 +91,9 @@ export default Cacheable('CMS.Models.Person', {
       /^[-!#$%&*+\\./0-9=?A-Z^_`{|}~]+@([-0-9A-Z]+\.)+([0-9A-Z]){2,4}$/i;
     this._super(...arguments);
 
-    this.validateNonBlank('email');
-    this.validateFormatOf('email', rEmail);
-    this.validateNonBlank('name');
+    // this.validateNonBlank('email');
+    // this.validateFormatOf('email', rEmail);
+    // this.validateNonBlank('name');
   },
 }, {
   display_name: function () {

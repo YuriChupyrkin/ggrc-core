@@ -52,7 +52,7 @@ export default Cacheable('CMS.Models.TaskGroupTask', {
     if (this._super) {
       this._super(...arguments);
     }
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
     // instance.attr('access_control_list')
     //   .replace(...) doesn't raise change event

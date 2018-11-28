@@ -101,8 +101,8 @@ export default Cacheable('CMS.Models.AssessmentTemplate', {
    */
   init: function () {
     this._super(...arguments);
-    this.validateNonBlank('title');
-    this.validateNonBlank('default_people.assignees');
+    // this.validateNonBlank('title');
+    // this.validateNonBlank('default_people.assignees');
 
     this.validateListNonBlank(
       'assigneesList',

@@ -85,6 +85,6 @@ export default Cacheable('CMS.Models.Process', {
       this._super(...arguments);
     }
 
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
   },
 }, {});
