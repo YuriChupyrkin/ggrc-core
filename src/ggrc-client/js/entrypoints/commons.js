@@ -9,6 +9,7 @@ import '../mustache-templates';
 import '../apps/base_widgets';
 import '../tracker';
 import '../plugins/canjs_extensions';
+import '../plugins/validatejs_extensions';
 import '../bootstrap/modal-ajax';
 import '../bootstrap/modal-form';
 import '../plugins/lodash_helpers';
@@ -34,5 +35,3 @@ import './user';
 
 // Common components
 import '../components/model-loader/model-loader';
-
-
