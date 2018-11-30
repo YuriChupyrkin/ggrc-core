@@ -104,28 +104,28 @@ export default Cacheable('CMS.Models.AssessmentTemplate', {
     // this.validateNonBlank('title');
     // this.validateNonBlank('default_people.assignees');
 
-    this.validateListNonBlank(
-      'assigneesList',
-      function () {
-        return this.attr('default_people.assignees') === 'other';
-      }
-    );
-    this.validateListNonBlank(
-      'verifiersList',
-      function () {
-        return this.attr('default_people.verifiers') === 'other';
-      }
-    );
-    this.validate(
-      'issue_tracker_component_id',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.component_id')) {
-          return 'cannot be blank';
-        }
-      }
-    );
+    // this.validateListNonBlank(
+    //   'assigneesList',
+    //   function () {
+    //     return this.attr('default_people.assignees') === 'other';
+    //   }
+    // );
+    // this.validateListNonBlank(
+    //   'verifiersList',
+    //   function () {
+    //     return this.attr('default_people.verifiers') === 'other';
+    //   }
+    // );
+    // this.validate(
+    //   'issue_tracker_component_id',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.component_id')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
   },
 }, {
   /**

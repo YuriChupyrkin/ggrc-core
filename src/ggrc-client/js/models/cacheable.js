@@ -6,10 +6,7 @@
 /* eslint-disable no-console, id-length */
 
 import CustomAttributeAccess from '../plugins/utils/custom-attribute/custom-attribute-access';
-import {
-  isSnapshot,
-  setAttrs,
-} from '../plugins/utils/snapshot-utils';
+import * as SnapshotUtils from '../plugins/utils/snapshot-utils';
 import resolveConflict from './conflict-resolution/conflict-resolution';
 import PersistentNotifier from '../plugins/persistent_notifier';
 import RefreshQueue from './refresh_queue';
@@ -17,26 +14,26 @@ import tracker from '../tracker';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
 
-var ViewModel = can.Map({
-  define: {
-    name: {
-      value: '',
-      validate: {
-        required: true,
-        custom: true,
-      },
-    },
-  },
-});
-var viewModel = new ViewModel({});
-
-viewModel.validate();
-
-viewModel.attr('name', 'ara');
-
-viewModel.validate();
-
-console.log('why!?');
+// var ViewModel = can.Map({
+//   define: {
+//     name: {
+//       value: '',
+//       validate: {
+//         required: true,
+//         custom: true,
+//       },
+//     },
+//   },
+// });
+// var viewModel = new ViewModel({});
+//
+// viewModel.validate();
+//
+// viewModel.attr('name', 'ara');
+//
+// viewModel.validate();
+//
+// console.log('why!?');
 
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
@@ -266,8 +263,9 @@ export default can.Model('can.Model.Cacheable', {
     let idKey = this.id;
     let _update = this.update;
     let _create = this.create;
+    this.cache = {};
     this.bind('created', function (ev, newObj) {
-      let cache = can.getObject('cache', newObj.constructor, true);
+      let cache = newObj.constructor.cache;
       if (newObj[idKey] || newObj[idKey] === 0) {
         if (!isSnapshot(newObj)) {
           cache[newObj[idKey]] = newObj;
@@ -278,7 +276,7 @@ export default can.Model('can.Model.Cacheable', {
       }
     });
     this.bind('destroyed', function (ev, oldObj) {
-      delete can.getObject('cache', oldObj.constructor, true)[oldObj[idKey]];
+      delete oldObj.constructor.cache[oldObj[idKey]];
     });
 
     // FIXME:  This gets set up in a chain of multiple calls to the function defined
@@ -323,18 +321,18 @@ export default can.Model('can.Model.Cacheable', {
   },
 
   findInCacheById: function (id) {
-    return can.getObject('cache', this, true)[id];
+    return this.cache[id];
   },
 
   removeFromCacheById: function (key) {
-    return delete this.store[key];
+    return delete this.cache[key];
   },
 
   newInstance: function (args) {
-    let cache = can.getObject('cache', this, true);
+    let cache = this.cache;
     let isKeyExists = args && args[this.id];
     let isObjectExists = isKeyExists && cache[args[this.id]];
-    let notSnapshot = args && !isSnapshot(args);
+    let notSnapshot = args /*&& !isSnapshot(args)*/;
     if (isObjectExists && notSnapshot) {
       // cache[args.id].attr(args, false); //CanJS has bugs in recursive merging
       // (merging -- adding properties from an object without removing existing ones
@@ -444,10 +442,7 @@ export default can.Model('can.Model.Cacheable', {
       this.removeFromCacheById(params[this.id]);
       delete this.cache[params[this.id]];
     }
-    model = this.findInCacheById(params[this.id]) ||
-      (params.provisional_id &&
-        can.getObject('provisional_cache',
-          can.Model.Cacheable, true)[params.provisional_id]);
+    model = this.findInCacheById(params[this.id]);
     if (model && !isSnapshot(params)) {
       if (model.provisional_id && params.id) {
         delete can.Model.Cacheable.provisional_cache[model.provisional_id];
@@ -587,9 +582,9 @@ export default can.Model('can.Model.Cacheable', {
   },
 }, {
   init: function () {
-    let cache = can.getObject('cache', this.constructor, true);
+    let cache = this.constructor.cache;
     let idKey = this.constructor.id;
-    setAttrs(this);
+    // SnapshotUtils.setAttrs(this);
     if ((this[idKey] || this[idKey] === 0) &&
       !isSnapshot(this)) {
       cache[this[idKey]] = this;
@@ -885,9 +880,6 @@ export default can.Model('can.Model.Cacheable', {
       this.before_save(preSaveNotifier);
     }
     if (isNew) {
-      this.attr('provisional_id', 'provisional_' + Date.now());
-      can.getObject('provisional_cache',
-        can.Model.Cacheable, true)[this.provisional_id] = this;
       if (this.before_create) {
         this.before_create(preSaveNotifier);
       }
