@@ -20,7 +20,7 @@ import assessmentIssueTracker from '../mixins/assessment-issue-tracker';
 import relatedAssessmentsLoader from '../mixins/related-assessments-loader';
 import {getInstance} from '../../plugins/utils/models-utils';
 
-export default Cacheable('CMS.Models.Assessment', {
+const Assessment = Cacheable('CMS.Models.Assessment', {
   root_object: 'assessment',
   root_collection: 'assessments',
   category: 'governance',
@@ -151,38 +151,38 @@ export default Cacheable('CMS.Models.Assessment', {
     if (this._super) {
       this._super(...arguments);
     }
-    this.validatePresenceOf('audit');
+    // this.validatePresenceOf('audit');
     // this.validateNonBlank('title');
 
 
-    this.validate(
-      'issue_tracker_title',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.title')) {
-          return 'cannot be blank';
-        }
-      }
-    );
-    this.validate(
-      'issue_tracker_component_id',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.component_id')) {
-          return 'cannot be blank';
-        }
-      }
-    );
-    this.validate(
-      '_gca_valid',
-      function () {
-        if (!this._gca_valid) {
-          return 'Missing required global custom attribute';
-        }
-      }
-    );
+    // this.validate(
+    //   'issue_tracker_title',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.title')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
+    // this.validate(
+    //   'issue_tracker_component_id',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.component_id')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
+    // this.validate(
+    //   '_gca_valid',
+    //   function () {
+    //     if (!this._gca_valid) {
+    //       return 'Missing required global custom attribute';
+    //     }
+    //   }
+    // );
   },
   prepareAttributes: function (attrs) {
     return attrs[this.root_object] ? attrs[this.root_object] : attrs;
@@ -258,6 +258,19 @@ export default Cacheable('CMS.Models.Assessment', {
     return this.store[id];
   },
 }, {
+  define: {
+    issue_tracker: {
+      validate: {
+        issue_tracker_title: true,
+        issue_tracker_component_id: true,
+      },
+    },
+    _gca_valid: {
+      validate: {
+        _gca_valid: true,
+      },
+    },
+  },
   init: function () {
     if (this._super) {
       this._super(...arguments);
@@ -412,3 +425,48 @@ export default Cacheable('CMS.Models.Assessment', {
   },
 });
 
+window.Assessment = Assessment;
+
+const SimpleModel = Cacheable('SimpleModel', {
+}, {
+  define: {
+    name: {
+      value: null,
+      validate: {
+        required: true,
+      },
+    },
+    issue_tracker: {
+      value: null,
+      validate: {
+        issue_tracker_title: true,
+        issue_tracker_component_id: true,
+      },
+    },
+    gca_valid: {
+      value: null,
+      validate: {
+        truly: true,
+      },
+    },
+  },
+  init() {
+    this.validate();
+  }
+});
+
+var inst = new SimpleModel({
+  name: 'adfadsf',
+  gca_valid: true,
+  can_use_issue_tracker: true,
+});
+
+inst.attr('name', 'ara');
+
+inst.validate();
+
+console.log('why!?');
+
+window.SimpleModel = SimpleModel;
+
+export default Assessment;
