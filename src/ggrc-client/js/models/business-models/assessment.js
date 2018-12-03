@@ -451,7 +451,9 @@ const SimpleModel = Cacheable('SimpleModel', {
     },
   },
   init() {
-    this.validate();
+    if (this._super) {
+      this._super(...arguments);
+    }
   }
 });
 
@@ -463,7 +465,10 @@ var inst = new SimpleModel({
 
 inst.attr('name', 'ara');
 
-inst.validate();
+inst.attr('issue_tracker', {
+  enabled: true,
+  title: 'adfadf',
+});
 
 console.log('why!?');
 

@@ -11,6 +11,7 @@ validate.validators.custom = function(value, options, key, attributes) {
 };
 
 validate.validators.issue_tracker_title = function(issue_tracker, options, key, attributes) {
+  console.log('issue_tracker_title');
   if (attributes.can_use_issue_tracker) {
     if (!issue_tracker || (issue_tracker.enabled && !issue_tracker.title)) {
       return 'title cannot be blank';
@@ -19,6 +20,7 @@ validate.validators.issue_tracker_title = function(issue_tracker, options, key, 
 };
 
 validate.validators.issue_tracker_component_id = function(value, options, key, attributes) {
+  console.log('issue_tracker_component_id');
   if (!value || (value.enabled && !value.component_id)) {
     return 'component_id cannot be blank';
   }

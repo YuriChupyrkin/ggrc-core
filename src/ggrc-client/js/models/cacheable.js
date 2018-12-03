@@ -601,6 +601,25 @@ export default can.Model('can.Model.Cacheable', {
     if (this.isCustomAttributable()) {
       this._customAttributeAccess = new CustomAttributeAccess(this);
     }
+    let i = 0;
+    //
+    // let fieldsNames = Object.keys(this.define);
+    // let fieldsToValidate = fieldsNames.filter((fieldName) =>
+    //   !!this.define[fieldName]['validate']);
+    //
+    // fieldsToValidate.forEach((fieldName) => {
+    //   this.on(fieldName, () => {
+    //     this.validate();
+    //     console.log(++i);
+    //   });
+    // });
+    this.on('change', (ev, fieldName, newVal, oldVal) => {
+      if (fieldName !== 'errors') {
+        this.validate();
+        console.log(++i);
+      }
+    });
+    this.validate();
   },
   /**
    * Updates custom attribute objects with help custom
