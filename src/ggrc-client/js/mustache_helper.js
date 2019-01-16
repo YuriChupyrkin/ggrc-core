@@ -4,6 +4,7 @@
 */
 
 import Spinner from 'spin.js';
+
 import {
   isInScopeModel,
   isSnapshotParent,
