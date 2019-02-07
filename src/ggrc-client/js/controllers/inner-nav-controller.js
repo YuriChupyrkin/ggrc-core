@@ -55,10 +55,14 @@ export default can.Control.extend({
       this.route(newVal);
     });
 
-    can.view(this.options.internav_view, this.options, (frag) => {
-      const isAuditScope = instance.type === 'Audit';
+    $.ajax({
+      url: this.options.internav_view,
+      dataType: 'text',
+    }).then((view) => {
+      let frag = can.stache(view)(this.options);
       this.element.append(frag);
-      if (isAuditScope) {
+
+      if (instance.type === 'Audit') {
         this.element.addClass(this.options.instance.type.toLowerCase());
       }
       this.setTabsPriority();
