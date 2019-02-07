@@ -96,11 +96,11 @@ let viewModel = can.Map.extend({
 
 export default can.Component.extend({
   tag: 'mapped-counter',
-  template: `<i class="fa fa-{{icon}} {{extraCssClass}}"></i>
+  template: can.stache(`<i class="fa fa-{{icon}} {{extraCssClass}}"></i>
              {{#isTitleVisible}}
-               {{title}}: 
+               {{title}}:
              {{/isTitleVisible}}
-             {{count}}`,
+             {{count}}`),
   leakScope: true,
   viewModel,
   events: {
