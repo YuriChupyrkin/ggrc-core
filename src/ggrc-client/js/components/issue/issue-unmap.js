@@ -8,7 +8,7 @@ import template from './issue-unmap.stache';
 
 export default can.Component.extend({
   tag: 'issue-unmap',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: {
     issueInstance: {},
