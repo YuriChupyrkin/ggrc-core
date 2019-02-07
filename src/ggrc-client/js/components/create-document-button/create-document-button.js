@@ -139,7 +139,7 @@ const viewModel = can.Map.extend({
 
 export default can.Component.extend({
   tag: 'create-document-button',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel,
   events: {

@@ -10,7 +10,7 @@ import template from './templates/custom-roles.stache';
 
 export default can.Component.extend({
   tag: 'custom-roles',
-  template: template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: {
     define: {

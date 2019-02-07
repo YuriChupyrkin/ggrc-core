@@ -18,7 +18,7 @@ import * as businessModels from '../../models/business-models';
 
 export default can.Component.extend({
   tag: 'revisions-comparer',
-  template: '<content/>',
+  template: can.stache('<content/>'),
   leakScope: true,
   viewModel: {
     instance: null,
