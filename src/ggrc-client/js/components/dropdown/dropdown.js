@@ -14,7 +14,7 @@ import {filtredMap} from '../../plugins/ggrc_utils';
 */
 export default can.Component.extend({
   tag: 'dropdown',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: {
     define: {

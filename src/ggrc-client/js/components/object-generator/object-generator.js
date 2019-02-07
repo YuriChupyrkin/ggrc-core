@@ -21,7 +21,7 @@ import template from './object-generator.stache';
  */
 export default can.Component.extend({
   tag: 'object-generator',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: function (attrs, parentViewModel) {
     return ObjectOperationsBaseVM.extend({

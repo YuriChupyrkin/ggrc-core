@@ -9,7 +9,7 @@ import template from './tab-container.stache';
 
 export default can.Component.extend({
   tag: 'tab-container',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: {
     lastErrorTab: null,

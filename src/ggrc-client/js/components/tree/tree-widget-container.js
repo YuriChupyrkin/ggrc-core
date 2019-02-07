@@ -647,7 +647,7 @@ viewModel = can.Map.extend({
  */
 export default can.Component.extend({
   tag: 'tree-widget-container',
-  template,
+  template: can.stache(template),
   leakScope: true,
   viewModel,
   init: function () {
