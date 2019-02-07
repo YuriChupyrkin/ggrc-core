@@ -66,9 +66,15 @@ export default can.Control.extend({
       return this._prepare_deferred;
     }
 
-    this._prepare_deferred =
-      can.view(this.options.widget_view, $.when(this.options))
-        .then(this.proxy('draw_widget'));
+    let options = this.options;
+    this._prepare_deferred = $.ajax({
+      url: options.widget_view,
+      dataType: 'text',
+      async: false,
+    }).then((view) => {
+      let render = can.stache(view);
+      return render(options);
+    }).then(this.proxy('draw_widget'));
 
     return this._prepare_deferred;
   },

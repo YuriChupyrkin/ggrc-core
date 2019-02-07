@@ -12,7 +12,7 @@ export default ModalsController({
   },
   init: function () {
     this._super(...arguments);
-    this.defaults.button_view = can.view.mustache('');
+    this.defaults.button_view = can.stache('')();
   },
 }, {
   init: function () {

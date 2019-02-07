@@ -4,9 +4,7 @@
  */
 
 import * as StateUtils from '../../plugins/utils/state-utils';
-import {
-  getCounts,
-} from '../../plugins/utils/widgets-utils';
+import {getCounts} from '../../plugins/utils/widgets-utils';
 import TreeLoader from './tree-loader';
 import TreeViewNode from './tree-view-node';
 import TreeViewOptions from './tree-view-options';
@@ -123,37 +121,37 @@ const TreeViewControl = TreeLoader.extend({
       this.options.attr('parent_instance', this.options.parent_instance());
     }
   },
-
   ' inserted': function () { // eslint-disable-line quote-props
     this._attached_deferred.resolve();
   },
-
   init_view: function () {
-    let self = this;
     let dfds = [];
-    let optionsDfd;
     let statusControl;
 
     if (this.options.header_view && this.options.show_header) {
-      optionsDfd = $.when(this.options);
       dfds.push(
-        can.view(this.options.header_view, optionsDfd).then(
-          this._ifNotRemoved(function (frag) {
+        $.ajax({
+          url: this.options.header_view,
+          dataType: 'text',
+        }).then((view) => {
+          return can.stache(view)(this.options);
+        }).then(
+          this._ifNotRemoved((frag) => {
             this.element.before(frag);
 
             statusControl = this.element.parent()
               .find('.tree-filter__status-wrap');
             // set state filter (checkboxes)
-            can.bind.call(statusControl.ready(function () {
-              let selectStateList = self.options.attr('selectStateList');
+            can.bind.call(statusControl.ready(() => {
+              let selectStateList = this.options.attr('selectStateList');
 
-              self.options.attr('filter_states').forEach(function (item) {
+              this.options.attr('filter_states').forEach((item) => {
                 if (selectStateList.indexOf(item.value) > -1) {
                   item.attr('checked', true);
                 }
               });
             }));
-          }.bind(this))));
+          })));
     }
 
     this.init_count();
