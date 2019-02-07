@@ -19,7 +19,7 @@ export const keyMap = {
 
 export default can.Component.extend({
   tag: 'autocomplete-input',
-  template: template,
+  template: can.stache(template),
   leakScope: true,
   viewModel: {
     define: {
