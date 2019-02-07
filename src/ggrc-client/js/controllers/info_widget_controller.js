@@ -43,10 +43,15 @@ export default can.Control.extend({
     });
     import(/* webpackChunkName: "modalsCtrls" */'./modals')
       .then(() => {
-        can.view(this.get_widget_view(this.element),
-          this.options.context, function (frag) {
-            this.element.html(frag);
-          }.bind(this));
+        let that = this;
+        $.ajax({
+          url: this.get_widget_view(this.element),
+          dataType: 'text',
+          async: false,
+        }).then((view) => {
+          let frag = can.stache(view)(that.options.context);
+          that.element.html(frag);
+        });
       });
   },
 

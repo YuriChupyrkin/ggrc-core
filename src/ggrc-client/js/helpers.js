@@ -205,6 +205,8 @@ can.stache.registerHelper('renderLive', function (template, context, options) {
     options.contexts = options.contexts.add(options.hash);
   }
 
+  // let render = can.stache(template);
+  // return render(options.contexts);
   return can.view.render(template, options.contexts);
 });
 

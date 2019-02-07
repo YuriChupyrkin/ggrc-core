@@ -55,7 +55,11 @@ export default can.Control.extend({
       this.route(newVal);
     });
 
-    can.view(this.options.internav_view, this.options, (frag) => {
+    $.ajax({
+      url: this.options.internav_view,
+      dataType: 'text',
+    }).then((view) => {
+      let frag = can.stache(view)(this.options);
       const isAuditScope = instance.type === 'Audit';
       this.element.append(frag);
       if (isAuditScope) {

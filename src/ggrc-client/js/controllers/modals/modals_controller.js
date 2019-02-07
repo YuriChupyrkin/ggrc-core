@@ -95,9 +95,13 @@ export default can.Control.extend({
     }
 
     if (!this.element.find('.modal-body').length) {
-      can.view(this.options.preload_view,
-        {},
-        (content) => this.after_preload(content));
+      $.ajax({
+        url: this.options.preload_view,
+        dataType: 'text',
+        async: false,
+      }).then((view) => {
+        return can.stache(view)();
+      }).then((content) => this.after_preload(content));
       return;
     }
 
@@ -256,16 +260,21 @@ export default can.Control.extend({
   },
 
   fetch_templates: function (dfd) {
-    let that = this;
-    dfd = dfd ? dfd.then(function () {
-      return that.options;
-    }) : $.when(this.options);
+    function getTemplate(url, options) {
+      return $.ajax({
+        url: url, dataType: 'text',
+      }).then((view) => {
+        let frag = can.stache(view)(options);
+        return frag;
+      });
+    }
+
     return $.when(
-      can.view(this.options.content_view, dfd),
-      can.view(this.options.header_view, dfd),
-      can.view(this.options.button_view, dfd),
-      can.view(this.options.custom_attributes_view, dfd)
-    ).done((content, header, footer, customAttributes) =>
+      getTemplate(this.options.content_view, this.options),
+      getTemplate(this.options.header_view, this.options),
+      getTemplate(this.options.button_view, this.options),
+      getTemplate(this.options.custom_attributes_view, this.options),
+    ).then((content, header, footer, customAttributes) =>
       this.draw(content, header, footer, customAttributes));
   },
 
@@ -381,11 +390,7 @@ export default can.Control.extend({
     let isProposal = this.options.isProposal;
     let isObjectModal = modalTitle && (modalTitle.indexOf('Edit') === 0 ||
       modalTitle.indexOf('New') === 0);
-    let $form;
-    let tabList;
-    let hidableTabs;
-    let storableUI;
-    let i;
+
     if (can.isArray(content)) {
       content = content[0];
     }
@@ -407,23 +412,22 @@ export default can.Control.extend({
     if (footer !== null) {
       this.options.$footer.html(footer);
     }
-
     if (customAttributes !== null && (isObjectModal || isProposal)) {
       this.options.$content.append(customAttributes);
     }
 
     // Update UI status array
-    $form = $(this.element).find('form');
-    tabList = $form.find('[tabindex]');
-    hidableTabs = 0;
-    for (i = 0; i < tabList.length; i++) {
+    let $form = $(this.element).find('form');
+    let tabList = $form.find('[tabindex]');
+    let hidableTabs = 0;
+    for (let i = 0; i < tabList.length; i++) {
       if ($(tabList[i]).attr('tabindex') > 0) {
         hidableTabs++;
       }
     }
     // ui_array index is used as the tab_order, Add extra space for skipped numbers
-    storableUI = hidableTabs + 20;
-    for (i = 0; i < storableUI; i++) {
+    let storableUI = hidableTabs + 20;
+    for (let i = 0; i < storableUI; i++) {
       // When we start, all the ui elements are visible
       this.options.ui_array.push(0);
     }

@@ -64,7 +64,7 @@ export default can.Control.extend({
     let self = this;
     import(/* webpackChunkName: "modalsCtrls" */'./modals')
       .then(() => {
-        this.element.html(can.view(view, {
+        let context = {
           instance: instance,
           isSnapshot: !!instance.snapshot || instance.isRevision,
           parentInstance: parentInstance,
@@ -81,7 +81,15 @@ export default can.Control.extend({
           onClose: function () {
             return self.close.bind(self);
           },
-        }));
+        };
+
+        $.ajax({
+          url: view,
+          dataType: 'text',
+        }).then((view) => {
+          let frag = can.stache(view)(context);
+          this.element.html(frag);
+        });
       });
   },
   prepareView: function (opts, el, maximizedState) {
@@ -148,7 +156,7 @@ export default can.Control.extend({
   },
   confirmEdit: function (instance, modalDetails) {
     let confirmDfd = $.Deferred();
-    let renderer = can.view.mustache(modalDetails.description);
+    let renderer = can.stache(modalDetails.description);
     confirm({
       modal_description: renderer(instance).textContent,
       modal_confirm: modalDetails.button,
