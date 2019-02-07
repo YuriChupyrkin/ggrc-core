@@ -94,7 +94,12 @@ export default can.Control.extend({
     }
 
     if (!this.element.find('.modal-body').length) {
-      can.view(this.options.preload_view, {}, this.proxy('after_preload'));
+      $.ajax({
+        url: this.options.preload_view,
+        dataType: 'text',
+      }).then((view) => {
+        return can.stache(view)();
+      }).then(this.proxy('after_preload'));
       return;
     }
 
@@ -253,16 +258,17 @@ export default can.Control.extend({
   },
 
   fetch_templates: function (dfd) {
-    let that = this;
-    dfd = dfd ? dfd.then(function () {
-      return that.options;
+    dfd = dfd ? dfd.then(() => {
+      return this.options;
     }) : $.when(this.options);
+
     return $.when(
-      can.view(this.options.content_view, dfd),
-      can.view(this.options.header_view, dfd),
-      can.view(this.options.button_view, dfd),
-      can.view(this.options.custom_attributes_view, dfd)
-    ).done(this.proxy('draw'));
+      $.ajax({url: this.options.content_view, dataType: 'text'}),
+      $.ajax({url: this.options.header_view, dataType: 'text'}),
+      $.ajax({url: this.options.button_view, dataType: 'text'}),
+      $.ajax({url: this.options.custom_attributes_view, dataType: 'text'}),
+      dfd,
+    ).then(this.proxy('draw'));
   },
 
   fetch_data: function (params) {
@@ -368,7 +374,7 @@ export default can.Control.extend({
     return findParams.serialize ? findParams.serialize() : findParams;
   },
 
-  draw: function (content, header, footer, customAttributes) {
+  draw: function (content, header, footer, customAttributes, context) {
     if (this.wasDestroyed()) {
       return;
     }
@@ -377,11 +383,7 @@ export default can.Control.extend({
     let isProposal = this.options.isProposal;
     let isObjectModal = modalTitle && (modalTitle.indexOf('Edit') === 0 ||
       modalTitle.indexOf('New') === 0);
-    let $form;
-    let tabList;
-    let hidableTabs;
-    let storableUI;
-    let i;
+
     if (can.isArray(content)) {
       content = content[0];
     }
@@ -395,31 +397,34 @@ export default can.Control.extend({
       customAttributes = customAttributes[0];
     }
     if (header !== null) {
+      header = can.stache(header)(context);
       this.options.$header.find('h2').html(header);
     }
     if (content !== null) {
+      content = can.stache(content)(context);
       this.options.$content.html(content).removeAttr('style');
     }
     if (footer !== null) {
+      footer = can.stache(footer)(context);
       this.options.$footer.html(footer);
     }
-
     if (customAttributes !== null && (isObjectModal || isProposal)) {
+      customAttributes = can.stache(customAttributes)(context);
       this.options.$content.append(customAttributes);
     }
 
     // Update UI status array
-    $form = $(this.element).find('form');
-    tabList = $form.find('[tabindex]');
-    hidableTabs = 0;
-    for (i = 0; i < tabList.length; i++) {
+    let $form = $(this.element).find('form');
+    let tabList = $form.find('[tabindex]');
+    let hidableTabs = 0;
+    for (let i = 0; i < tabList.length; i++) {
       if ($(tabList[i]).attr('tabindex') > 0) {
         hidableTabs++;
       }
     }
     // ui_array index is used as the tab_order, Add extra space for skipped numbers
-    storableUI = hidableTabs + 20;
-    for (i = 0; i < storableUI; i++) {
+    let storableUI = hidableTabs + 20;
+    for (let i = 0; i < storableUI; i++) {
       // When we start, all the ui elements are visible
       this.options.ui_array.push(0);
     }
