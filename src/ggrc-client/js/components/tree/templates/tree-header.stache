@@ -17,7 +17,7 @@
       <ul class="attr-list">
         {{#columns}}
           <li class="{{#if mandatory}}disabled{{/if}}">
-            <tree-visible-column-checkbox {column}=".">
+            <tree-visible-column-checkbox {column}="{.}">
             </tree-visible-column-checkbox>
           </li>
         {{/columns}}

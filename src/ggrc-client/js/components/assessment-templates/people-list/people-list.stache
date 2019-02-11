@@ -9,10 +9,10 @@
   </label>
   <dropdown
     {class-name}="'input-block-level js-toggle-field'"
-    {options-list}="peopleValues"
-    name="selectedValue"
-    ($change)="dropdownChanged"
-    {no-value}="hasEmptyValue"
+    {options-list}="{peopleValues}"
+    {name}="{selectedValue}"
+    ($change)="{dropdownChanged}"
+    {no-value}="{}hasEmptyValue"
   ></dropdown>
 </div>
 

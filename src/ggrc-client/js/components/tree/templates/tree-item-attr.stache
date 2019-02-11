@@ -45,7 +45,7 @@
 
   {{#case 'modified_by'}}
     <model-loader {path}="'business-models/person'">
-      <tree-field {source}="instance.modified_by" {type}="loadedModel" {field}="'email'"/>
+      <tree-field {source}="{instance.modified_by}" {type}="loadedModel" {field}="'email'"/>
     </model-loader>
   {{/case}}
 
@@ -104,7 +104,7 @@
   {{/case}}
 
   {{#case 'review_status'}}
-    <review-state {instance}="instance">
+    <review-state {instance}="{instance}">
       <span>{{reviewState}}</span>
     </review-state>
   {{/case}}
@@ -164,7 +164,7 @@
   {{/case}}
 
   {{#case 'reference_url'}}
-    <related-documents {instance}="instance" {kind}="REFERENCE_URL">
+    <related-documents {instance}="{instance}" {kind}="REFERENCE_URL">
       <div class="reference-urls-list">
         {{#each documents}}
           <span class="reference-urls-list__item">
@@ -176,11 +176,11 @@
   {{/case}}
 
   {{#case 'questionnaire'}}
-    <questions-link {instance}="instance">Open</questions-link>
+    <questions-link {instance}="{instance}">Open</questions-link>
   {{/case}}
 
   {{#case 'last_comment'}}
-    <last-comment {instance}="instance"></last-comment>
+    <last-comment {instance}="{instance}"></last-comment>
   {{/case}}
 
   {{#case 'audit_firm'}}

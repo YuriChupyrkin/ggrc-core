@@ -15,7 +15,7 @@
         </label>
 
         <assessment-object-type-dropdown
-          {instance}="instance"
+          {instance}="{instance}"
           {(assessment-type)}="instance.template_object_type">
           <dropdown
             class="input-medium pull-left"
@@ -102,7 +102,7 @@
       <div class="span6">
         <div class="row-fluid choose-from-select">
           <people-list
-            {instance}="instance"
+            {instance}="{instance}"
             {list-name}="'assignees'"
             {label-name}="'Default Assignees'"
             {people-list-attr}="'default_people.assignees'"
@@ -112,7 +112,7 @@
 
         <div class="row-fluid choose-from-select">
           <people-list
-            {instance}="instance"
+            {instance}="{instance}"
             {list-name}="'verifiers'"
             {label-name}="'Default Verifiers'"
             {people-list-attr}="'default_people.verifiers'"
@@ -138,9 +138,8 @@
           <i class="fa fa-question-circle" rel="tooltip" title="Indicates the status of this object."></i>
           <a href="javascript://" class="field-hide" tabindex="-1">hide</a>
         </label>
-          <dropdown data-test-id="new_program_dropdown_state_036a1fa6"
-                    options-list="model.statuses"
-                    name="instance.status"
+          <dropdown {options-list}="{model.statuses}"
+                    {name}="{instance.status}"
                     tabindex="23">
           </dropdown>
       </div>
@@ -195,7 +194,7 @@
                       {{^if _pending_delete}}
                           <li class="row-fluid sortable-item" {{data 'field'}}>
                               <template-field
-                                {field}="."
+                                {field}="{.}"
                                 {types}="types"
                                 (remove)="fieldRemoved"></template-field>
                           </li>
@@ -229,10 +228,10 @@
           <div class="hidden-fields-area">
             <div class="ggrc-form">
               <issue-tracker-switcher
-                {instance}="instance"
+                {instance}="{instance}"
                 {(is-integration-enabled)}="instance.issue_tracker.enabled">
                   <modal-issue-tracker-fields
-                    {instance}="instance"
+                    {instance}="{instance}"
                     {note}="'Turns on Ticket Tracker integration.'">
                   </modal-issue-tracker-fields>
               </issue-tracker-switcher>

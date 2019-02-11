@@ -15,7 +15,7 @@
 
 <mandatory-fields-modal
     {state}="modalState"
-    {instance}="instance"
+    {instance}="{instance}"
     {revision-modified-by}="restoredRevision.modified_by"
     {revision-updated-at}="restoredRevision.updated_at"
     (save)="saveInstance"

@@ -32,7 +32,7 @@
 
     {{^if_equals instance.type 'Audit'}}
       <add-tab-button
-        {instance}="instance"
+        {instance}="{instance}"
         {widget-list}="widget_list"
         {url-path}="urlPath"
         {add-tab-title}="'Add Tab'"
@@ -82,7 +82,7 @@
       {{/notPriorityTabs}}
 
       <add-tab-button
-        {instance}="instance"
+        {instance}="{instance}"
         {widget-list}="widget_list"
         {url-path}="urlPath"
         {add-tab-title}="'Add Scope'"

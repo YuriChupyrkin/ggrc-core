@@ -39,7 +39,7 @@
     </div>
 
     <access-control-list-roles-helper
-      {instance}="instance"
+      {instance}="{instance}"
       {is-new-instance}="new_object_form">
     </access-control-list-roles-helper>
 
@@ -49,7 +49,7 @@
           Repeat Workflow
         </label>
         {{#if new_object_form}}
-          <repeat-on-button-wrapper {(instance)}="instance"></repeat-on-button-wrapper>
+          <repeat-on-button-wrapper {(instance)}="{instance}"></repeat-on-button-wrapper>
         {{/if}}
         <repeat-on-summary {unit}="instance.unit" {repeat-every}="instance.repeat_every"
                            {hide-repeat-off}="new_object_form">
@@ -88,7 +88,7 @@
           <i class="fa fa-question-circle" rel="tooltip" title="If selected, all Workflow attachments go here."></i>
         </label>
         <ggrc-gdrive-folder-picker
-          instance="instance"
+          {instance}="{instance}"
           deferred="true"
           tabindex="5"
           hide-label="true"

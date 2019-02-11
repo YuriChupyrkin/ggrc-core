@@ -15,8 +15,8 @@ Copyright (C) 2019 Google Inc.
                 type="input"
                 hide-content-in-edit-mode="true"
                 {mandatory}="true"
-                {is-loading}="isLoading"
-                {instance}="instance"
+                {is-loading}="{isLoading}"
+                {instance}="{instance}"
                 {value}="instance.title"
                 {is-edit-icon-denied}="isEditDenied">
                     {{#unless editMode}}
@@ -24,7 +24,7 @@ Copyright (C) 2019 Google Inc.
                             (set-edit-mode)="setEditModeInline(%event)"
                             (set-in-progress)="setInProgressState()"
                             {is-edit-icon-denied}="isEditIconDenied"
-                            {instance}="instance"
+                            {instance}="{instance}"
                             {on-state-change-dfd}="onStateChangeDfd"
                             {edit-mode}="editMode">
                                 <base-inline-control-title
@@ -169,7 +169,7 @@ Copyright (C) 2019 Google Inc.
                       </li>
                       {{/if}}
                   {{/is_allowed}}
-            </three-dots-menu> 
+            </three-dots-menu>
 
             {{#is_info_pin}}
                 {{#unless options.isSubTreeItem}}
@@ -186,7 +186,7 @@ Copyright (C) 2019 Google Inc.
             {{#unless isEditDenied}}
                     <object-state-toolbar
                                         {verifiers}="verifiers"
-                                        {instance}="instance"
+                                        {instance}="{instance}"
                                         {disabled}="isInfoPaneSaving"
                                         {instance-state}="currentState"
                                         {is-undo-button-visible}="isUndoButtonVisible"

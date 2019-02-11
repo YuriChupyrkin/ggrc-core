@@ -26,7 +26,7 @@
           {{/if_helpers}}
           {{^if isSnapshot}}
             <span class="proposal">
-              <create-proposal-button {instance}="instance">
+              <create-proposal-button {instance}="{instance}">
               </create-proposal-button>
             </span>
           {{/if}}
@@ -46,14 +46,14 @@
           <div class="pane-header__snapshot-info">
             <hr class="snapshot">
               <snapshot-comparer-config
-                {instance}="instance"
+                {instance}="{instance}"
                 {left-revision-id}="instance.snapshot.revision_id"
                 {right-revisions}="instance.snapshot.revisions">
                   <revisions-comparer
                     {modal-title}="modalTitle"
                     {modal-confirm}="modalConfirm"
                     {button-view}="buttonView"
-                    {instance}="instance"
+                    {instance}="{instance}"
                     {left-revision-id}="leftRevisionId"
                     {right-revision}="rightRevision">
                       <a href="javascript://" can-click="compareIt">Get the latest version</a>

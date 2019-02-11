@@ -86,6 +86,7 @@ export default can.Control.extend({
         $.ajax({
           url: view,
           dataType: 'text',
+          async: false,
         }).then((view) => {
           let frag = can.stache(view)(context);
           this.element.html(frag);

@@ -35,7 +35,7 @@
 
           {{#if isAllowedToMap}}
             <li>
-              <tree-item-map {instance}="instance"></tree-item-map>
+              <tree-item-map {instance}="{instance}"></tree-item-map>
             </li>
           {{/if}}
 
@@ -57,7 +57,7 @@
 
           <li>
             <show-related-assessments-button
-              {instance}="instance"
+              {instance}="{instance}"
               {reset-styles}="true"
               {show-title}="false"
               {show-icon}="true"

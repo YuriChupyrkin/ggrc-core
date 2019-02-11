@@ -45,7 +45,7 @@
         <input tabindex="4" class="input-block-level" name="ra_manager.email" data-lookup="Person" placeholder="Enter email address" type="text" value="{{firstexist manager.email ''}}" />
         {{else}}
         <inline-autocomplete-wrapper
-          {instance}="instance"
+          {instance}="{instance}"
           {path}="'ra_manager'"
           {display-prop}="'email'"
           {text-value}="manager.email">
@@ -74,7 +74,7 @@
         <input tabindex="5" class="input-block-level" name="ra_counsel.email" data-lookup="Person" placeholder="Enter email address" type="text" value="{{firstexist counsel.email ''}}" />
         {{else}}
         <inline-autocomplete-wrapper
-          {instance}="instance"
+          {instance}="{instance}"
           {path}="'ra_counsel'"
           {display-prop}="'email'"
           {text-value}="counsel.email">
@@ -145,8 +145,8 @@
         <i class="fa fa-question-circle" rel="tooltip" title="Indicates the status of this object."></i>
         <a data-id="hide_state_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
       </label>
-        <dropdown options-list="model.statuses"
-                  name="instance.status"
+        <dropdown {options-list}="{model.statuses}"
+                  {name}="{instance.status}"
                   tabindex="9">
         </dropdown>
     </div>

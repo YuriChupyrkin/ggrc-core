@@ -20,7 +20,7 @@
           {type}="type"
           {(value)}="value"
           {field-id}="id"
-          {placeholder}="placeholder"
+          {placeholder}="{placeholder}"
           {options}="options"
           (value-changed)="fieldValueChanged(%event, %context)"
           class="form-field__content custom-attribute-{{type}}"

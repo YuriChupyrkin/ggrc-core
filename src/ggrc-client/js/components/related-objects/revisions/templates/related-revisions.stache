@@ -29,9 +29,9 @@
     <object-list {items}="visibleRevisions" {is-loading}="loading" {list-type}="'GRID'">
       <related-revisions-item
         class="object-history__row flex-box"
-        {instance}="instance"
+        {instance}="{instance}"
         {last-revision}="lastRevision"
-        {revision}=".">
+        {revision}="{.}">
       </related-revisions-item>
     </object-list>
   </div>

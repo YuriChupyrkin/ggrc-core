@@ -18,7 +18,7 @@
   </div>
 
   <div class="proposal-confirm__actions">
-    <spinner toggle="isLoading"></spinner>
+    <spinner toggle="{isLoading}"></spinner>
     {{#if canDisplayApplyButton}}
       <button type="button"
         class="btn btn-green proposal-confirm__button"

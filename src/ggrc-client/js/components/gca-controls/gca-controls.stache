@@ -35,7 +35,7 @@
       {type}="attributeType"
       {(value)}="value"
       {field-id}="customAttributeId"
-      {placeholder}="placeholder"
+      {placeholder}="{placeholder}"
       {options}="multiChoiceOptions"
       (value-changed)="updateGlobalAttribute(%event, %context)"
       class="form-field__content custom-attribute-{{attributeType}}"

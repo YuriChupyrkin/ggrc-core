@@ -72,7 +72,7 @@
           </div>
           <div class="flex-size-3">
 	            {{#instance.snapshots}}
-		            <business-object-list-item {instance}="."></business-object-list-item>
+		            <business-object-list-item {instance}="{.}"></business-object-list-item>
             {{/instance.snapshots}}
           </div>
           <div class="flex-size-3">
@@ -86,7 +86,7 @@
                                          {disabled}="isSaving"
                                          {reuse-allowed}="{{isAllowedToReuse .}}"
                                          {(selected-list)}="selectedEvidences">
-                    <document-object-list-item {instance}="instance"></document-object-list-item>
+                    <document-object-list-item {instance}="{instance}"></document-object-list-item>
 
                     {{^ifAllowedToReuse ../.}}
                     <div class="reusable-objets-item__control">

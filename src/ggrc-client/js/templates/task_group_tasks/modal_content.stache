@@ -91,7 +91,7 @@
     </div>
     <div class="span4">
         <access-control-list-roles-helper
-                {instance}="instance"
+                {instance}="{instance}"
                 {is-new-instance}="new_object_form">
         </access-control-list-roles-helper>
         {{#using task_group=instance.task_group}}

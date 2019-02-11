@@ -8,5 +8,5 @@
              {^editor-has-focus}="editorHasFocus"
              {disabled}="disabled"
              {hidden-toolbar}="true"
-             {placeholder}="placeholder"></rich-text>
+             {placeholder}="{placeholder}"></rich-text>
 </div>

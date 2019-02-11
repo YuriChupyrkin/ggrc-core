@@ -4,7 +4,7 @@
 }}
 
 <simple-modal {state}="state"
-              {instance}="instance"
+              {instance}="{instance}"
               {replace-content}="true"
               {extra-css-class}="'mandatory-fields'">
   <div class="simple-modal__header">
@@ -28,7 +28,7 @@
       {{#if showCAs}}
         <div class="ggrc-form">
           <gca-controls
-            {instance}="instance"
+            {instance}="{instance}"
             {items}="caFields">
           </gca-controls>
         </div>

@@ -34,7 +34,7 @@
       <div class="task_group_tasks__list">
         <object-list
           {items}="items"
-          {is-loading}="isLoading"
+          {is-loading}="{isLoading}"
           {list-type}="'GRID'">
             {{> /static/templates/task_group_tasks/task_group_subtree.stache}}
         </object-list>

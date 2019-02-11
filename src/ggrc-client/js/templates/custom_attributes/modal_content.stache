@@ -8,7 +8,7 @@
   {{^if_instance_of instance 'Assessment'}}
     <div class="ggrc-form">
       <gca-controls
-        {instance}="instance"
+        {instance}="{instance}"
         allow-hide="true"
       ></gca-controls>
     </div>
