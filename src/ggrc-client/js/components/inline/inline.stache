@@ -25,14 +25,14 @@
             <text-form-field
               {value}="value"
               class="inline__content-input inline-input-form-field"
-              {placeholder}="placeholder"
+              {placeholder}="{placeholder}"
               (value-changed)="fieldValueChanged(%event)"
             ></text-form-field>
           {{/case}}
           {{#case 'text'}}
             <rich-text-form-field {value}="value"
               class="inline__content-input"
-              {placeholder}="placeholder"
+              {placeholder}="{placeholder}"
               (value-changed)="fieldValueChanged(%event)"
             ></rich-text-form-field>
           {{/case}}
@@ -57,7 +57,7 @@
           {{#case 'number'}}
             <numberbox-form-field
               class="inline__content-input inline-input-form-field"
-              {placeholder}="placeholder"
+              {placeholder}="{placeholder}"
               {value}="value"
               (value-changed)="fieldValueChanged(%event)"
             ></numberbox-form-field>

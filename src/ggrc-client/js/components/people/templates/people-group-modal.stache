@@ -29,7 +29,7 @@
         Add person
       </p>
       {{#if isLoading}}
-        <spinner {toggle}="isLoading"></spinner>
+        <spinner {toggle}="{isLoading}"></spinner>
       {{else}}
         {{#if_config_exist 'external_services.Person'}}
           <external-data-autocomplete
@@ -51,7 +51,7 @@
       <div>
         <object-list
           ({items})="people"
-          {is-disabled}="isLoading"
+          {is-disabled}="{isLoading}"
           {empty-message}="emptyListMessage">
             <person-data {person}="{.}">
               {{#unmapablePerson}}

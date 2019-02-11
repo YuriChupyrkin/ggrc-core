@@ -4,11 +4,11 @@
 }}
 
 <div class="info-pane-utility">
-    <questions-link {instance}="instance">
+    <questions-link {instance}="{instance}">
       Questionnaire
       <i class="fa fa-external-link"></i>
     </questions-link>
-    <show-related-assessments-button instance="instance" extra-btn-css="btn-small"></show-related-assessments-button>
+    <show-related-assessments-button {instance}="{instance}" extra-btn-css="btn-small"></show-related-assessments-button>
     {{#if instance.snapshot}}
         {{> /static/templates/snapshots/dropdown_menu.stache}}
     {{else}}

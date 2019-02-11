@@ -8,7 +8,7 @@
     {{#is page_instance.type "Issue"}}
       <issue-unmap
         {issue-instance}="page_instance"
-        {target}="instance">
+        {target}="{instance}">
           <li class="border">
             <span class="unmap-link">
               <i class="fa fa-ban"></i>Unmap
@@ -17,7 +17,7 @@
       </issue-unmap>
     {{else}}
         <issue-unmap
-          {issue-instance}="instance"
+          {issue-instance}="{instance}"
           {target}="page_instance">
             <li class="border">
               <span class="unmap-link">

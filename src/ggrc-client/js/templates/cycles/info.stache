@@ -21,7 +21,7 @@
               {{/if}}
               {{^if isSnapshot}}
                 <span class="proposal">
-                  <create-proposal-button {instance}="instance">
+                  <create-proposal-button {instance}="{instance}">
                   </create-proposal-button>
                 </span>
               {{/if}}
@@ -52,7 +52,7 @@
                       </li>
                     {{/if}}
                     <li>
-                      <permalink {instance}="instance"/>
+                      <permalink {instance}="{instance}"/>
                     </li>
                   </ul>
                 </div>

@@ -57,7 +57,7 @@
 {{#if_instance_of instance 'Cycle'}}
 <div class="flex-box item-actions">
   <div class="request-control">
-     <cycle-end-cycle cycle="instance">
+     <cycle-end-cycle cycle="{instance}">
        {{#isAllowedToUpdateWorkflow}}
          {{#if instance.is_current}}
            <button type="button" class="btn btn-white btn-small end-cycle">End Cycle</button>

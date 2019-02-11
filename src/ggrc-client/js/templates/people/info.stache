@@ -81,16 +81,16 @@
             {{> /static/templates/custom_attributes/info.stache}}
           </tab-panel>
           <tab-panel {(panels)}="panels" title-text="Change Log">
-            <revision-log {instance}="instance" {options}="tabOptions"></revision-log>
+            <revision-log {instance}="{instance}" {options}="{tabOptions}"></revision-log>
           </tab-panel>
         </tab-container>
       </div>
     </section>
 
     {{#if is_info_widget}}
-      <info-pane-footer {created-at}="instance.created_at"
-                        {modified-at}="instance.updated_at"
-                        {modified-by}="instance.modified_by">
+      <info-pane-footer {created-at}="{instance.created_at}"
+                        {modified-at}="{instance.updated_at}"
+                        {modified-by}="{instance.modified_by}">
       </info-pane-footer>
     {{/if}}
   {{/if_helpers}}

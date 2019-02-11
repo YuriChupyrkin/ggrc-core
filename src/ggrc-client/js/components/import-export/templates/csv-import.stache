@@ -23,7 +23,7 @@
     <div class="import-section import-buttons">
       {{#switch state}}
         {{#case 'Select'}}
-          <spinner {toggle}="isLoading"></spinner>
+          <spinner {toggle}="{isLoading}"></spinner>
 
           <button type="button"
                   ($click)="selectFile()"

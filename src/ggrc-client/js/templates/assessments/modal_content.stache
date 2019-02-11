@@ -5,7 +5,7 @@
 
 {{!div class="modal-body"}}
   <div class="ggrc-form">
-    <assessment-modal {instance}="instance" {is-new-instance}="new_object_form">
+    <assessment-modal {instance}="{instance}" {is-new-instance}="new_object_form">
       {{#instance}}
     <form action="javascript://">
 
@@ -29,7 +29,7 @@
           </label>
           <assessment-object-type-dropdown
 	    class="input-medium"
-            {instance}="instance"
+            {instance}="{instance}"
             {(assessment-type)}="instance.assessment_type">
             <dropdown
               {options-groups}="objectTypes"
@@ -43,7 +43,7 @@
             Label
           </label>
           <multi-select-label only-edit-mode="true"
-                              {instance}="instance"
+                              {instance}="{instance}"
                               {labels}="instance.labels">
           </multi-select-label>
         </div>
@@ -88,14 +88,14 @@
 
       <div class="ggrc-form-item width-100">
         <div class="ggrc-form-item__row">
-        <assessment-people {instance}="instance" info-pane-mode=false>
+        <assessment-people {instance}="{instance}" info-pane-mode=false>
         </assessment-people>
         </div>
       </div>
 
       <div class="ggrc-form-item">
         <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
-          <checkbox-to-list property="recipients" instance="instance" class="flex-box">
+          <checkbox-to-list property="recipients" {instance}="{instance}" class="flex-box">
             <div class="ggrc-form-item__checkbox-item">
               <label class="input--inline">
                   <input
@@ -132,7 +132,7 @@
         <div class="ggrc-form-item__row">
           <deferred-mapper
                   class="width-100"
-                  {instance}="instance"
+                  {instance}="{instance}"
                   {mapped-objects}="mappedObjects"
                   {use-snapshots}="true">
             <label class="ggrc-form-item__label">
@@ -144,7 +144,7 @@
                   <div class="modal-mapped-objects-item__details">
                     <object-list-item-updater {target-instance}="{.}">
                       {{#if instanceUpdated}}
-                        <business-object-list-item {instance}="instance">
+                        <business-object-list-item {instance}="{instance}">
                           <div class="description">
                             <read-more {text}="itemData.description" max-lines-number="1"></read-more>
                           </div>
@@ -166,7 +166,7 @@
               <div class="objective-selector">
                 <map-button-using-assessment-type
                   {{data "deferred_to"}}
-                  {instance}="instance">
+                  {instance}="{instance}">
                       <a class="section-add section-sticky btn btn-small btn-white assessment-map-btn"
                         href="javascript://"
                         data-placement="left"
@@ -225,10 +225,10 @@
             <issue-tracker-switcher
               set-issue-title="true"
               {default-title}="instance.title"
-              {instance}="instance"
+              {instance}="{instance}"
               {(is-integration-enabled)}="instance.issue_tracker.enabled">
                 <modal-issue-tracker-fields
-                  {instance}="instance"
+                  {instance}="{instance}"
                   {allow-to-change-id}="true"
                   {linking-note}="'Please leave this empty for a new ticket to be generated and linked to this assessment. If you would like to link to an existing ticket please provide the ticket number.''"
                   {set-issue-title}="setIssueTitle"

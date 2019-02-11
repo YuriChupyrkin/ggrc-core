@@ -62,7 +62,7 @@
     {{/if}}
     <request-review-modal
       {review}="review"
-      {parent-instance}="instance"
+      {parent-instance}="{instance}"
       {(modal-state)}="reviewersModalState"
       (reviewers-updated)="reviewersUpdated(%event)">
     </request-review-modal>

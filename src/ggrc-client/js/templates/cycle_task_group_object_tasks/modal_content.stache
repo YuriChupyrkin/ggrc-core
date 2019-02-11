@@ -4,7 +4,7 @@
 }}
 
 <cycle-task-modal
-  {instance}="instance"
+  {instance}="{instance}"
   {pre-mapped-stubs}="object_params.pre_mapped_objects"
 >
 <form action="javascript://" class="form">
@@ -43,7 +43,7 @@
         <option value="checkbox" {{#if_equals instance.task_type 'checkbox'}}selected="selected"{{/if_equals}}>Checkbox</option>
       </select>
       <deferred-mapper
-          {instance}="instance"
+          {instance}="{instance}"
           {mapped-objects}="mappedObjects"
           {pre-mapped-objects}="preMappedObjects"
         >
@@ -86,7 +86,7 @@
     <div class="span4">
       <div class="{{#instance.computed_errors.contact}} field-failure {{/instance.computed_errors.contact}}">
         <access-control-list-roles-helper
-                {instance}="instance"
+                {instance}="{instance}"
                 {is-new-instance}="new_object_form">
         </access-control-list-roles-helper>
       </div>

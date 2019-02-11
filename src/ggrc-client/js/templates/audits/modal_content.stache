@@ -52,8 +52,8 @@
           <a data-id="hide_status_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
         </label>
         <div tabindex="4">
-            <dropdown options-list="model.statuses"
-                      name="instance.status"
+            <dropdown {options-list}="{model.statuses}"
+                      {name}="{instance.status}"
                       tabindex="23">
             </dropdown>
         </div>
@@ -62,7 +62,7 @@
     <div class="row-fluid">
       <div class="span12 hide-wrap hidable">
         <access-control-list-roles-helper
-          {instance}="."
+          {instance}="{.}"
           {is-new-instance}="new_object_form">
         </access-control-list-roles-helper>
       </div>
@@ -148,13 +148,13 @@
         </div>
       </div>
       <div data-id="folder_hidden" class="span3 hidable">
-        <ggrc-gdrive-folder-picker instance="instance" deferred="true" tabindex="13"></ggrc-gdrive-folder-picker>
+        <ggrc-gdrive-folder-picker {instance}="{instance}" deferred="true" tabindex="13"></ggrc-gdrive-folder-picker>
       </div>
       <div class="span3 hidable">
         <deferred-mapper
-          {instance}="instance">
+          {instance}="{instance}">
           <related-documents
-            {instance}="instance"
+            {instance}="{instance}"
             {model-type}="'Evidence'"
             {kind}="'URL'"
             {autorefresh}="false"
@@ -162,10 +162,10 @@
             (remove-mappings)="removeMappings(%event.object)">
             <related-urls
               tabindex="20"
-              {instance}="instance"
+              {instance}="{instance}"
               {allow-to-remove}="new_object_form"
               {(urls)}="documents"
-              {is-disabled}="isLoading"
+              {is-disabled}="{isLoading}"
               (createUrl)="markDocumentForAddition(%event.payload)"
               (removeUrl)="markDocumentForDeletion(%event.payload)">
               <label>
@@ -226,10 +226,10 @@
         <div class="hidden-fields-area">
           <div class="ggrc-form">
             <issue-tracker-switcher
-              {instance}="instance"
+              {instance}="{instance}"
               {(is-integration-enabled)}="instance.issue_tracker.enabled">
                 <modal-issue-tracker-fields
-                  {instance}="instance"
+                  {instance}="{instance}"
                   {note}="'Turns on Ticket Tracker integration.'">
                 </modal-issue-tracker-fields>
             </issue-tracker-switcher>

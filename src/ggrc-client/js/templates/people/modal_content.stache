@@ -5,7 +5,7 @@
 
 <div class="hideable-holder">
 {{#instance}}
-<person-modal {instance}="instance" {is-new-instance}="new_object_form">
+<person-modal {instance}="{instance}" {is-new-instance}="new_object_form">
   <form action="javascript://">
     {{> /static/templates/base_objects/form_restore.stache}}
 

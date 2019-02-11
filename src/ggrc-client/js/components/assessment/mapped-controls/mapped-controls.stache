@@ -2,8 +2,8 @@
     Copyright (C) 2019 Google Inc.
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
-<object-list {(selected-item)}="selectedItem" {items}="mappedItems">
-    <business-object-list-item {instance}="instance">
+<object-list {(selected-item)}="{selectedItem}" {items}="{mappedItems}">
+    <business-object-list-item {instance}="{instance}">
         {{^if withoutDetails}}
             <read-more class="description" {text}="itemData.description"></read-more>
             <div class="more-information-wrapper">
@@ -33,18 +33,18 @@
         </button>
     </div>
     <div class="simple-modal__body mapped-controls-info__body {{#if isLoading}}loading{{/if}}">
-        <spinner {toggle}="isLoading" class="spinner-wrapper active"
+        <spinner {toggle}="{isLoading}" class="spinner-wrapper active"
                  extra-css-class="grid-spinner"></spinner>
         {{^if withoutDetails}}
         <collapsible-panel title-text="{{assessmentType}} Info"
                            expanded="true">
-            <detailed-business-object-list-item {instance}="instance"
+            <detailed-business-object-list-item {instance}="{instance}"
                                                 {custom-attributes}="customAttributes"
                                                 class="mapped-object-info">
             </detailed-business-object-list-item>
         </collapsible-panel>
         {{else}}
-            <detailed-business-object-list-item {instance}="instance"
+            <detailed-business-object-list-item {instance}="{instance}"
                     {custom-attributes}="customAttributes"
                     class="mapped-object-info">
             </detailed-business-object-list-item>

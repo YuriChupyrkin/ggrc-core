@@ -11,17 +11,17 @@
       <div class="people-groups">
         {{#groups}}
           <related-people-access-control-group
-            {group-id}="groupId"
-            {title}="title"
-            {people}="people"
-            {instance}="instance"
+            {group-id}="{groupId}"
+            {title}="{title}"
+            {people}="{people}"
+            {instance}="{instance}"
             class="people-group">
               <deletable-people-group
                 {can-unmap}="deletableAdmin"
-                {is-loading}="isUpdating"
-                {group-id}="groupId"
-                {instance}="instance"
-                {people}="people">
+                {is-loading}="{isUpdating}"
+                {group-id}="{groupId}"
+                {instance}="{instance}"
+                {people}="{people}">
                   <h6>Admin</h6>
               </deletable-people-group>
           </related-people-access-control-group>

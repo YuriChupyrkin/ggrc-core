@@ -49,19 +49,19 @@
           </div>
           <div class="row-fluid wrap-row">
             <div>
-              <custom-roles {instance}="instance"></custom-roles>
+              <custom-roles {instance}="{instance}"></custom-roles>
             </div>
           </div>
 
           <div class="row-fluid wrap-row">
               <related-documents
-                {instance}="instance"
+                {instance}="{instance}"
                 {model-type}="'Evidence'"
                 {kind}="'URL'">
                 <related-urls
-                  {instance}="instance"
+                  {instance}="{instance}"
                   {(urls)}="documents"
-                  {is-disabled}="isLoading"
+                  {is-disabled}="{isLoading}"
                   {is-not-editable}="instance.archived"
                   (createUrl)="createRelatedDocument(%event.payload)"
                   (removeUrl)="removeRelatedDocument(%event.payload)">
@@ -79,12 +79,12 @@
                   <ggrc-gdrive-folder-picker
                     {hide-label}="true"
                     {readonly}="true"
-                    {instance}="instance">
+                    {instance}="{instance}">
                   </ggrc-gdrive-folder-picker>
                 {{else}}
                   <ggrc-gdrive-folder-picker
                     {hide-label}="true"
-                    {instance}="instance">
+                    {instance}="{instance}">
                   </ggrc-gdrive-folder-picker>
                 {{/if_helpers}}
             </div>
@@ -167,10 +167,10 @@
 
               {{#if instance.can_use_issue_tracker}}
                 <info-issue-tracker-fields
-                  {instance}="instance"
+                  {instance}="{instance}"
                   {note}="'Turns on Ticket Tracker integration.'">
                   {{^if instance.archived}}
-                    <generate-issues-in-bulk-button {instance}="instance">
+                    <generate-issues-in-bulk-button {instance}="{instance}">
                     </generate-issues-in-bulk-button>
                   {{/if}}
                 </info-issue-tracker-fields>
@@ -180,13 +180,13 @@
           {{> /static/templates/custom_attributes/info.stache}}
         </tab-panel>
         <tab-panel {(panels)}="panels" title-text="Change Log">
-            <revision-log {instance}="instance" {options}="tabOptions"></revision-log>
+            <revision-log {instance}="{instance}" {options}="{tabOptions}"></revision-log>
         </tab-panel>
       </tab-container>
     </div>
   </section>
 
   {{#if is_info_widget}}
-    <info-pane-footer {created-at}="instance.created_at" {modified-at}="instance.updated_at" {modified-by}="instance.modified_by"></info-pane-footer>
+    <info-pane-footer {created-at}="{instance.created_at}" {modified-at}="{instance.updated_at}" {modified-by}="{instance.modified_by}"></info-pane-footer>
   {{/if}}
 {{/instance}}

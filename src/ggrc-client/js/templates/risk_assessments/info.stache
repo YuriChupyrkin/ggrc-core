@@ -25,12 +25,12 @@
 
             <div class="row-fluid wrap-row">
               <div class="span4">
-                <related-documents {instance}="instance" kind="FILE">
+                <related-documents {instance}="{instance}" kind="FILE">
                   <h6>Supporting files</h6>
                   <object-list {items}="documents" {empty-message}="noItemsText">
                     <editable-document-object-list-item {document}="{.}">
                       <unmap-button
-                        {destination}="instance"
+                        {destination}="{instance}"
                         {source}="document">
                         <action-toolbar-control>
                           <i class="fa fa-trash"></i>
@@ -41,7 +41,7 @@
 
                   {{#is_allowed 'update'}}
                     <ggrc-gdrive-picker-launcher
-                      instance="instance"
+                      {instance}="{instance}"
                       link_text="Attach supporting file"
                       (finish)="loadDocuments"
                       click_event="trigger_upload">
@@ -115,7 +115,7 @@
           <div class="info-pane__sidebar">
             <div class="info-pane__section-title">Responses/Comments</div>
             <comments-section class="flex-box flex-col"
-              {instance}="instance"
+              {instance}="{instance}"
               {notification}="'Notify Admins, Primary and Secondary Contacts'">
             </comments-section>
           </div>
@@ -124,7 +124,7 @@
       </tab-panel>
       {{^if isSnapshot}}
         <tab-panel {(panels)}="panels" title-text="Change Log">
-            <revision-log {instance}="instance" {options}="tabOptions"></revision-log>
+            <revision-log {instance}="{instance}" {options}="{tabOptions}"></revision-log>
         </tab-panel>
       {{/if}}
     </tab-container>

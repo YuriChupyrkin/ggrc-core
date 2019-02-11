@@ -10,14 +10,14 @@
         {{^if isMapperDetails}}
             <li>
                 <snapshot-comparer-config
-                    {instance}="instance"
+                    {instance}="{instance}"
                     {left-revision-id}="instance.snapshot.revision_id"
                     {right-revisions}="instance.snapshot.revisions">
                     <revisions-comparer
                         {modal-title}="modalTitle"
                         {modal-confirm}="modalConfirm"
                         {button-view}="buttonView"
-                        {instance}="instance"
+                        {instance}="{instance}"
                         {left-revision-id}="leftRevisionId"
                         {right-revision}="rightRevision">
                         <a href="javascript://" can-click="compareIt">

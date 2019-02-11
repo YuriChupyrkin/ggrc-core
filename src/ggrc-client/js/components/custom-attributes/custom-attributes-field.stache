@@ -9,7 +9,7 @@
         class="inline-input-form-field"
         {value}="value"
         {field-id}="fieldId"
-        {placeholder}="placeholder"
+        {placeholder}="{placeholder}"
         {disabled}="disabled"
         (value-changed)="fieldValueChanged(%event)"
     ></text-form-field>
@@ -17,7 +17,7 @@
   {{#case 'text'}}
     <rich-text-form-field {value}="value"
 			  {field-id}="fieldId"
-			  {placeholder}="placeholder"
+			  {placeholder}="{placeholder}"
 			  {disabled}="disabled"
 			  (value-changed)="fieldValueChanged(%event)"
     ></rich-text-form-field>

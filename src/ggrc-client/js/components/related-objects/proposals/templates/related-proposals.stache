@@ -37,11 +37,11 @@
       </div>
     </div>
     <div class="object-history__body {{#isLoading}}loading{{/isLoading}}">
-      <object-list {items}="relatedObjects" {is-loading}="isLoading" {list-type}="'GRID'">
+      <object-list {items}="relatedObjects" {is-loading}="{isLoading}" {list-type}="'GRID'">
         <related-proposals-item
           class="object-history__row flex-box"
           {instance}="baseInstance"
-          {proposal}="instance">
+          {proposal}="{instance}">
         </related-proposals-item>
       </object-list>
     </div>

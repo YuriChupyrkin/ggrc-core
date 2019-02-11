@@ -19,7 +19,7 @@
                               <div class="info-pane-utility">
                                   {{^if instance.archived}}
                                       <add-object-button
-                                          instance="instance"
+                                          {instance}="{instance}"
                                           linkclass="btn btn-small btn-white"
                                           content="Create assessment"
                                           text="Create Assessment"
@@ -28,14 +28,14 @@
                                       </add-object-button>
 
                                       <add-object-button
-                                          instance="instance"
+                                          {instance}="{instance}"
                                           linkclass="btn btn-small btn-darkBlue"
                                           content="Create Template"
                                           text="Define Assessment Template"
                                           singular="AssessmentTemplate"
                                           plural="assessment_templates">
                                       </add-object-button>
-                                      <assessment-generator-button audit="instance" button='true'></assessment-generator-button>
+                                      <assessment-generator-button audit="{instance}" button='true'></assessment-generator-button>
                                   {{/if}}
                               </div>
                             </div>
@@ -123,7 +123,7 @@
                                     {{#is_allowed 'create' 'Assessment' context=instance.context}}
                                         Start by
                                         <add-object-button
-                                            instance="instance"
+                                            {instance}="{instance}"
                                             content="creating an assessment template"
                                             text="Define Assessment Template"
                                             singular="AssessmentTemplate"
@@ -131,7 +131,7 @@
                                         </add-object-button>
                                         or add an
                                         <add-object-button
-                                            instance="instance"
+                                            {instance}="{instance}"
                                             content="assessment manually"
                                             text="Create Assessment"
                                             singular="Assessment"

@@ -9,17 +9,15 @@
     <div class="ggrc-form-item">
       <div class="ggrc-form-item__multiple-row">
         <label class="form-label ggrc-form-item__label">State</label>
-        <dropdown
-          options-list="model.statuses"
-          name="instance.status">
+        <dropdown {options-list}="{model.statuses}"
+                  {name}="{instance.status}">
         </dropdown>
       </div>
       <div class="ggrc-form-item__multiple-row">
         <label class="form-label ggrc-form-item__label">Document Type</label>
-        <dropdown
-          options-list="model.kinds"
-          name="instance.kind"
-          {{^if new_object_form}}is-disabled="true"{{/if}}>
+        <dropdown {options-list}="{model.kinds}"
+                  {name}="{instance.kind}"
+                  {{^if new_object_form}}is-disabled="true"{{/if}}>
         </dropdown>
       </div>
     </div>
@@ -35,7 +33,7 @@
           <i class="fa fa-asterisk"></i>
         </label>
         <document-object-list-item
-          {instance}="instance">
+          {instance}="{instance}">
         </document-object-list-item>
       </div>
     </div>
@@ -58,7 +56,7 @@
     </div>
 
     <access-control-list-roles-helper
-      {instance}="."
+      {instance}="{.}"
       {is-new-instance}="new_object_form">
     </access-control-list-roles-helper>
 

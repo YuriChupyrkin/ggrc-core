@@ -5,7 +5,7 @@
 
 {{#if instance}}
   <cycle-task-group-object-task
-    {instance}="instance"
+    {instance}="{instance}"
   >
   </cycle-task-group-object-task>
 {{/if}}

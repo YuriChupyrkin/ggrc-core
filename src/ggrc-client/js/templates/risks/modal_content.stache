@@ -127,8 +127,8 @@
   <div class="row">
     <div class="span12 hide-wrap hidable">
       <access-control-list-roles-helper
-        {instance}="."
-        {is-proposal}="isProposal"
+        {instance}="{.}"
+        {is-proposal}="{isProposal}"
         {is-new-instance}="new_object_form">
       </access-control-list-roles-helper>
     </div>
@@ -165,7 +165,7 @@
   {{^if isProposal}}
     <div class="row-fluid">
       <div data-id="folder_hidden" class="span6 hidable">
-        <ggrc-gdrive-folder-picker instance="instance" deferred="true" tabindex="9">
+        <ggrc-gdrive-folder-picker {instance}="{instance}" deferred="true" tabindex="9">
         </ggrc-gdrive-folder-picker>
       </div>
     </div>
@@ -184,7 +184,7 @@
       </div>
     {{/if}}
     <div class="span4 hidable">
-      <effective-dates instance="instance"/>
+      <effective-dates {instance}="{instance}"/>
     </div>
   </div>
 
@@ -196,10 +196,10 @@
            title="Indicates the status of this object."></i>
         <a href="javascript://" class="field-hide" tabindex="-1">hide</a>
       </label>
-        <dropdown options-list="model.statuses"
-                  no-value="true"
-                  no-value-label="---"
-                  name="instance.status"
+        <dropdown {options-list}="{model.statuses}"
+                  {no-value}="{true}"
+                  {no-value-label}="'---'"
+                  {name}="{instance.status}"
                   tabindex="23">
         </dropdown>
     </div>

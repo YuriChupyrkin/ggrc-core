@@ -19,7 +19,7 @@
         {{#if isDirective}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             type="Requirement"
                             {add-content}="@addContent"
             ></mapped-counter>
@@ -29,14 +29,14 @@
         {{#if isRequirement}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             {add-content}="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             type="Objective"
                             {add-content}="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             type="Control"
                             {add-content}="@addContent"
             ></mapped-counter>
@@ -46,10 +46,10 @@
         {{#if isCycleTaskGroupObjectTask}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             {add-content}="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             type="Comment"
                             {add-content}="@addContent"
                             (deferred-update-counter)="addDeferredContent(%event)"
@@ -64,7 +64,7 @@
         {{#if isCycleTaskGroup}}
           <section>
             <h3 class="task-list-title">Number of mapped tasks</h3>
-            <mapped-counter {instance}="instance"
+            <mapped-counter {instance}="{instance}"
                             type="CycleTaskGroupObjectTask"
                             {add-content}="@addContent"
             ></mapped-counter>

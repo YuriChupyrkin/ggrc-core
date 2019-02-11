@@ -56,19 +56,19 @@
   <collapsible-panel {soft-mode}="true" {title-text}="'Search Results ({{*totalObjects}})'" {(expanded)}="showResults">
     <div class="search-results">
       <mapper-results
-        base-instance="parentInstance"
-        {(is-loading)}="is_loading"
-        object="object"
-        type="type"
-        selected="selected"
-        submit-cbs="submitCbs"
-        default-sort="defaultSort"
+        {base-instance}="{parentInstance}"
+        {(is-loading)}="{is_loading}"
+        {object}="{object}"
+        {type}="{type}"
+        {selected}="{selected}"
+        {submit-cbs}="{submitCbs}"
+        {default-sort}="{defaultSort}"
         {^paging.total}="*totalObjects"
-        {(entries)}="entries"
+        {(entries)}="{entries}"
         {filter-items}="*filterItems"
         {status-item}="*statusItem"
-        (loaded)="onLoaded()"
-        {apply-owned-filter}="reduceToOwnedItems">
+        (loaded)="{onLoaded()}"
+        {apply-owned-filter}="{reduceToOwnedItems}">
       </mapper-results>
     </div>
   </collapsible-panel>

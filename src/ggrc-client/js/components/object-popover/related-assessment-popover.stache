@@ -33,7 +33,7 @@
                 <mapped-objects
                         {parent-instance}="parentInstance"
                         {related-types}="relatedTypes">
-                    <comment-list-item {instance}="instance"></comment-list-item>
+                    <comment-list-item {instance}="{instance}"></comment-list-item>
                 </mapped-objects>
             </related-comments>
         </tab-panel>

@@ -30,7 +30,7 @@
                 <div class="simple-modal__section-title">Evidence file
                     <spinner class="simple-modal__section-title-icon" {toggle}="isUpdatingEvidences"></spinner>
                 </div>
-                <object-list {items}="evidences" {empty-message}="noItemsText">
+                <object-list {items}="{evidences}" {empty-message}="{noItemsText}">
                     <editable-document-object-list-item {document}="{.}">
                         <a ($click)="removeRelatedItem(document, 'files')">
                             <action-toolbar-control>
@@ -43,14 +43,14 @@
                     (before-create)="addItems(%event, 'files')"
                     (finish)="verifyObjects('files', 'Evidence')"
                     {is-attach-action-disabled}="isUpdatingEvidences"
-                    {instance}="instance">
+                    {instance}="{instance}">
                 </attach-button>
             </div>
         {{/if}}
         {{#if url}}
             <div class="simple-modal__section">
                 <div class="simple-modal__section-title">Evidence url</div>
-                <object-list {items}="urls" {empty-message}="noItemsText">
+                <object-list {items}="{urls}" {empty-message}="{noItemsText}">
                     <editable-document-object-list-item {document}="{.}">
                         <a ($click)="removeRelatedItem(document, 'urls')">
                             <action-toolbar-control>

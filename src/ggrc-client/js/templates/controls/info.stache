@@ -8,11 +8,11 @@
     <div class="tier-content">
       {{> /static/templates/base_objects/general-page-header.stache}}
 
-      <tab-container {instance}="instance">
+      <tab-container {instance}="{instance}">
         <tab-panel {(panels)}="panels" title-text="Attributes">
           <div class="info-pane__body">
             <div class="info-pane__main-content {{^if isSnapshot}}info-pane__main-content-with-sidebar{{/if}}">
-              <object-review {instance}="instance"></object-review>
+              <object-review {instance}="{instance}"></object-review>
               {{> /static/templates/base_objects/description.stache}}
               {{> /static/templates/base_objects/test_plan.stache}}
               {{> /static/templates/base_objects/notes.stache}}
@@ -20,7 +20,7 @@
               {{> /static/templates/base_objects/reference-urls.stache}}
               <div class="row-fluid wrap-row">
                 <folder-attachments-list {title}="'Attachment'"
-                                      {instance}="instance"
+                                      {instance}="{instance}"
                                       {is-snapshot}="isSnapshot">
                 </folder-attachments-list>
               </div>
@@ -149,7 +149,7 @@
                       {{#if assertions}}
                         {{#if_helpers '\n #if' instance.snapshot '\n or #if' instance.isRevision}}
                             <ul>
-                              <sort-by is-snapshot="true" {items}="assertions">
+                              <sort-by is-snapshot="{true}" {items}="{assertions}">
                                 {{#sortedItems}}
                                   <li>{{name}}</li>
                                 {{/sortedItems}}
@@ -173,7 +173,7 @@
                       {{#if categories}}
                         {{#if_helpers '\n #if' instance.snapshot '\n or #if' instance.isRevision}}
                             <ul>
-                              <sort-by is-snapshot="true" {items}="categories">
+                              <sort-by is-snapshot="{true}" {items}="{categories}">
                                 {{#sortedItems}}
                                   <li>{{name}}</li>
                                 {{/sortedItems}}
@@ -181,7 +181,7 @@
                             </ul>
                           {{else}}
                             <ul>
-                              <sort-by {items}="categories">
+                              <sort-by {items}="{categories}">
                                 {{#sortedItems}}
                                   <li>{{name}}</li>
                                 {{/sortedItems}}
@@ -201,7 +201,7 @@
             <div class="info-pane__sidebar">
               <div class="info-pane__section-title">Responses/Comments</div>
               <comments-section class="flex-box flex-col"
-                {instance}="instance"
+                {instance}="{instance}"
                 {notification}="'Notify Admins, Control Operators, Control Owners and Other Contacts'">
               </comments-section>
             </div>
@@ -215,19 +215,19 @@
             extra-classes="proposal proposal__tab-warning"
             tab-id="tab-related-proposals"
             {(panels)}="panels"
-            {parent-instance}="instance"
+            {parent-instance}="{instance}"
             {can-display-warning}="true"
             {pre-render-content}="true">
             <related-proposals
               (update-proposals-warning)="updateWarningState(%event)"
-              {base-instance}="instance">
+              {base-instance}="{instance}">
             </related-proposals>
           </tab-panel>
           <tab-panel {(panels)}="panels" title-text="Version History">
-              <related-revisions {instance}="instance"></related-revisions>
+              <related-revisions {instance}="{instance}"></related-revisions>
           </tab-panel>
           <tab-panel tab-id="change-log" {(panels)}="panels" title-text="Change Log">
-              <revision-log {instance}="instance" {options}="tabOptions"></revision-log>
+              <revision-log {instance}="{instance}" {options}="{tabOptions}"></revision-log>
           </tab-panel>
         {{/if}}
       </tab-container>
@@ -235,6 +235,9 @@
   </section>
 
   {{#if is_info_widget}}
-    <info-pane-footer {created-at}="instance.created_at" {modified-at}="instance.updated_at" {modified-by}="instance.modified_by"></info-pane-footer>
+    <info-pane-footer {created-at}="{instance.created_at}"
+                      {modified-at}="{instance.updated_at}"
+                      {modified-by}="{instance.modified_by}">
+    </info-pane-footer>
   {{/if}}
 {{/instance}}
