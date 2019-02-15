@@ -3,13 +3,13 @@
  * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-reusable-objects-item {
+reusable-objects {
   position: relative;
   box-sizing: border-box;
   display: block;
   padding-right: 40px;
 
-  .reusable-objets-item__control {
+  .reusable-objects__control {
     position: absolute;
     display: flex;
     align-items: center;

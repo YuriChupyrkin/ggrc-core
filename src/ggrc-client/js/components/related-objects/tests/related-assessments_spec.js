@@ -304,13 +304,13 @@ describe('related-assessments component', () => {
       });
     });
 
-    describe('checkReuseAbility() method', () => {
+    describe('checkReuseability() method', () => {
       it('returns true if evidence is not a file', () => {
         let evidence = new can.Map({
           kind: 'URL',
         });
 
-        let result = viewModel.checkReuseAbility(evidence);
+        let result = viewModel.checkReuseability(evidence);
 
         expect(result).toBe(true);
       });
@@ -321,7 +321,7 @@ describe('related-assessments component', () => {
           gdrive_id: 'gdrive_id',
         });
 
-        let result = viewModel.checkReuseAbility(evidence);
+        let result = viewModel.checkReuseability(evidence);
 
         expect(result).toBe(true);
       });
@@ -332,7 +332,7 @@ describe('related-assessments component', () => {
           gdrive_id: '',
         });
 
-        let result = viewModel.checkReuseAbility(evidence);
+        let result = viewModel.checkReuseability(evidence);
 
         expect(result).toBe(false);
       });
@@ -351,19 +351,19 @@ describe('related-assessments component', () => {
       beforeEach(() => {
         isAllowedToReuse = Component.prototype.helpers
           .isAllowedToReuse.bind(viewModel);
-        spyOn(viewModel, 'checkReuseAbility');
+        spyOn(viewModel, 'checkReuseability');
         evidence = jasmine.createSpy();
       });
 
-      it('calls checkReuseAbility()', () => {
+      it('calls checkReuseability()', () => {
         isAllowedToReuse(evidence);
 
-        expect(viewModel.checkReuseAbility).toHaveBeenCalled();
+        expect(viewModel.checkReuseability).toHaveBeenCalled();
       });
 
-      it('returns checkReuseAbility result', () => {
+      it('returns checkReuseability result', () => {
         let abilityResult = {test: true};
-        viewModel.checkReuseAbility.and.returnValue(abilityResult);
+        viewModel.checkReuseability.and.returnValue(abilityResult);
 
         let result = isAllowedToReuse(evidence);
 
@@ -384,7 +384,7 @@ describe('related-assessments component', () => {
       beforeEach(() => {
         ifAllowedToReuse = Component.prototype.helpers
           .ifAllowedToReuse.bind(viewModel);
-        spyOn(viewModel, 'checkReuseAbility');
+        spyOn(viewModel, 'checkReuseability');
         evidence = {test: true};
         options = {
           fn: jasmine.createSpy(),
@@ -400,7 +400,7 @@ describe('related-assessments component', () => {
       });
 
       it('calls fn if able to reuse', () => {
-        viewModel.checkReuseAbility.and.returnValue(true);
+        viewModel.checkReuseability.and.returnValue(true);
 
         ifAllowedToReuse(evidence, options);
 
@@ -408,7 +408,7 @@ describe('related-assessments component', () => {
       });
 
       it('calls inverse if not able to reuse', () => {
-        viewModel.checkReuseAbility.and.returnValue(false);
+        viewModel.checkReuseability.and.returnValue(false);
 
         ifAllowedToReuse(evidence, options);
 

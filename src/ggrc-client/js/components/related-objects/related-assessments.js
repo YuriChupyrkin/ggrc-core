@@ -8,14 +8,13 @@ import '../object-list/object-list';
 import '../object-list-item/business-object-list-item';
 import '../object-list-item/document-object-list-item';
 import '../object-popover/related-assessment-popover';
-import '../reusable-objects/reusable-objects-item';
+import '../reusable-objects/reusable-objects';
 import '../state-colors-map/state-colors-map';
 import '../spinner/spinner';
 import '../tree_pagination/tree_pagination';
 import Pagination from '../base-objects/pagination';
 import template from './templates/related-assessments.stache';
 import {prepareCustomAttributes} from '../../plugins/utils/ca-utils';
-import {resolve} from '../../plugins/utils/can-utils';
 import {backendGdriveClient} from '../../plugins/ggrc-gapi-client';
 import tracker from '../../tracker';
 import Evidence from '../../models/business-models/evidence';
@@ -152,14 +151,6 @@ export default can.Component.extend({
           this.attr('loading', false);
         });
     },
-    checkReuseAbility(evidence) {
-      let isFile = evidence.attr('kind') === 'FILE';
-      let isGdriveIdProvided = !!evidence.attr('gdrive_id');
-
-      let isAble = !isFile || isGdriveIdProvided;
-
-      return isAble;
-    },
   },
   init() {
     this.viewModel.loadRelatedAssessments();
@@ -173,22 +164,6 @@ export default can.Component.extend({
     },
     '{viewModel.orderBy} changed'() {
       this.viewModel.loadRelatedAssessments();
-    },
-  },
-  helpers: {
-    isAllowedToReuse(evidence) {
-      evidence = resolve(evidence);
-
-      let isAllowed = this.checkReuseAbility(evidence);
-
-      return isAllowed;
-    },
-    ifAllowedToReuse(evidence, options) {
-      evidence = resolve(evidence);
-
-      let isAllowed = this.checkReuseAbility(evidence);
-
-      return isAllowed ? options.fn(this) : options.inverse(this);
     },
   },
 });

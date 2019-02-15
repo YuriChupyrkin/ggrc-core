@@ -3,18 +3,32 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-import template from './reusable-objects-item.stache';
+import template from './reusable-objects.stache';
 
 export default can.Component.extend({
-  tag: 'reusable-objects-item',
+  tag: 'reusable-objects',
   template: can.stache(template),
   leakScope: true,
   viewModel: {
+    define: {
+      reuseAllowed: {
+        type: Boolean,
+        get() {
+          let evidence = this.attr('instance');
+          return this.checkReuseability(evidence);
+        },
+      },
+    },
     disabled: false,
-    reuseAllowed: true,
-    instance: {},
+    instance: null,
     selectedList: [],
     isChecked: false,
+    checkReuseability(evidence) {
+      let isFile = evidence.attr('kind') === 'FILE';
+      let isGdriveIdProvided = !!evidence.attr('gdrive_id');
+
+      return !isFile || isGdriveIdProvided;
+    },
   },
   events: {
     '{viewModel} isChecked'(viewModel, ev, isChecked) {

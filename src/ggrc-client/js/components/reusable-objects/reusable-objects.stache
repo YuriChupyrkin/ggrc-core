@@ -1,0 +1,24 @@
+{{!
+    Copyright (C) 2019 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+<div class="reusable-objects__control">
+  {{#if reuseAllowed}}  
+  {{#is_allowed 'update' baseInstance context='for'}}
+    {{#is_allowed 'update' instance context='for'}}
+      {{^if baseInstance.archived}}
+          <input type="checkbox" can-value="isChecked"
+                {{#if disabled}}disabled{{/if}}/>
+      {{/if}}
+    {{/is_allowed}}
+  {{/is_allowed}}
+  {{else}}
+    <div class="reusable-objects__control">
+      <i class="fa fa-exclamation-triangle red attachments-list-alert" 
+         rel="tooltip" 
+         data-placement="bottom" 
+         data-original-title="Evidence can't be re-used, because gDrive file doesn't exist.">
+      </i>
+    <div>
+  {{/if}}
+</div>
