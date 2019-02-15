@@ -3,12 +3,55 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import {
+  getComponentVM,
+} from '../../../../js_specs/spec_helpers';
 import Component from '../reusable-objects.js';
 
 describe('reusable-objects component', () => {
+  let viewModel;
+
+  describe('checkReuseability() method', () => {
+    beforeEach(() => {
+      viewModel = getComponentVM(Component);
+    });
+
+    it('returns true if evidence is not a file', () => {
+      let evidence = new can.Map({
+        kind: 'URL',
+      });
+
+      let result = viewModel.checkReuseability(evidence);
+
+      expect(result).toBe(true);
+    });
+
+    it('returns true if evidence is a file with gdrive_id', () => {
+      let evidence = new can.Map({
+        kind: 'FILE',
+        gdrive_id: 'gdrive_id',
+      });
+
+      let result = viewModel.checkReuseability(evidence);
+
+      expect(result).toBe(true);
+    });
+
+    it('returns false if evidence is a file without gdrive_id', () => {
+      let evidence = new can.Map({
+        kind: 'FILE',
+        gdrive_id: '',
+      });
+
+      let result = viewModel.checkReuseability(evidence);
+
+      expect(result).toBe(false);
+    });
+  });
+
   describe('events', () => {
-    let viewModel;
     let events;
+
     beforeEach(() => {
       viewModel = new can.Map({
         instance: {},
