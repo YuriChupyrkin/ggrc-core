@@ -3,9 +3,9 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-import Component from '../reusable-objects-item.js';
+import Component from '../reusable-objects.js';
 
-describe('reusable-object-item component', () => {
+describe('reusable-objects component', () => {
   describe('events', () => {
     let viewModel;
     let events;
