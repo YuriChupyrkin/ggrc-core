@@ -24,6 +24,9 @@ import '../components/simple-modal/simple-modal';
 import '../helpers';
 import '../generated/ggrc_filter_query_parser';
 
+// Validation
+import '../plugins/validation-extensions';
+
 // Models
 import '../models';
 

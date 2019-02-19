@@ -86,6 +86,7 @@ export default Cacheable.extend({
     }
     this.validateNonBlank('title');
 
+    // TODO: use "validateIssueTracker" extension
     this.validate(
       'issue_tracker_component_id',
       function () {
@@ -95,6 +96,7 @@ export default Cacheable.extend({
         }
       }
     );
+    // TODO: Use "validateIssueTrackerTitle" validation extension
     this.validate(
       'issue_tracker_title',
       function () {

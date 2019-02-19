@@ -11,7 +11,6 @@ import {
   getClosestWeekday,
   getDate,
 } from '../../plugins/utils/date-utils';
-import {getPageInstance} from '../../plugins/utils/current-page-utils';
 import contactable from '../mixins/contactable';
 import timeboxed from '../mixins/timeboxed';
 import accessControlList from '../mixins/access-control-list';
@@ -50,6 +49,7 @@ export default Cacheable.extend({
     }
     this.validateNonBlank('title');
 
+    // TODO: use "validateAssignee" validation
     // instance.attr('access_control_list')
     //   .replace(...) doesn't raise change event
     // that's why we subscribe on access_control_list.length
@@ -64,16 +64,13 @@ export default Cacheable.extend({
       }
     });
 
+    // TODO: Use "validateStartEndDates" validation extension
     this.validate(['start_date', 'end_date'], function () {
       let that = this;
-      let workflow = getPageInstance();
+
       let datesAreValid = true;
       let startDate = getDate(that.attr('start_date'));
       let endDate = getDate(that.attr('end_date'));
-
-      if (!(workflow instanceof Workflow)) {
-        return;
-      }
 
       // Handle cases of a workflow with start and end dates
       datesAreValid = startDate && endDate &&

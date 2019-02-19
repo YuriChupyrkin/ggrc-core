@@ -95,6 +95,7 @@ export default Cacheable.extend({
         return this.attr('default_people.verifiers') instanceof can.List;
       }
     );
+    // TODO: Use "validateAssessmentIssueTracker" validation extension
     this.validate(
       'issue_tracker_component_id',
       function () {

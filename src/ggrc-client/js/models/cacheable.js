@@ -288,6 +288,7 @@ export default can.Model.extend({
       return ret;
     };
 
+    // TODO: use "validateGCA" validation extension
     // Register this type as a custom attributable type if it is one.
     if (this.is_custom_attributable) {
       this.validate(
