@@ -149,10 +149,11 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
+    /* Can be replaced with "Required" */
     this.validatePresenceOf('audit');
     this.validateNonBlank('title');
 
-
+    // TODO: Use "validateIssueTrackerTitle" validation extension
     this.validate(
       'issue_tracker_title',
       function () {
@@ -163,6 +164,7 @@ export default Cacheable.extend({
         }
       }
     );
+    // TODO: Use "validateAssessmentIssueTracker" validation extension
     this.validate(
       'issue_tracker_component_id',
       function () {
@@ -173,6 +175,7 @@ export default Cacheable.extend({
         }
       }
     );
+    // TODO: remove. Duplicate of cacheable validation
     this.validate(
       '_gca_valid',
       function () {
@@ -274,6 +277,7 @@ export default Cacheable.extend({
       }
     }.bind(this));
 
+    // TODO: Check property "validate_assessor"
     if (this.validate_assessor !== undefined) {
       backupInstance.validate_assessor = this.validate_assessor;
     }
