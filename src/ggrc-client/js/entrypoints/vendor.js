@@ -34,3 +34,9 @@ import 'spin.js';
 import 'jquery/jquery-ui.css';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
+
+/* canjs v3 */
+import 'can-validate-legacy/map/validate/validate';
+import 'can-validate-legacy/shims/validatejs';
+import 'can-map-define';
+import 'can-construct-super';
