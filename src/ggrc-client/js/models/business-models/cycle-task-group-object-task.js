@@ -167,6 +167,7 @@ export default Cacheable.extend({
     this.validateNonBlank('start_date');
     this.validateNonBlank('end_date');
 
+    // TODO: use "validateAssignee" validation
     // instance.attr('access_control_list')
     //   .replace(...) doesn't raise change event
     // that's why we subscribe on access_control_list.length

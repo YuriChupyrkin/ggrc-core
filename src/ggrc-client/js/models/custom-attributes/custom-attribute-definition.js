@@ -78,6 +78,7 @@ export default Cacheable.extend({
   init: function () {
     this.validateNonBlank('title');
 
+    // TODO: Use 'validateMultiChoiceOptions' validation extension
     // Besides multi_choice_options we need toset the validation on the
     // attribute_type field as well, even though its validation always
     // succeeds. For some reson this is required for the modal UI buttons to

@@ -7,6 +7,8 @@ import Mixin from './mixin';
 
 export default Mixin({
   'after:init': function () {
+    // TODO: use "validateUniqueTitle" validation extension
+    // TODO: use "_transient_title" property instead of "_transient.title"
     this.validate(['title', '_transient.title'], function (newVal, prop) {
       if (prop === 'title') {
         return this.attr('_transient.title');
