@@ -111,9 +111,11 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
+    /* Can be replaced with "Required" */
     this.validatePresenceOf('program');
     this.validateNonBlank('title');
 
+    // TODO: use "validateIssueTracker" extension
     this.validate(
       'issue_tracker_component_id',
       function () {
