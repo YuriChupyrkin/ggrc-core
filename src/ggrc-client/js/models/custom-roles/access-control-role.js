@@ -26,10 +26,17 @@ export default Cacheable.extend({
     'delete': true,
   },
   init: function () {
-    this.validateNonBlank('name');
     this._super(...arguments);
   },
 }, {
+  define: {
+    title: {
+      value: '',
+      validate: {
+        required: true,
+      },
+    },
+  },
   init: function () {
     this._super(...arguments);
   },
