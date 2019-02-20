@@ -287,19 +287,6 @@ export default can.Model.extend({
       delete ret.hasFailCallback;
       return ret;
     };
-
-    // TODO: use "validateGCA" validation extension
-    // Register this type as a custom attributable type if it is one.
-    if (this.is_custom_attributable) {
-      this.validate(
-        '_gca_valid',
-        function () {
-          if (!this._gca_valid) {
-            return 'Missing required global custom attribute';
-          }
-        }
-      );
-    }
   },
 
   findInCacheById: function (id) {
