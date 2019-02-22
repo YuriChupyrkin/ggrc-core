@@ -32,6 +32,7 @@ import {
   getFormattedLocalDate,
   formatDate,
 } from './plugins/utils/date-utils';
+import {isValidAttrProperty} from './plugins/utils/validation-utils';
 
 // Chrome likes to cache AJAX requests for template.
 let templateUrls = {};
@@ -1003,3 +1004,16 @@ Mustache.registerHelper('if_recurring_workflow', function (object, options) {
   }
   return options.inverse(this);
 });
+
+Mustache.registerHelper('isValidAttrProperty',
+  (instance, attrName, propertyName, options) => {
+    instance = Mustache.resolve(instance);
+    attrName = Mustache.resolve(attrName);
+    propertyName = Mustache.resolve(propertyName);
+    const errorMessage = isValidAttrProperty(instance, attrName, propertyName);
+
+    return errorMessage ?
+      options.fn(options.contexts) :
+      options.inverse(options.contexts);
+  }
+);
