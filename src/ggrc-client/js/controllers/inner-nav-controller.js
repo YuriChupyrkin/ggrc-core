@@ -55,15 +55,15 @@ export default can.Control.extend({
       this.route(newVal);
     });
 
-    can.view(this.options.internav_view, this.options, (frag) => {
-      const isAuditScope = instance.type === 'Audit';
-      this.element.append(frag);
-      if (isAuditScope) {
-        this.element.addClass(this.options.instance.type.toLowerCase());
-      }
-      this.setTabsPriority();
-      this.route(router.attr('widget'));
-    });
+    // can.view(this.options.internav_view, this.options, (frag) => {
+    //   const isAuditScope = instance.type === 'Audit';
+    //   this.element.append(frag);
+    //   if (isAuditScope) {
+    //     this.element.addClass(this.options.instance.type.toLowerCase());
+    //   }
+    //   this.setTabsPriority();
+    //   this.route(router.attr('widget'));
+    // });
 
     this.on();
   },

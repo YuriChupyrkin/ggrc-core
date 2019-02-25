@@ -68,7 +68,7 @@ const DashboardControl = can.Control.extend({
     let $pageHeader = this.element.find('#page-header');
 
     if (this.options.header_view && $pageHeader.length) {
-      $pageHeader.html(can.view(this.options.header_view));
+      // $pageHeader.html(can.view(this.options.header_view));
     }
   },
 
