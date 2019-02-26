@@ -29,13 +29,12 @@ export default can.Component.extend({
     /**
      * Activate currently selected panel
      *
-     * @param {Object} scope - current item value from `viewModel.panels`
-     * @param {jQuery.Element} el - clicked element
      * @param {Object} ev - click event handler
+     * @param {Object} panel - current item value from `viewModel.panels`
      */
-    setActive: function (scope, el, ev) {
+    setActive: function (ev, panel) {
       ev.preventDefault();
-      this.setActivePanel(scope.attr('tabIndex'));
+      this.setActivePanel(panel.attr('tabIndex'));
     },
     /**
      * Update Panels List setting all panels except selected to inactive state

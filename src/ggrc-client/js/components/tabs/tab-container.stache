@@ -7,7 +7,7 @@
   <ul class="nav nav-tabs">
     {{#each panels}}
     <li class="{{extraClasses}} {{#if active}}active{{/if}}">
-      <a ($click)='setActive'
+      <a ($click)='{setActive(%event, .)}'
         tabindex="{{@index}}">
         {{titleText}}
         {{#if canDisplayWarning}}
