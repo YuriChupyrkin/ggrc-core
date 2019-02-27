@@ -680,6 +680,31 @@ can.stache.registerHelper('if_config_exist', function (key, options) {
     options.inverse(options.contexts);
 });
 
+can.stache.registerHelper('with_mapping_count',
+  function (instance, mappingName, options) {
+    let relevant;
+    let dfd;
+
+    mappingName = resolve(mappingName);
+    instance = resolve(instance);
+
+    relevant = {
+      id: instance.id,
+      type: instance.type,
+    };
+    dfd = batchRequests(buildCountParams([mappingName], relevant)[0]);
+    return deferRender('span', {
+      done: function (count) {
+        return options.fn(options.contexts.add({
+          count: count[mappingName].count}));
+      },
+      progress: function () {
+        return options.inverse(options.contexts);
+      },
+    },
+    dfd);
+  });
+
 can.stache.registerHelper('switch', function (value, options) {
   let frame = new can.Map({});
   value = resolveComputed(value);
