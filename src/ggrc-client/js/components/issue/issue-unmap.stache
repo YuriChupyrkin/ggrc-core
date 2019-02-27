@@ -4,13 +4,13 @@
 }}
 
 <unmap-button
-  prevent-click="true"
-  {source}="issueInstance"
-  {destination}="target">
+  {prevent-click}="{true}"
+  {source}="{issueInstance}"
+  {destination}="{target}">
     <issue-unmap-item
-      (unmap-issue)="unmapInstance()"
-      {issue-instance}="issueInstance"
-      {target}="target">
+      (unmap-issue)="{unmapInstance()}"
+      {issue-instance}="{issueInstance}"
+      {target}="{target}">
         <content></content>
     </issue-unmap-item>
 </unmap-button>

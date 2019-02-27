@@ -15,7 +15,10 @@
 
           <div class="pane-header__toolbar">
             {{#is_info_pin}}
-              <info-pin-buttons maximized={"maximized"} on-change-maximized-state="{@onChangeMaximizedState}" on-close="{@onClose}"></info-pin-buttons>
+              <info-pin-buttons {maximized}="{maximized}" 
+                                {on-change-maximized-state}="{@onChangeMaximizedState}"
+                                {on-close}="{@onClose}">
+              </info-pin-buttons>
             {{/is_info_pin}}
 
             <div class="info-pane-utility">
@@ -28,7 +31,7 @@
                     {{/using}}
                     <li>
                       <task-group-clone
-                        {task-group}="instance">
+                        {task-group}="{instance}">
                         <a href="javascript://">
                           <i class="fa fa-clone"></i>
                           Clone Task Group
@@ -47,8 +50,8 @@
         <div class="info-pane__section">
         {{#if readyToRenderTaskGroupObjects}}
           <task-group-objects
-            {task-group}="instance"
-            {can-edit}="canEdit"
+            {task-group}="{instance}"
+            {can-edit}="{canEdit}"
           ></task-group-objects>
         {{/if}}
         </div>
@@ -57,8 +60,8 @@
             Tasks
           </h5>
           <task-list
-            {base-instance}="instance"
-            {workflow}="workflow"
+            {base-instance}="{instance}"
+            {workflow}="{workflow}"
           ></task-list>
         </div>
       </div>

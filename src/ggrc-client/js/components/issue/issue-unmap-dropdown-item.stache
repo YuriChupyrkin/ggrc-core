@@ -7,8 +7,8 @@
   {{#unless denyIssueUnmap}}
     {{#is page_instance.type "Issue"}}
       <issue-unmap
-        {issue-instance}="page_instance"
-        {target}="instance">
+        {issue-instance}="{page_instance}"
+        {target}="{instance}">
           <li class="border">
             <span class="unmap-link">
               <i class="fa fa-ban"></i>Unmap
@@ -17,8 +17,8 @@
       </issue-unmap>
     {{else}}
         <issue-unmap
-          {issue-instance}="instance"
-          {target}="page_instance">
+          {issue-instance}="{instance}"
+          {target}="{page_instance}">
             <li class="border">
               <span class="unmap-link">
                 <i class="fa fa-ban"></i>Unmap
@@ -32,8 +32,8 @@
     <li class="border">
       {{^if isMappableExternally}}
         <unmap-button
-          {source}="page_instance"
-          {destination}="instance"
+          {source}="{page_instance}"
+          {destination}="{instance}"
           class="unmap-link">
             <i class="fa fa-ban"></i>Unmap
         </unmap-button>

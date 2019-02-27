@@ -24,7 +24,10 @@
 
           <div class="pane-header__toolbar">
             {{#is_info_pin}}
-              <info-pin-buttons maximized={"maximized"} on-change-maximized-state="{@onChangeMaximizedState}" on-close="{@onClose}"></info-pin-buttons>
+              <info-pin-buttons {maximized}="{maximized}" 
+                                {on-change-maximized-state}="{@onChangeMaximizedState}"
+                                {on-close}="{@onClose}">
+              </info-pin-buttons>
             {{/is_info_pin}}
 
             <div class="info-pane-utility">
@@ -40,7 +43,7 @@
                       </li>
                     {{/if}}
                     <li>
-                      <permalink {instance}="instance"/>
+                      <permalink {instance}="{instance}"/>
                     </li>
                 </three-dots-menu>
               {{/using}}
@@ -55,30 +58,31 @@
       <div class="span12">
         <h6>Description</h6>
         <div class="rtf-block">
-          <read-more {text}="instance.description"></read-more>
+          <read-more {text}="{instance.description}"></read-more>
         </div>
       </div>
     </div>
 
     {{#using workflow=instance.workflow}}
       <custom-roles
-        {instance}="workflow"
-        {read-only}="true">
+        {instance}="{workflow}"
+        {read-only}="{true}">
       </custom-roles>
 
       <div class="row-fluid wrap-row">
           <div class="span6">
             <ggrc-gdrive-folder-picker
               {{^is_allowed 'update' workflow}}readonly="true"{{/is_allowed}}
-              instance="workflow"
-              placeholder="If selected, all workflow attachments go here." />
+              {instance}="{workflow}"
+              {placeholder}="'If selected, all workflow attachments go here.'" />
           </div>
           <div class="span6">
             <h6>
                 Repeat Cycle
             </h6>
-            <repeat-on-summary {unit}="workflow.unit" {repeat-every}="workflow.repeat_every"
-                               hide-repeat-off="false">
+            <repeat-on-summary {unit}="{workflow.unit}" 
+                               {repeat-every}="{workflow.repeat_every}"
+                               {hide-repeat-off}="{false}">
             </repeat-on-summary>
           </div>
       </div>
