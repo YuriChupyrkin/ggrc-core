@@ -12,7 +12,7 @@
       <ticket-id-checker
         {instance}="instance"
         {issue-tracker-enabled}="instance.issue_tracker.enabled"
-        (value-change)="inlineDropdownValueChange(%event)">
+        (value-change)="inlineDropdownValueChange(%event, true)">
         <inline-edit-control
           (inline-save)="checkTicketId(%event)"
           {is-edit-icon-denied}="isEditDenied"

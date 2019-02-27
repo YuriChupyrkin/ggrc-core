@@ -3,7 +3,11 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
-import {getComponentVM} from '../../../../js_specs/spec_helpers';
+import Assessment from '../../../models/business-models/assessment';
+import {
+  getComponentVM,
+  makeFakeInstance,
+} from '../../../../js_specs/spec_helpers';
 import Component from '../issue-tracker-switcher';
 
 describe('issue-tracker-switcher component', () => {
@@ -49,5 +53,43 @@ describe('issue-tracker-switcher component', () => {
       let result = convertToBoolMethod('hello world');
       expect(result).toBeTruthy();
     });
+  });
+
+  describe('"inlineDropdownValueChange" method', () => {
+    let method;
+    let instance;
+
+    beforeAll(() => {
+      instance = makeFakeInstance({model: Assessment})({});
+      viewModel.attr('instance', instance);
+      method = viewModel.inlineDropdownValueChange.bind(viewModel);
+    });
+
+    beforeEach(() => {
+      spyOn(viewModel.attr('instance'), 'initIssueTracker');
+      spyOn(viewModel, 'dispatch');
+    });
+
+    it('should call "initIssueTracker"', () => {
+      method({value: true}, true);
+      expect(viewModel.dispatch).toHaveBeenCalled();
+      expect(viewModel.attr('instance').initIssueTracker).toHaveBeenCalled();
+    });
+
+    it('should NOT call "initIssueTracker". Value is false', () => {
+      method({value: false}, true);
+      expect(viewModel.dispatch).toHaveBeenCalled();
+      expect(viewModel.attr('instance').initIssueTracker)
+        .not.toHaveBeenCalled();
+    });
+
+    it('should NOT call "initIssueTracker". "reinitIssueTracker" arg is false',
+      () => {
+        method({value: true}, false);
+        expect(viewModel.dispatch).toHaveBeenCalled();
+        expect(viewModel.attr('instance').initIssueTracker)
+          .not.toHaveBeenCalled();
+      }
+    );
   });
 });

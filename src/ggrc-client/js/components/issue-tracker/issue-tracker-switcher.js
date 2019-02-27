@@ -38,10 +38,18 @@ export default can.Component.extend({
 
       return !(!value || value === 'false');
     },
-    inlineDropdownValueChange: function (args) {
+    inlineDropdownValueChange: function (args, reinitIssueTracker) {
       let dropdownValue = this.convertToBool(args.value);
       args.value = dropdownValue;
       args.type = 'issueTrackerSwitcherChanged';
+
+      /*
+      * Issue tracker can be not inited on the info-pane after PUT requests
+      * Reinit issue tracker to setup correct values from Audit object
+      */
+      if (reinitIssueTracker && args.value) {
+        this.attr('instance').initIssueTracker();
+      }
 
       this.dispatch(args);
     },
