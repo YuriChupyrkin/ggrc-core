@@ -442,7 +442,7 @@ const LhnSearchControl = can.Control.extend({
         return;
       }
       modelNames = can.map(
-        this.get_visible_lists(), this.proxy('get_list_model'));
+        this.get_visible_lists(), ($list) => this.get_list_model($list));
       modelName = instance.constructor.model_singular;
 
       if (modelNames.indexOf(modelName) > -1) {
@@ -827,10 +827,9 @@ const LhnSearchControl = can.Control.extend({
       return $.Deferred().resolve();
     }
 
-
-    models = can.map(this.get_lists(), this.proxy('get_list_model'));
+    models = can.map(this.get_lists(), ($list) => this.get_list_model($list));
     extraModels = can.map(
-      this.get_lists(), this.proxy('get_extra_list_model'));
+      this.get_lists(), ($list) => this.get_extra_list_model($list));
 
     this.options._hasPendingRefresh = false;
     // Retrieve and display counts
@@ -847,7 +846,7 @@ const LhnSearchControl = can.Control.extend({
     let self = this;
     let searchId = this.search_id;
     let lists = this.get_visible_lists();
-    let models = can.map(lists, this.proxy('get_list_model'));
+    let models = can.map(lists, ($list) => this.get_list_model($list));
 
     if (!$('.lhn-trigger').hasClass('active')) {
       this.options._hasPendingRefresh = true;
