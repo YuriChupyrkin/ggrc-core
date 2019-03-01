@@ -99,7 +99,7 @@ export default can.Control.extend({
         dataType: 'text',
       }).then((view) => {
         return can.stache(view)();
-      }).then(this.proxy('after_preload'));
+      }).then((content) => this.after_preload(content));
       return;
     }
 
@@ -140,14 +140,14 @@ export default can.Control.extend({
     this.options.attr('$footer', this.element.find('.modal-footer'));
     this.on();
     this.fetch_all()
-      .then(this.proxy('apply_object_params'))
-      .then(this.proxy('serialize_form'))
+      .then(() => this.apply_object_params())
+      .then(() => this.serialize_form())
       .then(() => {
         if (!this.wasDestroyed()) {
           this.element.trigger('preload');
         }
       })
-      .then(this.proxy('autocomplete'))
+      .then((el) => this.autocomplete(el))
       .then(() => {
         if (!this.wasDestroyed()) {
           this.options.afterFetch(this.element);
@@ -268,7 +268,8 @@ export default can.Control.extend({
       $.ajax({url: this.options.button_view, dataType: 'text'}),
       $.ajax({url: this.options.custom_attributes_view, dataType: 'text'}),
       dfd,
-    ).then(this.proxy('draw'));
+    ).then((content, header, footer, customAttributes, context) =>
+      this.draw(content, header, footer, customAttributes, context));
   },
 
   fetch_data: function (params) {
@@ -475,7 +476,7 @@ export default can.Control.extend({
     let $elements = $form
       .find(':input');
 
-    $elements.toArray().forEach(this.proxy('set_value_from_element'));
+    $elements.toArray().forEach((el) => this.set_value_from_element(el));
   },
   set_value_from_element: function (el) {
     let name;
@@ -901,9 +902,9 @@ export default can.Control.extend({
       $form.trigger('reset');
     }).done(() => {
       $.when(this.options.attr('instance', newInstance))
-        .then(this.proxy('apply_object_params'))
-        .then(this.proxy('serialize_form'))
-        .then(this.proxy('autocomplete'));
+        .then(() => this.apply_object_params())
+        .then(() => this.serialize_form())
+        .then((el) => this.autocomplete(el));
     });
 
     this.restore_ui_status();
