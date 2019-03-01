@@ -5,7 +5,6 @@
 
 import Spinner from 'spin.js';
 import {
-  isAdmin,
   getPageInstance,
 } from './plugins/utils/current-page-utils';
 import {
@@ -430,12 +429,6 @@ can.stache.registerHelper('is_dashboard', function (options) {
 can.stache.registerHelper('is_dashboard_or_all', function (options) {
   return (/dashboard/.test(window.location) ||
     /objectBrowser/.test(window.location)) ?
-    options.fn(options.contexts) :
-    options.inverse(options.contexts);
-});
-
-can.stache.registerHelper('is_admin_page', (options) => {
-  return isAdmin() ?
     options.fn(options.contexts) :
     options.inverse(options.contexts);
 });
