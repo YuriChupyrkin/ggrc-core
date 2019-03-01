@@ -51,7 +51,7 @@ export default can.Control.extend({
       dataType: 'text',
     })).then((ctx, view) => {
       return can.stache(view[0])(ctx);
-    }).then(this.proxy('draw_widget'));
+    }).then((frag) => this.draw_widget(frag));
 
     return this._prepare_deferred;
   },

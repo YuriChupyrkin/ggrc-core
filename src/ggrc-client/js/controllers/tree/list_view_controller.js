@@ -193,7 +193,7 @@ export default TreeLoader({
     this.options.search_query = '';
     this.element.find('.search-filters')
       .find('input[name=search], select[name=user_role]').val('');
-    this.fetch_list().then(this.proxy('draw_list'));
+    this.fetch_list().then((list) => this.draw_list(list));
   },
 
   insert_items: function (items) {
@@ -230,7 +230,7 @@ export default TreeLoader({
 
   '.search-filters input[name=search] change': function (el, ev) {
     this.options.search_params.search_term = el.val();
-    this.fetch_list().then(this.proxy('draw_list'));
+    this.fetch_list().then((list) => this.draw_list(list));
   },
 
   '.search-filters select[name=user_role] change': function (el, ev) {
@@ -242,7 +242,7 @@ export default TreeLoader({
       this.options.search_params.noRole = false;
       this.options.search_params.role_id = value;
     }
-    this.fetch_list().then(this.proxy('draw_list'));
+    this.fetch_list().then((list) => this.draw_list(list));
   },
 
   '.search-filters button[type=reset] click': 'reset_search',
