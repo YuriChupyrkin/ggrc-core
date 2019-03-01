@@ -6,7 +6,6 @@
 
 <div class="tabs priority {{^is instance.type 'Audit'}}single-set{{/is}}">
   <ul class="internav {{#if_equals instance.type 'Audit'}}audit{{/if_equals}}">
-    {{#if_helpers '\n ^is_empty' counts '\n or #is_admin_page'}}
     {{#priorityTabs}}
       <li class="{{internav_icon}} {{widgetType}} {{#if_equals contexts.active_widget.selector selector}}active{{/if_equals}}">
         {{#displayWidgetTab(., instance)}}
@@ -29,7 +28,6 @@
       </li>
     {{/priorityTabs}}
 
-
     {{^if_equals instance.type 'Audit'}}
       <add-tab-button
         {instance}="instance"
@@ -40,7 +38,6 @@
       </add-tab-button>
     {{/if_equals}}
 
-    {{/if_helpers}}
 
     {{#if_equals instance.type 'Workflow'}}
       {{> /static/templates/dashboard/object_nav_actions.stache}}
@@ -48,8 +45,6 @@
   </ul>
 </div>
 
-
-{{#if_helpers '\n ^is_empty' counts '\n or #is_admin_page'}}
 {{#if_equals instance.type 'Audit'}}
 <div class="tabs not-priority">
   <div class="not-priority-hide {{#if isMenuVisible}}visible{{/if}}">
@@ -92,4 +87,3 @@
   {{/isMenuVisible}}
 </div>
 {{/if_equals}}
-{{/if_helpers}}

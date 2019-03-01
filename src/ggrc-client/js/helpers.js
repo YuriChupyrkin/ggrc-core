@@ -519,12 +519,6 @@ can.stache.registerHelper('is_dashboard_or_all', function (options) {
     options.inverse(options.contexts);
 });
 
-can.stache.registerHelper('is_admin_page', (options) => {
-  return isAdmin() ?
-    options.fn(options.contexts) :
-    options.inverse(options.contexts);
-});
-
 can.stache.registerHelper('current_user_is_admin', function (options) {
   if (Permission.is_allowed('__GGRC_ADMIN__')) {
     return options.fn(options.contexts);
@@ -922,8 +916,8 @@ can.stache.registerHelper('displayWidgetTab',
       instance.constructor.obj_nav_options.force_show_list,
       widget.attr('internav_display'));
 
-    displayTab = widget.attr('has_count') &&
-        widget.attr('count') ||
+    displayTab = isAdmin() ||
+        widget.attr('has_count') && !!widget.attr('count') ||
         widget.attr('uncountable') ||
         widget.attr('force_show') ||
         instance.constructor.obj_nav_options.show_all_tabs ||
