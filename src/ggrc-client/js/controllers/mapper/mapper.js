@@ -181,6 +181,12 @@ const ObjectMapper = can.Control.extend({
   init: function () {
     let frag = can.stache(this.options.component)(this.options);
     this.element.html(frag);
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 });
 

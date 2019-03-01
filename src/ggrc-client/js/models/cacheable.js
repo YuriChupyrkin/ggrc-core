@@ -5,7 +5,7 @@
 // Disabling some minor eslint rules until major refactoring
 /* eslint-disable no-console, id-length */
 
-import CanModel from 'can-model/src/can-model';
+//import CanModel from 'can-model/src/can-model';
 
 import CustomAttributeAccess from '../plugins/utils/custom-attribute/custom-attribute-access';
 import {
@@ -20,9 +20,9 @@ import tracker from '../tracker';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
 
-if (!CanModel.attributes) {
-  CanModel.attributes = {};
-}
+// if (!CanModel.attributes) {
+//   CanModel.attributes = {};
+// }
 
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
@@ -99,7 +99,8 @@ function makeDateSerializer(type, key) {
   };
 }
 
-export default CanModel.extend({
+export default can.Model.extend({ //CanModel.extend({
+  attributes: {},
   root_object: '',
   attr_list: [
     {

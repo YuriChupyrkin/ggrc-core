@@ -12,6 +12,7 @@ import {
 import {getChildTreeDisplayList} from '../plugins/utils/display-prefs-utils';
 import {clear as clearLocalStorage} from '../plugins/utils/local-storage-utils';
 import TreeViewConfig from '../apps/base_widgets';
+import * as canEvent from 'can-event';
 
 const DashboardControl = can.Control.extend({
   defaults: {
@@ -32,6 +33,12 @@ const DashboardControl = can.Control.extend({
     this.hide_widget_area();
     this.init_default_widgets();
     this.init_widget_area();
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   init_tree_view_settings: function () {
@@ -72,7 +79,8 @@ const DashboardControl = can.Control.extend({
         dataType: 'text',
         async: false,
       }).then((view) => {
-        let frag = can.stache(view)();
+        let view1 = can.stache(view);
+        let frag = view1();
         $pageHeader.html(frag);
       });
     }
@@ -91,10 +99,10 @@ const DashboardControl = can.Control.extend({
   },
 
   init_inner_nav: function () {
-    let $internav = this.element.find('.internav');
+    let $internav = $(this.element).find('.internav');
     if ($internav.length) {
       this.inner_nav_controller = new InnerNav(
-        this.element.find('.internav'), {
+        $(this.element).find('.internav')[0], {
           dashboard_controller: this,
         });
     }
@@ -126,11 +134,13 @@ const DashboardControl = can.Control.extend({
     if (_.isBoolean(updateCount) && !updateCount) {
       return;
     }
+    count = ev.args[0];
     this.inner_nav_controller
-      .update_widget_count($(ev.target), count, updateCount);
+      .update_widget_count(ev.target, count, updateCount);
   },
   update_inner_nav: function (el, ev, data) {
     if (this.inner_nav_controller) {
+      data = ev.args[0];
       if (data) {
         this.inner_nav_controller
           .update_widget(data.widget || data, data.index);
@@ -140,7 +150,7 @@ const DashboardControl = can.Control.extend({
   },
 
   get_active_widget_containers: function () {
-    return this.element.find('.widget-area');
+    return $(this.element).find('.widget-area');
   },
 
   add_widget_from_descriptor: function (...args) {
@@ -173,7 +183,7 @@ const DashboardControl = can.Control.extend({
       return;
     }
 
-    $element = $("<section class='widget'>");
+    $element = $("<section class='widget'>")[0];
     control = new descriptor
       .controller($element, descriptor.controller_options);
 
@@ -192,8 +202,9 @@ const DashboardControl = can.Control.extend({
       $container.append($element);
     }
 
-    $element
-      .trigger('widgets_updated', $element);
+    // $($element)
+    //   .trigger('widgets_updated', $element);
+    canEvent.trigger.call($element, 'widgets_updated', [$element]);
 
     return control;
   },
@@ -220,14 +231,20 @@ const PageObjectControl = DashboardControl.extend({}, {
     this.options.model = this.options.instance.constructor;
     this._super();
     this.init_info_pin();
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   init_info_pin: function () {
-    this.info_pin = new InfoPin(this.element.find('.pin-content'));
+    this.info_pin = new InfoPin(this.element.getElementsByClassName('pin-content')[0]);
   },
 
   hideInfoPin() {
-    const infopinCtr = this.info_pin.element.control();
+    const infopinCtr = $(this.info_pin.element).control();
 
     if (infopinCtr) {
       infopinCtr.hideInstance();

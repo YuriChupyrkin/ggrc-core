@@ -34,7 +34,7 @@ import {changeUrl} from '../router';
       $element
         .on('preload', function () {
           this.is_form_dirty(true);
-          this.control = this.$element.control();
+          this.control = $(this.$element).control();
           if (this.control.options && this.control.options.instance) {
             this.instance = this.control.options.instance;
             this.instance.backup();

@@ -32,6 +32,12 @@ const LhnControl = can.Control.extend({}, {
       setLHNState({panel_scroll: this.scrollTop});
     }, 250);
     this.element.find('.affix-holder').on('scroll', lhsHolderOnscroll);
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
   is_lhn_open: function () {
     let isOpen = getLHNState().is_open;
@@ -368,6 +374,13 @@ const LhnSearchControl = can.Control.extend({
     counts: new can.Map(),
   },
 }, {
+  init: function () {
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
+  },
   display: function () {
     let templatePath = GGRC.templates_path + this.element.data('template');
     let lhnPrefs = getLHNState();

@@ -4,7 +4,13 @@
 */
 
 const InfiniteScrollControl = can.Control.extend({}, {
-  init: function () {},
+  init: function () {
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
+  },
   ' DOMMouseScroll': 'prevent_overscroll',
   ' mousewheel': 'prevent_overscroll',
   ' scroll': 'prevent_overscroll',
@@ -80,6 +86,12 @@ const LhnTooltipsControl = can.Control.extend({
     }
     // Renew event listening, since we assigned $extended, $lhs
     this.on();
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   // Tooltip / popover handling

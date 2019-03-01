@@ -127,9 +127,9 @@ let viewModel = can.Map.extend({
   menuInitialized: false,
   lhnInitialized: false,
   showHideTitles: function (element) {
-    let elWidth = element.width();
-    let $menu = element.find('.menu');
-    let $title = element.find('h1');
+    let elWidth = $(element).width();
+    let $menu = $(element).find('.menu');
+    let $title = $(element).find('h1');
 
     this.attr('showTitles', true);
 

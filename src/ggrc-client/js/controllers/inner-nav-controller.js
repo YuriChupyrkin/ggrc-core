@@ -70,6 +70,12 @@ export default can.Control.extend({
     });
 
     this.on();
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   addRefetchOnceItems(modelNames) {
@@ -227,7 +233,7 @@ export default can.Control.extend({
   },
 
   update_widget_count: function ($el, count) {
-    let widgetId = $el.closest('.widget').attr('id');
+    let widgetId = $($el).closest('.widget').attr('id');
     let widget = this.widget_by_selector('#' + widgetId);
 
     if (widget) {
