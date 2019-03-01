@@ -3,6 +3,9 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+// Validation
+import '../plugins/validation-extensions';
+
 // Common templates
 import '../templates';
 
@@ -23,9 +26,6 @@ import '../plugins/popover_template';
 import '../components/simple-modal/simple-modal';
 import '../helpers';
 import '../generated/ggrc_filter_query_parser';
-
-// Validation
-import '../plugins/validation-extensions';
 
 // Models
 import '../models';

@@ -77,6 +77,12 @@ export default can.Control.extend({
     setTimeout(function () {
       this.draw_node();
     }.bind(this), 0);
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   '{instance} custom_attribute_values':

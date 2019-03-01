@@ -6,6 +6,13 @@
 export default can.Control.extend({
   defaults: {},
 }, {
+  init: function () {
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
+  },
   init_spinner: function () {
     let $footer;
     let $wrapper;

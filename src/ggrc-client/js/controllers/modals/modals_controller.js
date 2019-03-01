@@ -127,6 +127,12 @@ export default can.Control.extend({
       .then(() => {
         this.after_preload();
       });
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
   after_preload: function (content) {
     if (this.wasDestroyed()) {

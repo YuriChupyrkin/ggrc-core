@@ -25,7 +25,7 @@ export default can.Component.extend({
     tabOptions: {},
     hideOneTab: true,
     selectedTabIndex: 0,
-    panels: [],
+    panels: new can.List([]),
     /**
      * Activate currently selected panel
      *
@@ -45,7 +45,7 @@ export default can.Component.extend({
       if (this.instance) {
         this.attr('instance.selectedTabIndex', tabIndex);
       }
-      this.attr('panels').forEach(function (panel) {
+      this.panels.forEach(function (panel) {
         let isActive = (panel.attr('tabIndex') === tabIndex);
         panel.attr('active', isActive);
         panel.dispatch('updateActiveTab');
@@ -56,7 +56,8 @@ export default can.Component.extend({
      */
     setDefaultActivePanel: function () {
       let tabIndex = this.attr('selectedTabIndex');
-      let panels = this.attr('panels');
+      //let panels = this.attr('panels');
+      const panels = this.panels;
       // Select the first panel if tabIndex is not defined
       if (!tabIndex && panels.length) {
         tabIndex = panels[0].attr('tabIndex');
@@ -67,7 +68,8 @@ export default can.Component.extend({
       this.attr('lastErrorTab', tabIndex);
     },
     navigate(tabId, tabOptions) {
-      const panels = this.attr('panels');
+      //const panels = this.attr('panels');
+      const panels = this.panels;
       const panel = _.find(panels, (panel) => panel.tabId === tabId);
 
       if (panel) {
@@ -81,13 +83,13 @@ export default can.Component.extend({
      * Update Currently selected Tab on each add of Panels
      */
     '{viewModel.panels} panelAdded': function () {
-      this.viewModel.setDefaultActivePanel();
+      this.viewModel.setDefaultActivePanel.call(this.viewModel);
     },
     /**
      * Update Currently selected Tab on each remove of Panels
      */
     '{viewModel.panels} panelRemoved': function () {
-      this.viewModel.setDefaultActivePanel();
+      this.viewModel.setDefaultActivePanel.call(this.viewModel);
     },
     /**
      * Activate lastErrorTab.

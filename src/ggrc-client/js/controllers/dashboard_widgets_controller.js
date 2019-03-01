@@ -8,6 +8,8 @@ import {
 } from '../plugins/utils/widgets-utils';
 import {getPageModel} from '../plugins/utils/current-page-utils';
 
+import * as canEvent from 'can-event';
+
 export default can.Control.extend({
   defaults: {
     model: null,
@@ -40,7 +42,7 @@ export default can.Control.extend({
 
     this.options.widget_count = new can.Map();
 
-    this.element
+    $(this.element)
       .addClass('widget')
       .addClass(this.options.object_category)
       .addClass(this.options.widgetType)
@@ -57,8 +59,15 @@ export default can.Control.extend({
       this.options.widget_count.attr('count', counts.attr(countsName));
 
       counts.on(countsName, function (ev, newVal, oldVal) {
-        can.trigger(this.element, 'updateCount', [newVal]);
+        var canEv = canEvent;
+        canEv.trigger.call(this.element, 'updateCount', [newVal]);
       }.bind(this));
+    }
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
     }
   },
   prepare: function () {
@@ -79,10 +88,10 @@ export default can.Control.extend({
     return this._prepare_deferred;
   },
   draw_widget: function (frag) {
-    this.element.html(frag);
+    $(this.element).html(frag);
 
     if (this.options.content_controller) {
-      let controllerContent = this.element.find(this.options.content_selector);
+      let controllerContent = $(this.element).find(this.options.content_selector);
       if (this.options.content_controller_selector) {
         controllerContent =
           controllerContent.find(this.options.content_controller_selector);
@@ -93,7 +102,7 @@ export default can.Control.extend({
 
       this.options.content_controller_options.show_header = true;
       this.content_controller = new this.options.content_controller(
-        controllerContent, this.options.content_controller_options
+        controllerContent[0], this.options.content_controller_options
       );
 
       if (this.content_controller.prepare) {
@@ -108,7 +117,7 @@ export default can.Control.extend({
 
     this._display_deferred = this.prepare().then(function () {
       let dfd;
-      let $containerVM = that.element
+      let $containerVM = $(that.element)
         .find('tree-widget-container')
         .viewModel();
       let FORCE_REFRESH = true;

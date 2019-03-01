@@ -51,7 +51,7 @@ export default can.Component.extend({
     active: false,
     titleText: '@',
     tabId: '@', // used in REFRESH_TAB_CONTENT event handler
-    panels: [],
+    panels: new can.List([]),
     tabIndex: null,
     canDisplayWarning: false,
     warningState: false,

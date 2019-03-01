@@ -16,13 +16,18 @@ export default can.Component.extend({
   leakScope: true,
   viewModel: {
     instance: null,
-    comments: [],
+    comments: new can.List([]),
     isLoading: false,
+    // define: {
+    //   comments: {
+    //     value: new can.List([]),
+    //   },
+    // },
 
     loadComments() {
       let query = this.buildQuery();
       let comments = this.getComments(query);
-      this.attr('comments').replace(comments);
+      this.comments.replace(comments);
     },
     buildQuery() {
       let query = QueryAPI.buildParam('Comment', {sort: [{

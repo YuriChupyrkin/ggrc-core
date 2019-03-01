@@ -214,9 +214,9 @@ export default can.Component.extend('richText', {
   },
   events: {
     inserted() {
-      let wysiwyg = this.element.find('.rich-text__content')[0];
-      let toolbar = this.element.find('.rich-text__toolbar')[0];
-      let count = this.element.find('.rich-text__count')[0];
+      let wysiwyg = $(this.element).find('.rich-text__content')[0];
+      let toolbar = $(this.element).find('.rich-text__toolbar')[0];
+      let count = $(this.element).find('.rich-text__count')[0];
       this.viewModel.initEditor(wysiwyg, toolbar, count);
     },
     removed() {

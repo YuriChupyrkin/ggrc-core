@@ -25,9 +25,9 @@ export default can.Control.extend({
   init: function () {
     this.init_menu();
 
-    if (this.element.data('widget-view')) {
+    if ($(this.element).data('widget-view')) {
       this.options.widget_view = GGRC.templates_path +
-        this.element.data('widget-view');
+      $(this.element).data('widget-view');
     }
     if (this.options.instance.info_pane_preload) {
       this.options.instance.info_pane_preload();
@@ -45,14 +45,20 @@ export default can.Control.extend({
       .then(() => {
         let that = this;
         $.ajax({
-          url: this.get_widget_view(this.element),
+          url: this.get_widget_view($(this.element)),
           dataType: 'text',
           async: false,
         }).then((view) => {
           let frag = can.stache(view)(that.options.context);
-          that.element.html(frag);
+          $(that.element).html(frag);
         });
       });
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   get_widget_view: function (el) {

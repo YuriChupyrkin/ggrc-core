@@ -16,7 +16,7 @@ import Stub from '../stub';
  * AssessmentTemplate helps avoiding repeatedly defining the same set of
  * Assessment object properties for each new instance.
  */
-export default Cacheable.extend({
+const AT = Cacheable.extend({
   root_object: 'assessment_template',
   root_collection: 'assessment_templates',
   model_singular: 'AssessmentTemplate',
@@ -128,3 +128,7 @@ export default Cacheable.extend({
     }
   },
 });
+
+window.AT = AT;
+
+export default AT;

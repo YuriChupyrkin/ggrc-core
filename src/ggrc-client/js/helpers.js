@@ -993,15 +993,15 @@ can.stache.registerHelper('if_recurring_workflow', function (object, options) {
   return options.inverse(this);
 });
 
-Mustache.registerHelper('isValidAttrProperty',
-  (instance, attrName, propertyName, options) => {
-    instance = Mustache.resolve(instance);
-    attrName = Mustache.resolve(attrName);
-    propertyName = Mustache.resolve(propertyName);
-    const errorMessage = isValidAttrProperty(instance, attrName, propertyName);
+// Mustache.registerHelper('isValidAttrProperty',
+//   (instance, attrName, propertyName, options) => {
+//     instance = Mustache.resolve(instance);
+//     attrName = Mustache.resolve(attrName);
+//     propertyName = Mustache.resolve(propertyName);
+//     const errorMessage = isValidAttrProperty(instance, attrName, propertyName);
 
-    return errorMessage ?
-      options.fn(options.contexts) :
-      options.inverse(options.contexts);
-  }
-);
+//     return errorMessage ?
+//       options.fn(options.contexts) :
+//       options.inverse(options.contexts);
+//   }
+// );

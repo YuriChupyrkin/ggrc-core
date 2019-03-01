@@ -57,21 +57,21 @@ export default can.Component.extend({
       this.attr('existingConfigId', config.id);
     },
     async updateNotification(configId, checked) {
-      let config = await NotificationConfig.findInCacheById(configId).refresh();
-      config.attr('enable_flag', checked);
-      await config.save();
+      // let config = await NotificationConfig.findInCacheById(configId).refresh();
+      // config.attr('enable_flag', checked);
+      // await config.save();
     },
     async loadNotification() {
       this.attr('isLoading', true);
       try {
-        let config = await NotificationConfig.find(emailDigestType);
-        if (config) {
-          this.attr('emailDigest', config.enable_flag);
-          this.attr('existingConfigId', config.id);
-        } else {
-          // Handle the default case, in case notification object is not set
-          this.attr('emailDigest', true);
-        }
+        // let config = await NotificationConfig.find(emailDigestType);
+        // if (config) {
+        //   this.attr('emailDigest', config.enable_flag);
+        //   this.attr('existingConfigId', config.id);
+        // } else {
+        //   // Handle the default case, in case notification object is not set
+        //   this.attr('emailDigest', true);
+        // }
       } finally {
         this.attr('isLoading', false);
       }

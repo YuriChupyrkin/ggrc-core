@@ -37,6 +37,12 @@ const userRolesModalSelector = can.Control.extend({
     this.initContext();
     this.initView();
     this.initData();
+
+    if (!$(this.element).data('controls') || !$(this.element).data('controls').length) {
+      $(this.element).data('controls', [this]);
+    } else {
+      $(this.element).data('controls').push(this);
+    }
   },
 
   '.option_column li click': 'selectOption',
