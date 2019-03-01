@@ -61,6 +61,7 @@ import Assessment from '../../models/business-models/assessment';
 import Stub from '../../models/stub';
 import {getInstance} from '../../plugins/utils/models-utils';
 import {getUrlParams, changeHash} from '../../router';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 export default can.Control.extend({
   defaults: {
@@ -528,7 +529,7 @@ export default can.Control.extend({
 
     if (model) {
       if (item.value instanceof Array) {
-        value = can.map(item.value, function (id) {
+        value = filtredMap(item.value, function (id) {
           return getInstance(model, id);
         });
       } else if (item.value instanceof Object) {
@@ -548,7 +549,7 @@ export default can.Control.extend({
 
     if (name.length > 1) {
       if (can.isArray(value)) {
-        value = new can.List(can.map(value, function (v) {
+        value = new can.List(filtredMap(value, function (v) {
           return new can.Map({}).attr(name.slice(1).join('.'), v);
         }));
       } else if ($elem.is('[data-lookup]')) {

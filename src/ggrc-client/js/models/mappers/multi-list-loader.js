@@ -4,6 +4,7 @@
  */
 
 import Mappings from './mappings';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 (function (GGRC, can) {
   GGRC.ListLoaders.MultiListLoader =
@@ -32,7 +33,7 @@ import Mappings from './mappings';
         let self = this;
         let newResults;
 
-        newResults = can.map(results, function (result) {
+        newResults = filtredMap(results, function (result) {
           return self.make_result(result.instance, [result], binding);
         });
         self.insert_results(binding, newResults);

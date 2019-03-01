@@ -4,6 +4,7 @@
  */
 
 import Mappings from './mappings';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 (function (GGRC, can) {
   GGRC.ListLoaders.StubFilteredListLoader =
@@ -28,11 +29,13 @@ import Mappings from './mappings';
         binding.source_binding.list.bind('add', function (ev, results) {
           if (binding._refresh_stubs_deferred &&
             binding._refresh_stubs_deferred.state() !== 'pending') {
-            matchingResults = can.map(can.makeArray(results), function (res) {
-              if (self.filter_fn(res)) {
-                return self.make_result(res.instance, [res], binding);
+            matchingResults = filtredMap(
+              can.makeArray(results), function (res) {
+                if (self.filter_fn(res)) {
+                  return self.make_result(res.instance, [res], binding);
+                }
               }
-            });
+            );
             self.insert_results(binding, matchingResults);
           }
         });
@@ -46,7 +49,7 @@ import Mappings from './mappings';
       _refresh_stubs: function (binding) {
         return binding.source_binding.refresh_stubs()
           .then(function (results) {
-            let matchingResults = can.map(can.makeArray(results),
+            let matchingResults = filtredMap(can.makeArray(results),
               function (result) {
                 if (this.filter_fn(result)) {
                   return this.make_result(result.instance, [result], binding);

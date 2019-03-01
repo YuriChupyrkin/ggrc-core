@@ -18,6 +18,7 @@ import * as businessModels from '../models/business-models';
 import Relationship from '../models/service-models/relationship';
 import '../components/recently-viewed/recently-viewed';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
+import {filtredMap} from '../plugins/ggrc_utils';
 
 const LhnControl = can.Control.extend({}, {
   init: function () {
@@ -441,7 +442,7 @@ const LhnSearchControl = can.Control.extend({
         this.options._hasPendingRefresh = true;
         return;
       }
-      modelNames = can.map(
+      modelNames = filtredMap(
         this.get_visible_lists(), ($list) => this.get_list_model($list));
       modelName = instance.constructor.model_singular;
 
@@ -827,8 +828,9 @@ const LhnSearchControl = can.Control.extend({
       return $.Deferred().resolve();
     }
 
-    models = can.map(this.get_lists(), ($list) => this.get_list_model($list));
-    extraModels = can.map(
+
+    models = filtredMap(this.get_lists(), ($list) => this.get_list_model($list));
+    extraModels = filtredMap(
       this.get_lists(), ($list) => this.get_extra_list_model($list));
 
     this.options._hasPendingRefresh = false;
@@ -846,14 +848,14 @@ const LhnSearchControl = can.Control.extend({
     let self = this;
     let searchId = this.search_id;
     let lists = this.get_visible_lists();
-    let models = can.map(lists, ($list) => this.get_list_model($list));
+    let models = filtredMap(lists, ($list) => this.get_list_model($list));
 
     if (!$('.lhn-trigger').hasClass('active')) {
       this.options._hasPendingRefresh = true;
       return $.Deferred().resolve();
     }
 
-    models = can.map(models, function (modelName) {
+    models = filtredMap(models, function (modelName) {
       if (self.options.loaded_lists.indexOf(modelName) === -1) {
         return modelName;
       }
@@ -931,7 +933,7 @@ const LhnSearchControl = can.Control.extend({
   },
   get_visible_lists: function () {
     let self = this;
-    return can.map(this.get_lists(), function ($list) {
+    return filtredMap(this.get_lists(), function ($list) {
       $list = $($list);
       if ($list.find([self.options.list_content_selector,
         self.options.list_mid_level_selector].join(',')).hasClass('in')) {

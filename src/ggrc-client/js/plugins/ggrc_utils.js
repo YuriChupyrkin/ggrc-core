@@ -168,6 +168,11 @@ function getTruncatedList(items) {
   return mainContent + lastLine;
 }
 
+function filtredMap(items, predicate) {
+  return _.map(items, predicate)
+    .filter((item) => !_.isNull(item) && !_.isUndefined(item));
+}
+
 export {
   applyTypeFilter,
   isInnerClick,
@@ -178,4 +183,5 @@ export {
   getPlainText,
   getAssigneeType,
   getTruncatedList,
+  filtredMap,
 };

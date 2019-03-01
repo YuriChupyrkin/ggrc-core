@@ -3,6 +3,8 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {filtredMap} from '../../plugins/ggrc_utils';
+
 export default can.Model.extend({
   root_object: 'search',
   findOne: 'GET /search',
@@ -65,7 +67,7 @@ export default can.Model.extend({
       this.entries instanceof can.List)) {
       entries = this.entries[modelName] || [];
     } else {
-      entries = can.map(this.entries, function (v) {
+      entries = filtredMap(this.entries, function (v) {
         if (v.type === modelName) {
           return v;
         }

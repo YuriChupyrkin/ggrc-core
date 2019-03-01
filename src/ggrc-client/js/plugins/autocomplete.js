@@ -13,6 +13,7 @@ import {bindXHRToButton} from '../plugins/utils/modals';
 import {getInstance} from '../plugins/utils/models-utils';
 import * as businessModels from '../models/business-models';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
+import {filtredMap} from '../plugins/ggrc_utils';
 
 (function ($) {
   'use strict';
@@ -60,7 +61,7 @@ import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite
             if (objs.length || isNextPage) {
               // Envelope the object to not break model instance due to
               // shallow copy done by jQuery in `response()`
-              objs = can.map(objs, function (obj) {
+              objs = filtredMap(objs, function (obj) {
                 return {
                   item: obj,
                 };
@@ -203,7 +204,7 @@ import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite
       if (baseSearch) {
         searchtypes = baseSearch.trim().split(',');
 
-        this.options.searchtypes = can.map(searchtypes, function (typeName) {
+        this.options.searchtypes = filtredMap(searchtypes, function (typeName) {
           return businessModels[typeName].model_singular;
         });
       }
@@ -218,7 +219,7 @@ import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite
         model_class: modelClass,
         model: model,
         // Reverse the enveloping we did 25 lines up
-        items: can.map(items, function (item) {
+        items: filtredMap(items, function (item) {
           return item.item;
         }),
       };
@@ -260,7 +261,7 @@ import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite
             try {
               listItems = context.attr('items');
               context.attr('oldLen', listItems.length);
-              listItems.push(...can.map(items, function (item) {
+              listItems.push(...filtredMap(items, function (item) {
                 return item.item;
               }));
             } catch (error) {
@@ -324,7 +325,7 @@ import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite
             let ids = responseArr[objName].ids;
             let model = businessModels[objName];
 
-            let res = can.map(ids, (id) => {
+            let res = filtredMap(ids, (id) => {
               return getInstance(model.model_singular, id);
             });
             dfd.resolve(res);

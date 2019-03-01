@@ -8,6 +8,7 @@ import {
   ddValidationMapToValue,
 } from '../../../plugins/utils/ca-utils';
 import template from './template-field.stache';
+import {filtredMap} from '../../../plugins/ggrc_utils';
 
 /*
  * Template field
@@ -77,7 +78,7 @@ export default can.Component.extend({
      * is normalized into "2, 3" (10b, 11b).
      */
     normalizeMandatory: function (attrs) {
-      return can.map(attrs, ddValidationMapToValue).join(',');
+      return filtredMap(attrs, ddValidationMapToValue).join(',');
     },
   },
   events: {

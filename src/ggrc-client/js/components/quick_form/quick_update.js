@@ -4,6 +4,7 @@
 */
 
 import Stub from '../../models/stub';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 /*
   This component is for quickly updating the properties of an object through form fields.
@@ -71,7 +72,7 @@ export default can.Component.extend({
         this.viewModel.instance
           .attr(el.attr('name'))
           .replace(
-            can.map(
+            filtredMap(
               this.element.find(
                 'input[name="' + el.attr('name') + '"]:checked'),
               function (el) {
