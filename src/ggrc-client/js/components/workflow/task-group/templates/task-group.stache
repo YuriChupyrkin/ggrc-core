@@ -24,7 +24,7 @@
                     {{/if_equals}}
                     <li>
                       <task-group-clone
-                        {task-group}="instance">
+                        {task-group}="{instance}">
                         <a href="javascript://">
                           <i class="fa fa-clone"></i>
                           Clone Task Group

@@ -24,8 +24,8 @@
 
           <div class="pane-header__toolbar">
             {{#is_info_pin}}
-              <info-pin-buttons {maximized}="{maximized}" 
-                                {on-change-maximized-state}="{@onChangeMaximizedState}" 
+              <info-pin-buttons {maximized}="{maximized}"
+                                {on-change-maximized-state}="{@onChangeMaximizedState}"
                                 {on-close}="{@onClose}">
               </info-pin-buttons>
             {{/is_info_pin}}
@@ -80,7 +80,7 @@
               <h6>
                   Repeat Cycle
               </h6>
-              <repeat-on-summary {unit}="loadedObject.unit" 
+              <repeat-on-summary {unit}="loadedObject.unit"
                                 {repeat-every}="loadedObject.repeat_every"
                                 hide-repeat-off="false">
               </repeat-on-summary>
@@ -89,6 +89,6 @@
         {{/if}}
       </object-loader>
     </div>
-  
+
   </div>
 </section>
