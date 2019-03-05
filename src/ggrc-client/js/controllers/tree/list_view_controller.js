@@ -4,6 +4,7 @@
 */
 
 import TreeLoader from './tree-loader';
+import canControl3 from 'can-control';
 
 function modelListLoader(controller, params) {
   let model = controller.options.model;
@@ -37,6 +38,8 @@ export default TreeLoader({
   },
 }, {
   init: function () {
+    let that = this;
+    canControl3.initElement(this);
     if (!this.options.extra_params) {
       this.options.extra_params = {};
     }
@@ -69,8 +72,8 @@ export default TreeLoader({
         dataType: 'text',
       })).then((ctx, view) => {
         let frag = can.stache(view[0])(ctx);
-        if (this.element) {
-          this.element.prepend(frag);
+        if (this.$element) {
+          this.$element.prepend(frag);
         }
       });
     }
@@ -106,7 +109,7 @@ export default TreeLoader({
     let searchParams = this.options.search_params;
     let that = this;
 
-    this.element.trigger('loading');
+    this.$element.trigger('loading');
 
     if (this.options.list) {
       this.options.list.replace([]);
@@ -174,8 +177,8 @@ export default TreeLoader({
       dataType: 'text',
     }).then((view) => {
       let frag = can.stache(view)(this.context);
-      this.element.find('.spinner, .tree-structure').hide();
-      this.element.append(frag).trigger('loaded');
+      this.$element.find('.spinner, .tree-structure').hide();
+      this.$element.append(frag).trigger('loaded');
       this.options.state.attr('loading', false);
     });
   },
@@ -183,16 +186,16 @@ export default TreeLoader({
   update_count: function () {
     if (this.element) {
       if (this.options.pager) {
-        this.element.trigger('updateCount', this.options.pager.total);
+        this.$element.trigger('updateCount', this.options.pager.total);
       }
-      this.element.trigger('widget_updated');
+      this.$element.trigger('widget_updated');
     }
   },
 
   reset_search: function (el, ev) {
     this.options.search_params = {};
     this.options.search_query = '';
-    this.element.find('.search-filters')
+    this.$element.find('.search-filters')
       .find('input[name=search], select[name=user_role]').val('');
     this.fetch_list().then((list) => this.draw_list(list));
   },

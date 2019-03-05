@@ -84,9 +84,9 @@ export default can.Component.extend({
                     let fragRight = render(revisions[1]);
 
                     fragLeft.appendChild(fragRight);
-                    target.find('.modal-body').html(fragLeft);
+                    $(target).find('.modal-body').html(fragLeft);
 
-                    that.highlightDifference(target);
+                    that.highlightDifference($(target));
                     that.highlightCustomAttributes(target, revisions);
                   });
                 });
@@ -242,10 +242,11 @@ export default can.Component.extend({
     /**
      * Highlight difference in attributes
      *
-     * @param {jQuery} $target - the root DOM element containing the
+     * @param {jQuery} target - the root DOM element containing the
      *   revision diff comparison
      */
-    highlightAttributes: function ($target) {
+    highlightAttributes: function (target) {
+      const $target = $(target);
       const emptySelector = '.empty-message';
       const highlightClass = 'diff-highlighted';
       const listSelector = 'ul li, .object-list-item';
@@ -334,11 +335,12 @@ export default can.Component.extend({
     /**
      * Highlights difference in custom attributes
      *
-     * @param {jQuery} $target - the root DOM element containing the
+     * @param {jQuery} target - the root DOM element containing the
      *   revision diff comparison
      * @param {can.List} revisions - revisions for comparing
      */
-    highlightCustomAttributes($target, revisions) {
+    highlightCustomAttributes(target, revisions) {
+      const $target = $(target);
       const titleSelector = '.info-pane__section-title';
       const valueSelector = '.inline__content';
       const highlightClass = 'diff-highlighted';
@@ -485,14 +487,16 @@ export default can.Component.extend({
        * Compare two blocks of grants of a particular custom role and mark
        * the differences between them.
        *
-       * @param {jQuery} $blockOld - a DOM element containing a list of
+       * @param {jQuery} blockOld - a DOM element containing a list of
        *   people that had a particular custom role granted at a particular
        *   moment in the past
-       * @param {jQuery} $blockNew - a DOM element containing a list of
+       * @param {jQuery} blockNew - a DOM element containing a list of
        *   people that have a particular custom role granted at a newer point
        *   in time
        */
-      function compareRoleBlocks($blockOld, $blockNew) {
+      function compareRoleBlocks(blockOld, blockNew) {
+        const $blockOld = $(blockOld);
+        const $blockNew = $(blockNew);
         let oldUserIds = {};
         let newUserIds = {};
 
@@ -516,11 +520,11 @@ export default can.Component.extend({
       /**
        * Highlight block of grants of a particular custom role.
        *
-       * @param {jQuery} $block - a DOM element containing a list of
+       * @param {jQuery} block - a DOM element containing a list of
        *   people that have a particular custom role.
        */
-      function highlightBlock($block) {
-        $block.find('object-list').addClass(HIGHLIGHT_CLASS);
+      function highlightBlock(block) {
+        $(block).find('object-list').addClass(HIGHLIGHT_CLASS);
       }
 
       /**
