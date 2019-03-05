@@ -5,6 +5,7 @@
 
 import RefreshQueue from '../refresh_queue';
 import Mappings from './mappings';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 (function (GGRC, can) {
   /*
@@ -63,11 +64,9 @@ import Mappings from './mappings';
         binding.source_binding.list.bind('add', function (ev, results) {
           binding.refresh_instances().done(function () {
             new RefreshQueue().enqueue(
-              can.map(results, function (res) {
-                return res.instance;
-              })
+              filtredMap(results, (res) => res.instance)
             ).trigger().done(function () {
-              can.map(can.makeArray(results), function (result) {
+              filtredMap(can.makeArray(results), (result) => {
                 let newResult =
                   self.make_result(result.instance, [result], binding);
                 newResult.compute = resultCompute(result);
@@ -93,11 +92,9 @@ import Mappings from './mappings';
         return binding.source_binding.refresh_instances()
           .then(function (results) {
             new RefreshQueue().enqueue(
-              can.map(results, function (res) {
-                return res.instance;
-              })
+              filtredMap(results, (res) => res.instance)
             ).trigger().done(function () {
-              can.map(can.makeArray(results), function (result) {
+              filtredMap(can.makeArray(results), (result) => {
                 let newResult =
                   self.make_result(result.instance, [result], binding);
                 newResult.compute = can.compute(function () {

@@ -4,6 +4,7 @@
  */
 
 import Mappings from './mappings';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 (function (GGRC, can) {
   GGRC.ListLoaders.MultiListLoader =
@@ -29,13 +30,11 @@ import Mappings from './mappings';
         });
       },
       insert_from_source_binding: function (binding, results, index) {
-        let self = this;
         let newResults;
 
-        newResults = can.map(results, function (result) {
-          return self.make_result(result.instance, [result], binding);
-        });
-        self.insert_results(binding, newResults);
+        newResults = filtredMap(results,
+          (result) => this.make_result(result.instance, [result], binding));
+        this.insert_results(binding, newResults);
       },
       init_source_listeners: function (binding, sourceBinding) {
         let self = this;

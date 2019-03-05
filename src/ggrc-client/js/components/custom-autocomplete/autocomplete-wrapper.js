@@ -13,6 +13,7 @@ import {
 } from '../../plugins/utils/query-api-utils';
 import RefreshQueue from '../../models/refresh_queue';
 import {getInstance} from '../../plugins/utils/models-utils';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 export default can.Map.extend({
   currentValue: '',
@@ -55,9 +56,8 @@ export default can.Map.extend({
     let ids = responseArr[objName].ids;
     let modelConstructor = this.attr('modelConstructor');
 
-    let res = can.map(ids, function (id) {
-      return getInstance(modelConstructor.model_singular, id);
-    });
+    let res = filtredMap(ids,
+      (id) => getInstance(modelConstructor.model_singular, id));
 
     return new $.Deferred().resolve(res);
   },

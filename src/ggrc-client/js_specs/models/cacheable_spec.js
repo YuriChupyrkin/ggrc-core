@@ -10,6 +10,7 @@ import {
 } from '../spec_helpers';
 import CustomAttributeObject from '../../js/plugins/utils/custom-attribute/custom-attribute-object';
 import Mixin from '../../js/models/mixins/mixin';
+import {filtredMap} from '../../js/plugins/ggrc_utils';
 
 describe('Cacheable model', () => {
   let origGcaDefs;
@@ -191,12 +192,9 @@ describe('Cacheable model', () => {
       //  models calls new DummyModel.List() which we're already spying out,
       //  so spy models() out in order to *not* call it.
       spyOn(DummyModel, 'models').and.callFake(function (items) {
-        let ids = can.map(items, function (item) {
-          return item.id;
-        });
-        return can.map(dummyInsts, function (inst) {
-          return _.includes(ids, inst.id) ? inst : undefined;
-        });
+        let ids = filtredMap(items, (item) => item.id);
+        return filtredMap(dummyInsts, (inst) =>
+          _.includes(ids, inst.id) ? inst : undefined);
       });
       DummyModel.findAll().then(() => {
         // finally, we show that with the 100ms gap between pushing ids 3 and 4, we force a separate push.

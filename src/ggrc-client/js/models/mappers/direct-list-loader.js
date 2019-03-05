@@ -8,6 +8,7 @@ import Cacheable from '../cacheable';
 import {Person, Cycle} from '../business-models';
 import {reify} from '../../plugins/utils/reify-utils';
 import {Role} from '../service-models';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 const directListModels = {
   Person,
@@ -73,23 +74,22 @@ const directListModels = {
           mapping[this.object_attr].id === binding.instance.id)));
       },
       filter_and_insert_instances_from_mappings: function (binding, mappings) {
-        let self = this;
         let matchingMappings;
 
-        matchingMappings = can.map(can.makeArray(mappings), function (mapping) {
-          if (self.is_valid_mapping(binding, mapping)) {
-            return mapping;
+        matchingMappings = filtredMap(
+          can.makeArray(mappings), (mapping) => {
+            if (this.is_valid_mapping(binding, mapping)) {
+              return mapping;
+            }
           }
-        });
+        );
         return this.insert_instances_from_mappings(binding, matchingMappings);
       },
       insert_instances_from_mappings: function (binding, mappings) {
-        let self = this;
         let newResults;
 
-        newResults = can.map(can.makeArray(mappings), function (mapping) {
-          return self.get_result_from_mapping(binding, mapping);
-        });
+        newResults = filtredMap(can.makeArray(mappings),
+          (mapping) => this.get_result_from_mapping(binding, mapping));
         this.insert_results(binding, newResults);
       },
       remove_instance_from_mapping: function (binding, mapping) {

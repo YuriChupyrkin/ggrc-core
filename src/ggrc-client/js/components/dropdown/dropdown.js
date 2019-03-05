@@ -4,6 +4,7 @@
 */
 
 import template from './dropdown.stache';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 /*
   Component abstracts <select> dropdown in HTML.
@@ -33,15 +34,17 @@ export default can.Component.extend({
             }];
           let list = [];
           if (!isGroupedDropdown) {
-            list = can.map(this.attr('optionsList') || [], function (option) {
-              if (_.isString(option)) {
-                return {
-                  value: option,
-                  title: option,
-                };
+            list = filtredMap(
+              this.attr('optionsList') ||[], (option) => {
+                if (_.isString(option)) {
+                  return {
+                    value: option,
+                    title: option,
+                  };
+                }
+                return option;
               }
-              return option;
-            });
+            );
           } else {
             list = can.Map.keys(optionsGroups).map(function (key) {
               let group = optionsGroups.attr(key);

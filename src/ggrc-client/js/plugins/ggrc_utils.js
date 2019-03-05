@@ -168,6 +168,17 @@ function getTruncatedList(items) {
   return mainContent + lastLine;
 }
 
+/**
+ *
+ * @param {Array} items - array of items.
+ * @param {Function} predicate - function with the condition for "map" operation
+ * @return {Array} - result of "map" operation without "null" and "undefined" values
+ */
+function filtredMap(items, predicate) {
+  return _.map(items, predicate)
+    .filter((item) => !_.isNull(item) && !_.isUndefined(item));
+}
+
 export {
   applyTypeFilter,
   isInnerClick,
@@ -178,4 +189,5 @@ export {
   getPlainText,
   getAssigneeType,
   getTruncatedList,
+  filtredMap,
 };
