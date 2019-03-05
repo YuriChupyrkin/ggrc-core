@@ -27,7 +27,7 @@
                     {{/if_equals}}
                     <li>
                       <task-group-clone
-                        {task-group}="instance">
+                        {task-group}="{instance}">
                         <a href="javascript://">
                           <i class="fa fa-clone"></i>
                           Clone Task Group
@@ -43,8 +43,8 @@
           {{> /static/templates/task_groups/tier2_content.stache}}
           <div class="info-pane__section">
             {{#if readyToRenderTaskGroupObjects}}
-              <task-group-objects {task-group}="instance"
-                                  {can-edit}="canEdit"
+              <task-group-objects {task-group}="{instance}"
+                                  {can-edit}="{canEdit}"
               ></task-group-objects>
             {{/if}}
           </div>
@@ -52,8 +52,8 @@
             <h5 class="info-pane__section-title">
               Tasks
             </h5>
-            <task-list {base-instance}="instance"
-                       {workflow}="workflow"
+            <task-list {base-instance}="{instance}"
+                       {workflow}="{workflow}"
             ></task-list>
           </div>
         </div>
