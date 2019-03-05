@@ -280,8 +280,8 @@ import {filtredMap} from '../plugins/ggrc_utils';
         can.view.render(GGRC.templates_path + template,
           context, function (frag) {
             $ul.html(frag);
-            new LhnTooltipsControl($ul);
-            new InfiniteScrollControl($ul);
+            new LhnTooltipsControl($ul[0]);
+            new InfiniteScrollControl($ul[0]);
             can.view.hookup(ul);
           });
       });
@@ -351,7 +351,7 @@ import {filtredMap} from '../plugins/ggrc_utils';
         // being destroyed. In such cases we simply don't do anything.
         return;
       }
-      el = this.element.find('input[data-lookup]');
+      el = $(this.element).find('input[data-lookup]');
     } else {
       el = $(el);
     }

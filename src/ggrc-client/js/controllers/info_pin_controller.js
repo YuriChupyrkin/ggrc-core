@@ -36,16 +36,19 @@ export const pinContentHiddenClass = 'pin-content--hidden';
 export const pinContentMaximizedClass = 'pin-content--maximized';
 export const pinContentMinimizedClass = 'pin-content--minimized';
 
-export default can.Control.extend({
+import canControl3 from 'can-control';
+
+export default canControl3.extend({
   defaults: {
     view: GGRC.templates_path + '/base_objects/info.stache',
   },
 }, {
   init: function (el, options) {
+    canControl3.initElement(this);
     this.unsetInstance();
   },
   isPinVisible() {
-    return !this.element.hasClass(pinContentHiddenClass);
+    return !this.$element.hasClass(pinContentHiddenClass);
   },
   findOptions: function (el) {
     return el.closest('.tree-item-element').viewModel();
@@ -55,7 +58,7 @@ export default can.Control.extend({
     $(window).trigger('resize');
   },
   unsetInstance: function () {
-    this.element
+    this.$element
       .addClass(pinContentHiddenClass)
       .removeClass(`${pinContentMaximizedClass} ${pinContentMinimizedClass}`)
       .html('');
@@ -66,7 +69,7 @@ export default can.Control.extend({
     let self = this;
     import(/* webpackChunkName: "modalsCtrls" */'./modals')
       .then(() => {
-        this.element.html(can.view(view, {
+        this.$element.html(can.view(view, {
           instance: instance,
           isSnapshot: !!instance.snapshot || instance.isRevision,
           parentInstance: parentInstance,
@@ -126,25 +129,25 @@ export default can.Control.extend({
     return infoPaneOpenDfd;
   },
   changeMaximizedState(maximizedState) {
-    this.element
+    this.$element
       .removeClass(`${pinContentMaximizedClass} ${pinContentMinimizedClass}`)
       .removeClass(pinContentHiddenClass);
 
     if (maximizedState) {
-      this.element.addClass(pinContentMaximizedClass);
+      this.$element.addClass(pinContentMaximizedClass);
     } else {
-      this.element.addClass(pinContentMinimizedClass);
+      this.$element.addClass(pinContentMinimizedClass);
     }
   },
   updateInstance: function (selector, instance) {
-    let vm = this.element.find(selector).viewModel();
+    let vm = this.$element.find(selector).viewModel();
 
     vm.attr('instance', instance);
   },
   setLoadingIndicator: function (selector, isLoading) {
-    this.element.toggleClass('loading');
+    this.$element.toggleClass('loading');
 
-    this.element.find(selector)
+    this.$element.find(selector)
       .viewModel()
       .attr('isLoading', isLoading);
   },
@@ -201,9 +204,10 @@ export default can.Control.extend({
     );
   },
   ' scroll': function (el, ev) {
-    const header = this.element.find('.pane-header');
-    const scrollTop = el.scrollTop();
-    const prevScrollTop = el.data('scrollTop') || 0;
+    const $el = $(el);
+    const header = this.$element.find('.pane-header');
+    const scrollTop = $el.scrollTop();
+    const prevScrollTop = $el.data('scrollTop') || 0;
     const headerOuterHeight = header.outerHeight();
 
     if (!prevScrollTop) {
@@ -231,7 +235,7 @@ export default can.Control.extend({
       }
     }
 
-    el.data('scrollTop', scrollTop);
+    $el.data('scrollTop', scrollTop);
   },
   '{window} keyup'(el, event) {
     const ESCAPE_KEY_CODE = 27;

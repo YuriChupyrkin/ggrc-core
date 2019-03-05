@@ -18,7 +18,9 @@ import {loadScript} from '../plugins/ggrc_utils';
 import Relationship from '../models/service-models/relationship';
 import Assessment from '../models/business-models/assessment';
 
-export default can.Control({
+import canControl3 from 'can-control';
+
+export default canControl3({
   defaults: {
     Assessment,
     Relationship,
@@ -52,13 +54,13 @@ export default can.Control({
 }, {
   init: function () {
     let frag;
-    if (this.element.data('widget-view')) {
+    if (this.$element.data('widget-view')) {
       this.options.widget_view = GGRC.templates_path +
-        this.element.data('widget-view');
+        this.$element.data('widget-view');
     }
-    this.element.closest('.widget')
+    this.$element.closest('.widget')
       .on('widget_shown', this.widget_shown.bind(this));
-    this.element.closest('.widget')
+    this.$element.closest('.widget')
       .on('widget_hidden', this.widget_hidden.bind(this));
     this.options.context = new can.Map({
       model: this.options.model,
@@ -194,7 +196,7 @@ export default can.Control({
 
     chartOptions.attr('legend', legendData);
 
-    this.element.find('#piechart_audit_assessments_chart-legend tbody')
+    this.$element.find('#piechart_audit_assessments_chart-legend tbody')
       .off('mouseenter', 'tr')
       .on('mouseenter', 'tr', function () {
         let $el = $(this);

@@ -9,7 +9,9 @@ import {
   getPageInstance,
 } from '../plugins/utils/current-page-utils';
 
-export default can.Control({
+import canControl3 from 'can-control';
+
+export default canControl3({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),
@@ -17,9 +19,10 @@ export default can.Control({
   },
 }, {
   init: function () {
-    let frag;
-    let dashboards =
-      getDashboards(this.options.instance);
+    canControl3.initElement(this);
+    let options = this.options;
+    let dashboards = getDashboards(options.instance);
+    let $element = $(this.element);
 
     this.options.context = new can.Map({
       model: this.options.model,
@@ -32,7 +35,7 @@ export default can.Control({
       },
     });
 
-    frag = can.view(this.options.widget_view,
+    let frag = can.view(this.options.widget_view,
       this.options.context);
     this.element.html(frag);
     return 0;

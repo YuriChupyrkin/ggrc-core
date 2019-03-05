@@ -15,7 +15,9 @@ import {
 import * as businessModels from '../models/business-models';
 import {getCreateObjectUrl} from '../plugins/utils/ggrcq-utils';
 
-export default can.Control.extend({
+import canControl3 from 'can-control';
+
+export default canControl3.extend({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),
@@ -23,11 +25,12 @@ export default can.Control.extend({
   },
 }, {
   init: function () {
+    canControl3.initElement(this);
     this.init_menu();
 
-    if (this.element.data('widget-view')) {
+    if (this.$element.data('widget-view')) {
       this.options.widget_view = GGRC.templates_path +
-        this.element.data('widget-view');
+      this.$element.data('widget-view');
     }
     if (this.options.instance.info_pane_preload) {
       this.options.instance.info_pane_preload();
@@ -45,7 +48,7 @@ export default can.Control.extend({
       .then(() => {
         can.view(this.get_widget_view(this.element),
           this.options.context, function (frag) {
-            this.element.html(frag);
+            this.$element.html(frag);
           }.bind(this));
       });
   },
