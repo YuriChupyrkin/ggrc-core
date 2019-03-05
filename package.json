@@ -27,7 +27,9 @@
     "can-validate-legacy": "1.4.0",
     "can-component": "^3.3.10",
     "can-model": "^3.0.3",
-    "can-construct-super": "^3.2.0"
+    "can-construct-super": "^3.2.0",
+    "can-control": "^3.2.4",
+    "can-event": "^3.7.7"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

@@ -101,7 +101,7 @@ function confirm(options, success, dismiss) {
       $target
         .modal({backdrop: 'static'});
 
-      new ModalsController($target, Object.assign({
+      new ModalsController($target[0], Object.assign({
         new_object_form: false,
         button_view: BUTTON_VIEW_CONFIRM_CANCEL,
         modal_confirm: 'Confirm',

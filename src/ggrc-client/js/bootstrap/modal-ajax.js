@@ -137,7 +137,7 @@ let handlers = {
     $target
       .modal_form(option, $trigger);
 
-    new ModalsController($target, {
+    new ModalsController($target[0], {
       new_object_form: !$trigger.attr('data-object-id'),
       object_params: objectParams,
       extendNewInstance,

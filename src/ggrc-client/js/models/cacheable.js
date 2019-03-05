@@ -100,7 +100,7 @@ function makeDateSerializer(type, key) {
   };
 }
 
-export default CanModel.extend({
+export default can.Model.extend({
   root_object: '',
   attr_list: [
     {
@@ -587,7 +587,7 @@ export default CanModel.extend({
       if (fieldName === 'errors') {
         return;
       }
-      this.validate();
+      //this.validate();
     });
   },
   /**

@@ -13,12 +13,17 @@ import {getChildTreeDisplayList} from '../plugins/utils/display-prefs-utils';
 import {clear as clearLocalStorage} from '../plugins/utils/local-storage-utils';
 import TreeViewConfig from '../apps/base_widgets';
 
-const DashboardControl = can.Control.extend({
+import canControl3 from 'can-control';
+import * as canEvent from 'can-event';
+
+const DashboardControl = canControl3.extend({
   defaults: {
     widget_descriptors: null,
   },
 }, {
   init: function (el, options) {
+    canControl3.initElement(this);
+
     this.init_tree_view_settings();
     this.init_page_title();
     this.init_page_header();
@@ -91,10 +96,10 @@ const DashboardControl = can.Control.extend({
   },
 
   init_inner_nav: function () {
-    let $internav = this.element.find('.internav');
+    let $internav = this.$element.find('.internav');
     if ($internav.length) {
       this.inner_nav_controller = new InnerNav(
-        this.element.find('.internav'), {
+        $internav[0], {
           dashboard_controller: this,
         });
     }
@@ -126,11 +131,14 @@ const DashboardControl = can.Control.extend({
     if (_.isBoolean(updateCount) && !updateCount) {
       return;
     }
+    count = ev.args[0];
+    updateCount = ev.args[1];
     this.inner_nav_controller
       .update_widget_count($(ev.target), count, updateCount);
   },
   update_inner_nav: function (el, ev, data) {
     if (this.inner_nav_controller) {
+      data = ev.args[0];
       if (data) {
         this.inner_nav_controller
           .update_widget(data.widget || data, data.index);
@@ -140,13 +148,13 @@ const DashboardControl = can.Control.extend({
   },
 
   get_active_widget_containers: function () {
-    return this.element.find('.widget-area');
+    return this.$element.find('.widget-area');
   },
 
   add_widget_from_descriptor: function (...args) {
     let descriptor = {};
     let that = this;
-    let $element;
+    let element;
     let control;
     let $container;
     let $lastWidget;
@@ -173,9 +181,9 @@ const DashboardControl = can.Control.extend({
       return;
     }
 
-    $element = $("<section class='widget'>");
+    element = $("<section class='widget'>")[0];
     control = new descriptor
-      .controller($element, descriptor.controller_options);
+      .controller(element, descriptor.controller_options);
 
     if (isAdmin()) {
       control.prepare();
@@ -187,13 +195,12 @@ const DashboardControl = can.Control.extend({
     $lastWidget = $container.find('section.widget').last();
 
     if ($lastWidget.length > 0) {
-      $lastWidget.after($element);
+      $lastWidget.after(element);
     } else {
-      $container.append($element);
+      $container.append(element);
     }
 
-    $element
-      .trigger('widgets_updated', $element);
+    canEvent.trigger.call(element, 'widgets_updated', [element]);
 
     return control;
   },
@@ -219,15 +226,16 @@ const PageObjectControl = DashboardControl.extend({}, {
   init: function () {
     this.options.model = this.options.instance.constructor;
     this._super();
+    canControl3.initElement(this);
     this.init_info_pin();
   },
 
   init_info_pin: function () {
-    this.info_pin = new InfoPin(this.element.find('.pin-content'));
+    this.info_pin = new InfoPin(this.$element.find('.pin-content')[0]);
   },
 
   hideInfoPin() {
-    const infopinCtr = this.info_pin.element.control();
+    const infopinCtr = this.info_pin.$element.control();
 
     if (infopinCtr) {
       infopinCtr.hideInstance();

@@ -20,8 +20,11 @@ import '../components/recently-viewed/recently-viewed';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
 import {filtredMap} from '../plugins/ggrc_utils';
 
-const LhnControl = can.Control.extend({}, {
+import canControl3 from 'can-control';
+
+const LhnControl = canControl3.extend({}, {
   init: function () {
+    canControl3.initElement(this);
     this.obs = new can.Map();
 
     this.init_lhn();
@@ -32,7 +35,7 @@ const LhnControl = can.Control.extend({}, {
     let lhsHolderOnscroll = _.debounce(function () {
       setLHNState({panel_scroll: this.scrollTop});
     }, 250);
-    this.element.find('.affix-holder').on('scroll', lhsHolderOnscroll);
+    this.$element.find('.affix-holder').on('scroll', lhsHolderOnscroll);
   },
   is_lhn_open: function () {
     let isOpen = getLHNState().is_open;
@@ -62,10 +65,10 @@ const LhnControl = can.Control.extend({}, {
   },
   toggle_filter_active: function () {
     // Set active state to search field if the input is not empty:
-    let $filter = this.element.find('.widgetsearch');
-    let $button = this.element.find('.widgetsearch-submit');
-    let $off = this.element.find('.filter-off');
-    let $searchTitle = this.element.find('.search-title');
+    let $filter = this.$element.find('.widgetsearch');
+    let $button = this.$element.find('.widgetsearch-submit');
+    let $off = this.$element.find('.filter-off');
+    let $searchTitle = this.$element.find('.search-title');
     let gotFilter = !!$filter.val().trim().length;
 
     $filter.toggleClass('active', gotFilter);
@@ -76,7 +79,7 @@ const LhnControl = can.Control.extend({}, {
   '.filter-off a click': function (el, ev) {
     ev.preventDefault();
 
-    this.element.find('.widgetsearch').val('');
+    this.$element.find('.widgetsearch').val('');
     this.do_search('');
     this.toggle_filter_active();
   },
@@ -109,10 +112,10 @@ const LhnControl = can.Control.extend({}, {
     $('.lhn-trigger').removeClass('active');
 
     let _width = getLHNavSize();
-    let width = _width || this.element.find('.lhs-holder').width();
+    let width = _width || this.$element.find('.lhs-holder').width();
     let safety = 20;
 
-    this.element.find('.lhs-holder')
+    this.$element.find('.lhs-holder')
       .removeClass('active')
       .css('left', (-width - safety) + 'px');
 
@@ -125,7 +128,7 @@ const LhnControl = can.Control.extend({}, {
     // not nested
     $('.lhn-trigger').removeClass('hide').addClass('active');
 
-    this.element.find('.lhs-holder')
+    this.$element.find('.lhs-holder')
       .css('left', '')
       .addClass('active');
 
@@ -155,16 +158,16 @@ const LhnControl = can.Control.extend({}, {
     }
     this.obs.attr('my_work', myWorkTab);
 
-    let searchControl = new LhnSearchControl($lhs, {
+    let searchControl = new LhnSearchControl($lhs[0], {
       observer: this.obs,
     });
     searchControl.display();
 
-    new LhnTooltipsControl($lhs);
+    new LhnTooltipsControl($lhs[0]);
 
     let checked = this.obs.attr('my_work');
     let value = checked ? 'my_work' : 'all';
-    let target = this.element.find(`#lhs input.my-work[value=${value}]`);
+    let target = this.$element.find(`#lhs input.my-work[value=${value}]`);
 
     target.prop('checked', true);
     target.closest('.btn')[checked
@@ -177,7 +180,7 @@ const LhnControl = can.Control.extend({}, {
     //  open section is handled in the LHN Search controller.
 
     if (getLHNState().open_category) {
-      this.element.one('list_displayed', this.initial_scroll.bind(this));
+      this.$element.one('list_displayed', this.initial_scroll.bind(this));
     } else {
       this.initial_scroll();
     }
@@ -192,7 +195,7 @@ const LhnControl = can.Control.extend({}, {
   },
 
   initial_scroll: function () {
-    this.element.find('.affix-holder').scrollTop(
+    this.$element.find('.affix-holder').scrollTop(
       getLHNState().panel_scroll || 0
     );
   },
@@ -225,7 +228,7 @@ const LhnControl = can.Control.extend({}, {
     let $bar = $('.bar-v');
     let $lhnTrigger = $('.lhn-trigger');
 
-    this.element.hide();
+    this.$element.hide();
     $lhsHolder.css('width', 0);
     $('.page-content').css('margin-left', 0);
     $bar.hide();
@@ -235,7 +238,7 @@ const LhnControl = can.Control.extend({}, {
     window.resize_areas();
   },
   do_search: function (value) {
-    let $searchTitle = this.element.find('.search-title');
+    let $searchTitle = this.$element.find('.search-title');
     value = $.trim(value);
     if (this._value === value) {
       return;
@@ -258,7 +261,7 @@ const LhnControl = can.Control.extend({}, {
     }
     resize = Math.min(resize, maxWidth);
 
-    this.element.find('.lhs-holder').width(resize);
+    this.$element.find('.lhs-holder').width(resize);
 
     if (resize) {
       setLHNavSize(resize);
@@ -328,7 +331,7 @@ const LhnControl = can.Control.extend({}, {
     }
   },
   destroy: function () {
-    this.element.find('.affix-holder').off('scroll');
+    this.$element.find('.affix-holder').off('scroll');
     this._super && this._super(...arguments);
   },
   '.lhn-pin click': function (element, event) {
@@ -339,18 +342,18 @@ const LhnControl = can.Control.extend({}, {
     }
   },
   unpin: function () {
-    this.element.find('.lhn-pin').removeClass('active');
-    this.element.find('.bar-v').removeClass('disabled');
+    this.$element.find('.lhn-pin').removeClass('active');
+    this.$element.find('.bar-v').removeClass('disabled');
     setLHNState({is_pinned: false});
   },
   pin: function () {
-    this.element.find('.lhn-pin').addClass('active');
-    this.element.find('.bar-v').addClass('disabled');
+    this.$element.find('.lhn-pin').addClass('active');
+    this.$element.find('.bar-v').addClass('disabled');
     setLHNState({is_pinned: true});
   },
 });
 
-const LhnSearchControl = can.Control.extend({
+const LhnSearchControl = canControl3.extend({
   defaults: {
     list_view: GGRC.templates_path + '/base_objects/search_result.stache',
     actions_view: GGRC.templates_path + '/base_objects/search_actions.stache',
@@ -370,7 +373,7 @@ const LhnSearchControl = can.Control.extend({
   },
 }, {
   display: function () {
-    let templatePath = GGRC.templates_path + this.element.data('template');
+    let templatePath = GGRC.templates_path + this.$element.data('template');
     let lhnPrefs = getLHNState();
 
     // 2-way binding is set up in the view using can-value, directly connecting the
@@ -383,7 +386,7 @@ const LhnSearchControl = can.Control.extend({
       async: false,
     }).then((view) => {
       let frag = can.stache(view)(lhnPrefs);
-      this.element.html(frag);
+      this.$element.html(frag);
     });
 
     let initialParams = {};
@@ -391,8 +394,8 @@ const LhnSearchControl = can.Control.extend({
 
     this.post_init();
 
-    let subLevelElements = this.element.find('.sub-level');
-    new InfiniteScrollControl(subLevelElements);
+    let subLevelElements = this.$element.find('.sub-level');
+    new InfiniteScrollControl(subLevelElements[0]);
     subLevelElements.on('scroll', _.debounce(function () {
       setLHNState({category_scroll: this.scrollTop});
     }, 250));
@@ -423,7 +426,7 @@ const LhnSearchControl = can.Control.extend({
         .join(',');
 
       this.toggle_list_visibility(
-        this.element.find(selector)
+        this.$element.find(selector)
       );
     }
   },
@@ -596,13 +599,13 @@ const LhnSearchControl = can.Control.extend({
     }
   },
   ' resize': function () {
-    let $content = this.element
+    let $content = this.$element
       .find([this.options.list_content_selector].join(','))
       .filter(':visible');
 
     if ($content.length) {
       let lastHeight = this._holder_height;
-      let holder = this.element.closest('.lhs-holder');
+      let holder = this.$element.closest('.lhs-holder');
       this._holder_height = holder.outerHeight();
 
 
@@ -945,7 +948,7 @@ const LhnSearchControl = can.Control.extend({
   },
   get_lists: function () {
     return $.makeArray(
-      this.element.find(this.options.list_selector));
+      this.$element.find(this.options.list_selector));
   },
   get_visible_lists: function () {
     let self = this;

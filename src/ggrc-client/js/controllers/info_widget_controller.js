@@ -15,7 +15,9 @@ import {
 } from '../plugins/utils/current-page-utils';
 import * as businessModels from '../models/business-models';
 
-export default can.Control.extend({
+import canControl3 from 'can-control';
+
+export default canControl3.extend({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),
@@ -23,11 +25,12 @@ export default can.Control.extend({
   },
 }, {
   init: function () {
+    canControl3.initElement(this);
     this.init_menu();
 
-    if (this.element.data('widget-view')) {
+    if (this.$element.data('widget-view')) {
       this.options.widget_view = GGRC.templates_path +
-        this.element.data('widget-view');
+      this.$element.data('widget-view');
     }
     if (this.options.instance.info_pane_preload) {
       this.options.instance.info_pane_preload();
@@ -45,12 +48,12 @@ export default can.Control.extend({
       .then(() => {
         let that = this;
         $.ajax({
-          url: this.get_widget_view(this.element),
+          url: this.get_widget_view(this.$element),
           dataType: 'text',
           async: false,
         }).then((view) => {
           let frag = can.stache(view)(that.options.context);
-          that.element.html(frag);
+          that.$element.html(frag);
         });
       });
   },

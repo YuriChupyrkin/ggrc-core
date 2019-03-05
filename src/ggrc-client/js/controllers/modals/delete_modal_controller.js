@@ -19,8 +19,8 @@ export default ModalsController({
   '{$footer} a.btn[data-toggle=delete]:not(:disabled) click'(el, ev) {
     let that = this;
     // Disable the cancel button.
-    let cancelButton = this.element.find('a.btn[data-dismiss=modal]');
-    let modalBackdrop = this.element.data('modal_form').$backdrop;
+    let cancelButton = this.$element.find('a.btn[data-dismiss=modal]');
+    let modalBackdrop = this.$element.data('modal_form').$backdrop;
 
     bindXHRToButton(this.options.instance.refresh()
       .then(function (instance) {

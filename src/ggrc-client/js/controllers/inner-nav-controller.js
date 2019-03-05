@@ -14,7 +14,9 @@ import router, {buildUrl} from '../router';
 import '../components/add-tab-button/add-tab-button';
 import pubSub from '../pub-sub';
 
-export default can.Control.extend({
+import canControl3 from 'can-control';
+
+export default canControl3.extend({
   defaults: {
     internav_view: '/static/templates/dashboard/internav_list.stache',
     pin_view: '.pin-content',
@@ -39,6 +41,7 @@ export default can.Control.extend({
   },
 }, {
   init: function (options) {
+    canControl3.initElement(this);
     const instance = getPageInstance();
 
     this.options = new can.Map(this.options);
@@ -61,9 +64,9 @@ export default can.Control.extend({
     }).then((view) => {
       let frag = can.stache(view)(this.options);
       const isAuditScope = instance.type === 'Audit';
-      this.element.append(frag);
+      this.$element.append(frag);
       if (isAuditScope) {
-        this.element.addClass(this.options.instance.type.toLowerCase());
+        this.$element.addClass(this.options.instance.type.toLowerCase());
       }
       this.setTabsPriority();
       this.route(router.attr('widget'));

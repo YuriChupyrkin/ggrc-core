@@ -7,8 +7,10 @@ import Role from '../models/service-models/role';
 import Person from '../models/business-models/person';
 import UserRole from '../models/service-models/user-role';
 
+import canControl3 from 'can-control';
+
 // Role Assignment Modal Selector
-const userRolesModalSelector = can.Control.extend({
+const userRolesModalSelector = canControl3.extend({
   defaults: {
     base_modal_view:
       GGRC.templates_path + '/people_roles/base_modal.stache',
@@ -31,6 +33,7 @@ const userRolesModalSelector = can.Control.extend({
   },
 }, {
   init() {
+    canControl3.initElement(this);
     this.rolesList = new can.List();
     this.userRolesList = new can.List();
 
@@ -50,8 +53,8 @@ const userRolesModalSelector = can.Control.extend({
       dataType: 'text',
     }).then((view) => {
       let frag = can.stache(view)(this.context);
-      $(this.element).html(frag);
-      this.element.trigger('loaded');
+      this.$element.html(frag);
+      this.$element.trigger('loaded');
       deferred.resolve();
     });
 
