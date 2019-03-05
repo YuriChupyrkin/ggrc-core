@@ -10,15 +10,15 @@
         Comment
       </label>
       <rich-text
-          {hidden-toolbar}="true"
+          {hidden-toolbar}="{true}"
           {placeholder}="'Enter Proposal Agenda'"
-          {(content)}="proposalAgenda">
+          {(content)}="{proposalAgenda}">
       </rich-text>
     </div>
   </div>
 
   <div class="proposal__save-button">
-    <spinner class="proposal__spinner" toggle="loading"></spinner>
+    <spinner class="proposal__spinner" {toggle}="{loading}"></spinner>
     <a class="btn btn-small btn-green {{#if isDisabled}}disabled{{/isDisabled}}"
        ($click)="create(%element, %event)">
         Propose
