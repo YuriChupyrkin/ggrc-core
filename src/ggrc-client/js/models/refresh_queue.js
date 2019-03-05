@@ -5,6 +5,7 @@
 
 import {reify} from '../plugins/utils/reify-utils';
 import allModels from './all-models';
+import {filtredMap} from '../plugins/ggrc_utils';
 
 /*  RefreshQueue
  *
@@ -72,7 +73,7 @@ const RefreshQueueManager = can.Construct({}, {
     this.queues = [];
   },
   triggered_queues: function () {
-    return can.map(this.queues, function (queue) {
+    return filtredMap(this.queues, (queue) => {
       if (queue.triggered) {
         return queue;
       }
@@ -236,9 +237,7 @@ const RefreshQueue = can.Construct({
 
     if (deferreds.length) {
       $.when(...deferreds).then(function () {
-        self.deferred.resolve(can.map(self.objects, function (obj) {
-          return reify(obj);
-        }));
+        self.deferred.resolve(filtredMap(self.objects, (obj) => reify(obj)));
       }, function () {
         self.deferred.reject(...arguments);
       });

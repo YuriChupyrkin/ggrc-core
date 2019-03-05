@@ -5,6 +5,7 @@
 
 import Cacheable from '../cacheable';
 import {getRoleableModels} from '../../plugins/utils/models-utils';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 /**
  * A "mixin" denoting a model type that can be assigned custom roles.
@@ -21,7 +22,7 @@ export default Cacheable.extend({
     // a list of objects in the Custom Roles widget.
     let types = _.orderBy(getRoleableModels(), 'category', false);
 
-    let instances = can.map(types, (type, i) => {
+    let instances = filtredMap(types, (type, i) => {
       let withId = Object.assign({}, type, {id: i});
       return new this(withId);
     });

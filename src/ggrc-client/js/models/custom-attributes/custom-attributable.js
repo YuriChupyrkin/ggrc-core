@@ -5,6 +5,7 @@
 
 import Cacheable from '../cacheable';
 import {getCustomAttributableModels} from '../../plugins/utils/models-utils';
+import {filtredMap} from '../../plugins/ggrc_utils';
 
 /* class CustomAttributable
   *
@@ -20,7 +21,7 @@ export default Cacheable.extend({
     let types = _.orderBy(getCustomAttributableModels(),
       'category', false);
 
-    return $.when(can.map(types, (type, i) => {
+    return $.when(filtredMap(types, (type, i) => {
       return new this(Object.assign({}, type, {
         id: i,
       }));

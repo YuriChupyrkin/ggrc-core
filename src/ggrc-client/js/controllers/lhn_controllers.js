@@ -19,6 +19,7 @@ import Relationship from '../models/service-models/relationship';
 import '../components/recently-viewed/recently-viewed';
 import '../components/questionnaire-create-link/questionnaire-create-link';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
+import {filtredMap} from '../plugins/ggrc_utils';
 
 const LhnControl = can.Control.extend({}, {
   init: function () {
@@ -442,7 +443,7 @@ const LhnSearchControl = can.Control.extend({
         this.options._hasPendingRefresh = true;
         return;
       }
-      modelNames = can.map(
+      modelNames = filtredMap(
         this.get_visible_lists(), this.proxy('get_list_model'));
       modelName = instance.constructor.model_singular;
 
@@ -829,8 +830,8 @@ const LhnSearchControl = can.Control.extend({
     }
 
 
-    models = can.map(this.get_lists(), this.proxy('get_list_model'));
-    extraModels = can.map(
+    models = filtredMap(this.get_lists(), this.proxy('get_list_model'));
+    extraModels = filtredMap(
       this.get_lists(), this.proxy('get_extra_list_model'));
 
     this.options._hasPendingRefresh = false;
@@ -848,14 +849,14 @@ const LhnSearchControl = can.Control.extend({
     let self = this;
     let searchId = this.search_id;
     let lists = this.get_visible_lists();
-    let models = can.map(lists, this.proxy('get_list_model'));
+    let models = filtredMap(lists, this.proxy('get_list_model'));
 
     if (!$('.lhn-trigger').hasClass('active')) {
       this.options._hasPendingRefresh = true;
       return $.Deferred().resolve();
     }
 
-    models = can.map(models, function (modelName) {
+    models = filtredMap(models, (modelName) => {
       if (self.options.loaded_lists.indexOf(modelName) === -1) {
         return modelName;
       }
@@ -933,7 +934,7 @@ const LhnSearchControl = can.Control.extend({
   },
   get_visible_lists: function () {
     let self = this;
-    return can.map(this.get_lists(), function ($list) {
+    return filtredMap(this.get_lists(), ($list) => {
       $list = $($list);
       if ($list.find([self.options.list_content_selector,
         self.options.list_mid_level_selector].join(',')).hasClass('in')) {

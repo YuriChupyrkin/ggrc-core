@@ -17,6 +17,7 @@ import RefreshQueue from './refresh_queue';
 import tracker from '../tracker';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
+import {filtredMap} from '../plugins/ggrc_utils';
 
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
@@ -593,13 +594,13 @@ export default can.Model.extend({
       GGRC.custom_attr_defs = {};
       console.warn('Missing injected custom attribute definitions');
     }
-    definitions = can.map(GGRC.custom_attr_defs, function (def) {
+    definitions = filtredMap(GGRC.custom_attr_defs, (def) => {
       let idCheck = !def.definition_id || def.definition_id === this.id;
       if (idCheck &&
           def.definition_type === this.constructor.table_singular) {
         return def;
       }
-    }.bind(this));
+    });
     this.attr('custom_attribute_definitions', definitions);
   },
   /*
@@ -739,7 +740,7 @@ export default can.Model.extend({
       } else if (val && _.isFunction(val.save)) {
         serial[name] = (new Stub(val)).serialize();
       } else if (typeof val === 'object' && val !== null && val.length) {
-        serial[name] = can.map(val, function (v) {
+        serial[name] = filtredMap(val, (v) => {
           let isModel = v && _.isFunction(v.save);
           return isModel ?
             (new Stub(v)).serialize() :
