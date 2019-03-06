@@ -15,7 +15,7 @@ export default can.Component.extend({
   tag: 'ggrc-gdrive-folder-picker',
   template: can.stache(template),
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     define: {
       readonly: {
         type: 'boolean',
@@ -115,14 +115,14 @@ export default can.Component.extend({
         this.setCurrent(folderId);
       }
     },
-  },
+  }),
 
   events: {
     inserted: function () {
       let viewModel = this.viewModel;
 
       if (!viewModel.attr('readonly')) {
-        this.element.removeAttr('tabindex');
+        $(this.element).removeAttr('tabindex');
       }
 
       viewModel.setRevisionFolder();

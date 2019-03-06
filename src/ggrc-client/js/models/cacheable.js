@@ -295,14 +295,14 @@ export default can.Model.extend({
 
     // Register this type as a custom attributable type if it is one.
     if (this.is_custom_attributable) {
-      this.validate(
-        '_gca_valid',
-        function () {
-          if (!this._gca_valid) {
-            return 'Missing required global custom attribute';
-          }
-        }
-      );
+      // this.validate(
+      //   '_gca_valid',
+      //   function () {
+      //     if (!this._gca_valid) {
+      //       return 'Missing required global custom attribute';
+      //     }
+      //   }
+      // );
     }
   },
 
@@ -760,6 +760,9 @@ export default can.Model.extend({
         }
       }
     }.bind(this));
+    if (!serial.context) {
+      serial.context = {};
+    }
     return serial;
   },
   display_name: function () {

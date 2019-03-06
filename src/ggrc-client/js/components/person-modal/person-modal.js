@@ -11,27 +11,27 @@ const viewModel = can.Map.extend({
   isNewInstance: false,
   turnOnCalendarEvents: true,
   async updatePersonProfile() {
-    const instance = this.attr('instance');
-    let profile = PersonProfile.findInCacheById(instance.attr('profile.id'));
+    // const instance = this.attr('instance');
+    // let profile = PersonProfile.findInCacheById(instance.attr('profile.id'));
 
-    // If we use "Create" modal then profile might be empty.
-    // It's generated on BE after person creation. Because of this,
-    // profile should be loaded.
-    if (!profile) {
-      profile = await loadPersonProfile(instance);
-    }
+    // // If we use "Create" modal then profile might be empty.
+    // // It's generated on BE after person creation. Because of this,
+    // // profile should be loaded.
+    // if (!profile) {
+    //   profile = await loadPersonProfile(instance);
+    // }
 
-    profile
-      .attr('send_calendar_events', this.attr('turnOnCalendarEvents'))
-      .save();
+    // profile
+    //   .attr('send_calendar_events', this.attr('turnOnCalendarEvents'))
+    //   .save();
   },
   loadPersonProfile() {
     // Profile is loaded in the moment of modal initialization via person's
     // form_preload method
-    const profile = PersonProfile.findInCacheById(
-      this.attr('instance.profile.id')
-    );
-    this.attr('turnOnCalendarEvents', profile.attr('send_calendar_events'));
+    // const profile = PersonProfile.findInCacheById(
+    //   this.attr('instance.profile.id')
+    // );
+    // this.attr('turnOnCalendarEvents', profile.attr('send_calendar_events'));
   },
 });
 

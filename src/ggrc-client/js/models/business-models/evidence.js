@@ -72,7 +72,7 @@ export default Cacheable.extend({
       }],
   },
   init() {
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
     this._super(...arguments);
   },
 }, {

@@ -69,6 +69,6 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
-    this.validatePresenceOf('title');
+   // this.validatePresenceOf('title');
   },
 }, {});

@@ -112,13 +112,13 @@ export default Cacheable.extend({
   keyControlOptions:
     [{title: 'Non-Key', value: false}, {title: 'Key', value: true}],
   init: function () {
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
-    this.validate('assertions', function () {
-      if (!this.attr('assertions') || !this.attr('assertions.length')) {
-        return 'cannot be blank';
-      }
-    });
+    // this.validate('assertions', function () {
+    //   if (!this.attr('assertions') || !this.attr('assertions.length')) {
+    //     return 'cannot be blank';
+    //   }
+    // });
 
     this._super(...arguments);
   },

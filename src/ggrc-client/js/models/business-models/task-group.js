@@ -44,9 +44,9 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
-    this.validateNonBlank('title');
-    this.validateNonBlank('contact');
-    this.validateNonBlank('workflow');
+    // this.validateNonBlank('title');
+    // this.validateNonBlank('contact');
+    // this.validateNonBlank('workflow');
 
     this.bind('updated', function (ev, instance) {
       if (instance instanceof that) {

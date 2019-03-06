@@ -14,15 +14,16 @@ import Context from '../../models/service-models/context';
 export default can.Component.extend({
   tag: 'comment-data-provider',
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     instance: null,
-    comments: [],
+    comments: can.List(),
     isLoading: false,
 
     loadComments() {
       let query = this.buildQuery();
-      let comments = this.getComments(query);
-      this.attr('comments').replace(comments);
+      this.getComments(query).then((data) => {
+        this.attr('comments').replace(data);
+      });
     },
     buildQuery() {
       let objectName = this.attr('instance').class.isChangeableExternally
@@ -91,7 +92,7 @@ export default can.Component.extend({
           this.removeComment(comment);
         });
     },
-  },
+  }),
   init() {
     this.viewModel.loadComments();
   },

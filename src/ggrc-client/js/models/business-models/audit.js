@@ -111,18 +111,18 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
-    this.validatePresenceOf('program');
-    this.validateNonBlank('title');
+    // this.validatePresenceOf('program');
+    // this.validateNonBlank('title');
 
-    this.validate(
-      'issue_tracker_component_id',
-      function () {
-        if (this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.component_id')) {
-          return 'cannot be blank';
-        }
-      }
-    );
+    // this.validate(
+    //   'issue_tracker_component_id',
+    //   function () {
+    //     if (this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.component_id')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
   },
   buildIssueTrackerConfig() {
     return {

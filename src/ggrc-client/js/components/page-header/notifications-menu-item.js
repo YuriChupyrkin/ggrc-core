@@ -18,9 +18,9 @@ export default can.Component.extend({
     define: {
       emailDigest: {
         set(newValue) {
-          if (!this.attr('isLoading')) {
-            this.saveEmailDigest(newValue);
-          }
+          // if (!this.attr('isLoading')) {
+          //   this.saveEmailDigest(newValue);
+          // }
 
           return newValue;
         },
@@ -33,28 +33,28 @@ export default can.Component.extend({
       this.attr('isSaving', true);
 
       try {
-        let existingConfigId = this.attr('existingConfigId');
+        // let existingConfigId = this.attr('existingConfigId');
 
-        if (existingConfigId) {
-          await this.updateNotification(existingConfigId, checked);
-        } else {
-          await this.createNotification(checked);
-        }
+        // if (existingConfigId) {
+        //   await this.updateNotification(existingConfigId, checked);
+        // } else {
+        //   await this.createNotification(checked);
+        // }
       } finally {
         this.attr('isSaving', false);
       }
     },
     async createNotification(checked) {
-      let config = new NotificationConfig({
-        person_id: GGRC.current_user.id,
-        notif_type: emailDigestType,
-        enable_flag: checked,
-        context: new Context({id: null}),
-      });
+      // let config = new NotificationConfig({
+      //   person_id: GGRC.current_user.id,
+      //   notif_type: emailDigestType,
+      //   enable_flag: checked,
+      //   context: new Context({id: null}),
+      // });
 
-      config = await config.save();
+      // config = await config.save();
 
-      this.attr('existingConfigId', config.id);
+      // this.attr('existingConfigId', config.id);
     },
     async updateNotification(configId, checked) {
       let config = await NotificationConfig.findInCacheById(configId).refresh();
@@ -64,14 +64,14 @@ export default can.Component.extend({
     async loadNotification() {
       this.attr('isLoading', true);
       try {
-        let config = await NotificationConfig.find(emailDigestType);
-        if (config) {
-          this.attr('emailDigest', config.enable_flag);
-          this.attr('existingConfigId', config.id);
-        } else {
-          // Handle the default case, in case notification object is not set
-          this.attr('emailDigest', true);
-        }
+        // let config = await NotificationConfig.find(emailDigestType);
+        // if (config) {
+        //   this.attr('emailDigest', config.enable_flag);
+        //   this.attr('existingConfigId', config.id);
+        // } else {
+        //   // Handle the default case, in case notification object is not set
+        //   this.attr('emailDigest', true);
+        // }
       } finally {
         this.attr('isLoading', false);
       }

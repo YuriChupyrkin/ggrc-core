@@ -132,11 +132,11 @@ export default can.Control.extend({
       });
 
     // TODO: FIX
-    let self = this;
-    // Works as NOT expected. Doesn't have ev arg
-    this.options.instance.on('destroyed', function () {
-      self.hide.call(self, null, {});
-    });
+    // let self = this;
+    // // Works as NOT expected. Doesn't have ev arg
+    // this.options.instance.on('destroyed', function () {
+    //   self.hide.call(self, null, {});
+    // });
   },
   after_preload: function (content) {
     if (this.wasDestroyed()) {
@@ -320,7 +320,7 @@ export default can.Control.extend({
           that.options.attr('new_object_form', true);
           that.options.attr('instance', new that.options.model(params));
           return instance;
-        }).done(function () {
+        }).then(function () {
           if (!that.wasDestroyed()) {
             that.on(); // listen to instance.
           }
@@ -346,7 +346,7 @@ export default can.Control.extend({
       }
     });
 
-    return dfd.done(function () {
+    return dfd.then(function () {
       this.reset_form(this.options.instance);
     }.bind(that));
   },

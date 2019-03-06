@@ -149,38 +149,38 @@ export default Cacheable.extend({
     if (this._super) {
       this._super(...arguments);
     }
-    this.validatePresenceOf('audit');
-    this.validateNonBlank('title');
+    // this.validatePresenceOf('audit');
+    // this.validateNonBlank('title');
 
 
-    this.validate(
-      'issue_tracker_title',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.title')) {
-          return 'cannot be blank';
-        }
-      }
-    );
-    this.validate(
-      'issue_tracker_component_id',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.component_id')) {
-          return 'cannot be blank';
-        }
-      }
-    );
-    this.validate(
-      '_gca_valid',
-      function () {
-        if (!this._gca_valid) {
-          return 'Missing required global custom attribute';
-        }
-      }
-    );
+    // this.validate(
+    //   'issue_tracker_title',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.title')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
+    // this.validate(
+    //   'issue_tracker_component_id',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.component_id')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
+    // this.validate(
+    //   '_gca_valid',
+    //   function () {
+    //     if (!this._gca_valid) {
+    //       return 'Missing required global custom attribute';
+    //     }
+    //   }
+    // );
   },
   prepareAttributes: function (attrs) {
     return attrs[this.root_object] ? attrs[this.root_object] : attrs;

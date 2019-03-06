@@ -4,6 +4,9 @@
 */
 
 import 'jquery';
+
+jQuery.fn.load = function(callback){ $(window).on("load", callback) };
+
 import 'lodash';
 import 'components-jqueryui/ui/widgets/autocomplete';
 import 'components-jqueryui/ui/widgets/datepicker';
@@ -36,13 +39,13 @@ import can3 from 'can/legacy';
 window.can = can3;
 
 /* canjs v3 */
-import 'can-validate-legacy/map/validate/validate';
-import 'can-validate-legacy/shims/validatejs';
-import 'can-map-define';
-import 'can-construct-super';
+// import 'can-validate-legacy/map/validate/validate';
+// import 'can-validate-legacy/shims/validatejs';
+// import 'can-map-define';
+//import 'can-construct-super';
 
-import 'can-control';
-import 'can-event';
+// import 'can-control';
+// import 'can-event';
 
 import 'moment';
 import 'moment-timezone/builds/moment-timezone-with-data.min';

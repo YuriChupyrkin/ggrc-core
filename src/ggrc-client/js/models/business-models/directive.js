@@ -63,7 +63,7 @@ export default Cacheable.extend({
     modified_by: Stub,
   },
   init: function () {
-    this.validateNonBlank('title');
+   // this.validateNonBlank('title');
     this._super(...arguments);
   },
 }, {});

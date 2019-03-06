@@ -34,13 +34,13 @@ const events = {
     );
     const releaseNotesDate = getFormattedUtcDate(RELEASE_NOTES_DATE);
 
-    if (releaseNotesDate !== lastSeenDate) {
-      profile.attr('last_seen_whats_new', releaseNotesDate);
-      profile.save()
-        .then(() => {
-          this.viewModel.open();
-        });
-    }
+    // if (releaseNotesDate !== lastSeenDate) {
+    //   profile.attr('last_seen_whats_new', releaseNotesDate);
+    //   profile.save()
+    //     .then(() => {
+    //       this.viewModel.open();
+    //     });
+    // }
   },
 };
 

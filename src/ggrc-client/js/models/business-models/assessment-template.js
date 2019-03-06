@@ -81,30 +81,30 @@ export default Cacheable.extend({
    */
   init: function () {
     this._super(...arguments);
-    this.validateNonBlank('title');
+    // this.validateNonBlank('title');
 
-    this.validateListNonBlank(
-      'default_people.assignees',
-      function () {
-        return this.attr('default_people.assignees') instanceof can.List;
-      }
-    );
-    this.validateListNonBlank(
-      'default_people.verifiers',
-      function () {
-        return this.attr('default_people.verifiers') instanceof can.List;
-      }
-    );
-    this.validate(
-      'issue_tracker_component_id',
-      function () {
-        if (this.attr('can_use_issue_tracker') &&
-          this.attr('issue_tracker.enabled') &&
-          !this.attr('issue_tracker.component_id')) {
-          return 'cannot be blank';
-        }
-      }
-    );
+    // this.validateListNonBlank(
+    //   'default_people.assignees',
+    //   function () {
+    //     return this.attr('default_people.assignees') instanceof can.List;
+    //   }
+    // );
+    // this.validateListNonBlank(
+    //   'default_people.verifiers',
+    //   function () {
+    //     return this.attr('default_people.verifiers') instanceof can.List;
+    //   }
+    // );
+    // this.validate(
+    //   'issue_tracker_component_id',
+    //   function () {
+    //     if (this.attr('can_use_issue_tracker') &&
+    //       this.attr('issue_tracker.enabled') &&
+    //       !this.attr('issue_tracker.component_id')) {
+    //       return 'cannot be blank';
+    //     }
+    //   }
+    // );
   },
 }, {
   /**
