@@ -3,14 +3,14 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-import canControl3 from 'can-control';
+
 import * as canEvent from 'can-event';
 
-export default canControl3.extend({
+export default can.Control.extend({
   defaults: {},
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
   },
   init_spinner: function () {
     let $footer;

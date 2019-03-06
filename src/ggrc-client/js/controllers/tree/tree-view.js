@@ -9,7 +9,7 @@ import TreeLoader from './tree-loader';
 import TreeViewNode from './tree-view-node';
 import TreeViewOptions from './tree-view-options';
 import Mappings from '../../models/mappers/mappings';
-import canControl3 from 'can-control';
+
 
 import * as canEvent from 'can-event';
 
@@ -69,7 +69,7 @@ const TreeViewControl = TreeLoader.extend({
   },
 
   init: function (el, opts) {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     let states = StateUtils
       .getStatesForModel(this.options.model.model_singular);

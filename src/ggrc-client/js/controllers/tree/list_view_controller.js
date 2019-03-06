@@ -4,7 +4,7 @@
 */
 
 import TreeLoader from './tree-loader';
-import canControl3 from 'can-control';
+
 
 function modelListLoader(controller, params) {
   let model = controller.options.model;
@@ -39,7 +39,7 @@ export default TreeLoader({
 }, {
   init: function () {
     let that = this;
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     if (!this.options.extra_params) {
       this.options.extra_params = {};
     }

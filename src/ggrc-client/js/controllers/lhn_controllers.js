@@ -21,11 +21,11 @@ import '../components/questionnaire-create-link/questionnaire-create-link';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
 import {filtredMap} from '../plugins/ggrc_utils';
 
-import canControl3 from 'can-control';
 
-const LhnControl = canControl3.extend({}, {
+
+const LhnControl = can.Control.extend({}, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     this.obs = new can.Map();
 
     this.init_lhn();
@@ -354,7 +354,7 @@ const LhnControl = canControl3.extend({}, {
   },
 });
 
-const LhnSearchControl = canControl3.extend({
+const LhnSearchControl = can.Control.extend({
   defaults: {
     list_view: GGRC.templates_path + '/base_objects/search_result.stache',
     actions_view: GGRC.templates_path + '/base_objects/search_actions.stache',
@@ -374,7 +374,7 @@ const LhnSearchControl = canControl3.extend({
   },
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     this.options.observer.on('my_work', (ev, newval) => {
       this.run_search(this.current_term, newval

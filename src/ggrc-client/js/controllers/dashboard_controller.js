@@ -13,16 +13,16 @@ import {getChildTreeDisplayList} from '../plugins/utils/display-prefs-utils';
 import {clear as clearLocalStorage} from '../plugins/utils/local-storage-utils';
 import TreeViewConfig from '../apps/base_widgets';
 
-import canControl3 from 'can-control';
+
 import * as canEvent from 'can-event';
 
-const DashboardControl = canControl3.extend({
+const DashboardControl = can.Control.extend({
   defaults: {
     widget_descriptors: null,
   },
 }, {
   init: function (el, options) {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     this.init_tree_view_settings();
     this.init_page_title();
@@ -228,7 +228,7 @@ const PageObjectControl = DashboardControl.extend({}, {
   init: function () {
     this.options.model = this.options.instance.constructor;
     this._super();
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     this.init_info_pin();
   },
 

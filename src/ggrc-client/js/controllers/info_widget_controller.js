@@ -15,9 +15,9 @@ import {
 import * as businessModels from '../models/business-models';
 import {getCreateObjectUrl} from '../plugins/utils/ggrcq-utils';
 
-import canControl3 from 'can-control';
 
-export default canControl3.extend({
+
+export default can.Control.extend({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),
@@ -25,7 +25,7 @@ export default canControl3.extend({
   },
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     this.init_menu();
 
     if (this.$element.data('widget-view')) {

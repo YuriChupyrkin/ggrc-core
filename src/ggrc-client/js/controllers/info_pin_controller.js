@@ -36,15 +36,15 @@ export const pinContentHiddenClass = 'pin-content--hidden';
 export const pinContentMaximizedClass = 'pin-content--maximized';
 export const pinContentMinimizedClass = 'pin-content--minimized';
 
-import canControl3 from 'can-control';
 
-export default canControl3.extend({
+
+export default can.Control.extend({
   defaults: {
     view: GGRC.templates_path + '/base_objects/info.stache',
   },
 }, {
   init: function (el, options) {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     this.unsetInstance();
   },
   isPinVisible() {

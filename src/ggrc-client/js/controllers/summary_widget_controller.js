@@ -18,9 +18,9 @@ import {loadScript} from '../plugins/ggrc_utils';
 import Relationship from '../models/service-models/relationship';
 import Assessment from '../models/business-models/assessment';
 
-import canControl3 from 'can-control';
 
-export default canControl3({
+
+export default can.Control({
   defaults: {
     Assessment,
     Relationship,

@@ -20,15 +20,30 @@ import 'bootstrap/js/bootstrap-tab.js';
 import 'bootstrap/js/bootstrap-tooltip.js';
 import 'bootstrap/js/bootstrap-popover.js';
 import 'clipboard';
-import 'canjs/amd/can';
-import 'can/construct/super';
-import 'can/construct/proxy';
-import 'can/control/plugin';
-import 'can/list/sort';
-import 'can/map/attributes';
-import 'can/map/backup';
-import 'can/map/validations';
-import 'can/view/stache';
+
+// import 'canjs/amd/can';
+// import 'can/construct/super';
+// import 'can/construct/proxy';
+// import 'can/control/plugin';
+// import 'can/list/sort';
+// import 'can/map/attributes';
+// import 'can/map/backup';
+// import 'can/map/validations';
+// import 'can/view/stache';
+
+import can3 from 'can/legacy';
+
+window.can = can3;
+
+/* canjs v3 */
+import 'can-validate-legacy/map/validate/validate';
+import 'can-validate-legacy/shims/validatejs';
+import 'can-map-define';
+import 'can-construct-super';
+
+import 'can-control';
+import 'can-event';
+
 import 'moment';
 import 'moment-timezone/builds/moment-timezone-with-data.min';
 import 'spin.js';
@@ -36,26 +51,17 @@ import 'jquery/jquery-ui.css';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
-/* canjs v3 */
-import canControl3 from 'can-control';
-//can.Control = canControl3;
-
-// import 'can-validate-legacy/map/validate/validate';
-// import 'can-validate-legacy/shims/validatejs';
-// import 'can-map-define';
-import 'can-construct-super';
-
 function addControlPlugin () {
   let makeArray = can.makeArray;
 
-  canControl3.prototype._ifNotRemoved = function (fn) {
+  can.Control.prototype._ifNotRemoved = function (fn) {
     let isPresent = this.element;
     return function () {
       return isPresent ? fn.apply(this, arguments) : null;
     };
   },
 
-  canControl3.initElement = function (ctrlInstance) {
+  can.Control.initElement = function (ctrlInstance) {
     const $el = $(ctrlInstance.element);
     ctrlInstance.$element = $el;
     if (!$el.data('controls') || !$el.data('controls').length) {

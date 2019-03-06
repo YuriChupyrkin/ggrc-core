@@ -19,6 +19,10 @@ import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
 import {filtredMap} from '../plugins/ggrc_utils';
 
+if (!can.Model.attributes) {
+  can.Model.attributes = {};
+}
+
 function dateConverter(date, oldValue, fn, key) {
   let conversion = 'YYYY-MM-DD\\THH:mm:ss\\Z';
   let ret;

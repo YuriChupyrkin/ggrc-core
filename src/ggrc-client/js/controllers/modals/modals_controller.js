@@ -63,9 +63,9 @@ import {getInstance} from '../../plugins/utils/models-utils';
 import {getUrlParams, changeHash} from '../../router';
 import {filtredMap} from '../../plugins/ggrc_utils';
 
-import canControl3 from 'can-control';
 
-export default canControl3.extend({
+
+export default can.Control.extend({
   defaults: {
     preload_view: GGRC.templates_path + '/dashboard/modal_preload.stache',
     header_view: GGRC.templates_path + '/modals/modal_header.stache',
@@ -92,7 +92,7 @@ export default canControl3.extend({
   init: function () {
     let userFetch;
 
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     if (!(this.options instanceof can.Map)) {
       this.options = new can.Map(this.options);

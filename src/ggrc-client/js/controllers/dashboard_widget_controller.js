@@ -9,9 +9,9 @@ import {
   getPageInstance,
 } from '../plugins/utils/current-page-utils';
 
-import canControl3 from 'can-control';
 
-export default canControl3({
+
+export default can.Control({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),
@@ -19,7 +19,7 @@ export default canControl3({
   },
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     let options = this.options;
     let dashboards = getDashboards(options.instance);
     let $element = $(this.element);

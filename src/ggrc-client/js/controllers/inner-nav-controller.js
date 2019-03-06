@@ -14,9 +14,9 @@ import router, {buildUrl} from '../router';
 import '../components/add-tab-button/add-tab-button';
 import pubSub from '../pub-sub';
 
-import canControl3 from 'can-control';
 
-export default canControl3.extend({
+
+export default can.Control.extend({
   defaults: {
     internav_view: '/static/templates/dashboard/internav_list.stache',
     pin_view: '.pin-content',
@@ -41,7 +41,7 @@ export default canControl3.extend({
   },
 }, {
   init: function (options) {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     const instance = getPageInstance();
 
     this.options = new can.Map(this.options);

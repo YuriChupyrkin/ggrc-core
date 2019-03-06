@@ -3,11 +3,11 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
-import canControl3 from 'can-control';
 
-const InfiniteScrollControl = canControl3.extend({}, {
+
+const InfiniteScrollControl = can.Control.extend({}, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
   },
   ' DOMMouseScroll': 'prevent_overscroll',
   ' mousewheel': 'prevent_overscroll',
@@ -62,7 +62,7 @@ const InfiniteScrollControl = canControl3.extend({}, {
   },
 });
 
-const LhnTooltipsControl = canControl3.extend({
+const LhnTooltipsControl = can.Control.extend({
   defaults: {
     tooltip_view: GGRC.templates_path + '/base_objects/extended_info.stache',
     trigger_selector: '.show-extended',
@@ -71,7 +71,7 @@ const LhnTooltipsControl = canControl3.extend({
   },
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     if (!this.options.$extended) {
       this.options.$extended = $('#extended-info');

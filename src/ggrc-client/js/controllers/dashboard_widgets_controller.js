@@ -8,10 +8,10 @@ import {
 } from '../plugins/utils/widgets-utils';
 import {getPageModel} from '../plugins/utils/current-page-utils';
 
-import canControl3 from 'can-control';
+
 import * as canEvent from 'can-event';
 
-export default canControl3.extend({
+export default can.Control.extend({
   defaults: {
     model: null,
     widget_id: '',
@@ -29,7 +29,7 @@ export default canControl3.extend({
   },
 }, {
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
     if (!this.options.model) {
       this.options.model = getPageModel();
     }

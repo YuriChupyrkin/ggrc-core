@@ -15,7 +15,7 @@ import TreeViewControl from './tree-view';
 import TreeViewOptions from './tree-view-options';
 import {reify} from '../../plugins/utils/reify-utils';
 
-import canControl3 from 'can-control';
+
 
 function _firstElementChild(el) {
   let i;
@@ -30,7 +30,7 @@ function _firstElementChild(el) {
   }
 }
 
-export default canControl3.extend({
+export default can.Control.extend({
   defaults: {
     model: null,
     parent: null,
@@ -63,7 +63,7 @@ export default canControl3.extend({
   },
 
   init: function () {
-    canControl3.initElement(this);
+    can.Control.initElement(this);
 
     this._draw_node_deferred = $.Deferred();
 
