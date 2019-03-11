@@ -118,7 +118,7 @@ module.exports = function (env) {
       modules: [nodeModulesDir, vendorDir],
       alias: {
         //can: 'canjs/amd/can/',
-        can: 'can/legacy',
+        can: 'can-util/namespace',
         entrypoints: './js/entrypoints',
       },
     },

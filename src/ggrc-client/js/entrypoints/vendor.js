@@ -34,18 +34,36 @@ import 'clipboard';
 // import 'can/map/validations';
 // import 'can/view/stache';
 
-import can3 from 'can/legacy';
+/* canjs v3 */
+import can3 from 'can-util/namespace';
+
+
+import 'can-component';
+import 'can-route';
+import 'can-stache'; // ?????
+import 'can-stache-bindings';
+import 'can-event';
+import 'can-view-model'; // ???
+import 'can-map';
+import 'can-list';
+import 'can-model';
+import 'can-map-backup';
+import 'can-control';
+import 'can-construct';
+import 'can-construct-super';
+
+// can.Control = canControl3;
+// can.Construct = canConstruct3;
+// can.Map = canMap3;
+// can.List = canList3;
+// can.Model = canModel3;
 
 window.can = can3;
 
-/* canjs v3 */
-// import 'can-validate-legacy/map/validate/validate';
-// import 'can-validate-legacy/shims/validatejs';
-// import 'can-map-define';
-//import 'can-construct-super';
+import 'can-validate-legacy/map/validate/validate';
+import 'can-validate-legacy/shims/validatejs';
+import 'can-map-define';
 
-// import 'can-control';
-// import 'can-event';
 
 import 'moment';
 import 'moment-timezone/builds/moment-timezone-with-data.min';
@@ -54,7 +72,15 @@ import 'jquery/jquery-ui.css';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
+import template from '../templates/base_objects/info-pane-utility.stache';
+
 function addControlPlugin () {
+
+  can.stache.registerPartial('/static/templates/base_objects/info-pane-utility.stache',
+    template);
+
+
+
   let makeArray = can.makeArray;
 
   can.Control.prototype._ifNotRemoved = function (fn) {
@@ -62,7 +88,7 @@ function addControlPlugin () {
     return function () {
       return isPresent ? fn.apply(this, arguments) : null;
     };
-  },
+  };
 
   can.Control.initElement = function (ctrlInstance) {
     const $el = $(ctrlInstance.element);
@@ -74,7 +100,18 @@ function addControlPlugin () {
     }
   };
 
+  let origin = can.Component.prototype.init;
+  can.Component.prototype.init = function (el) {
+    console.log('init component');
+    let self = this;
+    $(el).data('viewModel', self.viewModel);
+    origin.apply(this, arguments);
+  };
+
   $.fn.extend({
+    viewModel: function () {
+      return $(this).data('viewModel') || new can.Map();
+    },
 
     /*
     * @function jQuery.fn.controls jQuery.fn.controls
