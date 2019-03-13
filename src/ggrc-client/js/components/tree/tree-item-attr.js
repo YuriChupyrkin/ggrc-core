@@ -35,7 +35,7 @@ export default can.Component.extend({
   tag: 'tree-item-attr',
   template: can.stache(template),
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     instance: null,
     name: '',
     define: {
@@ -93,5 +93,5 @@ export default can.Component.extend({
     isMarkdown() {
       return !!this.attr('instance').constructor.isChangeableExternally;
     },
-  },
+  }),
 });
