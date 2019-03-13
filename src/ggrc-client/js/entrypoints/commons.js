@@ -13,6 +13,7 @@ import '../apps/base_widgets';
 import '../plugins/lodash_helpers';
 import '../plugins/canjs_extensions';
 import '../plugins/jquery_extensions';
+import '../plugins/partial-views-resolver';
 import '../tracker';
 import '../bootstrap/modal-ajax';
 import '../bootstrap/modal-form';
