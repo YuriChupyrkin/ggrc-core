@@ -8,7 +8,7 @@ import RefreshQueue from '../../models/refresh_queue';
 export default can.Component.extend({
   tag: 'object-loader',
   leakSkope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     define: {
       path: {
         set(value) {
@@ -22,5 +22,5 @@ export default can.Component.extend({
       },
     },
     loadedObject: null,
-  },
+  }),
 });
