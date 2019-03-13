@@ -10,8 +10,8 @@ export default can.Component.extend({
   tag: 'issue-unmap',
   template: can.stache(template),
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     issueInstance: {},
     target: {},
-  },
+  }),
 });
