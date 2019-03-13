@@ -61,16 +61,9 @@ export default can.Control.extend({
   },
 
   init: function () {
-    this._draw_node_deferred = $.Deferred();
+    can.Control.initElement(this);
 
-    if (this.options.child_options) {
-      this.options.child_options.each(function (option) {
-        option.attr({
-          parent: this,
-          parent_instance: this.options.instance,
-        });
-      }.bind(this));
-    }
+    this._draw_node_deferred = $.Deferred();
 
     // this timeout is required because the invoker will access the control via
     // the element synchronously so we must not replace the element just yet
@@ -89,6 +82,7 @@ export default can.Control.extend({
         this.draw_node();
       }
     },
+  // TODO: check
   ' updateCount'(el, ev, count, updateCount) {
     // prevents updating counts for widget after openning tree-view-node
     ev.stopPropagation();
@@ -102,9 +96,9 @@ export default can.Control.extend({
       instance.id;
     if (!relatedInstances || relatedInstances &&
       !relatedInstances[instanceId]) {
-      this.element.addClass('not-directly-related');
+      this.$element.addClass('not-directly-related');
     } else {
-      this.element.addClass('directly-related');
+      this.$element.addClass('directly-related');
     }
   },
 
@@ -125,7 +119,7 @@ export default can.Control.extend({
 
     // the node's isActive state is not stored anywhere, thus we need to
     // determine it from the presemce of the corresponding CSS class
-    let isActive = this.element.hasClass('active');
+    let isActive = this.$element.hasClass('active');
 
     $.ajax({
       url: this.options.show_view,
@@ -136,11 +130,12 @@ export default can.Control.extend({
       this.replace_element(frag);
       this.add_control();
       if (isActive) {
-        this.element.addClass('active');
+        this.$element.addClass('active');
       }
       this._draw_node_deferred.resolve();
-    }));
-    this._draw_node_in_progress = false;
+    })).always(() => {
+      this._draw_node_in_progress = false;
+    });
   },
 
   // add all child options to one TreeViewOptions object
@@ -177,7 +172,7 @@ export default can.Control.extend({
   },
 
   add_control: function () {
-    const subTree = this.element.find('.tree-view-control');
+    const subTree = this.$element.find('.tree-view-control');
     if (subTree && subTree.length) {
       return new TreeViewControl(subTree[0], subTree.data('options'));
     }
@@ -221,7 +216,7 @@ export default can.Control.extend({
   },
 
   replace_element: function (el) {
-    let oldEl = this.element;
+    let oldEl = this.$element;
     let oldData;
     let firstchild;
 
@@ -238,7 +233,8 @@ export default can.Control.extend({
     this.off();
     oldEl.replaceWith(el);
     this.element = firstchild.addClass('tree-view-node')
-      .data(oldData);
+      .data(oldData)[0];
+    this.$element = $(this.element);
 
     if (this.options.is_subtree &&
       isObjectContextPage() &&
@@ -256,7 +252,7 @@ export default can.Control.extend({
     let childTreeDfds = [];
     let that = this;
 
-    this.element.find('.tree-view-control')
+    $(this.element).find('.tree-view-control')
       .each(function (_, el) {
         let $el = $(el);
         let childTreeControl;
@@ -287,7 +283,7 @@ export default can.Control.extend({
    *   nodes have been loaded and displayed
    */
   expand: function () {
-    let $el = this.element;
+    let $el = this.$element;
 
     this.add_child_lists_to_child();
     if (this._expand_deferred && $el.find('.openclose').is('.active')) {
@@ -305,8 +301,8 @@ export default can.Control.extend({
     setTimeout(this._ifNotRemoved(function () {
       this.display_subtrees()
         .then(this._ifNotRemoved(function () {
-          this.element.trigger('subtree_loaded');
-          this.element.trigger('loaded');
+          this.$element.trigger('subtree_loaded');
+          this.$element.trigger('loaded');
           if (this._expand_deferred) {
             this._expand_deferred.resolve();
           }
@@ -317,7 +313,7 @@ export default can.Control.extend({
 
   '.openclose:not(.active) click': function (el, ev) {
     // Ignore unless it's a direct child
-    if (el.closest('.tree-view-node').is(this.element)) {
+    if ($(el).closest('.tree-view-node').is(this.element)) {
       this.expand();
     }
   },
@@ -328,7 +324,7 @@ export default can.Control.extend({
   },
 
   trigger_expand: function () {
-    let $expandEl = this.element.find('.openclose').first();
+    let $expandEl = this.$element.find('.openclose').first();
     if (!$expandEl.hasClass('active')) {
       $expandEl.trigger('click');
     }

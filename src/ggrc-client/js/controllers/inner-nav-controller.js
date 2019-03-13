@@ -39,6 +39,7 @@ export default can.Control.extend({
   },
 }, {
   init: function (options) {
+    can.Control.initElement(this);
     const instance = getPageInstance();
 
     this.options = new can.Map(this.options);
@@ -60,10 +61,10 @@ export default can.Control.extend({
       dataType: 'text',
     }).then((view) => {
       let frag = can.stache(view)(this.options);
-      this.element.append(frag);
+      this.$element.append(frag);
 
       if (instance.type === 'Audit') {
-        this.element.addClass(this.options.instance.type.toLowerCase());
+        this.$element.addClass(this.options.instance.type.toLowerCase());
       }
       this.setTabsPriority();
       this.route(router.attr('widget'));
@@ -283,7 +284,7 @@ export default can.Control.extend({
     }
   },
   '.closed click': function (el, ev) {
-    let widgetSelector = el.data('widget');
+    let widgetSelector = $(el).data('widget');
     let widget = this.widget_by_selector(widgetSelector);
     let widgets = this.options.widget_list;
 
