@@ -26,7 +26,7 @@ export default can.Component.extend({
   tag: 'create-and-map',
   template: can.stache(template),
   leakScope: false,
-  viewModel: {
+  viewModel: can.Map.extend({
     define: {
       sourceType: {
         get() {
@@ -158,7 +158,7 @@ export default can.Component.extend({
         modalConfirmLink: getMappingUrl(this.attr('source'), destinationModel),
       });
     },
-  },
+  }),
   events: {
     inserted() {
       this.viewModel.attr('element', this.element);

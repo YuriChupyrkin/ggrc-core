@@ -20,7 +20,7 @@ export default can.Component.extend({
   tag: 'issue-unmap-dropdown-item',
   template: can.stache(template),
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     define: {
       issueUnmap: {
         get: function () {
@@ -61,5 +61,5 @@ export default can.Component.extend({
     instance: {},
     page_instance: {},
     options: {},
-  },
+  }),
 });
