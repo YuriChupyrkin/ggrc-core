@@ -75,7 +75,7 @@ export default can.Component.extend({
   tag: 'assessment-info-pane',
   template: can.stache(template),
   leakScope: true,
-  viewModel: {
+  viewModel: can.Map.extend({
     define: {
       verifiers: {
         get: function () {
@@ -620,7 +620,7 @@ export default can.Component.extend({
       this.attr('previousStatus', undefined);
       this.attr('isUndoButtonVisible', false);
     },
-  },
+  }),
   init: function () {
     this.viewModel.initializeFormFields();
     this.viewModel.initGlobalAttributes();
