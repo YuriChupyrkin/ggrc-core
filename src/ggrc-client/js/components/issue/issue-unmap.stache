@@ -8,7 +8,7 @@
   {source}="{issueInstance}"
   {destination}="{target}">
     <issue-unmap-item
-      (unmap-issue)="{unmapInstance()}"
+      on:unmapIssue="unmapInstance()"
       {issue-instance}="{issueInstance}"
       {target}="{target}">
         <content></content>
