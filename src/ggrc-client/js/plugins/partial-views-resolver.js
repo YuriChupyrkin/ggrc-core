@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+/*
 import infoPaneUtility from '../templates/base_objects/info-pane-utility.stache';
 import peopleDropdowMenu from '../templates/people/dropdown_menu.stache';
 import snapshotsDropdowMenu from '../templates/snapshots/dropdown_menu.stache';
@@ -77,3 +78,4 @@ const partialViews = [
 _.forEach(partialViews, (view) => {
   registerPartial(view.id, view.template);
 });
+*/
