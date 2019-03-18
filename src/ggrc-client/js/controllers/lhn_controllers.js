@@ -19,6 +19,7 @@ import Relationship from '../models/service-models/relationship';
 import '../components/recently-viewed/recently-viewed';
 import '../components/questionnaire-create-link/questionnaire-create-link';
 import {InfiniteScrollControl, LhnTooltipsControl} from '../controllers/infinite-scroll-controller';
+import * as canBatch from 'can-event/batch/batch';
 
 const LhnControl = can.Control.extend({}, {
   init: function () {
@@ -67,7 +68,7 @@ const LhnControl = can.Control.extend({}, {
     let $button = this.$element.find('.widgetsearch-submit');
     let $off = this.$element.find('.filter-off');
     let $searchTitle = this.$element.find('.search-title');
-    let gotFilter = !!$filter.val().trim().length;
+    let gotFilter = !!($filter.length && $filter.val().trim());
 
     $filter.toggleClass('active', gotFilter);
     $button.toggleClass('active', gotFilter);
@@ -202,7 +203,7 @@ const LhnControl = can.Control.extend({}, {
   // it ain't pretty, but it works
   initial_lhn_render: function () {
     let self = this;
-    if (!$('.lhs-holder').size() || !$('.lhn-trigger').size()) {
+    if (!$('.lhs-holder').length || !$('.lhn-trigger').length) {
       window.requestAnimationFrame(this.initial_lhn_render.bind(this));
       return;
     }
@@ -373,6 +374,7 @@ const LhnSearchControl = can.Control.extend({
   init: function () {
     can.Control.initElement(this);
 
+    /*
     this.options.observer.on('my_work', (ev, newval) => {
       this.run_search(this.current_term, newval
         ? {contact_id: GGRC.current_user.id}
@@ -383,6 +385,7 @@ const LhnSearchControl = can.Control.extend({
     this.options.observer.on('value', (ev, newval) => {
       this.run_search(newval, this.current_params);
     });
+    */
 
     // TODO: FIX
     //this.on();
@@ -402,48 +405,48 @@ const LhnSearchControl = can.Control.extend({
     }).then((view) => {
       let frag = can.stache(view)(lhnPrefs);
       this.$element.html(frag);
-    });
 
-    let initialParams = {};
-    let savedFilters = lhnPrefs.filter_params || new can.Map();
+      let initialParams = {};
+      let savedFilters = lhnPrefs.filter_params || new can.Map();
 
-    this.post_init();
+      this.post_init();
 
-    let subLevelElements = this.$element.find('.sub-level');
-    new InfiniteScrollControl(subLevelElements[0]);
-    subLevelElements.on('scroll', _.debounce(function () {
-      setLHNState({category_scroll: this.scrollTop});
-    }, 250));
+      let subLevelElements = this.$element.find('.sub-level');
+      new InfiniteScrollControl(subLevelElements[0]);
+      subLevelElements.on('scroll', _.debounce(function () {
+        setLHNState({category_scroll: this.scrollTop});
+      }, 250));
 
-    let initialTerm = lhnPrefs.search_text || '';
-    if (this.options.observer.my_work) {
-      initialParams = {contact_id: GGRC.current_user.id};
-    }
-    $.map(businessModels, (model, name) => {
-      if (model.default_lhn_filters) {
-        this.options.filter_params.attr(model.default_lhn_filters);
+      let initialTerm = lhnPrefs.search_text || '';
+      if (this.options.observer.my_work) {
+        initialParams = {contact_id: GGRC.current_user.id};
+      }
+      $.map(businessModels, (model, name) => {
+        if (model.default_lhn_filters) {
+          this.options.filter_params.attr(model.default_lhn_filters);
+        }
+      });
+
+      this.options.filter_params.attr(savedFilters.serialize());
+      this.options.loaded_lists = [];
+      this.run_search(initialTerm, initialParams);
+
+      // Above, category scrolling is listened on to save the scroll position.  Below, on page load the
+      //  open category is toggled open, and the search placed into the search box by display prefs is
+      //  sent to the search service.
+
+      if (lhnPrefs.open_category) {
+        let selector = this.options.list_selector
+          .split(',')
+          .map((item) =>
+            `${item} > a[data-object-singular=${lhnPrefs.open_category}]`)
+          .join(',');
+
+        this.toggle_list_visibility(
+          this.$element.find(selector)
+        );
       }
     });
-
-    this.options.filter_params.attr(savedFilters.serialize());
-    this.options.loaded_lists = [];
-    this.run_search(initialTerm, initialParams);
-
-    // Above, category scrolling is listened on to save the scroll position.  Below, on page load the
-    //  open category is toggled open, and the search placed into the search box by display prefs is
-    //  sent to the search service.
-
-    if (lhnPrefs.open_category) {
-      let selector = this.options.list_selector
-        .split(',')
-        .map((item) =>
-          `${item} > a[data-object-singular=${lhnPrefs.open_category}]`)
-        .join(',');
-
-      this.toggle_list_visibility(
-        this.$element.find(selector)
-      );
-    }
   },
   post_init: function () {
     let lhnCtr = $('#lhn').control();
@@ -490,7 +493,7 @@ const LhnSearchControl = can.Control.extend({
       .find('a.list-toggle.top');
     let $ul = $toggle.parent('li').find(this.options.list_mid_level_selector);
 
-    if ($toggle.size() && !$toggle.hasClass('active')) {
+    if ($toggle.length && !$toggle.hasClass('active')) {
       this.open_list($toggle, $ul, null, true);
     }
   },
@@ -502,7 +505,7 @@ const LhnSearchControl = can.Control.extend({
     let $parent = $el.parent('li');
     let selector;
 
-    if ($parent.find(midSelector).size()) {
+    if ($parent.find(midSelector).length) {
       selector = midSelector;
     } else {
       selector = subSelector;
@@ -643,7 +646,7 @@ const LhnSearchControl = can.Control.extend({
     );
 
     setTimeout(function () {
-      that.refresh_visible_lists().done(stopFn);
+      that.refresh_visible_lists().then(stopFn);
     }, 20);
   },
   // TODO: FIX
@@ -838,10 +841,10 @@ const LhnSearchControl = can.Control.extend({
       });
 
       function finishDisplay(results) {
-        can.Map.startBatch();
+        canBatch.start();
         self.options.visible_lists[modelName].attr('is_loading', false);
         self.options.visible_lists[modelName].replace(results);
-        can.Map.stopBatch();
+        canBatch.stop();
         setTimeout(function () {
           $list.trigger('list_displayed', modelName);
         }, 1);

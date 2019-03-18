@@ -90,13 +90,7 @@
                     </div>
                   </div><!-- row-fluid end -->
                   {{#if instance.can_use_issue_tracker}}
-                    <info-issue-tracker-fields
-                      {instance}="{instance}"
-                      {show-id}="{true}"
-                      {linking-note}="'If you would like to keep the existing bug linked to this issue do not edit this attribute. If you would like to link to a different ticket, either clear this attribute to generate new or provide an existing ticket number.'"
-                      {note}="'Turns on Ticket Tracker integration. Any subsequent updates to admins, primary contacts, secondary contacts and state fields should be made through tracking system and will be synced automatically to GGRC.'"
-                      {show-title}="{true}">
-                    </info-issue-tracker-fields>
+                    
                   {{/if}}
                   <div class="row-fluid wrap-row">
                     <div class="span4">

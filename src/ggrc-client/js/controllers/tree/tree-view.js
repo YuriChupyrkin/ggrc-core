@@ -145,6 +145,7 @@ const TreeViewControl = TreeLoader.extend({
             statusControl = this.$element.parent()
               .find('.tree-filter__status-wrap');
             // set state filter (checkboxes)
+            /*
             can.bind.call(statusControl.ready(() => {
               let selectStateList = this.options.attr('selectStateList');
 
@@ -154,6 +155,17 @@ const TreeViewControl = TreeLoader.extend({
                 }
               });
             }));
+            */
+
+            statusControl.ready(() => {
+              let selectStateList = this.options.attr('selectStateList');
+
+              this.options.attr('filter_states').forEach((item) => {
+                if (selectStateList.indexOf(item.value) > -1) {
+                  item.attr('checked', true);
+                }
+              });
+            });
           })));
     }
 

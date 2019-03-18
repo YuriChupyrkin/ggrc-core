@@ -129,11 +129,11 @@ export default can.Control.extend({
       });
 
     // TODO: FIX
-    let self = this;
-    // Works as NOT expected. Doesn't have ev arg
-    this.options.instance.on('destroyed', function () {
-      self.hide.call(self, null, {});
-    });
+    // let self = this;
+    // // Works as NOT expected. Doesn't have ev arg
+    // this.options.instance.on('destroyed', function () {
+    //   self.hide.call(self, null, {});
+    // });
   },
   after_preload: function (content) {
     if (this.wasDestroyed()) {
@@ -1014,7 +1014,7 @@ export default can.Control.extend({
   },
 
   // TODO: FIX
-  //'{instance} destroyed': ' hide',
+  '{instance} destroyed': ' hide',
 
   ' hide': function (el, ev) {
     this.hide(el, ev);

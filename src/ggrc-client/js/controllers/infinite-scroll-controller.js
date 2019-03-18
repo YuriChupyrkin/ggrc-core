@@ -11,9 +11,10 @@ const InfiniteScrollControl = can.Control.extend({}, {
   ' mousewheel': 'prevent_overscroll',
   ' scroll': 'prevent_overscroll',
 
-  prevent_overscroll: function ($el, ev) {
+  prevent_overscroll: function (el, ev) {
     // Based on Troy Alford's response on StackOverflow:
     //   http://stackoverflow.com/a/16324762
+    let $el = $(el);
     let scrollTop = $el[0].scrollTop;
     let scrollHeight = $el[0].scrollHeight;
     let height = $el.height();
