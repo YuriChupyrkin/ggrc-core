@@ -913,3 +913,13 @@ can.stache.registerHelper('isValidAttrProperty',
       options.inverse(options.contexts);
   }
 );
+
+can.stache.registerHelper('canData',
+  (key, options) => {
+    key = resolve(key);
+
+    return function (el) {
+      $(el).data(key, options.context);
+    };
+  }
+);
