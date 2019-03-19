@@ -9,13 +9,9 @@
 {{#instance}}
   <div class="row-fluid">
     <div class="span12">
-      {{#using cycle=instance.cycle}}
-      {{#using workflow=cycle.workflow}}
-        <a class="main-title {{class.category}} oneline" href="{{workflow.viewLink}}">
-          {{title}}
-        </a>
-      {{/using}}
-      {{/using}}
+      <a class="main-title {{class.category}} oneline" href="javascript://">
+        {{title}}
+      </a>
     </div>
   </div>
 
