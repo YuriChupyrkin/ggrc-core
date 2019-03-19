@@ -42,6 +42,8 @@ let viewModel = can.Map.extend({
     },
   },
   instance: null,
+  isTitleVisible: true,
+  extraCssClass: '',
   type: '@',
   count: 0,
   /**
@@ -94,7 +96,11 @@ let viewModel = can.Map.extend({
 
 export default can.Component.extend({
   tag: 'mapped-counter',
-  template: '<i class="fa fa-{{icon}}"></i> {{title}}: {{count}}',
+  template: `<i class="fa fa-{{icon}} {{extraCssClass}}"></i>
+             {{#isTitleVisible}}
+               {{title}}: 
+             {{/isTitleVisible}}
+             {{count}}`,
   leakScope: true,
   viewModel,
   events: {
