@@ -46,5 +46,10 @@ import 'can-construct-super';
 import 'can-validate-legacy/map/validate/validate';
 import 'can-validate-legacy/shims/validatejs';
 import 'can-map-define';
+import 'can-simple-observable';
+
+import canModel from './can-model-modified';
+//can3.Model = canModel;
 
 window.can = can3;
+
