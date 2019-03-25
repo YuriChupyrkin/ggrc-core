@@ -654,6 +654,7 @@ export default can.Component.extend({
   init: function () {
     this.viewModel.setColumnsConfiguration();
     this.viewModel.setSortingConfiguration();
+    can.Component.prototype.init.apply(this, arguments);
   },
   events: {
     '{viewModel.pageInfo} current': function () {
@@ -665,7 +666,9 @@ export default can.Component.extend({
     '{viewModel.pageInfo} pageSize': function () {
       this.viewModel.loadItems();
     },
-    ' selectTreeItem': function (el, ev, selectedEl, instance) {
+    ' selectTreeItem': function (el, ev) {
+      let selectedEl = $(ev.args[0]);
+      let instance = ev.args[1];
       let parent = this.viewModel.attr('parent_instance');
       let setInstanceDfd;
       let infoPaneOptions = new can.Map({
@@ -688,7 +691,7 @@ export default can.Component.extend({
 
       this.viewModel.attr('canOpenInfoPin', false);
       this.viewModel.attr('isSubTreeItem', isSubTreeItem);
-      el.find('.item-active').removeClass('item-active');
+      $(el).find('.item-active').removeClass('item-active');
       selectedEl.addClass('item-active');
 
       setInstanceDfd = $('.pin-content').control()

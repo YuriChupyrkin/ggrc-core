@@ -23,6 +23,7 @@
     "can-construct": "3.5.4",
     "can-construct-super": "^3.2.0",
     "can-map-define": "3.1.2",
+    "can-jquery": "3.2.5",
     "clipboard": "^1.5.16",
     "components-jqueryui": "^1.12.1",
     "doctoc": "^0.11.0",

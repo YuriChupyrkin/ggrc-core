@@ -46,5 +46,7 @@ import 'can-construct-super';
 import 'can-validate-legacy/map/validate/validate';
 import 'can-validate-legacy/shims/validatejs';
 import 'can-map-define';
+import 'can-jquery';
+import 'can-jquery/legacy';
 
 window.can = can3;

@@ -3,9 +3,6 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 // Disabling some minor eslint rules until major refactoring
-/* eslint-disable no-console, id-length */
-
-import CanModel from 'can-model/src/can-model';
 
 import CustomAttributeAccess from '../plugins/utils/custom-attribute/custom-attribute-access';
 import {
@@ -19,6 +16,8 @@ import RefreshQueue from './refresh_queue';
 import tracker from '../tracker';
 import {delayLeavingPageUntil} from '../plugins/utils/current-page-utils';
 import Stub from './stub';
+
+const CanModel = can.Model;
 
 if (!CanModel.attributes) {
   CanModel.attributes = {};
@@ -100,6 +99,7 @@ function makeDateSerializer(type, key) {
 }
 
 export default CanModel.extend({
+  ajax: $.ajax,
   root_object: '',
   attr_list: [
     {

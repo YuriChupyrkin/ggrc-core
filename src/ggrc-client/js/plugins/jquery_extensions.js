@@ -9,9 +9,9 @@ $.fn.extend({
   },
 
   // Returns viewModel instsnce from element of Component
-  viewModel: function () {
-    return $(this).data('viewModel') || new can.Map();
-  },
+  // viewModel: function () {
+  //   return $(this).data('viewModel') || new can.Map();
+  // },
 
   /*
   * @function jQuery.fn.controls jQuery.fn.controls

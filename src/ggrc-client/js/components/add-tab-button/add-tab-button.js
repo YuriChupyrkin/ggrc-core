@@ -56,8 +56,8 @@ export default can.Component.extend({
   events: {
     // top nav dropdown position
     '.dropdown-toggle click'(el) {
-      let $dropdown = this.element.find('.dropdown-menu');
-      let leftPos = el.offset().left;
+      let $dropdown = $(this.element).find('.dropdown-menu');
+      let leftPos = $(el).offset().left;
       let winWidth = $(window).width();
 
       if (winWidth - leftPos < 400) {

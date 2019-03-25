@@ -36,7 +36,7 @@ export default can.Component.extend({
   events: {
     inserted: function () {
       this.viewModel.attr('deferredTo',
-        this.element.data('deferred_to'));
+        $(this.element).data('deferred_to'));
     },
     '.assessment-map-btn click': function (el, ev) {
       this.viewModel.onClick(el, ev);

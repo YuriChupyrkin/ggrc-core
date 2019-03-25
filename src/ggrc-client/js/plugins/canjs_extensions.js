@@ -26,14 +26,12 @@
     };
   };
 
-  /*
   can.camelCaseToUnderscore = function (string) {
     if (!_.isString(string)) {
       throw new TypeError('Invalid type, string required.');
     }
     return _.snakeCase(string);
   };
-  */
 
   can.List.prototype.replace = function (items) {
     if (!items.then || !_.isFunction(items.then)) {
@@ -47,10 +45,10 @@
   };
 
   // Add viewModel instance to element's data of component
-  can.Component.prototype.init = function (el) {
-    $(el).data('viewModel', this.viewModel);
-    originComponentInit.apply(this, arguments);
-  };
+  // can.Component.prototype.init = function (el) {
+  //   $(el).data('viewModel', this.viewModel);
+  //   originComponentInit.apply(this, arguments);
+  // };
 
   // Add control instance to element's data of control
   can.Control.initElement = function (ctrlInstance) {
@@ -62,4 +60,9 @@
       $el.data('controls').push(ctrlInstance);
     }
   };
+
+  can.List.prototype.sort = function (predicate) {
+    this.replace(_.sortBy(this.attr(), predicate));
+    return this;
+  }
 })(jQuery, can);

@@ -85,7 +85,8 @@ export default can.Component.extend({
   tag: 'object-mapper',
   template: can.stache(template),
   leakScope: true,
-  viewModel: function (attrs, parentViewModel) {
+  viewModel: can.Map.extend({}),
+  xviewModel: function (attrs, parentViewModel) {
     let config = {
       general: parentViewModel.attr('general'),
       special: parentViewModel.attr('special'),
