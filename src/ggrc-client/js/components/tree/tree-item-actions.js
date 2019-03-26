@@ -14,6 +14,7 @@ import {
 } from '../../plugins/utils/current-page-utils';
 import Permission from '../../permission';
 import Mapper from '../../models/mappers/mappings';
+import {trigger} from 'can-event';
 
 const forbiddenEditList = ['Cycle', 'CycleTaskGroup'];
 
@@ -92,7 +93,9 @@ const viewModel = can.Map.extend({
     ev.stopPropagation();
   },
   subTreeTypes() {
-    can.trigger(this.attr('$el'), 'childTreeTypes');
+    debugger;
+    // TODO: Check el
+    trigger.call(this.attr('$el'), 'childTreeTypes');
   },
   instance: null,
   childOptions: null,
