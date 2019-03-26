@@ -121,7 +121,6 @@ const TreeViewControl = TreeLoader.extend({
   },
   init_view: function () {
     let dfds = [];
-    let statusControl;
 
     if (this.options.header_view && this.options.show_header) {
       dfds.push(
@@ -133,20 +132,9 @@ const TreeViewControl = TreeLoader.extend({
         }).then(
           this._ifNotRemoved((frag) => {
             this.element.before(frag);
-
-            statusControl = this.element.parent()
-              .find('.tree-filter__status-wrap');
-            // set state filter (checkboxes)
-            can.bind.call(statusControl.ready(() => {
-              let selectStateList = this.options.attr('selectStateList');
-
-              this.options.attr('filter_states').forEach((item) => {
-                if (selectStateList.indexOf(item.value) > -1) {
-                  item.attr('checked', true);
-                }
-              });
-            }));
-          })));
+          })
+        )
+      );
     }
 
     this.init_count();
