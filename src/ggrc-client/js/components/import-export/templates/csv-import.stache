@@ -124,7 +124,7 @@
     </div>
 
     {{#isImportStopped}}
-      <show-more {items}="{importDetails}" limit="1">
+      <show-more {items}="{importDetails}" {limit}="1">
         <div class="import-section border-top">
 
           <section class="import-details__stats">

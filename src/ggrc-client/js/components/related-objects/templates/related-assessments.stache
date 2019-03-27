@@ -81,7 +81,7 @@
       <div class="flex-size-3">
         {{#if instance.evidence.length}}
           {{#if needReuse}}
-            <object-list {items}="{instance.evidence}" show-more="true">
+            <object-list {items}="{instance.evidence}" {show-more}="true">
               <reusable-objects-item {instance}="{.}"
                                       {disabled}="{isSaving}"
                                       {reuse-allowed}="{{isAllowedToReuse .}}"

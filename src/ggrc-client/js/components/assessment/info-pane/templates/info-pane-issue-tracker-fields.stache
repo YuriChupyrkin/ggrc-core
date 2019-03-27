@@ -105,7 +105,7 @@
       <div class="inline">
         <base-inline-control-title
           class="inline__header"
-          is-edit-icon-denied="true">
+          {is-edit-icon-denied}="true">
             <div class="ggrc-form__title">Ticket Type</div>
         </base-inline-control-title>
       </div>
