@@ -10,17 +10,17 @@
         <label class="flex-box">
           <input type="checkbox"
                  on:el:change="changeLastUpdatesFilter(%element)"
-                 {($checked)}="{options.showLastReviewUpdates}"/>
+                 el:checked:bind="options.showLastReviewUpdates"/>
           Show updates after last review
         </label>
       </div>
     {{/if}}
     <div class="grid-data__toolbar flex-box">
-      <tree-pagination {paging}="{pageInfo}"></tree-pagination>
+      <tree-pagination vm:paging:from="pageInfo"></tree-pagination>
     </div>
-    <revision-page {revisions}="{revisions}"
-                   {instance}="{instance}"
-                   {is-loading}="{isLoading}">
+    <revision-page vm:revisions:from="revisions"
+                   vm:instance:from="instance"
+                   vm:isLoading:from="isLoading">
     </revision-page>
   </div>
 {{/instance}}

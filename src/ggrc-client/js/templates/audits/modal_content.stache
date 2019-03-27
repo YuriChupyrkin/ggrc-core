@@ -52,8 +52,8 @@
           <a data-id="hide_status_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
         </label>
         <div tabindex="4">
-            <dropdown {options-list}="{model.statuses}"
-                      {name}="'instance.status'"
+            <dropdown vm:optionsList:from="model.statuses"
+                      vm:name:from="'instance.status'"
                       tabindex="23">
             </dropdown>
         </div>
@@ -62,8 +62,8 @@
     <div class="row-fluid">
       <div class="span12 hide-wrap hidable">
         <access-control-list-roles-helper
-          {instance}="{.}"
-          {is-new-instance}="{new_object_form}">
+          vm:instance:from="{.}"
+          vm:isNewInstance:from="new_object_form">
         </access-control-list-roles-helper>
       </div>
     </div>
@@ -78,9 +78,9 @@
           <div class="rich-text">
               <rich-text
                 tabindex="10"
-                {hidden-toolbar}="{true}"
-                {placeholder}="'Enter Description'"
-                {(content)}="{instance.description}">
+                vm:hiddenToolbar:from="true"
+                vm:placeholder:from="'Enter Description'"
+                vm:content:bind="instance.description">
               </rich-text>
           </div>
 
@@ -97,7 +97,7 @@
                   <input type="text" class="span8 search-icon"
                          name="loadedObject.email"
                          value="loadedObject.title"
-                         data-lookup="OrgGroup" 
+                         data-lookup="OrgGroup"
                          placeholder="Enter text to search for Audit Firm"
                          tabindex="12">
                 </object-loader>
@@ -111,17 +111,17 @@
     <div class="row-fluid">
       <div data-id="planned_start_date_hidden" class="span3 hidable">
         <a data-id="hide_effective_date_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
-        <datepicker {(date)}="{start_date}"
-                    {label}="'Planned Start Date'"
-                    {set-max-date}="{end_date}"
+        <datepicker vm:date:bind="start_date"
+                    vm:label:from="'Planned Start Date'"
+                    vm:setMaxDate:from="end_date"
                     tabindex="20">
         </datepicker>
       </div>
       <div data-id="planned_end_date_hidden" class="span3 hidable">
         <a data-id="hide_stop_date_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
-        <datepicker {(date)}="{end_date}"
-                    {set-min-date}="{start_date}"
-                    {label}="'Planned End Date'"          
+        <datepicker vm:date:bind="end_date"
+                    vm:setMinDate:from="start_date"
+                    vm:label:from="'Planned End Date'"
                     tabindex="21">
         </datepicker>
         <label>
@@ -136,44 +136,44 @@
         </label>
         <div class="row-fluid">
           <div class="span6">
-            <datepicker {(date)}="{report_start_date}"
-                        {set-max-date}="{report_end_date}"
+            <datepicker vm:date:bind="report_start_date"
+                        vm:setMaxDate:from="report_end_date"
                         tabindex="22">
             </datepicker>
           </div>
           <div class="span6">
-            <datepicker {(date)}="{report_end_date}"
-                        {set-min-date}="{report_start_date}">
+            <datepicker vm:date:bind="report_end_date"
+                        vm:setMinDate:from="report_start_date">
             </datepicker>
           </div>
         </div>
       </div>
       <div data-id="folder_hidden" class="span3 hidable">
-        <ggrc-gdrive-folder-picker {instance}="{instance}" {deferred}="{true}" tabindex="13"></ggrc-gdrive-folder-picker>
+        <ggrc-gdrive-folder-picker vm:instance:from="instance" vm:deferred:from="true" tabindex="13"></ggrc-gdrive-folder-picker>
       </div>
       <div class="span3 hidable">
         <deferred-mapper
-          {instance}="{instance}">
+          vm:instance:from="instance">
           <related-documents
-            {instance}="{instance}"
-            {model-type}="'Evidence'"
-            {kind}="'URL'"
-            {autorefresh}="{false}"
+            vm:instance:from="instance"
+            vm:modelType:from="'Evidence'"
+            vm:kind:from="'URL'"
+            vm:autorefresh:from="false"
             on:addMappings="addMappings(%event.objects)"
             on:removeMappings="removeMappings(%event.object)">
             <related-urls
               tabindex="20"
-              {instance}="{instance}"
-              {allow-to-remove}="{new_object_form}"
-              {(urls)}="{documents}"
-              {is-disabled}="{isLoading}"
+              vm:instance:from="instance"
+              vm:allowToRemove:from="new_object_form"
+              vm:urls:bind="documents"
+              vm:isDisabled:from="isLoading"
               on:createUrl="markDocumentForAddition(%event.payload)"
               on:removeUrl="markDocumentForDeletion(%event.payload)">
               <label>
                 Evidence URL
                 <i class="fa fa-question-circle" rel="tooltip" title="Web links to other references."></i>
                 <a data-id="hide_url_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
-                <spinner {toggle}="{isDisabled}"></spinner>
+                <spinner vm:toggle:from="isDisabled"></spinner>
               </label>
             </related-urls>
           </related-documents>
@@ -225,11 +225,11 @@
         <div class="hidden-fields-area">
           <div class="ggrc-form">
             <issue-tracker-switcher
-              {instance}="{instance}"
-              {(is-integration-enabled)}="{instance.issue_tracker.enabled}">
+              vm:instance:from="instance"
+              vm:isIntegrationEnabled:bind="instance.issue_tracker.enabled">
                 <modal-issue-tracker-fields
-                  {instance}="{instance}"
-                  {note}="'Turns on Ticket Tracker integration.'">
+                  vm:instance:from="instance"
+                  vm:note:from="'Turns on Ticket Tracker integration.'">
                 </modal-issue-tracker-fields>
             </issue-tracker-switcher>
           </div>

@@ -6,9 +6,9 @@
 {{#getCustomAttrValue instance customAttributeId}}
     {{! because the object can currently only be a
     person there is no need to switch }}
-    <model-loader {path}="'business-models/person'">
-        <tree-field-wrapper {source}="{object}" {type}="{loadedModel}" {field}="'email'">
-          <tree-field {source}="{items}"/>
+    <model-loader vm:path:from="'business-models/person'">
+        <tree-field-wrapper vm:source:from="object" vm:type:from="loadedModel" vm:field:from="'email'">
+          <tree-field vm:source:from="items"/>
         </tree-field-wrapper>
     </model-loader>
 {{/getCustomAttrValue}}

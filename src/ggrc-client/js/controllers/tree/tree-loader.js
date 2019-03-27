@@ -24,8 +24,8 @@ export default can.Control.extend({
       }
 
       let renderer = can.stache(
-        `<spinner {extra-css-class}="'tree-items'"
-                  {toggle}="{showMe}" {size}="'large'">
+        `<spinner vm:extraCssClass:from="'tree-items'"
+                  vm:toggle:from="showMe" vm:size:from="'large'">
         </spinner>`
       );
       let spinner = renderer({showMe: true});

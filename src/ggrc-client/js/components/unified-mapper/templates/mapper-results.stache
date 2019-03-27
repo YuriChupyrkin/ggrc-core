@@ -3,39 +3,39 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 
-<object-selection {items}="{items}" 
-                  {selected-items}="{selected}"
-                  {disabled-ids}="{disabledIds}"
-                  {all-items}="{allItems}"
-                  {(refresh-selection)}="{refreshItems}"
-                  {(all-selected)}="{allSelected}">
+<object-selection vm:items:from="items" 
+                  vm:selectedItems:from="selected"
+                  vm:disabledIds:from="disabledIds"
+                  vm:allItems:from="allItems"
+                  vm:refreshSelection:bind="refreshItems"
+                  vm:allSelected:bind="allSelected">
   {{#if items.length}}
     <div class="list-header">
       {{^disableColumnsConfiguration}}
-        <mapper-results-columns-configuration {model-type}="{getDisplayModel.model_singular}"
-                                              {available-columns}="{columns.available}"
-                                              {(selected-columns)}="{columns.selected}">
+        <mapper-results-columns-configuration vm:modelType:from="getDisplayModel.model_singular"
+                                              vm:availableColumns:from="columns.available"
+                                              vm:selectedColumns:bind="columns.selected">
         </mapper-results-columns-configuration>
       {{/disableColumnsConfiguration}}
       <mapper-results-items-header class="{{#useSnapshots}}is-snapshot{{/useSnapshots}}
                                           {{#searchOnly}}search-only{{/searchOnly}}
                                           {{#relatedAssessments.show}}has-related-assessments{{/relatedAssessments.show}}"
-                                   {model-type}="{type}"
-                                   {columns}="{columns.selected}"
-                                   {(sort-key)}="{sort.key}"
-                                   {(sort-direction)}="{sort.direction}">
+                                   vm:modelType:from="type"
+                                   vm:columns:from="columns.selected"
+                                   vm:sortKey:bind="sort.key"
+                                   vm:sortDirection:bind="sort.direction">
       </mapper-results-items-header>
       {{^searchOnly}}
         <div class="list-selection-switcher">
           Select:
           <button type="button" class="btn btn-link"
-                  on:el:click="deselectAll"
+                  on:el:click="deselectAll()"
                   {{#isLoading}}disabled="disabled"{{/isLoading}}>
             None
           </button>
           |
           <button type="button" class="btn btn-link"
-                  on:el:click="selectAll"
+                  on:el:click="selectAll()"
                   {{#isLoading}}disabled="disabled"{{/isLoading}}>
             All
           </button>
@@ -43,21 +43,21 @@
       {{/searchOnly}}
     </div>
     <div class="list-body {{#isLoading}}loading{{/isLoading}}">
-      <object-list {items}="{items}" {is-loading}="{isLoading}" {list-type}="'GRID'">
+      <object-list vm:items:from="items" vm:isLoading:from="isLoading" vm:listType:from="'GRID'">
         <mapper-results-item class="{{#relatedAssessments.show}}has-related-assessments{{/relatedAssessments.show}}"
-                             {item-data}="{data}"
-                             {search-only}="{searchOnly}"
-                             {selected-columns}="{columns.selected}"
-                             {draw-related-assessments}="{relatedAssessments.show}"
+                             vm:itemData:from="data"
+                             vm:searchOnly:from="searchOnly"
+                             vm:selectedColumns:from="columns.selected"
+                             vm:drawRelatedAssessments:from="relatedAssessments.show"
                              on:showRelatedAssessments="showRelatedAssessments(%event)">
         </mapper-results-item>
       </object-list>
     </div>
-    <tree-pagination {paging}="{paging}" {placement}="{top}"></tree-pagination>
+    <tree-pagination vm:paging:from="paging" vm:placement:from="top"></tree-pagination>
   {{else}}
     {{#if isLoading}}
       <div class="no-items-spinner-wrapper">
-        <spinner {toggle}="{isLoading}" {extra-css-class}="'grid-spinner'" class="spinner-wrapper active"></spinner>
+        <spinner vm:toggle:from="isLoading" vm:extraCssClass:from="'grid-spinner'" class="spinner-wrapper active"></spinner>
       </div>
     {{else}}
       <div class="well well-small">No {{getDisplayModel.title_plural}} were found</div>
@@ -65,13 +65,13 @@
   {{/if}}
 </object-selection>
 {{#relatedAssessments.show}}
-  <simple-modal {instance}="{relatedAssessments.instance}"
-                {modal-title}="'Related Assessments'"
-                {state}="{relatedAssessments.state}"
-                {extra-css-class}="{related-assessments}">
+  <simple-modal vm:instance:from="relatedAssessments.instance"
+                vm:modalTitle:from="'Related Assessments'"
+                vm:state:from="relatedAssessments.state"
+                vm:extraCssClass:from="related-assessments">
     <div class="simple-modal__body">
       <related-assessments
-        {instance}="{instance}">
+        vm:instance:from="instance">
       </related-assessments>
     </div>
   </simple-modal>

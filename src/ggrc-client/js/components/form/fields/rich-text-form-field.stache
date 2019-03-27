@@ -4,9 +4,9 @@
 }}
 
 <div class="input-wrapper">
-  <rich-text {(content)}="{inputValue}"
-             {^editor-has-focus}="{editorHasFocus}"
-             {disabled}="{disabled}"
-             {hidden-toolbar}="{true}"
-             {placeholder}="{placeholder}"></rich-text>
+  <rich-text vm:content:bind="inputValue"
+             vm:editorHasFocus:to="editorHasFocus"
+             vm:disabled:from="disabled"
+             vm:hiddenToolbar:from="true"
+             vm:placeholder:from="placeholder"></rich-text>
 </div>

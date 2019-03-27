@@ -6,22 +6,22 @@
 <div class="col-container">
   <div class="attr-container title">
     <related-people-access-control
-      {include-roles}="{adminRole}"
-      {instance}="{item}">
+      vm:includeRoles:from="adminRole"
+      vm:instance:from="item">
       <div class="people-groups">
         {{#groups}}
           <related-people-access-control-group
-            {group-id}="{groupId}"
-            {title}="{title}"
-            {people}="{people}"
-            {instance}="{instance}"
+            vm:groupId:from="groupId"
+            vm:title:from="title"
+            vm:people:from="people"
+            vm:instance:from="instance"
             class="people-group">
               <deletable-people-group
-                {can-unmap}="{deletableAdmin}"
-                {is-loading}="{isUpdating}"
-                {group-id}="{groupId}"
-                {instance}="{instance}"
-                {people}="{people}">
+                vm:canUnmap:from="deletableAdmin"
+                vm:isLoading:from="isUpdating"
+                vm:groupId:from="groupId"
+                vm:instance:from="instance"
+                vm:people:from="people">
                   <h6>Admin</h6>
               </deletable-people-group>
           </related-people-access-control-group>
@@ -41,8 +41,8 @@
     <h6>Description</h6>
     <read-more
       class="attr-value"
-      {text}="{item.description}"
-      {handle-markdown}="{instance.class.isChangeableExternally}">
+      vm:text:from="item.description"
+      vm:handleMarkdown:from="instance.class.isChangeableExternally">
     </read-more>
   </div>
 </div>

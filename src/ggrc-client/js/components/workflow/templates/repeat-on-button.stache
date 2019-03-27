@@ -3,13 +3,13 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 
-<a href="javascript://" on:el:click="showDialog"
+<a href="javascript://" on:el:click="showDialog()"
    class="btn btn-small {{#if unit}}btn-green{{else}}btn-white{{/if}}">
     {{buttonText}}
 </a>
-<simple-modal {modal-title}="{modalTitle}"
-              {state}="{state}"
-              {extra-css-class}="'repeat-on'">
+<simple-modal vm:modalTitle:from="modalTitle"
+              vm:state:from="state"
+              vm:extraCssClass:from="'repeat-on'">
     <div class="simple-modal__body">
         <div class="ggrc-form">
           <div class="row-fluid">
@@ -25,9 +25,9 @@
                       Repeats
                   </label>
                   <dropdown id="repeats-select"
-                            {options-list}="{unitOptions}"
-                            {name}="'state.result.unit'"
-                            {is-disabled}="{repeatDisabled}">
+                            vm:optionsList:from="unitOptions"
+                            vm:name:from="'state.result.unit'"
+                            vm:isDisabled:from="repeatDisabled">
                   </dropdown>
               </div>
               <div class="span5">
@@ -35,9 +35,9 @@
                       Repeat Every
                   </label>
                   <dropdown id="repeat-every-select"
-                            {options-list}="{repeatOptions}"
-                            {name}="'state.result.repeatEvery'"
-                            {is-disabled}="{repeatDisabled}">
+                            vm:optionsList:from="repeatOptions"
+                            vm:name:from="'state.result.repeatEvery'"
+                            vm:isDisabled:from="repeatDisabled">
                   </dropdown>
               </div>
           </div>

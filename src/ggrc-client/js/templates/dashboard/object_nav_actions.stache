@@ -4,7 +4,7 @@
 }}
 
 <span class="inner-nav__actions">
-  <nav-actions {instance}="{instance}">
+  <nav-actions vm:instance:from="instance">
     {{#if showSetupRequirement}}
       <p class="tiny-help-text">
         You need to setup task group(s) before activating workflow.
@@ -21,8 +21,8 @@
       </p>
     {{/if}}
     {{#if canEdit}}
-      <workflow-activate {instance}="{instance}">
-        <spinner {toggle}="{waiting}"></spinner>
+      <workflow-activate vm:instance:from="instance">
+        <spinner vm:toggle:from="waiting"></spinner>
 
         {{^if waiting}}
           {{#if_equals instance.status "Draft"}}
@@ -30,7 +30,7 @@
               type="submit"
               href="#workflowActivate"
               class="btn btn-lightBlue btn-small"
-              on:el:click="activateWorkflow"
+              on:el:click="activateWorkflow()"
               {{^if instance.can_start_cycle}}disabled="disabled"{{/if}}>
               Activate Workflow
             </button>

@@ -7,54 +7,54 @@
 <div class="flex-box">
   <related-people-access-control
     class="width-100"
-    {deferred-save}="{deferredSave}"
+    vm:deferredSave:from="deferredSave"
     on:saveCustomRole="save(%event)"
-    {conflict-roles}="{conflictRoles}"
-    {order-of-roles}="{orderOfRoles}"
-    {include-roles}="{includeRoles}"
-    {exclude-roles}="{excludeRoles}"
-    {updatable-group-id}="{updatableGroupId}"
-    {info-pane-mode}="{infoPaneMode}"
-    {is-new-instance}="{isNewInstance}"
-    {read-only}="{isReadonly}"
-    {instance}="{instance}">
+    vm:conflictRoles:from="conflictRoles"
+    vm:orderOfRoles:from="orderOfRoles"
+    vm:includeRoles:from="includeRoles"
+    vm:excludeRoles:from="excludeRoles"
+    vm:updatableGroupId:from="updatableGroupId"
+    vm:infoPaneMode:from="infoPaneMode"
+    vm:isNewInstance:from="isNewInstance"
+    vm:readOnly:from="isReadonly"
+    vm:instance:from="instance">
       <div class="people-groups">
         {{#groups}}
           <related-people-access-control-group
             class="people-group"
             on:updateRoles="updateRoles(%event)"
-            {required}="{required}"
-            {group-id}="{groupId}"
-            {title}="{title}"
-            {people}="{people}"
-            {instance}="{instance}"
-            {read-only}="{readOnly}"
-            {updatable-group-id}="{updatableGroupId}"
-            {single-user-role}="{singleUserRole}">
+            vm:required:from="required"
+            vm:groupId:from="groupId"
+            vm:title:from="title"
+            vm:people:from="people"
+            vm:instance:from="instance"
+            vm:readOnly:from="readOnly"
+            vm:updatableGroupId:from="updatableGroupId"
+            vm:singleUserRole:from="singleUserRole">
               <div>
                   <editable-people-group
-                    {required}="{required}"
+                    vm:required:from="required"
                     on:unmap="removePerson(%event)"
                     on:changeEditableMode="changeEditableGroup(%event)"
                     on:saveChanges="saveChanges()"
                     on:personSelected="personSelected(%event)"
-                    {can-unmap}="{canEdit}"
-                    {can-edit}="{canEdit}"
-                    {is-loading}="{isLoading}"
-                    {group-id}="{groupId}"
-                    {instance}="{instance}"
-                    {title}="{title}"
-                    {people}="{people}"
-                    {updatable-group-id}="{updatableGroupId}">
+                    vm:canUnmap:from="canEdit"
+                    vm:canEdit:from="canEdit"
+                    vm:isLoading:from="isLoading"
+                    vm:groupId:from="groupId"
+                    vm:instance:from="instance"
+                    vm:title:from="title"
+                    vm:people:from="people"
+                    vm:updatableGroupId:from="updatableGroupId">
                       <editable-people-group-header
-                        {editable-mode}="{editableMode}"
-                        {redirection-enabled}="{redirectionEnabled}"
-                        {is-loading}="{isLoading}"
-                        {can-edit}="{canEdit}"
-                        {title}="{title}"
-                        {required}="{required}"
-                        {people}="{people}"
-                        {single-user-role}="{singleUserRole}"
+                        vm:editableMode:from="editableMode"
+                        vm:redirectionEnabled:from="redirectionEnabled"
+                        vm:isLoading:from="isLoading"
+                        vm:canEdit:from="canEdit"
+                        vm:title:from="title"
+                        vm:required:from="required"
+                        vm:people:from="people"
+                        vm:singleUserRole:from="singleUserRole"
                         on:editPeopleGroup="changeEditableMode(true)">
                       </editable-people-group-header>
                   </editable-people-group>

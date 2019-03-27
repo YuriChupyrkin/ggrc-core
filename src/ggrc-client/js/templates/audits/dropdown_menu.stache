@@ -8,7 +8,7 @@
     {{#is_allowed 'update' instance context='for'}}
       {{#if instance.is_snapshotable}}
         <li>
-          <snapshot-scope-update {instance}="{instance}">
+          <snapshot-scope-update vm:instance:from="instance">
             <a href="javascript://" on:el:click="upsertIt">
               <i class="fa fa-refresh"></i>
               Update objects to latest version</a>
@@ -19,9 +19,9 @@
 
       <li>
         <assessment-template-clone-button
-          {object-type}="'AssessmentTemplate'"
-          {parent-id}="{instance.id}"
-          {parent-type}="{instance.class.model_singular}">
+          vm:objectType:from="'AssessmentTemplate'"
+          vm:parentId:from="instance.id"
+          vm:parentType:from="instance.class.model_singular">
           <i class="fa fa-sliders"></i>
           Define Assessment template
         </assessment-template-clone-button>
@@ -31,17 +31,16 @@
 
   {{#is_allowed 'update' program context='for'}}
     {{#if instance.class.is_clonable}}
-      {{#is_allowed 'update' instance context='for'}}
-        <li>
-          <object-cloner {instance}="{instance}"
-                         {modal-title}="'Clone {{ instance.type }}'"
-                         {modal-description}="'Select all that you would like to clone as well?'">
-            <a href="javascript://" on:el:click="cloneObject">
-              <i class="fa fa-clone"></i>
-              Clone {{ instance.type }}
-            </a>
-          </object-cloner>
-        </li>
+        {{#is_allowed 'update' instance context='for'}}
+          <li>
+              <object-cloner vm:instance:from="instance"
+                             vm:modalTitle:from="'Clone {{ instance.type }}'"
+                             vm:modalDescription:from="'Select all that you would like to clone as well?'">
+                <a href="javascript://" on:el:click="cloneObject">
+                    <i class="fa fa-clone"></i>
+                    Clone {{ instance.type }}</a>
+              </object-cloner>
+          </li>
       {{/is_allowed}}
     {{/if}}
   {{/is_allowed}}
@@ -71,15 +70,15 @@
   </li>
 
   <li>
-    <permalink {instance}="{instance}"/>
+    <permalink vm:instance:from="instance"/>
   </li>
 
   {{#is_info_pin}}
-    <unmap-dropdown-item
-      {page_instance}="{page_instance}"
-      {instance}="{instance}"
-      {options}="{options}">
-    </unmap-dropdown-item>
+    <issue-unmap-dropdown-item
+      vm:page_instance:from="page_instance"
+      vm:instance:from="instance"
+      vm:options:from="options">
+    </issue-unmap-dropdown-item>
 
     {{#if instance.viewLink}}
       <li>
@@ -126,7 +125,7 @@
   {{#if instance.archived}}
     {{#current_user_is_admin}}
         <li>
-           <unarchive-link {instance}="{instance}" {notify}="{true}">
+           <unarchive-link vm:instance:from="instance" vm:notify:from="true">
                <i class="fa fa-archive"></i>
                Unarchive Audit
            </unarchive-link>

@@ -6,10 +6,10 @@
 {{#instance}}
   <section class="info{{#is_info_pin}} sticky-info-panel{{/is_info_pin}}">
     <div class="tier-content">
-      <general-page-header {instance}="{instance}"></general-page-header>
+      <general-page-header vm:instance:from="instance"></general-page-header>
 
-      <tab-container {instance}="{instance}">
-        <tab-panel {(panels)}="{panels}" {title-text}="'Attributes'">
+      <tab-container vm:instance:from="instance">
+        <tab-panel vm:panels:bind="panels" vm:titleText:from="'Attributes'">
           <div class="info-pane__body">
             <div class="info-pane__main-content {{^if isSnapshot}}info-pane__main-content-with-sidebar{{/if}}">
               {{#if review_status}}
@@ -26,14 +26,14 @@
               <div class="row-fluid wrap-row">
                 <div data-test-id="title_description_7a906d2e" class="span12">
                   <proposable-attribute
-                    {instance}="{instance}"
-                    {title}="'Description'"
-                    {attr-name}="'description'"
+                    vm:instance:from="instance"
+                    vm:title:from="'Description'"
+                    vm:attrName:from="'description'"
                   >
                     <div data-test-id="title_description_content_7a906d2e" class="rtf-block">
                       <read-more
-                        {text}="{description}"
-                        {handle-markdown}="{instance.class.isChangeableExternally}">
+                        vm:text:from="description"
+                        vm:handleMarkdown:from="instance.class.isChangeableExternally">
                       </read-more>
                     </div>
                   </proposable-attribute>
@@ -43,14 +43,14 @@
               <div class="row-fluid wrap-row">
                 <div class="span12">
                   <proposable-attribute
-                    {instance}="{instance}"
-                    {title}="'Assessment Procedure'"
-                    {attr-name}="'test_plan'"
+                    vm:instance:from="instance"
+                    vm:title:from="'Assessment Procedure'"
+                    vm:attrName:from="'test_plan'"
                   >
                     <div class="rtf-block">
                       <read-more
-                        {text}="{test_plan}"
-                        {handle-markdown}="{instance.class.isChangeableExternally}">
+                        vm:text:from="test_plan"
+                        vm:handleMarkdown:from="instance.class.isChangeableExternally">
                       </read-more>
                     </div>
                   </proposable-attribute>
@@ -60,14 +60,14 @@
               <div class="row-fluid wrap-row">
                 <div data-test-id="title_notes_ef5bc3a71e88" class="span12">
                   <proposable-attribute
-                    {instance}="{instance}"
-                    {title}="'Notes'"
-                    {attr-name}="'notes'"
+                    vm:instance:from="instance"
+                    vm:title:from="'Notes'"
+                    vm:attrName:from="'notes'"
                   >
                     <div data-test-id="title_notes_content_ef5bc3a71e88" class="rtf-block">
                       <read-more
-                        {text}="notes"
-                        {handle-markdown}="instance.class.isChangeableExternally">
+                        vm:text:from="notes"
+                        vm:handleMarkdown:from="instance.class.isChangeableExternally">
                       </read-more>
                     </div>
                   </proposable-attribute>
@@ -77,9 +77,9 @@
               {{> /static/templates/base_objects/contacts.stache}}
               {{> /static/templates/base_objects/reference-urls.stache}}
               <div class="row-fluid wrap-row">
-                <folder-attachments-list {title}="'Attachment'"
-                                         {instance}="{instance}"
-                                         {is-snapshot}="{isSnapshot}">
+                <folder-attachments-list vm:title:from="'Attachment'"
+                                         vm:instance:from="instance"
+                                         vm:isSnapshot:from="isSnapshot">
                 </folder-attachments-list>
               </div>
 
@@ -117,9 +117,9 @@
                     </div>
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Kind/Nature'"
-                        {attr-name}="'kind'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Kind/Nature'"
+                        vm:attrName:from="'kind'"
                       >
                         {{#if kind}}
                           <p>
@@ -132,9 +132,9 @@
                     </div>
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Fraud Related'"
-                        {attr-name}="'is_fraud_related'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Fraud Related'"
+                        vm:attrName:from="'is_fraud_related'"
                       >
                         <p>
                           {{#if fraud_related}}
@@ -153,9 +153,9 @@
                   <div class="row-fluid wrap-row">
                     <div class="span8">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Significance'"
-                        {attr-name}="'is_key_control'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Significance'"
+                        vm:attrName:from="'is_key_control'"
                       >
                         <p>
                           {{#if key_control}}
@@ -172,9 +172,9 @@
                     </div>
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Type/Means'"
-                        {attr-name}="'means'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Type/Means'"
+                        vm:attrName:from="'means'"
                       >
                         {{#if means}}
                           <p>
@@ -189,9 +189,9 @@
                   <div class="row-fluid wrap-row">
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Effective Date'"
-                        {attr-name}="'start_date'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Effective Date'"
+                        vm:attrName:from="'start_date'"
                       >
                         {{#if start_date}}
                           <p>
@@ -220,9 +220,9 @@
                     </div>
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Frequency'"
-                        {attr-name}="'verify_frequency'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Frequency'"
+                        vm:attrName:from="'verify_frequency'"
                       >
                         {{#if verify_frequency}}
                           <p>
@@ -237,14 +237,14 @@
                   <div class="row-fluid wrap-row">
                     <div class="span8">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Assertions'"
-                        {attr-name}="'control_assertions'"
-                        {mandatory}="'true'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Assertions'"
+                        vm:attrName:from="'control_assertions'"
+                        vm:mandatory:from="'true'"
                       >
                         {{#if assertions.length}}
                           <ul>
-                            <sort {items}="{assertions}">
+                            <sort vm:items:from="assertions">
                               {{#sortedItems}}
                                 <li>{{.}}</li>
                               {{/sortedItems}}
@@ -257,13 +257,13 @@
                     </div>
                     <div class="span4">
                       <proposable-attribute
-                        {instance}="{instance}"
-                        {title}="'Categories'"
-                        {attr-name}="'control_categories'"
+                        vm:instance:from="instance"
+                        vm:title:from="'Categories'"
+                        vm:attrName:from="'control_categories'"
                       >
                         {{#if categories.length}}
                           <ul>
-                            <sort {items}="{categories}">
+                            <sort vm:items:from="categories">
                               {{#sortedItems}}
                                 <li>{{.}}</li>
                               {{/sortedItems}}
@@ -283,8 +283,8 @@
             <div class="info-pane__sidebar">
               <div class="info-pane__section-title">Responses/Comments</div>
               <comments-section class="flex-box flex-col"
-                {instance}="{instance}"
-                {notification}="'Notify Admins, Control Operators, Control Owners and Other Contacts'">
+                vm:instance:from="instance"
+                vm:notification:from="'Notify Admins, Control Operators, Control Owners and Other Contacts'">
               </comments-section>
             </div>
             {{/if}}
@@ -292,22 +292,22 @@
         </tab-panel>
         {{^if isSnapshot}}
           <tab-link
-            {instance}="{instance}"
-            {(panels)}="{panels}"
-            {title-text}="'Change Proposals'"
-            {link-type}="'proposals'"
+            vm:instance:from="instance"
+            vm:panels:bind="panels"
+            vm:titleText:from="'Change Proposals'"
+            vm:linkType:from="'proposals'"
           ></tab-link>
           <tab-link
-            {instance}="{instance}"
-            {(panels)}="{panels}"
-            {title-text}="'Version History'"
-            {link-type}="'change-log'"
+            vm:instance:from="instance"
+            vm:panels:bind="panels"
+            vm:titleText:from="'Version History'"
+            vm:linkType:from="'change-log'"
           ></tab-link>
           <tab-link
-            {instance}="{instance}"
-            {(panels)}="{panels}"
-            {title-text}="'Change Log'"
-            {link-type}="'change-log'"
+            vm:instance:from="instance"
+            vm:panels:bind="panels"
+            vm:titleText:from="'Change Log'"
+            vm:linkType:from="'change-log'"
           ></tab-link>
         {{/if}}
       </tab-container>
@@ -315,9 +315,9 @@
   </section>
 
   {{#if is_info_widget}}
-    <info-pane-footer {created-at}="{instance.created_at}"
-                      {modified-at}="{instance.updated_at}"
-                      {modified-by}="{instance.modified_by}">
+    <info-pane-footer vm:createdAt:from="instance.created_at"
+                      vm:modifiedAt:from="instance.updated_at"
+                      vm:modifiedBy:from="instance.modified_by">
     </info-pane-footer>
   {{/if}}
 {{/instance}}

@@ -6,17 +6,17 @@
 {{#instance}}
   <div class="row-fluid wrap-row">
     <div data-test-id="title_reference_url_aa7d1a65">
-      <related-documents {instance}="{instance}" {kind}="'REFERENCE_URL'">
+      <related-documents vm:instance:from="instance" vm:kind:from="'REFERENCE_URL'">
         <related-urls
-          {instance}="{instance}"
-          {(urls)}="{documents}"
-          {is-disabled}="{isLoading}"
-          {is-not-editable}="{isSnapshot}"
-          {is-snapshot}="{isSnapshot}"
+          vm:instance:from="instance"
+          vm:urls:bind="documents"
+          vm:isDisabled:from="isLoading"
+          vm:isNotEditable:from="isSnapshot"
+          vm:isSnapshot:from="isSnapshot"
           on:createUrl="createRelatedDocument(%event.payload)"
           on:removeUrl="removeRelatedDocument(%event.payload)">
           <div class="related-urls__heading">
-            <spinner class="related-urls__spinner" {toggle}="{isLoading}"></spinner>
+            <spinner class="related-urls__spinner" vm:toggle:from="isLoading"></spinner>
             <h6 class="related-urls__title">Reference URL</h6>
           </div>
         </related-urls>

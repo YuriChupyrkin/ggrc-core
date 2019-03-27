@@ -32,11 +32,11 @@
     }}
     <custom-attributes-field
       tabindex="20"
-      {type}="{attributeType}"
-      {(value)}="{value}"
-      {field-id}="{customAttributeId}"
-      {placeholder}="{placeholder}"
-      {options}="{multiChoiceOptions}"
+      vm:type:from="attributeType"
+      vm:value:bind="value"
+      vm:fieldId:from="customAttributeId"
+      vm:placeholder:from="placeholder"
+      vm:options:from="multiChoiceOptions"
       on:valueChanged="updateGlobalAttribute(%event, %context)"
       class="form-field__content custom-attribute-{{attributeType}}"
     ></custom-attributes-field>

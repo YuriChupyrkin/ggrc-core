@@ -7,25 +7,25 @@
   <div class="flex-box flex-col header tree-header-content">
     <div class="flex-box tree-filter">
       <tree-filter-input class="flex-size-1"
-                         {register-filter}="{@registerFilter}"
+                         vm:registerFilter:from="@registerFilter"
                          on:submit="onFilter()"
                          on:openAdvanced="openAdvancedFilter()"
                          on:removeAdvanced="removeAdvancedFilters()"
-                         {show-advanced}="{statusFilterVisible}"
-                         {disabled}="{advancedSearch.filter}"
-                         {depth}="{options.depth}"
-                         {filter-deep-limit}="{options.filterDeepLimit}"
+                         vm:showAdvanced:from="statusFilterVisible"
+                         vm:disabled:from="advancedSearch.filter"
+                         vm:depth:from="options.depth"
+                         vm:filterDeepLimit:from="options.filterDeepLimit"
       ></tree-filter-input>
       {{#if statusFilterVisible}}
         <tree-status-filter class="flex-size-1"
-                            {widget-id}="{options.widgetId}"
-                            {model-name}="{modelName}"
-                            {register-filter}="{@registerFilter}"
-                            on:filter="onFilter"
-                            {disabled}="{advancedSearch.filter}">
-          <multiselect-dropdown {options}="{filterStates}"
-                                {placeholder}="'Filter by State'"
-                                {disabled}="{advancedSearch.filter}"
+                            vm:widgetId:from="options.widgetId"
+                            vm:modelName:from="modelName"
+                            vm:registerFilter:from="@registerFilter"
+                            on:filter="onFilter()"
+                            vm:disabled:from="advancedSearch.filter">
+          <multiselect-dropdown vm:options:from="filterStates"
+                                vm:placeholder:from="'Filter by State'"
+                                vm:disabled:from="advancedSearch.filter"
                                 on:dropdownClose="selectItems(%event)">
           </multiselect-dropdown>
           {{#if statusTooltipVisible}}
@@ -35,25 +35,25 @@
         </tree-status-filter>
       {{/if}}
       {{^if noResults}}
-        <tree-pagination {paging}="{pageInfo}"></tree-pagination>
+        <tree-pagination vm:paging:from="pageInfo"></tree-pagination>
       {{/if}}
     </div>
 
-    <tree-actions {parent-instance}="{parent_instance}"
-                  {options}="{options}"
-                  {model}="{model}"
-                  {showed-items}="{showedItems}"
+    <tree-actions vm:parentInstance:from="parent_instance"
+                  vm:options:from="options"
+                  vm:model:from="model"
+                  vm:showedItems:from="showedItems"
                   on:export="export()">
     </tree-actions>
 
-    <simple-modal {state}="{advancedSearch}"
-                  {modal-title}="'{{model.title_singular}} Advanced Search'"
-                  {extra-css-class}="'advanced-search'">
+    <simple-modal vm:state:from="advancedSearch"
+                  vm:modalTitle:from="'{{model.title_singular}} Advanced Search'"
+                  vm:extraCssClass:from="'advanced-search'">
       <div class="advanced-search__content">
         <div class="simple-modal__body">
-          <advanced-search-filter-container {(items)}="{advancedSearch.filterItems}"
-                                            {available-attributes}="{columns.available}"
-                                            {model-name}="{modelName}"
+          <advanced-search-filter-container vm:items:bind="advancedSearch.filterItems"
+                                            vm:availableAttributes:from="columns.available"
+                                            vm:modelName:from="modelName"
                                             on:el:enter="applyAdvancedFilters()">
           </advanced-search-filter-container>
         </div>
@@ -61,8 +61,8 @@
           <h4>Filter by Mapping</h4>
         </div>
         <div class="simple-modal__body">
-          <advanced-search-mapping-container {(items)}="{advancedSearch.mappingItems}"
-                                             {model-name}="{modelName}"
+          <advanced-search-mapping-container vm:items:bind="advancedSearch.mappingItems"
+                                             vm:modelName:from="modelName"
                                              on:el:enter="applyAdvancedFilters()">
           </advanced-search-mapping-container>
         </div>
@@ -75,32 +75,32 @@
       </div>
     </simple-modal>
 
-    <tree-header {selected-columns}="{columns.selected}"
-                 {available-columns}="{columns.available}"
-                 {mandatory}="{columns.mandatory}"
-                 {disable-configuration}="{columns.disableConfiguration}"
-                 {sorting-info}="{sortingInfo}"
-                 {model}="{model}"
+    <tree-header vm:selectedColumns:from="columns.selected"
+                 vm:availableColumns:from="columns.available"
+                 vm:mandatory:from="columns.mandatory"
+                 vm:disableConfiguration:from="columns.disableConfiguration"
+                 vm:sortingInfo:from="sortingInfo"
+                 vm:model:from="model"
                  on:sort="onSort(%event)"
                  on:updateColumns="onUpdateColumns(%event)">
     </tree-header>
 
   </div>
 
-  <tree-view {items}="{showedItems}"
-             {limit-depth-tree}="{limitDepthTree}"
-             {selected-columns}="{columns.selected}"
-             {mandatory}="{columns.mandatory}"
-             {disable-configuration}="{columns.disableConfiguration}"
-             {loading}="{loading}"
-             {parent-instance}="{parent_instance}"
-             {model}="{model}"
-             {get-depth-filter}="{@getDepthFilter}">
+  <tree-view vm:items:from="showedItems"
+             vm:limitDepthTree:from="limitDepthTree"
+             vm:selectedColumns:from="columns.selected"
+             vm:mandatory:from="columns.mandatory"
+             vm:disableConfiguration:from="columns.disableConfiguration"
+             vm:loading:from="loading"
+             vm:parentInstance:from="parent_instance"
+             vm:model:from="model"
+             vm:getDepthFilter:from="@getDepthFilter">
   </tree-view>
 
   <div class="tree-footer flex-box">
     {{^if noResults}}
-      <tree-pagination {paging}="{pageInfo}" {placement}="'top'"></tree-pagination>
+      <tree-pagination vm:paging:from="pageInfo" vm:placement:from="'top'"></tree-pagination>
     {{/if}}
   </div>
 </div>

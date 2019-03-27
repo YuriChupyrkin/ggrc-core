@@ -10,25 +10,25 @@
         {{#case "state"}}
         <div class="filter-container__state">
           <advanced-search-filter-state
-            {model-name}="{modelName}"
-            {(state-model)}="{value}">
+            vm:modelName:from="modelName"
+            vm:stateModel:bind="value">
           </advanced-search-filter-state>
         </div>
         {{/case}}
         {{#case "operator"}}
         <div class="filter-container__operator">
           <advanced-search-filter-operator
-            {(operator)}="{value}">
+            vm:operator:bind="value">
           </advanced-search-filter-operator>
         </div>
         {{/case}}
         {{#case "attribute"}}
         <div class="filter-container__attribute">
           <advanced-search-filter-attribute
-            {(attribute)}="{value}"
+            vm:attribute:bind="value"
             on:remove="removeItem(../)"
-            {available-attributes}="{availableAttributes}"
-            {extendable}="{true}"
+            vm:availableAttributes:from="availableAttributes"
+            vm:extendable:from="true"
             on:createGroup="createGroup(../)">
           </advanced-search-filter-attribute>
         </div>
@@ -36,9 +36,9 @@
         {{#case "group"}}
         <div class="filter-container__group">
           <advanced-search-filter-group
-            {(items)}="{value}"
+            vm:items:bind="value"
             on:remove="removeItem(../)"
-            {available-attributes}="{availableAttributes}">
+            vm:availableAttributes:from="availableAttributes">
           </advanced-search-filter-group>
         </div>
         {{/case}}

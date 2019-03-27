@@ -6,31 +6,31 @@
 <div class="flex-box">
   <related-people-access-control
     class="width-100"
-    {conflict-roles}="{conflictRoles}"
-    {order-of-roles}="{orderOfRoles}"
-    {include-roles}="{includeRoles}"
-    {exclude-roles}="{excludeRoles}"
-    {updatable-group-id}="{updatableGroupId}"
-    {is-new-instance}="{isNewInstance}"
-    {read-only}="{readOnly}"
-    {instance}="{instance}">
+    vm:conflictRoles:from="conflictRoles"
+    vm:orderOfRoles:from="orderOfRoles"
+    vm:includeRoles:from="includeRoles"
+    vm:excludeRoles:from="excludeRoles"
+    vm:updatableGroupId:from="updatableGroupId"
+    vm:isNewInstance:from="isNewInstance"
+    vm:readOnly:from="readOnly"
+    vm:instance:from="instance">
       <div class="people-groups">
         {{#groups}}
           <related-people-access-control-group
             class="people-group"
-            {auto-update}="{true}"
+            vm:autoUpdate:from="true"
             on:updateRoles="updateRoles(%event)"
-            {is-new-instance}="{isNewInstance}"
-            {required}="{required}"
-            {group-id}="{groupId}"
-            {title}="{title}"
-            {people}="{people}"
-            {instance}="{instance}"
-            {is-proposal}="{isProposal}"
-            {updatable-group-id}="{updatableGroupId}"
-            {read-only}="{readOnly}"
+            vm:isNewInstance:from="isNewInstance"
+            vm:required:from="required"
+            vm:groupId:from="groupId"
+            vm:title:from="title"
+            vm:people:from="people"
+            vm:instance:from="instance"
+            vm:isProposal:from="isProposal"
+            vm:updatableGroupId:from="updatableGroupId"
+            vm:readOnly:from="readOnly"
             data-original-title="{{groupTooltip}}"
-            {single-user-role}="{singleUserRole}"
+            vm:singleUserRole:from="singleUserRole"
             {{#showGroupTooltip}}
               rel="tooltip"
               data-placement="bottom"
@@ -38,14 +38,14 @@
             >
               <div>
                 <deletable-people-group
-                  {show-empty-message}="{false}"
-                  {required}="{required}"
+                  vm:showEmptyMessage:from="false"
+                  vm:required:from="required"
                   on:unmap="removePerson(%event)"
-                  {can-unmap}="{canEdit}"
-                  {is-loading}="{isLoading}"
-                  {group-id}="{groupId}"
-                  {instance}="{instance}"
-                  {people}="{people}">
+                  vm:canUnmap:from="canEdit"
+                  vm:isLoading:from="isLoading"
+                  vm:groupId:from="groupId"
+                  vm:instance:from="instance"
+                  vm:people:from="people">
                   <label class="people-group__title-content form-label form-label__extended">
                     <span class="people-group__title people-group__title--deletable">{{title}}</span>
                     {{#if required}}
@@ -60,20 +60,20 @@
                 </deletable-people-group>
                 <div>
                   {{#if isUpdating}}
-                    <spinner {toggle}="{isUpdating}"></spinner>
+                    <spinner vm:toggle:from="isUpdating"></spinner>
                   {{else}}
                     {{#if canEdit}}
                       {{^if_config_exist 'external_services.Person'}}
                       <autocomplete
-                          {search-items-type}="'Person'"
+                          vm:searchItemsType:from="'Person'"
                           on:itemSelected="addPerson(%event.selectedItem, @groupId)"
-                          {placeholder}="{placeholder}">
+                          vm:placeholder:from="placeholder">
                       </autocomplete>
                       {{else}}
                       <external-data-autocomplete
-                        {type}="'Person'"
-                        {placeholder}="{placeholder}"
-                        {min-length}="2"
+                        vm:type:from="'Person'"
+                        vm:placeholder:from="placeholder"
+                        vm:minLength:from="2"
                         on:itemSelected="addPerson(%event.selectedItem, @groupId)">
                       </external-data-autocomplete>
                       {{/if_config_exist}}

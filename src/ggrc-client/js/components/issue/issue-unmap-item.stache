@@ -5,7 +5,7 @@
 
 <content></content>
 
-<simple-modal {modal-title}="{modalTitle}" {state}="{modalState}" {replace-content}="{true}" {extra-css-class}="'related-snapshots'">
+<simple-modal vm:modalTitle:from="modalTitle" vm:state:from="modalState" vm:replaceContent:from="true" vm:extraCssClass:from="'related-snapshots'">
   <div class="simple-modal__header flex-box flex-row">
         <div class="simple-modal__header-text flex-size-1">
             <div class="simple-modal__title">
@@ -32,7 +32,7 @@
             <div class="related-snapshots__audit-container">
                 <business-object-list-item
                     on:el:click="openObject({relatedAudit})"
-                    {instance}="{relatedAudit}">
+                    vm:instance:from="relatedAudit">
                 </business-object-list-item>
             </div>
         </div>
@@ -43,33 +43,33 @@
                 Related Snapshots
             </div>
             <div class="modal-mapped-objects">
-                <spinner {toggle}="{isLoading}" class="spinner-wrapper active"
-                         {extra-css-class}="'grid-spinner'">
+                <spinner vm:toggle:from="isLoading" class="spinner-wrapper active"
+                         vm:extraCssClass:from="'grid-spinner'">
                 </spinner>
-                <object-list {items}="{relatedSnapshots}">
+                <object-list vm:items:from="relatedSnapshots">
                     <div class="modal-mapped-objects-item">
                         <div class="modal-mapped-objects-item__details">
                             <business-object-list-item
                                 on:el:click="openObject({.})"
-                                {instance}="{.}">
+                                vm:instance:from="{.}">
                             </business-object-list-item>
                         </div>
                     </div>
                 </object-list>
             </div>
-            <tree-pagination {paging}="{paging}" {placement}="'top'"></tree-pagination>
+            <tree-pagination vm:paging:from="paging" vm:placement:from="'top'"></tree-pagination>
         </div>
         {{/if}}
     </div>
     <div class="simple-modal__footer">
         <div class="simple-modal__toolbar">
             <button type="button" class="btn btn-small btn-red simple-modal__toolbar-item"
-                    on:el:click="unmap"
+                    on:el:click="unmap()"
                     {{#if isLoading}}disabled{{/if}}>
                 Unmap
             </button>
             <button type="button" class="btn btn-small btn-white simple-modal__toolbar-item"
-                    on:el:click="hide"
+                    on:el:click="hide()"
                     {{#if isLoading}}disabled{{/if}}>
                 Close
             </button>

@@ -19,9 +19,9 @@
         {{#if isDirective}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="{instance}"
-                            {type}="'Requirement'"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:type:from="'Requirement'"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
           </section>
         {{/if}}
@@ -29,16 +29,16 @@
         {{#if isRequirement}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="{instance}"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="{instance}"
-                            {type}="'Objective'"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:type:from="'Objective'"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="{instance}"
-                            {type}="'Control'"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:type:from="'Control'"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
           </section>
         {{/if}}
@@ -46,12 +46,12 @@
         {{#if isCycleTaskGroupObjectTask}}
           <section>
             <h3 class="task-list-title">Number of mapped objects</h3>
-            <mapped-counter {instance}="{instance}"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
-            <mapped-counter {instance}="{instance}"
-                            {type}="'Comment'"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:type:from="'Comment'"
+                            vm:addContent:from="@addContent"
                             on:deferredUpdateCounter="addDeferredContent(%event)"
             ></mapped-counter>
             <div class="date">
@@ -64,17 +64,17 @@
         {{#if isCycleTaskGroup}}
           <section>
             <h3 class="task-list-title">Number of mapped tasks</h3>
-            <mapped-counter {instance}="{instance}"
-                            {type}="'CycleTaskGroupObjectTask'"
-                            {add-content}="{@addContent}"
+            <mapped-counter vm:instance:from="instance"
+                            vm:type:from="'CycleTaskGroupObjectTask'"
+                            vm:addContent:from="@addContent"
             ></mapped-counter>
           </section>
         {{/if}}
 
         {{#if drawStatuses}}
-          <object-tasks {instance-id}="{instance.id}"
-                        {instance-type}="{instance.type}"
-                        {add-content}="{@addContent}"
+          <object-tasks vm:instanceId:from="instance.id"
+                        vm:instanceType:from="instance.type"
+                        vm:addContent:from="@addContent"
           ></object-tasks>
         {{/if}}
       {{/if}}

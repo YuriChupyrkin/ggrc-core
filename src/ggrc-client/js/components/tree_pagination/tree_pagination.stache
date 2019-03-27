@@ -33,9 +33,9 @@
       </a>
     </div>
     <div class="pagination-item pagination-item_list">
-      <simple-popover {button-text}="{getPaginationInfo}"
-                      {extra-css-class}="'simple-popover_pagination_pages'"
-                      {placement}="{{placement}}">
+      <simple-popover vm:buttonText:from="getPaginationInfo"
+                      vm:extraCssClass:from="'simple-popover_pagination_pages'"
+                      vm:placement:from="{{placement}}">
           {{#pagesList}}
             <div class="pagination-item__popover-item single-line
                         {{#if_equals paging.current .}} pagination-item__popover-item_selected{{/if_equals}}"

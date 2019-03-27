@@ -17,12 +17,12 @@
            title="Set a name for the {{class.title_singular}}."></i>
       </label>
       <input-filter
-        {name}="'name'"
-        {(value)}="{name}"
-        {placeholder}="'Enter Name'"
-        {exclude-symbols}="'*'"
-        {tabindex}="1"
-        {autofocus}="{true}">
+        vm:name:from="'name'"
+        vm:value:bind="name"
+        vm:placeholder:from="'Enter Name'"
+        vm:excludeSymbols:from="'*'"
+        vm:tabindex:from="1"
+        vm:autofocus:from="true">
       </input-filter>
     </div>
 

@@ -15,12 +15,12 @@
         <i class="fa fa-question-circle" rel="tooltip" title="Give new {{model.model_plural}} a name."></i>
       </label>
       <input-filter
-        {name}="'title'"
-        {(value)}="{title}"
-        {placeholder}="'Enter Title'"
-        {exclude-symbols}="'*'"
-        {tabindex}="1"
-        {autofocus}="{true}">
+        vm:name:from="'title'"
+        vm:value:bind="title"
+        vm:placeholder:from="'Enter Title'"
+        vm:excludeSymbols:from="'*'"
+        vm:tabindex:from="1"
+        vm:autofocus:from="true">
       </input-filter>
     </div>
     <div class="span4">
@@ -29,9 +29,9 @@
         <i class="fa fa-asterisk"></i>
         <i class="fa fa-question-circle" rel="tooltip" title="Choose the type of attribute to create."></i>
       </label>
-        <dropdown {options-list}="{model.attributeTypes}"
-                  {name}="'instance.attribute_type'"
-                  {data-purpose}="'ca-type'">
+        <dropdown vm:optionsList:from="model.attributeTypes"
+                  vm:name:from="'instance.attribute_type'"
+                  vm:dataPurpose:from="'ca-type'">
         </dropdown>
     </div>
     <div class="span2">

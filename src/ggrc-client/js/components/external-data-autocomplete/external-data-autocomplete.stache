@@ -6,20 +6,20 @@
 <input type="text"
        class="input-block-level {{extraCssClass}}"
        on:el:input="setSearchCriteria($element)"
-       {($value)}="{searchCriteria}"
+       el:value:bind="searchCriteria"
        on:el:focus="openResults()"
        on:el:blur="closeResults()"
        placeholder="{{placeholder}}">
 </input>
-<spinner {extra-css-class}="'saving'" {toggle}="{saving}"></spinner>
+<spinner vm:extraCssClass:from="'saving'" vm:toggle:from="saving"></spinner>
 
 {{#if renderResults}}
-<external-data-provider {type}="{type}"
-                        {search-criteria}="{searchCriteria}">
-    <autocomplete-results {title-field-path}="'name'"
-                          {info-field-path}="'email'"
-                          {loading}="{loading}"
-                          {values}="{values}"
+<external-data-provider vm:type:from="type"
+                        vm:searchCriteria:from="searchCriteria">
+    <autocomplete-results vm:titleFieldPath:from="'name'"
+                          vm:infoFieldPath:from="'email'"
+                          vm:loading:from="loading"
+                          vm:values:from="values"
                           on:itemPicked="onItemPicked(%event.data)">
     </autocomplete-results>
 </external-data-provider>

@@ -12,10 +12,10 @@
         {{#if showIcon}}<i class="fa fa-assessment"></i>{{/if}}
         {{title}}
       </a>
-      <simple-modal {instance}="{instance}" {modal-title}="{modalTitle}" {state}="{state}" {extra-css-class}="'related-assessments'">
+      <simple-modal vm:instance:from="instance" vm:modalTitle:from="modalTitle" vm:state:from="state" vm:extraCssClass:from="'related-assessments'">
           <div class="simple-modal__body">
             <related-assessments
-              {instance}="{instance}">
+              vm:instance:from="instance">
             </related-assessments>
           </div>
       </simple-modal>

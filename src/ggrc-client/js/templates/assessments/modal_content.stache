@@ -5,7 +5,7 @@
 
 {{!div class="modal-body"}}
   <div class="ggrc-form">
-    <assessment-modal {instance}="{instance}" {is-new-instance}="{new_object_form}">
+    <assessment-modal vm:instance:from="instance" vm:isNewInstance:from="new_object_form">
       {{#instance}}
     <form action="javascript://">
 
@@ -29,12 +29,12 @@
           </label>
           <assessment-object-type-dropdown
 	          class="input-medium"
-            {instance}="{instance}"
-            {(assessment-type)}="{instance.assessment_type}">
+            vm:instance:from="instance"
+            vm:assessmentType:bind="instance.assessment_type">
             <dropdown
-              {options-groups}="{objectTypes}"
-              {is-grouped-dropdown}="{true}"
-              {name}="'assessmentType'">
+              vm:optionsGroups:from="objectTypes"
+              vm:isGroupedDropdown:from="true"
+              vm:name:from="'assessmentType'">
             </dropdown>
           </assessment-object-type-dropdown>
         </div>
@@ -42,9 +42,9 @@
           <label class="form-label ggrc-form-item__label">
             Label
           </label>
-          <multi-select-label {only-edit-mode}="{true}"
-                              {instance}="{instance}"
-                              {labels}="{instance.labels}">
+          <multi-select-label vm:onlyEditMode:from="true"
+                              vm:instance:from="instance"
+                              vm:labels:from="instance.labels">
           </multi-select-label>
         </div>
       </div>
@@ -69,7 +69,7 @@
             placeholder="Enter Title"
             name="title"
             type="text"
-            {$value}="{title}" autofocus>
+            el:value:from="title" autofocus>
           {{#instance.computed_errors.title}}<label class="help-inline warning">{{this}}</label>{{/instance.computed_errors.title}}
         </div>
       </div>
@@ -80,24 +80,24 @@
             Assessment Procedure
           </label>
           <rich-text tab-index="3"
-              {hidden-toolbar}="{true}"
-              {placeholder}="'Enter Assessment Procedure'"
-              {(content)}="{test_plan}">
+              vm:hiddenToolbar:from="true"
+              vm:placeholder:from="'Enter Assessment Procedure'"
+              vm:content:bind="test_plan">
           </rich-text>
         </div>
       </div>
 
       <div class="ggrc-form-item width-100">
         <div class="ggrc-form-item__row">
-        <assessment-people {instance}="{instance}"
-                           {info-pane-mode}="{false}">
+        <assessment-people vm:instance:from="instance"
+                           vm:infoPaneMode:from="false">
         </assessment-people>
         </div>
       </div>
 
       <div class="ggrc-form-item">
         <div class="ggrc-form-item__row ggrc-from-item__checkbox-list">
-          <checkbox-to-list {property}="{recipients}" {instance}="{instance}" class="flex-box">
+          <checkbox-to-list vm:property:from="recipients" vm:instance:from="instance" class="flex-box">
             <div class="ggrc-form-item__checkbox-item">
               <label class="input--inline">
                   <input
@@ -133,9 +133,9 @@
       <div class="ggrc-form-item">
         <div class="ggrc-form-item__row">
           <deferred-mapper class="width-100"
-                           {instance}="{instance}"
-                           {mapped-objects}="{mappedObjects}"
-                           {use-snapshots}="{true}">
+                           vm:instance:from="instance"
+                           vm:mappedObjects:from="mappedObjects"
+                           vm:useSnapshots:from="true">
             <label class="ggrc-form-item__label">
               Mapped Objects
             </label>
@@ -143,14 +143,14 @@
               {{#each list}}
                 <div class="modal-mapped-objects-item">
                   <div class="modal-mapped-objects-item__details">
-                    <object-list-item-updater {target-instance}="{.}">
+                    <object-list-item-updater vm:targetInstance:from="{.}">
                       {{#if instanceUpdated}}
-                        <business-object-list-item {instance}="{instance}">
+                        <business-object-list-item vm:instance:from="instance">
                           <div class="description">
                             <read-more
-                              {text}="{itemData.description}"
-                              {max-lines-number}=1
-                              {handle-markdown}="{instance.class.isChangeableExternally}">
+                              vm:text:from="itemData.description"
+                              vm:maxLinesNumber:from=1
+                              vm:handleMarkdown:from="instance.class.isChangeableExternally">
                             </read-more>
                           </div>
                         </business-object-list-item>
@@ -171,7 +171,7 @@
               <div class="objective-selector">
                 <map-button-using-assessment-type
                   {{canData "deferred_to"}}
-                  {instance}="{instance}">
+                  vm:instance:from="instance">
                       <a class="btn btn-small btn-white assessment-map-btn"
                         href="javascript://"
                         data-placement="left"
@@ -228,16 +228,16 @@
           </div>
           <div class="hidden-issue-tracker-fields-area">
             <issue-tracker-switcher
-              {set-issue-title}="{true}"
-              {default-title}="{instance.title}"
-              {instance}="{instance}"
-              {(is-integration-enabled)}="{instance.issue_tracker.enabled}">
+              vm:setIssueTitle:from="true"
+              vm:defaultTitle:from="instance.title"
+              vm:instance:from="instance"
+              vm:isIntegrationEnabled:bind="instance.issue_tracker.enabled">
                 <modal-issue-tracker-fields
-                  {instance}="{instance}"
-                  {allow-to-change-id}="{true}"
-                  {linking-note}="'Please leave this empty for a new ticket to be generated and linked to this assessment. If you would like to link to an existing ticket please provide the ticket number.'"
-                  {set-issue-title}="{setIssueTitle}"
-                  {note}="'Turns on Ticket Tracker integration.'">
+                  vm:instance:from="instance"
+                  vm:allowToChangeId:from="true"
+                  vm:linkingNote:from="'Please leave this empty for a new ticket to be generated and linked to this assessment. If you would like to link to an existing ticket please provide the ticket number.'"
+                  vm:setIssueTitle:from="setIssueTitle"
+                  vm:note:from="'Turns on Ticket Tracker integration.'">
                 </modal-issue-tracker-fields>
             </issue-tracker-switcher>
           </div>

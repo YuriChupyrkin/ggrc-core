@@ -27,10 +27,10 @@ export default can.Component.extend('treePeopleWithRoleListField', {
   tag: 'tree-people-with-role-list-field',
   template: can.stache(
     `<tree-field-wrapper
-      {source}="{peopleList}"
-      {type}="{type}"
-      {field}="'email'">
-      <tree-field {source}="{items}"/>
+      vm:source:from="peopleList"
+      vm:type:from="type"
+      vm:field:from="'email'">
+      <tree-field vm:source:from="items"/>
     </tree-field-wrapper>`
   ),
   leakScope: true,

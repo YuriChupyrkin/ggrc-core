@@ -4,8 +4,8 @@
 }}
 
 <assessment-template-clone
-    {type}="{type}"
-    {join_object_id}="{join_object_id}"
-    {object}="{object}"
+    vm:type:from="type"
+    vm:join_object_id:from="join_object_id"
+    vm:object:from="object"
     on:refreshTreeView="refreshTreeView(%event)">
 </assessment-template-clone>

@@ -3,10 +3,10 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 <rich-text class="comment-input {{#if disabled}}is-disabled{{/if}}"
-    {hidden-toolbar}="{true}"
-    {disabled}="{disabled}"
-    {placeholder}="{placeholder}"
-    {max-length}="2000"
-    {(content)}="{value}"
-    {with-mentions}="{true}">
+    vm:hiddenToolbar:from="true"
+    vm:disabled:from="disabled"
+    vm:placeholder:from="placeholder"
+    vm:maxLength:from="2000"
+    vm:withMentions:from="true"
+    vm:content:bind="value">
 </rich-text>

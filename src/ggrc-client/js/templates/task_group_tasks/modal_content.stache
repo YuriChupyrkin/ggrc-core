@@ -46,9 +46,9 @@
             <div class="rich-text">
                 <rich-text
                   tabindex="3"
-                  {hidden-toolbar}="{true}"
-                  {placeholder}="'Enter Description'"
-                  {(content)}="{instance.description}">
+                  vm:hiddenToolbar:from="true"
+                  vm:placeholder:from="'Enter Description'"
+                  vm:content:bind="instance.description">
                 </rich-text>
             </div>
           </div>
@@ -60,9 +60,9 @@
               <i class="fa fa-asterisk"></i>
               <i class="fa fa-question-circle" rel="tooltip" title="Choose which response should be applied to this {{model.model_singular}}."></i>
             </label>
-            <textarea-array {array}="{instance.response_options}"
-                            {placeholder}="'Enter Values'"
-                            {class-name}="'span12 double'">
+            <textarea-array vm:array:from="instance.response_options"
+                            vm:placeholder:from="'Enter Values'"
+                            vm:className:from="'span12 double'">
             </textarea-array>
           </div>
           {{/if_equals}}
@@ -73,9 +73,9 @@
               <i class="fa fa-asterisk"></i>
               <i class="fa fa-question-circle" rel="tooltip" title="Choose which response should be applied to this {{model.model_singular}}."></i>
             </label>
-            <textarea-array {array}="{instance.response_options}"
-                            {placeholder}="'Enter Values'"
-                            {class-name}="'span12 double'">
+            <textarea-array vm:array:from="instance.response_options"
+                            vm:placeholder:from="'Enter Values'"
+                            vm:className:from="'span12 double'">
             </textarea-array>
           </div>
         {{/if_equals}}
@@ -96,8 +96,8 @@
       </div>
     </div>
     <div class="span4">
-        <access-control-list-roles-helper {instance}="{instance}"
-                                          {is-new-instance}="{new_object_form}">
+        <access-control-list-roles-helper vm:instance:from="instance"
+                                          vm:isNewInstance:from="new_object_form">
         </access-control-list-roles-helper>
         <object-loader {path}="instance.task_group">
          <object-loader {path}="loadedObject.workflow">
@@ -106,19 +106,19 @@
               Repeat
               <i class="fa fa-question-circle" rel="tooltip" title="Choose start and end dates"></i>
             </label>
-            <repeat-on-summary {unit}="{loadedObject.unit}"
-                               {repeat-every}="{loadedObject.repeat_every}"
-                               {hide-repeat-off}="{false}">
+            <repeat-on-summary vm:unit:from="loadedObject.unit"
+                               vm:repeatEvery:from="loadedObject.repeat_every"
+                               vm:hideRepeatOff:from="false">
             </repeat-on-summary>
             <label class="smaller">
               <label class="form-label">
                 Start Date
                 <i class="fa fa-asterisk"></i>
               </label>
-              <datepicker {(date)}="{instance.start_date}"
-                          {required}="{true}"
-                          {no-weekends}="{true}"
-                          {readonly}="{true}">
+              <datepicker vm:date:bind="instance.start_date"
+                          vm:required:from="true"
+                          vm:noWeekends:from="true"
+                          vm:readonly:from="true">
               </datepicker>
             </label>
             <label class="smaller">
@@ -126,11 +126,11 @@
                 Due Date
                 <i class="fa fa-asterisk"></i>
               </label>
-              <datepicker {(date)}="{instance.end_date}"
-                          {set-min-date}="{instance.start_date}"
-                          {required}="{true}"
-                          {no-weekends}="{true}"
-                          {readonly}="{true}">
+              <datepicker vm:date:bind="instance.end_date"
+                          vm:setMinDate:from="instance.start_date"
+                          vm:required:from="true"
+                          vm:noWeekends:from="true"
+                          vm:readonly:from="true">
               </datepicker>
             </div>
           </div>

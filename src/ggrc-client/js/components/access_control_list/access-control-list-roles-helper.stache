@@ -7,13 +7,13 @@
 <custom-roles-modal
   tabindex="4"
   class="custom-roles-modal"
-  {instance}="{instance}"
-  {is-proposal}="{isProposal}"
-  {is-new-instance}="{isNewInstance}"
-  {include-roles}="{includeRoles}"
-  {exclude-roles}="{excludeRoles}"
-  {read-only}="{readOnly}"
-  {order-of-roles}="{orderOfRoles}"
-  {show-group-tooltip}="{showGroupTooltip}"
-  {group-tooltip}="{groupTooltip}">
+  vm:instance:from="instance"
+  vm:isProposal:from="isProposal"
+  vm:isNewInstance:from="isNewInstance"
+  vm:includeRoles:from="includeRoles"
+  vm:excludeRoles:from="excludeRoles"
+  vm:readOnly:from="readOnly"
+  vm:orderOfRoles:from="orderOfRoles"
+  vm:showGroupTooltip:from="showGroupTooltip"
+  vm:groupTooltip:from="groupTooltip">
 </custom-roles-modal>

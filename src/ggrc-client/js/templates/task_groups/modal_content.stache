@@ -31,19 +31,19 @@
                   value="{{firstnonempty loadedObject.email ''}}">
           {{else}}
           <inline-autocomplete-wrapper
-            {instance}="{instance}"
-            {path}="'contact'"
-            {display-prop}="'email'"
-            {text-value}="{loadedObject.email}">
+            vm:instance:from="instance"
+            vm:path:from="'contact'"
+            vm:displayProp:from="'email'"
+            vm:textValue:from="loadedObject.email">
             <external-data-autocomplete
-              {type}="'Person'"
-              {extra-css-class}="'span10 search-icon'"
-              {placeholder}="'Enter text to search for Assignee'"
+              vm:type:from="'Person'"
+              vm:extraCssClass:from="'span10 search-icon'"
+              vm:placeholder:from="'Enter text to search for Assignee'"
               on:itemSelected="setItem(%event.selectedItem)"
               on:criteriaChanged="setItem(%event.value)"
-              {auto-clean}="{false}"
-              {min-length}="2"
-              {search-criteria}="{textValue}">
+              vm:autoClean:from="false"
+              vm:minLength:from="2"
+              vm:searchCriteria:from="textValue">
             </external-data-autocomplete>
           </inline-autocomplete-wrapper>
           {{/if_config_exist}}
@@ -64,9 +64,9 @@
       <div class="rich-text">
           <rich-text
             tabindex="3"
-            {hidden-toolbar}="{true}"
-            {placeholder}="'Enter Description'"
-            {(content)}="{instance.description}">
+            vm:hiddenToolbar:from="true"
+            vm:placeholder:from="'Enter Description'"
+            vm:content:bind="instance.description">
           </rich-text>
       </div>
     </div>

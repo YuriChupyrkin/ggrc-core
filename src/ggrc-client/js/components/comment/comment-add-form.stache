@@ -4,20 +4,20 @@
 }}
 
 <div class="comment-add-form__section">
-    <comment-input {(value)}="*commentValue"
-                   {disabled}="{isSaving}"></comment-input>
+    <comment-input vm:value:bind="*commentValue"
+                   vm:disabled:from="isSaving"></comment-input>
 </div>
 <div class="comment-add-form__toolbar comment-add-form__section">
     <label class="comment-add-form__toolbar-item comment-add-form__toolbar-label">
             <input type="checkbox"
                    class="comment-add-form__toolbar-checkbox"
                    name="send_notification"
-                   {($value)}="{sendNotifications}">
+                   el:value:bind="sendNotifications">
             {{notificationsInfo}}
             <i class="fa fa-question-circle" rel="tooltip" title="{{tooltipTitle}}"></i>
         </label>
         <comment-add-button class="comment-add-form__toolbar-item"
-                            {(value)}="*commentValue"
+                            vm:value:bind="*commentValue"
                             on:commentCreated="onCommentCreated(%event)"
-                            {is-saving}="{isSaving}">Add</comment-add-button>
+                            vm:isSaving:from="isSaving">Add</comment-add-button>
 </div>

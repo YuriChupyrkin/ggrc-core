@@ -3,7 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 
-<gca-controls {instance}="{instance}"></gca-controls>
+<gca-controls vm:instance:from="instance"></gca-controls>
 
 <div class="ggrc-form-item">
   <div class="ggrc-form-item__row">
@@ -12,9 +12,9 @@
     </label>
     <rich-text 
         tabindex="10"
-        {hidden-toolbar}="{true}"
-        {placeholder}="'Enter Notes'"
-        {(content)}="{notes}">
+        vm:hiddenToolbar:from="true"
+        vm:placeholder:from="'Enter Notes'"
+        vm:content:bind="notes">
     </rich-text>
   </div>
 </div>
@@ -26,9 +26,9 @@
     </label>
     <rich-text 
         tabindex="11"
-        {hidden-toolbar}="{true}"
-        {placeholder}="'Enter Description'"
-        {(content)}="{description}">
+        vm:hiddenToolbar:from="true"
+        vm:placeholder:from="'Enter Description'"
+        vm:content:bind="description">
     </rich-text>
   </div>
 </div>
@@ -44,7 +44,7 @@
       name="slug"
       placeholder="ASSESSMENT-XXX"
       type="text"
-      {$value}="{slug}">
+      el:value:from="slug">
   </div>
   <div class="ggrc-form-item__multiple-row">
     <label class="ggrc-form-item__label">
@@ -52,9 +52,9 @@
     </label>
     <datepicker
       tabindex="15"
-      {(date)}="{start_date}"
-      {set-max-date}="{end_date}"
-      {helptext}="'Enter the date this object becomes effective.'"
+      vm:date:bind="start_date"
+      vm:setMaxDate:from="end_date"
+      vm:helptext:from="'Enter the date this object becomes effective.'"
     />
   </div>
 </div>
@@ -69,10 +69,10 @@
         <em>Is this control design effective?</em>
       </small>
     </div>
-    <dropdown {options-list}="{model.conclusions}"
-              {no-value}="{true}"
-              {no-value-label}="'---'"
-              {name}="'instance.design'"
+    <dropdown vm:optionsList:from="model.conclusions"
+              vm:noValue:from="true"
+              vm:noValueLabel:from="'---'"
+              vm:name:from="'instance.design'"
               tabindex="17">
     </dropdown>
   </div>
@@ -85,10 +85,10 @@
         <em>Is this control design effective?</em>
       </small>
     </div>
-    <dropdown {options-list}="{model.conclusions}"
-              {no-value}="{true}"
-              {no-value-label}="'---'"
-              {name}="'instance.operationally'"
+    <dropdown vm:optionsList:from="model.conclusions"
+              vm:noValue:from="true"
+              vm:noValueLabel:from="'---'"
+              vm:name:from="'instance.operationally'"
               tabindex="18">
     </dropdown>
   </div>

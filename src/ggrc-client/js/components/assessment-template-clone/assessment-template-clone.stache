@@ -30,49 +30,49 @@
   </div>
 </div>
 <div class="modal-filter modal-body">
-  <collapsible-panel {soft-mode}="{true}" {title-text}="'filter'" {(expanded)}="{showSearch}">
-    <advanced-search-wrapper {model-name}="{type}"
-      {model-display-name}="{type}"
-      {^mapping-items}="*mappingItems"
-      {^filter-items}="*filterItems"
-      {^status-item}="*statusItem"
+  <collapsible-panel vm:softMode:from="true" vm:titleText:from="'filter'" vm:expanded:bind="showSearch">
+    <advanced-search-wrapper vm:modelName:from="type"
+      vm:modelDisplayName:from="type"
+      vm:mappingItems:to="*mappingItems"
+      vm:filterItems:to="*filterItems"
+      vm:statusItem:to="*statusItem"
       on:el:enter="onSubmit()">
       <div class="object-controls">
         <div class="object-controls__row">
           <div class="object-controls__state">
             <advanced-search-filter-state
-              {model-name}="{type}"
-              {(state-model)}="{statusItem.value}"
-              {show-operator}="{false}">
+              vm:modelName:from="type"
+              vm:stateModel:bind="statusItem.value"
+              vm:showOperator:from="false">
             </advanced-search-filter-state>
           </div>
         </div>
         <div class="object-controls__filters">
           <advanced-search-filter-container
-            {(items)}="{filterItems}"
-            {available-attributes}="{availableAttributes}"
-            {model-name}="{modelName}"
-            {default-status-filter}="{false}"
-            {show-add-button}="{mappingItems.length}">
+            vm:items:bind="filterItems"
+            vm:availableAttributes:from="availableAttributes"
+            vm:modelName:from="modelName"
+            vm:defaultStatusFilter:from="false"
+            vm:showAddButton:from="mappingItems.length">
           </advanced-search-filter-container>
         </div>
 
         {{#if mappingItems.length}}
         <div class="object-controls__mappings">
           <advanced-search-mapping-container
-            {(items)}="{mappingItems}"
-            {model-name}="{modelName}"
-            {is-clone}="{true}"
-            {show-add-button}="{false}">
+            vm:items:bind="mappingItems"
+            vm:modelName:from="modelName"
+            vm:isClone:from="true"
+            vm:showAddButton:from="false">
           </advanced-search-mapping-container>
         </div>
         {{/if}}
 
           <div class="filter-container__footer">
             {{^if mappingItems.length}}
-              <button type="button" class="btn btn-small btn-white" on:el:click="addFilterAttribute">Add Attribute</button>
+              <button type="button" class="btn btn-small btn-white" on:el:click="addFilterAttribute()">Add Attribute</button>
             {{/if}}
-            <button type="button" class="btn btn-small btn-white" on:el:click="addMappingFilter">Add Mapping Filter</button>
+            <button type="button" class="btn btn-small btn-white" on:el:click="addMappingFilter()">Add Mapping Filter</button>
           </div>
 
           <div class="object-controls__actions--right">
@@ -86,26 +86,26 @@
 </div>
 
 <div class="modal-footer modal-footer--trailed">
-  <collapsible-panel {soft-mode}="{true}" {title-text}="'Search Results ({{*totalObjects}})'" {(expanded)}="{showResults}">
+  <collapsible-panel vm:softMode:from="true" vm:titleText:from="'Search Results ({{*totalObjects}})'" vm:expanded:bind="showResults">
     <div class="search-results">
       <mapper-results
-        {base-instance}="{parentInstance}"
-        {(is-loading)}="{is_loading}"
-        {object}="{object}"
-        {type}="{type}"
-        {selected}="{selected}"
-        {submit-cbs}="{submitCbs}"
-        {^paging.total}="*totalObjects"
-        {(entries)}="{entries}"
-        {filter-items}="*filterItems"
-        {mapping-items}="*mappingItems"
-        {status-item}="*statusItem">
+        vm:baseInstance:from="parentInstance"
+        vm:isLoading:bind="is_loading"
+        vm:object:from="object"
+        vm:type:from="type"
+        vm:selected:from="selected"
+        vm:submitCbs:from="submitCbs"
+        vm:paging.total:to="*totalObjects"
+        vm:entries:bind="entries"
+        vm:filterItems:from="*filterItems"
+        vm:mappingItems:from="*mappingItems"
+        vm:statusItem:from="*statusItem">
       </mapper-results>
     </div>
 
     <div class="control-buttons">
       <div class="confirm-buttons">
-        <spinner {toggle}="{is_saving}"></spinner>
+        <spinner vm:toggle:from="is_saving"></spinner>
         <span class="confirm-buttons__objects-count">
           {{selected.length}}
           object(s) selected

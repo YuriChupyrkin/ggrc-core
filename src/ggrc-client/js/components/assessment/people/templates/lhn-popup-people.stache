@@ -19,40 +19,40 @@
   <related-people-access-control
     class="width-100"
     on:saveCustomRole="saveRoles()"
-    {^has-conflicts}="{hasConflicts}"
-    {conflict-roles}="{conflictRoles}"
-    {order-of-roles}="{includeRoles}"
-    {include-roles}="{includeRoles}"
-    {instance}="{instance}">
+    vm:hasConflicts:to="hasConflicts"
+    vm:conflictRoles:from="conflictRoles"
+    vm:orderOfRoles:from="includeRoles"
+    vm:includeRoles:from="includeRoles"
+    vm:instance:from="instance">
       <div class="lhn-people-groups">
         {{#groups}}
           <related-people-access-control-group
             class="lhn-people-group"
-            {auto-update}="{true}"
+            vm:autoUpdate:from="true"
             on:updateRoles="updateRoles(%event)"
-            {is-new-instance}="{isNewInstance}"
-            {required}="{required}"
-            {group-id}="{groupId}"
-            {title}="{title}"
-            {people}="{people}"
-            {instance}="{instance}"
-            {updatable-group-id}="{updatableGroupId}">
+            vm:isNewInstance:from="isNewInstance"
+            vm:required:from="required"
+            vm:groupId:from="groupId"
+            vm:title:from="title"
+            vm:people:from="people"
+            vm:instance:from="instance"
+            vm:updatableGroupId:from="updatableGroupId">
               <div>
                 <deletable-people-group
-                  {show-empty-message}="{true}"
-                  {required}="{required}"
+                  vm:showEmptyMessage:from="true"
+                  vm:required:from="required"
                   on:unmap="removePerson(%event)"
-                  {can-unmap}="{canEdit}"
-                  {is-loading}="{denyUnmap}"
-                  {group-id}="{groupId}"
-                  {instance}="{instance}"
-                  {people}="{people}">
+                  vm:canUnmap:from="canEdit"
+                  vm:isLoading:from="denyUnmap"
+                  vm:groupId:from="groupId"
+                  vm:instance:from="instance"
+                  vm:people:from="people">
                     <label class="lhn-people-group__title form-label form-label__extended">
                       {{title}}
                       {{#if required}}
                         <i class="fa fa-asterisk"></i>
                       {{/if}}
-                      <spinner class="lhn-people-group__spinner" {toggle}="{denyUnmap}"></spinner>
+                      <spinner class="lhn-people-group__spinner" vm:toggle:from="denyUnmap"></spinner>
                     </label>
                 </deletable-people-group>
               </div>

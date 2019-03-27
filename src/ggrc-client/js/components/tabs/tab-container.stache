@@ -10,11 +10,11 @@
         {{#case "link"}}
           <li>
             <questionnaire-link
-              {instance}="{instance}"
-              {show-icon}="{true}"
-              {icon-position}="'right'"
-              {link-type}="{linkType}"
-              {view-type}="'tab'"
+              vm:instance:from="instance"
+              vm:showIcon:from="true"
+              vm:iconPosition:from="'right'"
+              vm:linkType:from="linkType"
+              vm:viewType:from="'tab'"
             >
               <span>{{titleText}}</span>
             </questionnaire-link>

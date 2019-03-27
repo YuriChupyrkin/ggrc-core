@@ -9,19 +9,19 @@
       <a class="person-info-wrapper__remove-value" href="javascript:void(0)" on:el:click="unsetPerson">
         <i class="fa fa-times" aria-hidden="true"></i>
       </a>
-      <person-data {person-id}="{inputValue}"></person-data>
+      <person-data vm:personId:from="inputValue"></person-data>
     </div>
   {{else}}
     {{^if_config_exist 'external_services.Person'}}
-    <autocomplete {search-items-type}="'Person'"
+    <autocomplete vm:searchItemsType:from="'Person'"
                   on:itemSelected="setPerson(%event)"
-                  {placeholder}="'Select person'"
+                  vm:placeholder:from="'Select person'"
                   {{#if disabled}}disabled{{/if}}>
     </autocomplete>
     {{else}}
-    <external-data-autocomplete {type}="'Person'"
-                                {placeholder}="'Select person'"
-                                {min-length}="2"
+    <external-data-autocomplete vm:type:from="'Person'"
+                                vm:placeholder:from="'Select person'"
+                                vm:minLength:from="2"
                                 on:itemSelected="setPerson(%event)">
     </external-data-autocomplete>
     {{/if_config_exist}}

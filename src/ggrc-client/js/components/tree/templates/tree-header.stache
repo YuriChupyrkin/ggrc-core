@@ -17,12 +17,12 @@
       <ul class="attr-list">
         {{#columns}}
           <li class="{{#if mandatory}}disabled{{/if}}">
-            <tree-visible-column-checkbox {column}="{.}">
+            <tree-visible-column-checkbox vm:column:from="{.}">
             </tree-visible-column-checkbox>
           </li>
         {{/columns}}
       </ul>
-      <a class="btn btn-small btn-lightBlue set-tree-attrs" href="javascript://" on:el:click="setColumns">Set fields</a>
+      <a class="btn btn-small btn-lightBlue set-tree-attrs" href="javascript://" on:el:click="setColumns()">Set fields</a>
     </div>
     {{/if}}
   </tree-header-selector>
@@ -37,8 +37,8 @@
       {{else}}
         <sortable-column
           class="tree-header-titles__item"
-          {(sort)}="{orderBy}"
-          {sort-field}="'{{attr_sort_field}}'">
+          vm:sort:bind="orderBy"
+          vm:sortField:from="'{{attr_sort_field}}'">
           <span class="tree-header-titles__text">
             {{attr_title}}
           </span>

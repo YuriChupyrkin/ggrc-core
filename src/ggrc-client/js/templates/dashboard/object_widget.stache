@@ -48,9 +48,9 @@
   
   <section class="content">
     {{#if_equals widgetType 'treeview'}}
-      <tree-widget-container {model}="{model}"
-                             {limit-depth-tree}="{treeViewDepth}"
-                             {options}="{content_controller_options}">
+      <tree-widget-container vm:model:from="model"
+                             vm:limitDepthTree:from="treeViewDepth"
+                             vm:options:from="content_controller_options">
       </tree-widget-container>
     {{else}}
       {{{widget_initial_content}}}

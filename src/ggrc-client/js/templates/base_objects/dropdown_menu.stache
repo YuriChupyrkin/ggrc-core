@@ -7,7 +7,7 @@
     {{#is_allowed 'update' instance context='for'}}
       {{#if instance.is_snapshotable}}
         <li>
-          <snapshot-scope-update {instance}="{instance}">
+          <snapshot-scope-update vm:instance:from="instance">
             <a href="javascript://" on:el:click="upsertIt">
               <i class="fa fa-refresh"></i>
               Update objects to latest version</a>
@@ -22,9 +22,9 @@
 
       {{#if instance.class.is_clonable}}
       <li>
-        <object-cloner {instance}="{instance}"
-          {modal-title}="'Clone {{ instance.type }}'"
-          {modal-description}="'Select all that you would like to clone as well?'">
+        <object-cloner vm:instance:from="instance"
+          vm:modalTitle:from="'Clone {{ instance.type }}'"
+          vm:modalDescription:from="'Select all that you would like to clone as well?'">
           <a href="javascript://" on:el:click="cloneObject">
             <i class="fa fa-clone"></i>
             Clone {{ instance.type }}
@@ -59,22 +59,22 @@
     {{/is_allowed}}
     {{^if_instance_of instance "TaskGroup|TaskGroupTask"}}
     <li>
-      <permalink {instance}="{instance}"/>
+      <permalink vm:instance:from="instance"/>
     </li>
     {{/if_instance_of}}
     {{#if_instance_of instance "Assessment"}}
       {{#if_config_exist 'ASSESSMENT_SHORT_URL_PREFIX'}}
         <li>
-          <shortlink {instance}="{instance}"/>
+          <shortlink vm:instance:from="instance"/>
         </li>
       {{/if_config_exist}}
     {{/if_instance_of}}
     {{#is_info_pin}}
-      <unmap-dropdown-item
-        {page_instance}="{page_instance}"
-        {instance}="{instance}"
-        {options}="{options}">
-      </unmap-dropdown-item>
+      <issue-unmap-dropdown-item
+        vm:page_instance:from="page_instance"
+        vm:instance:from="instance"
+        vm:options:from="options">
+      </issue-unmap-dropdown-item>
       {{#if instance.viewLink}}
         <li>
           <a href="{{instance.viewLink}}">
@@ -87,7 +87,7 @@
 
     {{#if instance.class.isChangeableExternally}}
       <li>
-        <questionnaire-link {instance}="{instance}" {show-icon}="{true}">
+        <questionnaire-link vm:instance:from="instance" vm:showIcon:from="true">
           Open {{instance.class.title_singular}} in new frontend
         </questionnaire-link>
       </li>

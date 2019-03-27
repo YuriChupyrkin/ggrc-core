@@ -5,7 +5,7 @@
 
 <div class="ggrc-form revision-history">
   <div class="revision-history__restore-button">
-    <spinner class="revision-history__spinner" {toggle}="{loading}"></spinner>
+    <spinner class="revision-history__spinner" vm:toggle:from="loading"></spinner>
     <a class="btn btn-small btn-green {{#if loading}}disabled{{/if}}"
        on:el:click="restore(%element)">
       Restore Version
@@ -13,10 +13,10 @@
   </div>
 </div>
 
-<mandatory-fields-modal {state}="{modalState}"
-                        {instance}="{instance}"
-                        {revision-modified-by}="{restoredRevision.modified_by}"
-                        {revision-updated-at}="{restoredRevision.updated_at}"
-                        on:save="saveInstance($element)"
+<mandatory-fields-modal vm:state:from="modalState"
+                        vm:instance:from="instance"
+                        vm:revisionModifiedBy:from="restoredRevision.modified_by"
+                        vm:revisionUpdatedAt:from="restoredRevision.updated_at"
+                        on:save="saveInstance()"
                         on:cancel="revertChanges()">
 </mandatory-fields-modal>

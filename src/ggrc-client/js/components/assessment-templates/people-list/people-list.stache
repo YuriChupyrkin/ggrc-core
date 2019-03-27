@@ -8,11 +8,11 @@
     {{labelName}}
   </label>
   <dropdown
-    {class-name}="'input-block-level js-toggle-field'"
-    {options-list}="{peopleValues}"
-    {name}="'selectedValue'"
-    on:el:change="dropdownChanged"
-    {no-value}="{hasEmptyValue}"
+    vm:className:from="'input-block-level js-toggle-field'"
+    vm:optionsList:from="peopleValues"
+    vm:name:from="'selectedValue'"
+    on:el:change="dropdownChanged()"
+    vm:noValue:from="hasEmptyValue"
   ></dropdown>
 </div>
 
@@ -20,14 +20,14 @@
   <label>&nbsp;</label>
   {{#if_equals selectedValue 'other'}}
     {{^if_config_exist 'external_services.Person'}}
-      <autocomplete {search-items-type}="'Person'"
+      <autocomplete vm:searchItemsType:from="'Person'"
                     on:itemSelected="personAdded(%event)"
-                    {placeholder}="'Enter text to search for {{listName}}'"
+                    vm:placeholder:from="'Enter text to search for {{listName}}'"
       ></autocomplete>
     {{else}}
-      <external-data-autocomplete {type}="'Person'"
-                                  {placeholder}="'Enter text to search for {{listName}}'"
-                                  {min-length}="2"
+      <external-data-autocomplete vm:type:from="'Person'"
+                                  vm:placeholder:from="'Enter text to search for {{listName}}'"
+                                  vm:minLength:from="2"
                                   on:itemSelected="personAdded(%event)">
       </external-data-autocomplete>
     {{/if_config_exist}}
@@ -35,7 +35,7 @@
       <label class="help-inline warning">{{validationError}}</label>
     {{/if}}
     {{#each peopleList}}
-      <person-data {person-id}="{{.}}">
+      <person-data vm:personId:from="{{.}}">
         <a href="javascript://" class="unmap" title="Remove" on:el:click="removePerson(person)">
         <i class="fa fa-trash"></i>
         </a>

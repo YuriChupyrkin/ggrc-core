@@ -19,17 +19,17 @@
   <div class="row-fluid">
     <div class="span3">
       <a data-id="hide_effective_date_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
-      <datepicker {label}="'Effective Date'"
-                  {(date)}="{instance.start_date}"
-                  {set-max-date}="{instance.end_date}"
-                  {required}="{true}">
+      <datepicker vm:label:from="'Effective Date'"
+                  vm:date:bind="instance.start_date"
+                  vm:setMaxDate:from="instance.end_date"
+                  vm:required:from="true">
       </datepicker>
     </div>
     <div class="span3">
       <a data-id="hide_stop_date_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
-      <datepicker {label}="'End Date'"
-                  {(date)}="{instance.end_date}"
-                  {required}="{true}">
+      <datepicker vm:label:from="'End Date'"
+                  vm:date:bind="instance.end_date"
+                  vm:required:from="true">
       </datepicker>
     </div>
     <div class="span3 hidable">
@@ -46,18 +46,18 @@
                  value="{{firstexist loadedObject.email ''}}"/>
         {{else}}
         <inline-autocomplete-wrapper
-          {instance}="{instance}"
-          {path}="'ra_manager'"
-          {display-prop}="'email'"
-          {text-value}="{loadedObject.email}">
+          vm:instance:from="instance"
+          vm:path:from="'ra_manager'"
+          vm:displayProp:from="'email'"
+          vm:textValue:from="loadedObject.email">
           <external-data-autocomplete
-            {type}="'Person'"
-            {placeholder}="'Enter email address'"
+            vm:type:from="'Person'"
+            vm:placeholder:from="'Enter email address'"
             on:itemSelected="setItem(%event.selectedItem)"
             on:criteriaChanged="setItem(%event.value)"
-            {auto-clean}="{false}"
-            {min-length}="2"
-            {search-criteria}="{textValue}">
+            vm:autoClean:from="false"
+            vm:minLength:from="2"
+            vm:searchCriteria:from="textValue">
           </external-data-autocomplete>
         </inline-autocomplete-wrapper>
         {{/if_config_exist}}
@@ -78,18 +78,18 @@
                  value="{{firstexist loadedObject.email ''}}" />
         {{else}}
         <inline-autocomplete-wrapper
-          {instance}="{instance}"
-          {path}="'ra_counsel'"
-          {display-prop}="'email'"
-          {text-value}="'{loadedObject.email}'">
+          vm:instance:from="instance"
+          vm:path:from="'ra_counsel'"
+          vm:displayProp:from="'email'"
+          vm:textValue:from="'{loadedObject.email}'">
           <external-data-autocomplete
-            {type}="'Person'"
-            {placeholder}="'Enter email address'"
+            vm:type:from="'Person'"
+            vm:placeholder:from="'Enter email address'"
             on:itemSelected="setItem(%event.selectedItem)"
             on:criteriaChanged="setItem(%event.value)"
-            {auto-clean}="{false}"
-            {min-length}="2"
-            {search-criteria}="'{textValue}'">
+            vm:autoClean:from="false"
+            vm:minLength:from="2"
+            vm:searchCriteria:from="'{textValue}'">
           </external-data-autocomplete>
         </inline-autocomplete-wrapper>
         {{/if_config_exist}}
@@ -107,9 +107,9 @@
       </label>
       <rich-text
         tabindex="6"
-        {hidden-toolbar}="{true}"
-        {placeholder}="'Enter Description'"
-        {(content)}="{instance.description}">
+        vm:hiddenToolbar:from="true"
+        vm:placeholder:from="'Enter Description'"
+        vm:content:bind="instance.description">
       </rich-text>
     </div>
 
@@ -122,9 +122,9 @@
       <div class="rich-text">
           <rich-text
             tabindex="7"
-            {hidden-toolbar}="{true}"
-            {placeholder}="'Enter Notes'"
-            {(content)}="{instance.notes}">
+            vm:hiddenToolbar:from="true"
+            vm:placeholder:from="'Enter Notes'"
+            vm:content:bind="instance.notes">
           </rich-text>
       </div>
     </div>
@@ -149,8 +149,8 @@
         <i class="fa fa-question-circle" rel="tooltip" title="Indicates the status of this object."></i>
         <a data-id="hide_state_lk" href="javascript://" class="field-hide" tabindex="-1">hide</a>
       </label>
-        <dropdown {options-list}="{model.statuses}"
-                  {name}="'instance.status'"
+        <dropdown vm:optionsList:from="model.statuses"
+                  vm:name:from="'instance.status'"
                   tabindex="9">
         </dropdown>
     </div>

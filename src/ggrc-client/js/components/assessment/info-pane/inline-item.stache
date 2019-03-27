@@ -5,31 +5,31 @@
 
 <inline-edit-control
   on:inlineSave="saveInlineForm(%event)"
-  {is-grouped-dropdown}="{isGroupedDropdown}"
-  {dropdown-options-groups}="{dropdownOptionsGroups}"
-  {is-edit-icon-denied}="{isEditIconDenied}"
-  {prop-name}="{propName}"
-  {dropdown-options}="{dropdownOptions}"
-  {dropdown-class}="{dropdownClass}"
-  {dropdown-no-value}="{dropdownNoValue}"
-  {is-loading}="{isLoading}"
-  {instance}="{instance}"
-  {value}="{value}"
-  {type}="{type}"
-  {mandatory}="{mandatory}"
-  {with-read-more}="{withReadMore}">
+  vm:isGroupedDropdown:from="isGroupedDropdown"
+  vm:dropdownOptionsGroups:from="dropdownOptionsGroups"
+  vm:isEditIconDenied:from="isEditIconDenied"
+  vm:propName:from="propName"
+  vm:dropdownOptions:from="dropdownOptions"
+  vm:dropdownClass:from="dropdownClass"
+  vm:dropdownNoValue:from="dropdownNoValue"
+  vm:isLoading:from="isLoading"
+  vm:instance:from="instance"
+  vm:value:from="value"
+  vm:type:from="type"
+  vm:mandatory:from="mandatory"
+  vm:withReadMore:from="withReadMore">
     <confirm-edit-action
       on:setEditMode="setEditModeInline(%event)"
       on:setInProgress="setInProgressState()"
-      {is-edit-icon-denied}="{isEditIconDenied}"
-      {instance}="{instance}"
-      {is-confirmation-needed}="{isConfirmationNeeded}"
-      {on-state-change-dfd}="{onStateChangeDfd}"
-      {edit-mode}="{editMode}">
+      vm:isEditIconDenied:from="isEditIconDenied"
+      vm:instance:from="instance"
+      vm:isConfirmationNeeded:from="isConfirmationNeeded"
+      vm:onStateChangeDfd:from="onStateChangeDfd"
+      vm:editMode:from="editMode">
         <base-inline-control-title
           class="inline__header"
-          {edit-mode}="{editMode}"
-          {is-edit-icon-denied}="{isEditIconDenied}"
+          vm:editMode:from="editMode"
+          vm:isEditIconDenied:from="isEditIconDenied"
           on:setEditModeInline="confirmEdit()">
             <content></content>
         </base-inline-control-title>

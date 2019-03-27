@@ -13,56 +13,56 @@
 </div>
 
 <div class="modal-filter modal-body">
-  <collapsible-panel {soft-mode}="{true}" {title-text}="'filter'" {(expanded)}="{showSearch}">
-    <advanced-search-wrapper {model-name}="{model.model_singular}"
-                             {model-display-name}="{model.title_plural}"
-                             {^mapping-items}="*mappingItems"
-                             {^filter-items}="*filterItems"
-                             {^status-item}="*statusItem"
+  <collapsible-panel vm:softMode:from="true" vm:titleText:from="'filter'" vm:expanded:bind="showSearch">
+    <advanced-search-wrapper vm:modelName:from="model.model_singular"
+                             vm:modelDisplayName:from="model.title_plural"
+                             vm:mappingItems:to="*mappingItems"
+                             vm:filterItems:to="*filterItems"
+                             vm:statusItem:to="*statusItem"
                              on:el:enter="onSubmit()">
       <div class="object-controls">
         <div class="object-controls__row">
           <div class="object-controls__type">
             <h6>Object type</h6>
-            <mapping-type-selector {types}="{availableTypes}"
-                                   {(selected-type)}="{type}"
-                                   {disabled}="{is_loading}">
+            <mapping-type-selector vm:types:from="availableTypes"
+                                   vm:selectedType:bind="type"
+                                   vm:disabled:from="is_loading">
             </mapping-type-selector>
           </div>
           {{#if hasStatusFilter}}
             <div class="object-controls__state">
               <advanced-search-filter-state
-                {model-name}="{modelName}"
-                {(state-model)}="{statusItem.value}"
-                {show-operator}="{false}">
+                vm:modelName:from="modelName"
+                vm:stateModel:bind="statusItem.value"
+                vm:showOperator:from="false">
               </advanced-search-filter-state>
             </div>
           {{/if}}
         </div>
         <div class="object-controls__filters">
           <advanced-search-filter-container
-            {(items)}="{filterItems}"
-            {available-attributes}="{availableAttributes}"
-            {model-name}="{modelName}"
-            {default-status-filter}="{false}"
-            {show-add-button}="{mappingItems.length}">
+            vm:items:bind="filterItems"
+            vm:availableAttributes:from="availableAttributes"
+            vm:modelName:from="modelName"
+            vm:defaultStatusFilter:from="false"
+            vm:showAddButton:from="mappingItems.length">
           </advanced-search-filter-container>
         </div>
         {{#if mappingItems.length}}
           <div class="object-controls__mappings">
             <advanced-search-mapping-container
-              {(items)}="{mappingItems}"
-              {model-name}="{modelName}"
-              {show-add-button}="{false}">
+              vm:items:bind="mappingItems"
+              vm:modelName:from="modelName"
+              vm:showAddButton:from="false">
             </advanced-search-mapping-container>
           </div>
         {{/if}}
         <div class="object-controls__actions">
           <div class="object-controls__actions--left">
             {{^if mappingItems.length}}
-              <button type="button" class="btn btn-small btn-white" on:el:click="addFilterAttribute">Add Attribute</button>
+              <button type="button" class="btn btn-small btn-white" on:el:click="addFilterAttribute()">Add Attribute</button>
             {{/if}}
-            <button type="button" class="btn btn-small btn-white" on:el:click="addMappingFilter">Add Mapping Filter</button>
+            <button type="button" class="btn btn-small btn-white" on:el:click="addMappingFilter()">Add Mapping Filter</button>
           </div>
           <div class="object-controls__actions--right">
             <button type="reset" class="btn btn-small btn-white" {{#if is_loading}}disabled="disabled"{{/if}} on:el:click="resetFilters()">Reset</button>
@@ -75,23 +75,23 @@
 </div>
 
 <div class="modal-footer {{#if showResults}}expanded{{/if}}">
-  <collapsible-panel {soft-mode}="{true}" {title-text}="'Search Results {{displayCount *totalObjects}}'" {(expanded)}="{showResults}">
+  <collapsible-panel vm:softMode:from="true" vm:titleText:from="'Search Results {{displayCount *totalObjects}}'" vm:expanded:bind="showResults">
     <div class="search-results">
       {{#if resultsRequested}}
         <mapper-results class="{{#useSnapshots}}snapshot-list{{/useSnapshots}}"
-                        {base-instance}="{parentInstance}"
-                        {(is-loading)}="{is_loading}"
-                        {type}="{type}"
-                        {submit-cbs}="{submitCbs}"
-                        {^paging.total}="*totalObjects"
-                        {search-only}="{true}"
-                        {use-snapshots}="{useSnapshots}"
-                        {(after-search)}="{afterSearch}"
-                        {(entries)}="{entries}"
-                        {filter-items}="*filterItems"
-                        {mapping-items}="*mappingItems"
+                        vm:baseInstance:from="parentInstance"
+                        vm:isLoading:bind="is_loading"
+                        vm:type:from="type"
+                        vm:submitCbs:from="submitCbs"
+                        vm:paging.total:to="*totalObjects"
+                        vm:searchOnly:from="true"
+                        vm:useSnapshots:from="useSnapshots"
+                        vm:afterSearch:bind="afterSearch"
+                        vm:entries:bind="entries"
+                        vm:filterItems:from="*filterItems"
+                        vm:mappingItems:from="*mappingItems"
                         on:loaded="onLoaded()"
-                        {status-item}="*statusItem">
+                        vm:statusItem:from="*statusItem">
         </mapper-results>
       {{else}}
         <div class="well well-small">

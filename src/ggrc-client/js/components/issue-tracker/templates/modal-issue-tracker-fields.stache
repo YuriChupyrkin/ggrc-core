@@ -17,8 +17,8 @@
       {{/if}}
     </div>
     <div class="ggrc-form-item__multiple-row">
-      <dropdown {options-list}="{instance.class.issue_tracker_enable_options}"
-                {name}="'isIntegrationEnabled'">
+      <dropdown vm:optionsList:from="instance.class.issue_tracker_enable_options"
+                vm:name:from="'isIntegrationEnabled'">
       </dropdown>
     </div>
   </div>
@@ -40,10 +40,10 @@
           </div>
         </div>
         <div class="ggrc-form-item__multiple-row {{#isValidAttrProperty instance "issue_tracker" "issue_id"}}field-failure{{/isValidAttrProperty}}">
-          <numberbox {attr-data-id}="'code_txtbx'"
-                     {additional-class}="'input-block-level'"
-                     {placeholder}="'Enter Ticket ID'"
-                     {(value)}="{instance.issue_tracker.issue_id}">
+          <numberbox vm:attrDataId:from="'code_txtbx'"
+                     vm:additionalClass:from="'input-block-level'"
+                     vm:placeholder:from="'Enter Ticket ID'"
+                     vm:value:bind="instance.issue_tracker.issue_id">
           </numberbox>
           {{#isValidAttrProperty instance "issue_tracker" "issue_id"}}
             <label class="help-inline warning">{{this}}</label>
@@ -58,10 +58,10 @@
       <label class="ggrc-form-item__label">
         Hotlist ID
       </label>
-      <numberbox {attr-data-id}="'code_txtbx'"
-                 {additional-class}="'input-block-level'"
-                 {placeholder}="'Enter Hotlist ID'"
-                 {(value)}="{instance.issue_tracker.hotlist_id}">
+      <numberbox vm:attrDataId:from="'code_txtbx'"
+                 vm:additionalClass:from="'input-block-level'"
+                 vm:placeholder:from="'Enter Hotlist ID'"
+                 vm:value:bind="instance.issue_tracker.hotlist_id">
       </numberbox>
     </div>
     <div class="ggrc-form-item__multiple-row {{#isValidAttrProperty instance "issue_tracker" "component_id"}}field-failure{{/isValidAttrProperty}}">
@@ -69,10 +69,10 @@
         Component ID
         <i class="fa fa-asterisk"></i>
       </label>
-      <numberbox {attr-data-id}="'code_txtbx'"
-                 {additional-class}="'input-block-level'"
-                 {placeholder}="Enter Component ID"
-                 {(value)}="{instance.issue_tracker.component_id}">
+      <numberbox vm:attrDataId:from="'code_txtbx'"
+                 vm:additionalClass:from="'input-block-level'"
+                 vm:placeholder:from="Enter Component ID"
+                 vm:value:bind="instance.issue_tracker.component_id">
       </numberbox>
       {{#isValidAttrProperty instance "issue_tracker" "component_id"}}
         <label class="help-inline warning">{{this}}</label>
@@ -93,17 +93,17 @@
       <label class="ggrc-form-item__label">
         Ticket Priority
       </label>
-      <dropdown {options-list}="{instance.class.issue_tracker_priorities}"
-                {name}="'instance.issue_tracker.issue_priority}'">
+      <dropdown vm:optionsList:from="instance.class.issue_tracker_priorities"
+                vm:name:from="'instance.issue_tracker.issue_priority}'">
       </dropdown>
     </div>
     <div class="ggrc-form-item__multiple-row">
       <label class="ggrc-form-item__label">
         Ticket Severity
       </label>
-      <dropdown {instance}="{instance}"
-                {options-list}="{instance.class.issue_tracker_severities}"
-                {name}="'instance.issue_tracker.issue_severity'">
+      <dropdown vm:instance:from="instance"
+                vm:optionsList:from="instance.class.issue_tracker_severities"
+                vm:name:from="'instance.issue_tracker.issue_severity'">
       </dropdown>
     </div>
 
@@ -117,7 +117,7 @@
                class="input-block-level"
                placeholder="Enter Ticket Title"
                type="text"
-               {($value)}="{instance.issue_tracker.title}"
+               el:value:bind="instance.issue_tracker.title"
         />
         {{#isValidAttrProperty instance "issue_tracker" "title"}}
           <label class="help-inline warning">{{this}}</label>

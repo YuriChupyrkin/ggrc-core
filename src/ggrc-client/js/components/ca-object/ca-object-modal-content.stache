@@ -9,28 +9,28 @@
             <div class="field__title form-field__title">
                 <label class="field__title-text">{{content.title}}</label>
             </div>
-            <custom-attributes-field {type}="{content.type}"
-                                     {value}="{content.value}"
-                                     {options}="{content.options}"
-                                     {disabled}="{true}">
+            <custom-attributes-field vm:type:from="content.type"
+                                     vm:value:from="content.value"
+                                     vm:options:from="content.options"
+                                     vm:disabled:from="true">
             </custom-attributes-field>
         </div>
         {{#if comment}}
             <div class="simple-modal__section">
                 <div class="simple-modal__section-title">Comment</div>
                 <comment-input
-                    {(value)}="*commentValue"
-                    {disabled}="*isSaving">
+                    vm:value:bind="*commentValue"
+                    vm:disabled:from="*isSaving">
                 </comment-input>
             </div>
         {{/if}}
         {{#if evidence}}
             <div class="simple-modal__section">
                 <div class="simple-modal__section-title">Evidence file
-                    <spinner class="simple-modal__section-title-icon" {toggle}="{isUpdatingEvidences}"></spinner>
+                    <spinner class="simple-modal__section-title-icon" vm:toggle:from="isUpdatingEvidences"></spinner>
                 </div>
-                <object-list {items}="{evidences}" {empty-message}="{noItemsText}">
-                    <editable-document-object-list-item {document}="{.}">
+                <object-list vm:items:from="evidences" vm:emptyMessage:from="noItemsText">
+                    <editable-document-object-list-item vm:document:from="{.}">
                         <a on:el:click="removeRelatedItem(document, 'files')">
                             <action-toolbar-control>
                                 <i class="fa fa-trash"></i>
@@ -41,16 +41,16 @@
                 <attach-button
                     on:beforeCreate="addItems(%event, 'files')"
                     on:created="addRelatedItem(%event, 'files')"
-                    {is-attach-action-disabled}="{isUpdatingEvidences}"
-                    {instance}="{instance}">
+                    vm:isAttachActionDisabled:from="isUpdatingEvidences"
+                    vm:instance:from="instance">
                 </attach-button>
             </div>
         {{/if}}
         {{#if url}}
             <div class="simple-modal__section">
                 <div class="simple-modal__section-title">Evidence url</div>
-                <object-list {items}="{urls}" {empty-message}="{noItemsText}">
-                    <editable-document-object-list-item {document}="{.}">
+                <object-list vm:items:from="urls" vm:emptyMessage:from="noItemsText">
+                    <editable-document-object-list-item vm:document:from="{.}">
                         <a on:el:click="removeRelatedItem(document, 'urls')">
                             <action-toolbar-control>
                                 <i class="fa fa-trash"></i>
@@ -59,19 +59,19 @@
                     </editable-document-object-list-item>
                 </object-list>
                 {{#if urlsEditMode}}
-                    <create-url {type}="{documentTypes.urls}"
-                                {context}="{instance.context}"
+                    <create-url vm:type:from="documentTypes.urls"
+                                vm:context:from="instance.context"
                                 on:setEditMode="setUrlEditMode(false)"
                                 on:beforeCreate="addItems(%event, 'urls')"
                                 on:created="addRelatedItem(%event, 'urls')">
                         <form class="create-form">
                             <fieldset class="create-form__layout">
-                                <input {($value)}="{value}" class="create-form__input" type="text" placeholder="Add URL" spellcheck="false" autocomplete="false">
+                                <input el:value:bind="value" class="create-form__input" type="text" placeholder="Add URL" spellcheck="false" autocomplete="false">
                                 <div class="create-form__controls">
-                                    <button type="button" class="create-form__confirm" on:el:click="create">
+                                    <button type="button" class="create-form__confirm" on:el:click="create()">
                                         <i class="fa fa-check"></i>
                                     </button>
-                                    <button type="button" class="create-form__cancel" on:el:click="clear">
+                                    <button type="button" class="create-form__cancel" on:el:click="clear()">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </div>
@@ -91,10 +91,10 @@
         <div class="simple-modal__toolbar">
         {{#if comment}}
             <comment-add-button class="simple-modal__toolbar-item"
-                                {(value)}="*commentValue"
-                                {^is-saving}="*isSaving"
+                                vm:value:bind="*commentValue"
+                                vm:isSaving:to="*isSaving"
                                 on:commentCreated="onCommentCreated(%event)"
-                                {is-disabled}="{isUpdatingEvidences}">
+                                vm:isDisabled:from="isUpdatingEvidences">
               Save
             </comment-add-button>
         {{/if}}

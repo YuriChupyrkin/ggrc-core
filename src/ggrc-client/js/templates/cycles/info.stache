@@ -24,9 +24,9 @@
 
           <div class="pane-header__toolbar">
             {{#is_info_pin}}
-              <info-pin-buttons {maximized}="{maximized}"
-                                {on-change-maximized-state}="{@onChangeMaximizedState}"
-                                {on-close}="{@onClose}">
+              <info-pin-buttons vm:maximized:from="maximized"
+                                vm:onChangeMaximizedState:from="@onChangeMaximizedState"
+                                vm:onClose:from="@onClose">
               </info-pin-buttons>
             {{/is_info_pin}}
 
@@ -40,7 +40,7 @@
                   </a>
                 </li>
                 <li>
-                  <permalink {instance}="{instance}"/>
+                  <permalink vm:instance:from="instance"/>
                 </li>
               </three-dots-menu>
             </div>
@@ -51,38 +51,38 @@
 
     <div class="pane-content">
 
-      <div class="row-fluid wrap-row">
-        <div class="span12">
-          <h6>Description</h6>
-          <div class="rtf-block">
-            <read-more
-              {text}="{instance.description}"
-              {handle-markdown}="{instance.class.isChangeableExternally}">
-            </read-more>
-          </div>
+    <div class="row-fluid wrap-row">
+      <div class="span12">
+        <h6>Description</h6>
+        <div class="rtf-block">
+          <read-more
+            vm:text:from="instance.description"
+            vm:handleMarkdown:from="instance.class.isChangeableExternally">
+          </read-more>
         </div>
       </div>
+    </div>
 
       <object-loader {path}="instance.workflow">
         {{#if loadedObject}}
           <custom-roles
-            {instance}="{loadedObject}"
-            {read-only}="true">
+            vm:instance:from="workflow"
+            vm:readOnly:from="true">
           </custom-roles>
           <div class="row-fluid wrap-row">
             <div class="span6">
               <ggrc-gdrive-folder-picker
                 {{^is_allowed 'update' loadedObject}}readonly="true"{{/is_allowed}}
-                {instance}="{loadedObject}"
-                {placeholder}="'If selected, all workflow attachments go here.'" />
+                 vm:instance:from="workflow"
+                 vm:placeholder:from="'If selected, all workflow attachments go here.'" />
             </div>
             <div class="span6">
               <h6>
                   Repeat Cycle
               </h6>
-              <repeat-on-summary {unit}="loadedObject.unit"
-                                {repeat-every}="{loadedObject.repeat_every}"
-                                {hide-repeat-off}="{false}">
+              <repeat-on-summary vm:unit:from="loadedObject.unit"
+                                vm:repeatEvery:from="workflow.repeat_every"
+                                vm:hideRepeatOff:from="false">
               </repeat-on-summary>
             </div>
           </div>
