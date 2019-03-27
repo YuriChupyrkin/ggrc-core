@@ -10,7 +10,7 @@
         {{attr_title}}
       </div>
     {{else}}
-      <div class="title title_sortable" can-click="applySort">
+      <div class="title title_sortable" on:el:lick="applySort">
         {{attr_title}}
         {{#isSorted}}
           <i class="fa
