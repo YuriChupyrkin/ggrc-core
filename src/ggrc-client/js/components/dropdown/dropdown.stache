@@ -6,7 +6,7 @@
 <select class="{{firstnonempty className 'input-block-level'}}"
         null-if-empty="null-if-empty"
         el:value:bind="name"
-        can-change="onChange"
+        on:el:change="onChange"
         tabindex="{{tabIndex}}"
         {{#isDisabled}}disabled="disabled"{{/isDisabled}}
         {{#controlId}}id="{{controlId}}"{{/controlId}}>
