@@ -632,7 +632,8 @@ export default can.Component.extend({
         model: event.destinationType,
       });
     },
-    '{viewModel.instance} updated'(instance) {
+    '{viewModel.instance} updated'(instances) {
+      const instance = instances[0];
       const vm = this.viewModel;
       const isPending = vm.attr('deferredSave').isPending();
       instance.backup();
