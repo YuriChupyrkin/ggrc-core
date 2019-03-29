@@ -655,7 +655,8 @@ export default can.Component.extend({
       const status = this.viewModel.attr('instance.status');
       this.viewModel.setCurrentState(status);
     },
-    '{viewModel.instance} updated'(instance) {
+    '{viewModel.instance} updated'(instances) {
+      const instance = instances[0];
       const vm = this.viewModel;
       const isPending = vm.attr('deferredSave').isPending();
       instance.backup();
