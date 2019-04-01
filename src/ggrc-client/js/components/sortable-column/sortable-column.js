@@ -25,7 +25,7 @@ export default can.Component.extend({
       },
     },
     sort: null,
-    sortField: '@',
+    sortField: '',
     applySort: function () {
       if (this.attr('isSorted')) {
         this.toggleSortDirection();
