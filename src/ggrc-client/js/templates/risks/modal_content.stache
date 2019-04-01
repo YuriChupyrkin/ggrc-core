@@ -199,7 +199,7 @@
         <dropdown vm:optionsList:from="model.statuses"
                   vm:noValue:from="true"
                   vm:noValueLabel:from="'---'"
-                  vm:name:from="'instance.status'"
+                  vm:name:from="instance.status"
                   tabindex="23">
         </dropdown>
     </div>

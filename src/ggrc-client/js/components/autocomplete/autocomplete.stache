@@ -3,7 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 }}
 
-<div class="objective-selector autocomplete--wrapper{{ className}}">
+<div class="objective-selector autocomplete--wrapper {{className}}">
   <input type="text"
          data-lookup="{{searchItemsType}}"
          data-no-automap="{{automappingOff}}"

@@ -8,7 +8,7 @@
     <div class="dropdown-container__wrapper">
       <simple-popover {button-text}="{paging.pageSize}"
                       {extra-css-class}="'simple-popover_pagination_items'"
-                      {placement}="{{placement}}">
+                      {placement}="placement">
         <div>Items per page:</div>
         <div class="dropdown-container__items-list flex-box flex-row">
           {{#paging.pageSizeSelect}}
@@ -35,7 +35,7 @@
     <div class="pagination-item pagination-item_list">
       <simple-popover vm:buttonText:from="getPaginationInfo"
                       vm:extraCssClass:from="'simple-popover_pagination_pages'"
-                      vm:placement:from="{{placement}}">
+                      vm:placement:from="placement">
           {{#pagesList}}
             <div class="pagination-item__popover-item single-line
                         {{#if_equals paging.current .}} pagination-item__popover-item_selected{{/if_equals}}"

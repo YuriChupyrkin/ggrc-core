@@ -53,7 +53,7 @@
         </label>
         <div tabindex="4">
             <dropdown vm:optionsList:from="model.statuses"
-                      vm:name:from="'instance.status'"
+                      vm:name:from="instance.status"
                       tabindex="23">
             </dropdown>
         </div>

@@ -8,7 +8,7 @@
     vm:instance:from="instance">
     <related-documents 
       vm:instance:from="instance" 
-      vm:kind:from="REFERENCE_URL" 
+      vm:kind:from="'REFERENCE_URL'" 
       vm:autorefresh:from="false"
       on:addMappings="addMappings(%event.objects)"
       on:removeMappings="removeMappings(%event.object)">
