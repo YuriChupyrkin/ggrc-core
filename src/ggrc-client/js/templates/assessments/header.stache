@@ -60,7 +60,7 @@ Copyright (C) 2019 Google Inc.
     </div>
         <div class="pane-header__toolbar">
           {{#is_info_pin}}
-            <info-pin-buttons {maximized}="{maximized}" 
+            <info-pin-buttons {maximized}="{maximized}"
                               {on-change-maximized-state}="{@onChangeMaximizedState}"
                               {on-close}="{@onClose}">
             </info-pin-buttons>
@@ -135,7 +135,7 @@ Copyright (C) 2019 Google Inc.
                                       {{! Set default state }}
                                       <object-change-state {to-state}="{initialState}"
                                                            on:onStateChange="onStateChange(%event)">
-                                          <a href="#">
+                                          <a href="javascript:void(0)">
                                               <i class="fa fa-reply"></i> Restore
                                           </a>
                                       </object-change-state>
@@ -143,7 +143,7 @@ Copyright (C) 2019 Google Inc.
                                       <object-change-state {to-state}="{deprecatedState}"
                                                            on:onStateChange="onStateChange(%event)"
                                       >
-                                          <a href="#">
+                                          <a href="javascript:void(0)">
                                               <i class="fa fa-times-circle"></i> Deprecate
                                           </a>
                                       </object-change-state>
@@ -152,7 +152,7 @@ Copyright (C) 2019 Google Inc.
                                   <object-change-state {to-state}="{deprecatedState}"
                                                        on:onStateChange="onStateChange(%event)"
                                   >
-                                      <a href="#">
+                                      <a href="javascript:void(0)">
                                           <i class="fa fa-times-circle"></i> Deprecate
                                       </a>
                                   </object-change-state>
@@ -173,7 +173,7 @@ Copyright (C) 2019 Google Inc.
                       </li>
                       {{/if}}
                   {{/is_allowed}}
-            </three-dots-menu> 
+            </three-dots-menu>
 
             {{#is_info_pin}}
                 {{#unless options.isSubTreeItem}}

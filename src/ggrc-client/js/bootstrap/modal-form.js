@@ -470,7 +470,7 @@ import {trigger} from 'can-event';
           }
 
           $html.append(
-            '<a href="#" class="close" data-dismiss="alert">' +
+            '<a href="javascript:void(0)" class="close" data-dismiss="alert">' +
               '<i class="fa fa-times" aria-hidden="true"></i>' +
             '</a>'
           );
