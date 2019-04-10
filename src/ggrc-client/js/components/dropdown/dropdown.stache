@@ -5,7 +5,7 @@
 
 <select
   tabindex="{{tabIndex}}"
-  class="{{firstnonempty className 'input-block-level'}}"
+  class="{{firstnonempty className 'input-block-level'}} {{#is(name, instance.status)}}instance_status{{/is}}"
   el:value:bind="name"
   on:el:change="onChange"
   null-if-empty="null-if-empty"
