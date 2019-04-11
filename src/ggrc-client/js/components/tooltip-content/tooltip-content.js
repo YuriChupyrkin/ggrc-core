@@ -34,7 +34,7 @@ const events = {
 
 export default can.Component({
   tag: 'tooltip-content',
-  template: can.stache(template),
+  view: can.stache(template),
   leakScope: true,
   viewModel,
   events,

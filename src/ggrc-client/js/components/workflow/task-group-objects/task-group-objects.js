@@ -146,7 +146,7 @@ const init = function () {
 
 export default can.Component({
   tag: 'task-group-objects',
-  template: can.stache(template),
+  view: can.stache(template),
   leakScope: true,
   viewModel,
   events,
