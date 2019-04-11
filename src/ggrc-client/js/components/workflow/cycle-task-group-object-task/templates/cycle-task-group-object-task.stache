@@ -39,7 +39,7 @@
                     </a>
                   </li>
                   <li>
-                    <permalink {instance}="{instance}"/>
+                    <perma-link {instance}="{instance}"/>
                   </li>
                   <li>
                     {{#is(instance.status, "Deprecated")}}

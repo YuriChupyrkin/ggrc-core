@@ -6,7 +6,7 @@
 import './clipboard-link';
 
 export default can.Component.extend({
-  tag: 'permalink',
+  tag: 'perma-link',
   template: can.stache(
     '<clipboard-link {text}="{text}">' +
     '<i class="fa fa-link"></i>Get permalink</clipboard-link>'

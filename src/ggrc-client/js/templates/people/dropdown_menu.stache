@@ -5,7 +5,7 @@
 
 <three-dots-menu>
   <li class="border-bottom">
-    <permalink {instance}="{instance}"/>
+    <perma-link {instance}="{instance}"/>
   </li>
   <li>
     <a href="/people/{{instance.id}}" target="_blank">

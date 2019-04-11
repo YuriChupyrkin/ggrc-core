@@ -40,7 +40,7 @@
                   </a>
                 </li>
                 <li>
-                  <permalink {instance}="{instance}"/>
+                  <perma-link {instance}="{instance}"/>
                 </li>
               </three-dots-menu>
             </div>
