@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import canEvent from 'can-event';
 import updateService from '../../../plugins/utils/bulk-update-service';
 import {getComponentVM} from '../../../../js_specs/spec_helpers';
 import Component from '../bulk-update-button';
@@ -64,7 +65,7 @@ describe('bulk-update-button component', function () {
       resMessage = 'items updated';
       updateDfd = $.Deferred();
 
-      spyOn(can, 'trigger');
+      spyOn(canEvent, 'trigger');
       spyOn(NotifiersUtils, 'notifier');
       spyOn(updateService, 'update')
         .and.returnValue(updateDfd);
@@ -109,7 +110,7 @@ describe('bulk-update-button component', function () {
         updateDfd.resolve([]);
 
         expect(el.closest).not.toHaveBeenCalled();
-        expect(can.trigger)
+        expect(canEvent.trigger)
           .not.toHaveBeenCalled();
       });
 
