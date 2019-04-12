@@ -343,14 +343,11 @@ describe('mappers', function () {
       describe('when last_instance is not this MappingResult\'s ' +
                'instance', function () {
         it('calls the function on itself', function () {
-          let sanityCheck = false;
           let mr = new LL.MappingResult('foo', [], 'bar');
           mr.walk_instances(function (instance, _result, depth) {
             expect(instance).toBe('foo');
             expect(depth).toBe(0);
-            sanityCheck = true;
           }, 'bar', 0);
-          expect(sanityCheck).toBe(true);
         });
 
         describe('when mappings length is greater than zero', function () {
@@ -387,12 +384,10 @@ describe('mappers', function () {
         });
 
         it('no action is taken', function () {
-          let sanityCheck = false;
           let mr = new LL.MappingResult('foo', [], 'bar');
           mr.walk_instances(function (instance, _result, depth) {
             fail('fn was called');
           }, 'foo', 0);
-          expect(sanityCheck).toBe(false);
         });
       });
     });
@@ -629,31 +624,21 @@ describe('mappers', function () {
         let binding = {list: []};
         let sourceDfd = binding._refresh_stubs_deferred = new $.Deferred();
         let ret = ll.refresh_stubs(binding);
-        let sanity = false;
         sourceDfd.resolve();
         ret.done(function (data) {
           expect(data).toBe(binding.list);
-          sanity = true;
         });
-        if (!sanity) {
-          fail('sanity check failed for done callback from returned promise');
-        }
       });
 
       it('makes new refresh stubs deferred, returning binding list, ' +
          'if it does not already exist', function () {
         let ret;
         let binding = {list: []};
-        let sanity = false;
         ll._refresh_stubs = jasmine.createSpy().and.returnValue($.when());
         ret = ll.refresh_stubs(binding);
         ret.done(function (data) {
           expect(data).toBe(binding.list);
-          sanity = true;
         });
-        if (!sanity) {
-          fail('sanity check failed for done callback from returned promise');
-        }
         expect(ll._refresh_stubs).toHaveBeenCalled();
       });
     });
@@ -664,31 +649,21 @@ describe('mappers', function () {
         let binding = {list: []};
         let sourceDfd = binding._refresh_instances_deferred = new $.Deferred();
         let ret = ll.refresh_instances(binding);
-        let sanity = false;
         sourceDfd.resolve();
         ret.done(function (data) {
           expect(data).toBe(binding.list);
-          sanity = true;
         });
-        if (!sanity) {
-          fail('sanity check failed for done callback from returned promise');
-        }
       });
 
       it('makes new refresh instances deferred, returning binding list, ' +
          'if it does not already exist', function () {
         let ret;
         let binding = {list: []};
-        let sanity = false;
         ll._refresh_instances = jasmine.createSpy().and.returnValue($.when());
         ret = ll.refresh_instances(binding);
         ret.done(function (data) {
           expect(data).toBe(binding.list);
-          sanity = true;
         });
-        if (!sanity) {
-          fail('sanity check failed for done callback from returned promise');
-        }
         expect(ll._refresh_instances).toHaveBeenCalled();
       });
     });
@@ -697,7 +672,6 @@ describe('mappers', function () {
       it('returns promise based on binding list', function () {
         let ret;
         let binding = {list: [{instance: 'a'}]};
-        let sanity = false;
         spyOn(ll, 'refresh_stubs').and.returnValue($.when());
         spyOn(RefreshQueue.prototype, 'trigger').and.callFake(function () {
           return $.when(this.objects);
@@ -706,11 +680,7 @@ describe('mappers', function () {
         ret = ll._refresh_instances(binding);
         ret.done(function (data) {
           expect(data).toEqual(['a']);
-          sanity = true;
         });
-        if (!sanity) {
-          fail('sanity check failed for done callback from returned promise');
-        }
       });
     });
   });
