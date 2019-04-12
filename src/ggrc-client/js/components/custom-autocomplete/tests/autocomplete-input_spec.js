@@ -61,18 +61,7 @@ describe('autocomplete-input component', () => {
   });
 
   describe('inputLatency() method', () => {
-    const msTime = 501;
-
-    beforeEach(() => {
-      jasmine.clock().uninstall(); // required to fix jasmin.clock issue
-      jasmine.clock().install();
-    });
-
-    afterEach(() => {
-      jasmine.clock().uninstall();
-    });
-
-    it('should set "isPending" to true before dispatching event', () => {
+    it('should set "isPending" to true before dispatching event', (done) => {
       const value = 'f';
       viewModel.attr('value', value);
       viewModel.attr('isPending', false);
@@ -80,47 +69,48 @@ describe('autocomplete-input component', () => {
       spyOn(viewModel, 'dispatch');
       spyOn(window, 'setTimeout');
 
-      viewModel.inputLatency();
-
-      expect(viewModel.attr('isPending')).toBe(true);
-    });
-
-    it('should notify that value is changed when value is not empty', () => {
-      const value = 'f';
-      viewModel.attr('value', value);
-      spyOn(viewModel, 'dispatch');
-
-      viewModel.inputLatency();
-
-      jasmine.clock().tick(msTime);
-
-      expect(viewModel.dispatch).toHaveBeenCalledWith({
-        type: 'inputChanged',
-        value,
+      viewModel.inputLatency().then(() => {
+        expect(viewModel.attr('isPending')).toBe(true);
+        done();
       });
     });
 
-    it('should not notify that value is changed when value is empty', () => {
-      const value = '';
-      viewModel.attr('value', value);
-      spyOn(viewModel, 'dispatch');
+    it('should notify that value is changed when value is not empty',
+      (done) => {
+        const value = 'f';
+        viewModel.attr('value', value);
+        spyOn(viewModel, 'dispatch');
 
-      viewModel.inputLatency();
+        viewModel.inputLatency().then(() => {
+          expect(viewModel.dispatch).toHaveBeenCalledWith({
+            type: 'inputChanged',
+            value,
+          });
+          done();
+        });
+      });
 
-      jasmine.clock().tick(msTime);
+    it('should not notify that value is changed when value is empty',
+      (done) => {
+        const value = '';
+        viewModel.attr('value', value);
+        spyOn(viewModel, 'dispatch');
 
-      expect(viewModel.dispatch).not.toHaveBeenCalled();
-    });
+        viewModel.inputLatency().then(() => {
+          expect(viewModel.dispatch).not.toHaveBeenCalled();
+          done();
+        });
+      });
 
-    it('should set "isPending" to false after delay', () => {
+    it('should set "isPending" to false after delay', (done) => {
       ['any value', null, '', undefined].forEach((value) => {
         viewModel.attr('value', value);
         viewModel.attr('isPending', true);
 
-        viewModel.inputLatency();
-        jasmine.clock().tick(msTime);
-
-        expect(viewModel.attr('isPending')).toBe(false);
+        viewModel.inputLatency().then(() => {
+          expect(viewModel.attr('isPending')).toBe(false);
+          done();
+        });
       });
     });
   });

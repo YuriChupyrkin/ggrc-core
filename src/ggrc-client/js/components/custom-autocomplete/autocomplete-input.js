@@ -53,17 +53,20 @@ export default can.Component.extend({
     inputLatency: function () {
       this.attr('isPending', true);
 
-      setTimeout(() => {
-        let val = this.attr('value');
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          let val = this.attr('value');
 
-        if (val) {
-          this.dispatch({
-            type: 'inputChanged',
-            value: val,
-          });
-        }
-        this.attr('isPending', false);
-      }, 500);
+          if (val) {
+            this.dispatch({
+              type: 'inputChanged',
+              value: val,
+            });
+          }
+          this.attr('isPending', false);
+          resolve();
+        }, 500);
+      });
     },
   }),
   events: {
