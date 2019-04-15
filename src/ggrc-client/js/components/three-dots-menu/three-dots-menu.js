@@ -37,7 +37,7 @@ const events = {
   },
 };
 
-export default can.Component({
+export default can.Component.extend({
   tag: 'three-dots-menu',
   view: can.stache(template),
   leakScope: true,
