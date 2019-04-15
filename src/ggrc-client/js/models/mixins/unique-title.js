@@ -5,7 +5,7 @@
 
 import Mixin from './mixin';
 
-export default Mixin({}, {
+export default Mixin.extend({}, {
   save_error: function (val) {
     if (/title values must be unique\.$/.test(val)) {
       this.attr('_transient_title', val);
