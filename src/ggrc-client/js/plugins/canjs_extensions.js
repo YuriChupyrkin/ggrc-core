@@ -49,7 +49,7 @@ can.Control.setup = function () {
 };
 
 can.List.prototype.replace = function (items) {
-  if (!items.then || !_.isFunction(items.then)) {
+  if (!items || !items.then || !_.isFunction(items.then)) {
     originListReplace.call(this, items);
     return;
   }
