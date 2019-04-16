@@ -128,12 +128,13 @@ describe('external-data-autocomplete component', () => {
         spyOn(viewModel, 'createOrGet').and.returnValue(saveDfd);
       });
 
-      it('turns on "saving" flag', () => {
+      it('turns on "saving" flag', (done) => {
         viewModel.attr('saving', false);
 
-        viewModel.onItemPicked(item);
-
-        expect(viewModel.attr('saving')).toBe(true);
+        viewModel.onItemPicked(item).then(() => {
+          expect(viewModel.attr('saving')).toBe(true);
+          done();
+        });
       });
 
       it('call createOrGet() method', () => {
@@ -159,11 +160,13 @@ describe('external-data-autocomplete component', () => {
       it('turns off "saving" flag', (done) => {
         viewModel.attr('saving', true);
 
-        viewModel.onItemPicked(item);
+        let onItemPickedChain = viewModel.onItemPicked(item);
 
         saveDfd.resolve().always(() => {
-          expect(viewModel.attr('saving')).toBe(false);
-          done();
+          onItemPickedChain.then(() => {
+            expect(viewModel.attr('saving')).toBe(false);
+            done();
+          });
         });
       });
 

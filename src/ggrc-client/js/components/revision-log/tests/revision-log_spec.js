@@ -80,14 +80,16 @@ describe('revision-log component', function () {
       expect(viewModel.attr('revisions')).toBeNull();
     });
 
-    it('calls fetchAdditionalInfoForRevisions with fetched revisions', () => {
-      viewModel.fetchItems();
+    it('calls fetchAdditionalInfoForRevisions with fetched revisions',
+      (done) => {
+        viewModel.fetchItems();
 
-      fetchDfd.resolve('revisions');
-
-      expect(viewModel.fetchAdditionalInfoForRevisions)
-        .toHaveBeenCalledWith('revisions');
-    });
+        fetchDfd.resolve('revisions').then(() => {
+          expect(viewModel.fetchAdditionalInfoForRevisions)
+            .toHaveBeenCalledWith('revisions');
+          done();
+        });
+      });
 
     it('calls composeRevisionsData with fetched revisions ' +
     'after additional info fetched', () => {
@@ -99,14 +101,15 @@ describe('revision-log component', function () {
         .toHaveBeenCalledWith('additionalFetched');
     });
 
-    it('displays specified error if fetching the data fails', function () {
+    it('displays specified error if fetching the data fails', function (done) {
       viewModel.fetchItems();
-      fetchDfd.reject('Server error');
-
-      expect(NotifierUtils.notifier).toHaveBeenCalledWith(
-        'error',
-        'Failed to fetch revision history data.'
-      );
+      fetchDfd.reject('Server error').then(() => {
+        expect(NotifierUtils.notifier).toHaveBeenCalledWith(
+          'error',
+          'Failed to fetch revision history data.'
+        );
+        done();
+      });
     });
 
     it('assigns result of composeRevisionsData to revisions attr', () => {

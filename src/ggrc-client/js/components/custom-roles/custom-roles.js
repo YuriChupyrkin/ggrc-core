@@ -65,7 +65,7 @@ export default can.Component.extend({
         saveDfd = this.attr('instance').save();
       }
 
-      saveDfd.then(() => {
+      return saveDfd.then(() => {
         this.filterACL();
       }).always(() => {
         this.attr('updatableGroupId', null);

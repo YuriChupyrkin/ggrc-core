@@ -113,30 +113,33 @@ describe('gdrive-picker-launcher', function () {
         spyOn(viewModel, 'createDocumentModel').and.returnValue(createModelDfd);
       });
 
-      it('when uploadFiles() was failed', function () {
+      it('when uploadFiles() was failed', function (done) {
         uploadFilesDfd.reject();
 
-        viewModel.trigger_upload(viewModel, el);
-
-        expect(viewModel.attr('isUploading')).toBe(false);
+        viewModel.trigger_upload(viewModel, el).fail(() => {
+          expect(viewModel.attr('isUploading')).toBe(false);
+          done();
+        });
       });
 
-      it('after createDocumentModel() success', function () {
+      it('after createDocumentModel() success', function (done) {
         uploadFilesDfd.resolve();
         createModelDfd.resolve([]);
 
-        viewModel.trigger_upload(viewModel, el);
-
-        expect(viewModel.attr('isUploading')).toBe(false);
+        viewModel.trigger_upload(viewModel, el).then(() => {
+          expect(viewModel.attr('isUploading')).toBe(false);
+          done();
+        });
       });
 
-      it('when createDocumentModel() was failed', function () {
+      it('when createDocumentModel() was failed', function (done) {
         uploadFilesDfd.resolve();
         createModelDfd.reject();
 
-        viewModel.trigger_upload(viewModel, el);
-
-        expect(viewModel.attr('isUploading')).toBe(false);
+        viewModel.trigger_upload(viewModel, el).fail(() => {
+          expect(viewModel.attr('isUploading')).toBe(false);
+          done();
+        });
       });
     });
   });
@@ -157,38 +160,49 @@ describe('gdrive-picker-launcher', function () {
       spyOn(pickerUtils, 'uploadFiles').and.returnValue(uploadFilesDfd);
     });
 
-    it('sets "isUploading" flag to true', function () {
+    it('sets "isUploading" flag to true', function (done) {
       parentFolderDfd.resolve(parentFolderStub);
       viewModel.attr('isUploading', false);
 
-      viewModel.trigger_upload_parent(viewModel, el);
-
-      expect(viewModel.attr('isUploading')).toBe(true);
+      viewModel.trigger_upload_parent(viewModel, el).then(() => {
+        expect(viewModel.attr('isUploading')).toBe(true);
+        done();
+      });
     });
 
     describe('sets "isUploading" flag to false', function () {
+      let checkDelay = 100;
+
       beforeEach(function () {
         viewModel.attr('isUploading', true);
       });
 
-      it('after uploadFiles() success', function () {
+      it('after uploadFiles() success', function (done) {
         spyOn(viewModel, 'createDocumentModel')
           .and.returnValue($.Deferred().resolve());
         parentFolderDfd.resolve(parentFolderStub);
         uploadFilesDfd.resolve();
 
-        viewModel.trigger_upload_parent(viewModel, el);
-
-        expect(viewModel.attr('isUploading')).toBe(false);
+        viewModel.trigger_upload_parent(viewModel, el).done(() => {
+          // TODO: use uploadFilesDfd chain
+          setTimeout(() => {
+            expect(viewModel.attr('isUploading')).toBe(false);
+            done();
+          }, checkDelay);
+        });
       });
 
-      it('when uploadFiles() was failed', function () {
+      it('when uploadFiles() was failed', function (done) {
         parentFolderDfd.resolve(parentFolderStub);
         uploadFilesDfd.reject();
 
-        viewModel.trigger_upload_parent(viewModel, el);
-
-        expect(viewModel.attr('isUploading')).toBe(false);
+        viewModel.trigger_upload_parent(viewModel, el).done(() => {
+          // TODO: use uploadFilesDfd chain
+          setTimeout(() => {
+            expect(viewModel.attr('isUploading')).toBe(false);
+            done();
+          }, checkDelay);
+        });
       });
     });
   });
