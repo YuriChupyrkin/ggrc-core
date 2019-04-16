@@ -7,13 +7,13 @@
   <label>
     {{labelName}}
   </label>
-  <dropdown
+  <dropdown-component
     {class-name}="'input-block-level js-toggle-field'"
     {options-list}="{peopleValues}"
     {name}="'selectedValue'"
     ($change)="{dropdownChanged}"
     {no-value}="{hasEmptyValue}"
-  ></dropdown>
+  ></dropdown-component>
 </div>
 
 <div class="span6 {{#if validationError}}field-failure{{/if}}">
