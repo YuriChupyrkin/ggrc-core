@@ -87,8 +87,8 @@ describe('bulk-update-button component', function () {
 
     it('shows notification about bulk update result', function (done) {
       updateDfd.resolve([{status: 'updated'}]).then(() => {
-        expect(viewModel.getResultNotification)
-          .toHaveBeenCalledWith(viewModel.attr('model'), 1);
+        expect(viewModel.getResultNotification.serialize())
+          .toHaveBeenCalledWith(viewModel.attr('model').serialize(), 1);
         expect(NotifiersUtils.notifier)
           .toHaveBeenCalledWith('info', resMessage);
         done();
