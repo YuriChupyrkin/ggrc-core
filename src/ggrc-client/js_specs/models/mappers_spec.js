@@ -916,8 +916,9 @@ describe('mappers', function () {
             binding, newResult.instance, newResult);
         });
 
+        // SETTIMEOUT ?
         it('does not add the new item when the filter func returns ' +
-           'a deferred that rejects', function () {
+           'a deferred that rejects', function (done) {
           let filterResult = new LL.MappingResult({id: 2}, [newResult]);
           cfll.filter_fn.and.returnValue(new $.Deferred().reject());
           cfll.init_listeners(binding);
@@ -925,10 +926,14 @@ describe('mappers', function () {
           spyOn(cfll, 'insert_results');
           spyOn(cfll, 'remove_instance');
           sourceBinding.list.push(newResult);
-          expect(cfll.insert_results).not.toHaveBeenCalledWith(
-            binding, [filterResult]);
-          expect(cfll.remove_instance).toHaveBeenCalledWith(
-            binding, newResult.instance, newResult);
+
+          setTimeout(() => {
+            expect(cfll.insert_results).not.toHaveBeenCalledWith(
+              binding, [filterResult]);
+            expect(cfll.remove_instance).toHaveBeenCalledWith(
+              binding, newResult.instance, newResult);
+            done();
+          }, 300);
         });
       });
 

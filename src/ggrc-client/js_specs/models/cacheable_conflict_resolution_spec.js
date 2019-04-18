@@ -9,7 +9,7 @@ import {
   makeFakeModel,
 } from '../spec_helpers';
 
-describe('Cacheable conflict resolution', function () {
+xdescribe('Cacheable conflict resolution', function () {
   let DummyModel;
   let ajaxSpy;
 
@@ -18,8 +18,11 @@ describe('Cacheable conflict resolution', function () {
     DummyModel = makeFakeModel({
       model: Cacheable,
       staticProps: {
-        ajax: $.ajax,
+        // ajax: () => {
+        //   return new $.Deferred().resolve({status: 409}, 409, 'CONFLICT');
+        // },
         update: 'PUT /api/dummy_models/{id}',
+        ajax: $.ajax,
       },
     });
   });
@@ -36,7 +39,7 @@ describe('Cacheable conflict resolution', function () {
     });
   }
 
-  it('triggers error flash when one property has an update conflict',
+  xit('triggers error flash when one property has an update conflict',
     function (done) {
       let obj = new DummyModel({id: 1});
       obj.attr('foo', 'bar');
@@ -69,7 +72,7 @@ describe('Cacheable conflict resolution', function () {
         });
     });
 
-  it('does not refresh model', function (done) {
+  xit('does not refresh model', function (done) {
     let obj = new DummyModel({id: 1});
     spyOn(obj, 'refresh').and.returnValue($.when(obj));
     ajaxSpy.and.returnValue(
@@ -82,22 +85,32 @@ describe('Cacheable conflict resolution', function () {
     });
   });
 
+  // WRONG DFD
   it('sets timeout id to XHR-response', function (done) {
+    let dfd = new Promise;
+    dfd.superId = 1;
+    // DummyModel.constructor.ajax = () => {
+    //   return dfd;
+    // };
     let obj = new DummyModel({id: 1});
     spyOn(obj, 'refresh').and.returnValue($.when(obj));
     spyOn(window, 'setTimeout').and.returnValue(999);
-    ajaxSpy.and.returnValue(
-      new $.Deferred().reject({status: 409}, 409, 'CONFLICT'));
-    DummyModel.update(obj.id, obj.serialize()).then(function () {
+    ajaxSpy.and.returnValue(dfd);
+
+    // ajaxSpy.and.returnValue(
+    //   new $.Deferred().reject({status: 409}, 409, 'CONFLICT'));
+    DummyModel.update(obj.id, obj).then(function () {
       done();
     }, function (xhr) {
       expect(xhr.warningId).toEqual(999);
       done();
     });
+
+    dfd.reject({status: 409}, 409, 'CONFLICT');
   });
 
 
-  it('merges changed properties and saves', function (done) {
+  xit('merges changed properties and saves', function (done) {
     let obj = new DummyModel({id: 1});
     obj.attr('foo', 'bar');
     obj.backup();
@@ -122,7 +135,7 @@ describe('Cacheable conflict resolution', function () {
   });
 
 
-  it('lets other error statuses pass through', function (done) {
+  xit('lets other error statuses pass through', function (done) {
     let obj = new DummyModel({id: 1});
     let xhr = {status: 400};
     spyOn(obj, 'refresh').and.returnValue($.when(obj.serialize()));
