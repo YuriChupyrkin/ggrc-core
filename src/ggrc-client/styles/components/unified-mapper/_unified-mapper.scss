@@ -601,6 +601,13 @@ mapper-results-columns-configuration {
   }
   &__actions {
     margin-top: 24px;
+
+    &-filter {
+      @include controls-row(8px);
+    }
+    &-search {
+      margin-top: 24px;
+    }
     &--right {
       @include controls-row(8px);
       float: right;
