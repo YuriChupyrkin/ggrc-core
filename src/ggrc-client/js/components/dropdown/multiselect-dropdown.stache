@@ -38,8 +38,8 @@
               el:checked:bind="checked"
               on:el:click="optionChange(.)"
               value="{{value}}"
-              id="{{id}}"
-              class="multiselect-dropdown__checkbox {{cssClass}}"
+              {{#if id}}id="{{id}}"{{/if}}
+              class="multiselect-dropdown__checkbox {{#if cssClass}}{{cssClass}}{{/if}}"
               />
             {{value}}
           </label>
