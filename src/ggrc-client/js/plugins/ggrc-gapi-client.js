@@ -16,7 +16,7 @@ let showGapiModal = function ({scopes, onAccept, onDecline}) {
       '../controllers/modals/gapi-modal'
     )
       .then((module) => {
-        const modal = $('<div class="modal hide">').modal_form();
+        const modal = $('<div class="modal hide"/>').modal_form();
         modal.appendTo(document.body);
 
         new module.default(modal, {
