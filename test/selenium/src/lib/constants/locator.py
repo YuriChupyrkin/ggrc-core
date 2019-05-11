@@ -266,7 +266,8 @@ class CommonModalUnifiedMapper(object):
   MODAL_CSS = (By.CSS_SELECTOR, MODAL)
   MODAL_FILTER = Common.MODAL_FILTER
   FILTER_TOGGLE_CSS = (By.CSS_SELECTOR,
-                       MODAL_FILTER + " collapse-panel-click-area")
+                       MODAL_FILTER +
+                       " button.collapsible-panel-header__toggle-button")
   FILTER_ADD_ATTRIBUTE_BTN = (By.XPATH, "//button[text()='Add Attribute']")
   FILTER_ROW_CSS = (By.CSS_SELECTOR, ".filter-container__attribute")
   FILTER_OPERATOR = (By.CSS_SELECTOR, ".filter-operator__content select")
