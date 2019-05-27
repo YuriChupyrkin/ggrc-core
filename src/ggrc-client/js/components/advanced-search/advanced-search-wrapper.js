@@ -17,6 +17,23 @@ export default can.Component.extend({
           return StateUtils.hasFilter(this.attr('modelName'));
         },
       },
+      filtersToApply: {
+        set(filters) {
+          if (filters) {
+            const {
+              filterItems = [],
+              mappingItems = [],
+              statusItem,
+            } = filters;
+
+            this.attr('filterItems', filterItems);
+            this.attr('mappingItems', mappingItems);
+            this.attr('statusItem', statusItem);
+
+            this.dispatch('submit');
+          }
+        },
+      },
     },
     query: null,
     modelName: null,
