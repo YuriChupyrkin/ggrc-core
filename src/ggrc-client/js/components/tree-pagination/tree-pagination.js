@@ -32,6 +32,13 @@ export default can.Component.extend({
   },
   leakScope: true,
   viewModel: can.Map.extend({
+    define: {
+      isPageSizeSelectShown: {
+        get() {
+          return this.attr('paging.pageSizeSelect.length') > 1;
+        },
+      },
+    },
     placement: '',
     setCurrentPage: function (pageNumber) {
       this.paging.attr('current', pageNumber);
