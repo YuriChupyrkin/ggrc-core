@@ -44,6 +44,7 @@ import {
 import * as TreeViewUtils from '../../plugins/utils/tree-view-utils';
 import {
   initMappedInstances,
+  isObjectContextPage,
 } from '../../plugins/utils/current-page-utils';
 import {
   getCounts,
@@ -483,6 +484,7 @@ viewModel = can.Map.extend({
     appliedFilterItems: can.List(),
     mappingItems: can.List(),
     appliedMappingItems: can.List(),
+    parent: null,
   },
   openAdvancedFilter: function () {
     this.attr('advancedSearch.filterItems',
@@ -490,6 +492,10 @@ viewModel = can.Map.extend({
 
     this.attr('advancedSearch.mappingItems',
       this.attr('advancedSearch.appliedMappingItems').slice());
+
+    if (isObjectContextPage()) {
+      this.attr('advancedSearch.parent', this.attr('parent_instance'));
+    }
 
     this.attr('advancedSearch.open', true);
   },
