@@ -30,7 +30,7 @@ export default can.Component.extend({
             this.attr('mappingItems', mappingItems);
             this.attr('statusItem', statusItem);
 
-            this.dispatch('submit');
+            this.dispatch('applyFilters');
           }
         },
       },
