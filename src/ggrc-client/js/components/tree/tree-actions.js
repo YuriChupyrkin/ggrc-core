@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import '../clipboard-link/clipboard-link';
 import '../three-dots-menu/three-dots-menu';
 import '../change-request-link/change-request-link';
 import {
@@ -107,6 +108,7 @@ export default can.Component.extend({
     options: null,
     model: null,
     showedItems: [],
+    savedSearchPermalink: '',
   }),
   export() {
     this.dispatch('export');

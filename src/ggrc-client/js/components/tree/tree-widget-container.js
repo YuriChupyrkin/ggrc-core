@@ -186,6 +186,7 @@ viewModel = can.Map.extend({
   loaded: null,
   refreshLoaded: true,
   canOpenInfoPin: true,
+  savedSearchPermalink: '',
   loadItems: function () {
     let modelName = this.attr('modelName');
     let pageInfo = this.attr('pageInfo');
@@ -520,6 +521,25 @@ viewModel = can.Map.extend({
 
     this.attr('advancedSearch.open', true);
   },
+  clearSearchPermalink() {
+    this.attr('savedSearchPermalink', null);
+  },
+  updateSearchPermalink(appliedSearch) {
+    const appliedSavedSearch = this.attr('advancedSearch.appliedSavedSearch') &&
+      this.attr('advancedSearch.appliedSavedSearch').attr();
+
+    // Check applied search.
+    // Build permalink when current applied search is saved search
+    if (AdvancedSearch.isSavedSearch(appliedSavedSearch, appliedSearch)) {
+      const modelName = this.attr('model').table_singular;
+      const permalink = AdvancedSearch
+        .buildSearchPermalink(appliedSavedSearch.id, modelName);
+
+      this.attr('savedSearchPermalink', permalink);
+    } else {
+      this.clearSearchPermalink();
+    }
+  },
   applyAdvancedFilters: function () {
     const filters = this.attr('advancedSearch.filterItems').attr();
     const mappings = this.attr('advancedSearch.mappingItems').attr();
@@ -542,6 +562,13 @@ viewModel = can.Map.extend({
     this.attr('advancedSearch.filter', advancedFilters);
 
     this.attr('advancedSearch.open', false);
+
+    const appliedSearch = {
+      filterItems: filters,
+      mappingItems: mappings,
+      parentItems: parents,
+    };
+    this.updateSearchPermalink(appliedSearch);
     this.onFilter();
   },
   removeAdvancedFilters: function () {
@@ -550,6 +577,7 @@ viewModel = can.Map.extend({
     this.attr('advancedSearch.request', can.List());
     this.attr('advancedSearch.filter', null);
     this.attr('advancedSearch.open', false);
+    this.clearSearchPermalink();
     this.onFilter();
   },
   resetAdvancedFilters: function () {
