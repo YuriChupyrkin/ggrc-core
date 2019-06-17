@@ -414,7 +414,7 @@ describe('tree-widget-container component', function () {
 
       vm.applyAdvancedFilters();
 
-      expect(vm.attr('advancedSearch.request.length')).toBe(2);
+      expect(vm.attr('advancedSearch.request.length')).toBe(3);
     });
 
     it('closes modal window', function () {
