@@ -267,6 +267,12 @@ describe('mapper-results component', function () {
       viewModel.onSearch();
       expect(viewModel.setItemsDebounced).toHaveBeenCalled();
     });
+
+    it('sets searchInited flag to true', function () {
+      viewModel.attr('searchInited', false);
+      viewModel.onSearch();
+      expect(viewModel.attr('searchInited')).toBe(true);
+    });
   });
 
   describe('prepareRelevantQuery() method', function () {

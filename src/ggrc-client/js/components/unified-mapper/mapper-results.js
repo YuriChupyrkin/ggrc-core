@@ -91,6 +91,7 @@ export default can.Component.extend({
     deferredList: [],
     disabledIds: [],
     megaRelationObj: {},
+    searchInited: false,
     setItems: function () {
       const stopFn = tracker.start(this.attr('type'),
         tracker.USER_JOURNEY_KEYS.NAVIGATION,
@@ -153,6 +154,8 @@ export default can.Component.extend({
       this.setSortingConfiguration();
     },
     onSearch: function () {
+      this.attr('searchInited', true);
+
       this.resetSearchParams();
       this.attr('refreshItems', true);
       this.setItemsDebounced();
