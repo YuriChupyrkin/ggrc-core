@@ -20,15 +20,14 @@ export default can.Component.extend({
       filtersToApply: {
         set(filters) {
           if (filters) {
-            const {
-              filterItems = [],
-              mappingItems = [],
-              statusItem,
-            } = filters;
+            this.attr('filterItems', filters.filterItems || []);
+            this.attr('mappingItems', filters.mappingItems || []);
+            this.attr('statusItem', filters.statusItem);
 
-            this.attr('filterItems', filterItems);
-            this.attr('mappingItems', mappingItems);
-            this.attr('statusItem', statusItem);
+            if (filters.modelName && filters.modelDisplayName) {
+              this.attr('modelName', filters.modelName);
+              this.attr('modelDisplayName', filters.modelDisplayName);
+            }
 
             this.dispatch('applyFilters');
           }
