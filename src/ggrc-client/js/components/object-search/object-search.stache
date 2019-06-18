@@ -116,26 +116,20 @@
     <div class="modal-footer {{#if showResults}}expanded{{/if}}">
       <collapsible-panel softMode:from="true" titleText:from="'Search Results {{displayCount scope.vars.totalObjects}}'" expanded:bind="showResults">
         <div class="search-results">
-          {{#if resultsRequested}}
-            <mapper-results class="{{#useSnapshots}}snapshot-list{{/useSnapshots}}"
-                            baseInstance:from="parentInstance"
-                            isLoading:bind="is_loading"
-                            type:from="type"
-                            @onSearch:to="../onSearchCallback"
-                            paging.total:to="scope.vars.totalObjects"
-                            searchOnly:from="true"
-                            useSnapshots:from="useSnapshots"
-                            entries:bind="entries"
-                            filterItems:from="scope.vars.filterItems"
-                            mappingItems:from="scope.vars.mappingItems"
-                            on:loaded="onLoaded()"
-                            statusItem:from="scope.vars.statusItem">
-            </mapper-results>
-          {{else}}
-            <div class="well well-small">
-              No results
-            </div>
-          {{/if}}
+          <mapper-results class="{{#useSnapshots}}snapshot-list{{/useSnapshots}}"
+                          baseInstance:from="parentInstance"
+                          isLoading:bind="is_loading"
+                          type:from="type"
+                          @onSearch:to="../onSearchCallback"
+                          paging.total:to="scope.vars.totalObjects"
+                          searchOnly:from="true"
+                          useSnapshots:from="useSnapshots"
+                          entries:bind="entries"
+                          filterItems:from="scope.vars.filterItems"
+                          mappingItems:from="scope.vars.mappingItems"
+                          on:loaded="onLoaded()"
+                          statusItem:from="scope.vars.statusItem">
+          </mapper-results>
         </div>
       </collapsible-panel>
     </div>

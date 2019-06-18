@@ -25,9 +25,7 @@ export default can.Component.extend({
     return ObjectOperationsBaseVM.extend({
       object: 'MultitypeSearch',
       type: 'Control',
-      resultsRequested: false,
       onSubmit: function () {
-        this.attr('resultsRequested', true);
         this._super();
       },
     });
