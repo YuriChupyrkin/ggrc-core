@@ -14,6 +14,12 @@ export default can.Component.extend({
     readonly: false,
     types: [],
     selectedType: '',
+    onChanged() {
+      this.dispatch({
+        type: 'selectedTypeChanged',
+        modelName: this.attr('selectedType'),
+      });
+    },
   }),
   init: function () {
     let selectedType = this.viewModel.selectedType;
