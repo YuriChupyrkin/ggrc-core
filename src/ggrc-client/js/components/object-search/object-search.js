@@ -25,8 +25,12 @@ export default can.Component.extend({
     return ObjectOperationsBaseVM.extend({
       object: 'MultitypeSearch',
       type: 'Control',
+      selectedSavedSearchId: null,
       onSubmit: function () {
         this._super();
+      },
+      savedSearchSelected({savedSearchId}) {
+        this.attr('selectedSavedSearchId', savedSearchId);
       },
     });
   },

@@ -17,7 +17,7 @@ export default can.Component.extend({
           return StateUtils.hasFilter(this.attr('modelName'));
         },
       },
-      filtersToApply: {
+      savedFiltersToApply: {
         set(filters) {
           if (filters) {
             this.attr('filterItems', filters.filterItems || []);
@@ -29,7 +29,8 @@ export default can.Component.extend({
               this.attr('modelDisplayName', filters.modelDisplayName);
             }
 
-            this.dispatch('applyFilters');
+            this.attr('selectedSavedSearchId', filters.savedSearchId);
+            this.savedSearchSelected(filters.savedSearchId);
           }
         },
       },
@@ -40,6 +41,13 @@ export default can.Component.extend({
     mappingItems: [],
     statusItem: AdvancedSearch.create.state(),
     relevantTo: [],
+    selectedSavedSearchId: null,
+    savedSearchSelected(savedSearchId) {
+      this.dispatch({
+        type: 'savedSearchSelected',
+        savedSearchId: savedSearchId,
+      });
+    },
     availableAttributes: function () {
       return getAvailableAttributes(this.attr('modelName'));
     },
@@ -79,5 +87,16 @@ export default can.Component.extend({
   }),
   init: function () {
     this.viewModel.setDefaultStatusItem();
+  },
+  events: {
+    '{viewModel.filterItems} change'() {
+      this.viewModel.savedSearchSelected(null);
+    },
+    '{viewModel.mappingItems} change'() {
+      this.viewModel.savedSearchSelected(null);
+    },
+    '{viewModel.statusItem} change'() {
+      this.viewModel.savedSearchSelected(null);
+    },
   },
 });
