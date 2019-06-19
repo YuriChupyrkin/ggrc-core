@@ -521,13 +521,11 @@ viewModel = can.Map.extend({
 
     this.attr('advancedSearch.open', true);
   },
-  clearSearchPermalink() {
+  clearAppliedSavedSearch() {
     this.attr('savedSearchPermalink', null);
+    this.attr('advancedSearch.appliedSavedSearch', null);
   },
-  updateSearchPermalink(appliedSearch) {
-    const appliedSavedSearch = this.attr('advancedSearch.appliedSavedSearch') &&
-      this.attr('advancedSearch.appliedSavedSearch').attr();
-
+  checkAppliedSavedSearch(appliedSearch, appliedSavedSearch) {
     // Check applied search.
     // Build permalink when current applied search is saved search
     if (AdvancedSearch.isSavedSearch(appliedSavedSearch, appliedSearch)) {
@@ -537,7 +535,7 @@ viewModel = can.Map.extend({
 
       this.attr('savedSearchPermalink', permalink);
     } else {
-      this.clearSearchPermalink();
+      this.clearAppliedSavedSearch();
     }
   },
   applyAdvancedFilters: function () {
@@ -563,12 +561,17 @@ viewModel = can.Map.extend({
 
     this.attr('advancedSearch.open', false);
 
-    const appliedSearch = {
-      filterItems: filters,
-      mappingItems: mappings,
-      parentItems: parents,
-    };
-    this.updateSearchPermalink(appliedSearch);
+    const appliedSavedSearch = this.attr('advancedSearch.appliedSavedSearch') &&
+      this.attr('advancedSearch.appliedSavedSearch').attr();
+
+    if (appliedSavedSearch) {
+      const appliedSearch = {
+        filterItems: filters,
+        mappingItems: mappings,
+        parentItems: parents,
+      };
+      this.checkAppliedSavedSearch(appliedSearch, appliedSavedSearch);
+    }
     this.onFilter();
   },
   removeAdvancedFilters: function () {
@@ -577,7 +580,7 @@ viewModel = can.Map.extend({
     this.attr('advancedSearch.request', can.List());
     this.attr('advancedSearch.filter', null);
     this.attr('advancedSearch.open', false);
-    this.clearSearchPermalink();
+    this.clearAppliedSavedSearch();
     this.onFilter();
   },
   resetAdvancedFilters: function () {
