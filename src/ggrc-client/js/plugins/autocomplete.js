@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import {
@@ -276,7 +277,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
       /* webpackChunkName: "infiniteScroll" */
       '../controllers/infinite-scroll-controller'
     ).then(() => {
-      $.ajax({
+      ggrcAjax({
         url: GGRC.templates_path + template,
         dataType: 'text',
       }).then((view) => {

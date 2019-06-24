@@ -3,10 +3,12 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanModel from 'can-model';
 import CanList from 'can-list';
+
 export default CanModel.extend({
-  ajax: $.ajax,
+  ajax: ggrcAjax,
   root_object: 'search',
   findOne: 'GET /search',
   init: function () {
