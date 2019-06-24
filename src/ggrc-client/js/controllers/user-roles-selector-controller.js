@@ -3,12 +3,13 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanControl from 'can-control';
 import Role from '../models/service-models/role';
 import Person from '../models/business-models/person';
 import UserRole from '../models/service-models/user-role';
 
 // Role Assignment Modal Selector
-const userRolesModalSelector = can.Control.extend({
+const userRolesModalSelector = CanControl.extend({
   defaults: {
     base_modal_view:
       GGRC.templates_path + '/people_roles/base_modal.stache',

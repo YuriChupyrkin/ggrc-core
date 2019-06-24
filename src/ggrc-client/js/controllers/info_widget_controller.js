@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanControl from 'can-control';
 import '../components/comment/comments-section';
 import '../components/related-objects/proposals/related-proposals';
 import '../components/related-objects/proposals/related-proposals-item';
@@ -15,7 +16,7 @@ import {
 import * as businessModels from '../models/business-models';
 import {getCreateObjectUrl} from '../plugins/utils/ggrcq-utils';
 
-export default can.Control.extend({
+export default CanControl.extend({
   defaults: {
     model: getPageModel(),
     instance: getPageInstance(),

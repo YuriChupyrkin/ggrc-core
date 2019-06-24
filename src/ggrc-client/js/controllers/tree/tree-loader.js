@@ -3,7 +3,8 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-export default can.Control.extend({
+import CanControl from 'can-control';
+export default CanControl.extend({
   defaults: {},
 }, {
   init_spinner: function () {
