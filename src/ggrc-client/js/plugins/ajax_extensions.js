@@ -93,7 +93,7 @@ let _oldAjax = $.ajax;
 //  we have a default failure handler that should only be called if no other one is registered,
 //  unless it's also explicitly asked for.  If it's registered in a transformed one, though (after
 //  then() or pipe()), then the original one won't normally be notified of failure.
-can.ajax = $.ajax = function (options) {
+const ggrcAjax = function () {
   let _ajax = _oldAjax.apply($, arguments);
 
   function setup(newAjax, oldAjax) {
@@ -143,3 +143,7 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
     }
   }
 });
+
+export {
+  ggrcAjax,
+};

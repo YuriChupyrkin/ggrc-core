@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
@@ -79,7 +80,7 @@ const DashboardControl = CanControl.extend({
   init_page_header: function () {
     let $pageHeader = $('#page-header');
     if (this.options.header_view && $pageHeader.length) {
-      $.ajax({
+      ggrcAjax({
         url: this.options.header_view,
         dataType: 'text',
       }).then((view) => {
@@ -99,7 +100,7 @@ const DashboardControl = CanControl.extend({
         instance: pageInstance,
         showWidgetArea: this.showWidgetArea.bind(this),
       };
-      $.ajax({
+      ggrcAjax({
         url: this.options.innernav_view,
         dataType: 'text',
         async: false,
