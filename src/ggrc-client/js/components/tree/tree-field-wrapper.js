@@ -25,7 +25,7 @@ const viewModel = CanMap.extend({
   },
   getItems: function () {
     let source = this.attr('source');
-    let sourceList = can.isArray(source) ? source : MakeArray(source);
+    let sourceList = Array.isArray(source) ? source : MakeArray(source);
     let deferred = $.Deferred();
     let readyItemsList;
 
