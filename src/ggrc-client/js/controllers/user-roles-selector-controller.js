@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanMap from 'can-map';
 import CanControl from 'can-control';
 import Role from '../models/service-models/role';
 import Person from '../models/business-models/person';
@@ -68,7 +69,7 @@ const userRolesModalSelector = CanControl.extend({
   },
 
   initContext() {
-    this.context = new can.Map($.extend({
+    this.context = new CanMap($.extend({
       rolesList: this.rolesList,
       selectedPerson: null,
       selectedOption: null,

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import './tree-header-selector';
 import './sub-tree-expander';
@@ -60,7 +61,7 @@ import {isSnapshotType} from '../../plugins/utils/snapshot-utils';
 
 let viewModel;
 
-viewModel = can.Map.extend({
+viewModel = CanMap.extend({
   define: {
     /**
      * Condition that adds into all request to server-side Query API
@@ -670,7 +671,7 @@ export default CanComponent.extend({
     ' selectTreeItem': function (el, ev, selectedEl, instance) {
       let parent = this.viewModel.attr('parent_instance');
       let setInstanceDfd;
-      let infoPaneOptions = new can.Map({
+      let infoPaneOptions = new CanMap({
         instance: instance,
         parent_instance: parent,
         options: this.viewModel,
