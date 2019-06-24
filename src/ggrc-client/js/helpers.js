@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -110,7 +111,7 @@ CanStache.registerHelper('in_array', function (needle, haystack, options) {
 
 // Resolve and return the first computed value from a list
 CanStache.registerHelper('firstexist', function () {
-  let args = can.makeArray(arguments).slice(0, arguments.length - 1); // ignore the last argument (some Can object)
+  let args = MakeArray(arguments).slice(0, arguments.length - 1); // ignore the last argument (some Can object)
   for (let i = 0; i < args.length; i++) {
     let v = resolveComputed(args[i]);
     if (v && v.length) {
@@ -122,7 +123,7 @@ CanStache.registerHelper('firstexist', function () {
 
 // Return the first value from a list that computes to a non-empty string
 CanStache.registerHelper('firstnonempty', function () {
-  let args = can.makeArray(arguments).slice(0, arguments.length - 1); // ignore the last argument (some Can object)
+  let args = MakeArray(arguments).slice(0, arguments.length - 1); // ignore the last argument (some Can object)
   for (let i = 0; i < args.length; i++) {
     let v = resolveComputed(args[i]);
     if (v !== null && v !== undefined && !!v.toString()

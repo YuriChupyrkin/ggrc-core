@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanMap from 'can-map';
 import Component from '../object-bulk-update';
 import * as stateUtils from '../../../plugins/utils/state-utils';
@@ -44,7 +45,7 @@ describe('object-bulk-update component', function () {
     });
 
     it('returns correct target states', function () {
-      let actual = can.makeArray(result.targetStates);
+      let actual = MakeArray(result.targetStates);
       expect(actual).toEqual(targetStates);
     });
 
