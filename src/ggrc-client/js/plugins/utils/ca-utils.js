@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanCompute from 'can-compute';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 let customAttributesType = {
@@ -306,7 +307,7 @@ function convertToEditableField(attr) {
     validation: attr.validation.attr(),
     validationConfig: attr.validationConfig,
     errorsMap: attr.errorsMap.attr(),
-    valueId: can.compute(function () {
+    valueId: CanCompute(function () {
       return attr.attr('id');
     }),
   };
