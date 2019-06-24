@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanCompute from 'can-compute';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -706,7 +707,7 @@ const LhnSearchControl = CanControl.extend({
         filter_params: self.options.filter_params,
         list: self.options.visible_lists[modelName],
         counts: self.options.counts,
-        count: can.compute(function () {
+        count: CanCompute(function () {
           return self.options.results_lists[modelName].attr('length');
         }),
       };

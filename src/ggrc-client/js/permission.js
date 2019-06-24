@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanCompute from 'can-compute';
 import CanConstruct from 'can-construct';
 import {getPageInstance} from './plugins/utils/current-page-utils';
 import Stub from '../js/models/stub';
@@ -53,7 +54,7 @@ let _CONDITIONS_MAP = {
     return !(instance.attr(args.property_name) === args.prevent_if);
   },
 };
-let permissionsCompute = can.compute(GGRC.permissions);
+let permissionsCompute = CanCompute(GGRC.permissions);
 
 const Permission = CanConstruct.extend({
   _admin_permission_for_context: function (contextId) {
