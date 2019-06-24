@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';// Disabling some minor eslint rules until major refactoring
 /* eslint-disable no-console, id-length */
 
@@ -259,7 +260,7 @@ export default can.Model.extend({
       return new this.List();
     }
     ms = this._super(params);
-    if (params instanceof CanMap || params instanceof can.List) {
+    if (params instanceof CanMap || params instanceof CanList) {
       params.replace(ms);
       return params;
     }

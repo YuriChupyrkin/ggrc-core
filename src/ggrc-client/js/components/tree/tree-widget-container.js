@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import './tree-header-selector';
@@ -476,11 +477,11 @@ viewModel = CanMap.extend({
   advancedSearch: {
     open: false,
     filter: null,
-    request: can.List(),
-    filterItems: can.List(),
-    appliedFilterItems: can.List(),
-    mappingItems: can.List(),
-    appliedMappingItems: can.List(),
+    request: CanList(),
+    filterItems: CanList(),
+    appliedFilterItems: CanList(),
+    mappingItems: CanList(),
+    appliedMappingItems: CanList(),
   },
   openAdvancedFilter: function () {
     this.attr('advancedSearch.filterItems',
@@ -494,7 +495,7 @@ viewModel = CanMap.extend({
   applyAdvancedFilters: function () {
     let filters = this.attr('advancedSearch.filterItems').attr();
     let mappings = this.attr('advancedSearch.mappingItems').attr();
-    let request = can.List();
+    let request = CanList();
     let advancedFilters;
 
     this.attr('advancedSearch.appliedFilterItems', filters);
@@ -512,16 +513,16 @@ viewModel = CanMap.extend({
     this.onFilter();
   },
   removeAdvancedFilters: function () {
-    this.attr('advancedSearch.appliedFilterItems', can.List());
-    this.attr('advancedSearch.appliedMappingItems', can.List());
-    this.attr('advancedSearch.request', can.List());
+    this.attr('advancedSearch.appliedFilterItems', CanList());
+    this.attr('advancedSearch.appliedMappingItems', CanList());
+    this.attr('advancedSearch.request', CanList());
     this.attr('advancedSearch.filter', null);
     this.attr('advancedSearch.open', false);
     this.onFilter();
   },
   resetAdvancedFilters: function () {
-    this.attr('advancedSearch.filterItems', can.List());
-    this.attr('advancedSearch.mappingItems', can.List());
+    this.attr('advancedSearch.filterItems', CanList());
+    this.attr('advancedSearch.mappingItems', CanList());
   },
   closeInfoPane: function () {
     $('.pin-content')

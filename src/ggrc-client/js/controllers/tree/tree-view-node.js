@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
 import TreeViewControl from './tree-view';
@@ -118,7 +119,7 @@ export default CanControl.extend({
     if (this.options.attr('_added_child_list')) {
       return;
     }
-    this.options.attr('child_options', new can.List());
+    this.options.attr('child_options', new CanList());
 
     if (originalChildList.length === null) {
       originalChildList = [originalChildList];

@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
 import Role from '../models/service-models/role';
@@ -31,8 +32,8 @@ const userRolesModalSelector = CanControl.extend({
   },
 }, {
   init() {
-    this.rolesList = new can.List();
-    this.userRolesList = new can.List();
+    this.rolesList = new CanList();
+    this.userRolesList = new CanList();
 
     this.initContext();
     this.initView();

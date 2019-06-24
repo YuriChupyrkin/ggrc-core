@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 /**
  * Advanced Search Container view model.
@@ -12,9 +13,9 @@ import CanMap from 'can-map';
 export default CanMap.extend({
   /**
    * Contains Advanced Search Items.
-   * @type {can.List}
+   * @type {CanList}
    */
-  items: can.List(),
+  items: CanList(),
   /**
    * Removes Filter Operator and Advanced Search mapping item from the collection.
    * @param {CanMap} item - Advanced Search mapping item.
