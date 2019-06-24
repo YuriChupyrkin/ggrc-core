@@ -3,6 +3,7 @@
  * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -200,7 +201,7 @@ export default CanComponent.extend({
       });
       // waiting for all docs promises
       return $.when(...dfdDocs).then(() => {
-        return can.makeArray(arguments);
+        return MakeArray(arguments);
       }, (xhr) => {
         notifierXHR('error', xhr);
       });

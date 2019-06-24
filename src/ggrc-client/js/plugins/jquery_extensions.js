@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanMap from 'can-map';
 const originalViewModel = $.fn.viewModel;
 
@@ -37,7 +38,7 @@ $.fn.extend({
   * either by their type or pluginName.
   */
   controls: function () {
-    let controllerNames = can.makeArray(arguments);
+    let controllerNames = MakeArray(arguments);
     let instances = [];
     let controls;
     // check if arguments

@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import RefreshQueue from '../../models/refresh_queue';
@@ -24,7 +25,7 @@ const viewModel = CanMap.extend({
   },
   getItems: function () {
     let source = this.attr('source');
-    let sourceList = can.isArray(source) ? source : can.makeArray(source);
+    let sourceList = can.isArray(source) ? source : MakeArray(source);
     let deferred = $.Deferred();
     let readyItemsList;
 

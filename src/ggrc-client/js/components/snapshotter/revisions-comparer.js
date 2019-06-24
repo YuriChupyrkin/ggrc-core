@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanBatch from 'can-event/batch/batch';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
@@ -123,7 +124,7 @@ export default CanComponent.extend({
       } else if (cached.length === 1) {
         result = $.when(cached[0], Revision.findOne({id: notCached[0]}))
           .then(function () {
-            return can.makeArray(arguments);
+            return MakeArray(arguments);
           });
       } else {
         result = Revision.findAll({
