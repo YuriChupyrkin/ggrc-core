@@ -3,13 +3,14 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+// Disabling some minor eslint rules until major refactoring
+/* eslint-disable no-console, id-length */
+
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanBatch from 'can-event/batch/batch';
 import CanModel from 'can-model';
 import CanList from 'can-list';
-import CanMap from 'can-map';// Disabling some minor eslint rules until major refactoring
-/* eslint-disable no-console, id-length */
-
+import CanMap from 'can-map';
 import CustomAttributeAccess from '../plugins/utils/custom-attribute/custom-attribute-access';
 import {
   isSnapshot,
