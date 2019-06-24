@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanModel from 'can-model';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -1035,7 +1036,7 @@ export default CanControl.extend({
       ev.preventDefault();
       return false;
     }
-    if (instance instanceof can.Model &&
+    if (instance instanceof CanModel &&
       // Ensure that this modal was hidden and not a child modal
       this.element && ev.target === this.element[0] &&
       !this.options.skip_refresh && !instance.isNew()) {

@@ -3,11 +3,12 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanModel from 'can-model';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 let Stub = CanMap.extend({
   setup(model) {
-    let type = (model instanceof can.Model)
+    let type = (model instanceof CanModel)
       ? model.constructor.model_singular
       : model.type;
     let href = model.selfLink || model.href;

@@ -3,12 +3,13 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanModel from 'can-model';
 import Stub from '../stub';
 
 describe('Stub model', () => {
   let TestModel;
   beforeAll(() => {
-    TestModel = can.Model.extend({model_singular: 'testModel'}, {});
+    TestModel = CanModel.extend({model_singular: 'testModel'}, {});
   });
 
   it('Creates correct stub for single model', () => {
