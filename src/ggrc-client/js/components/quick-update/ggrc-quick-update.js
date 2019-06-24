@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanComponent from 'can-component';
 import Stub from '../../models/stub';
 
 /*
@@ -15,7 +16,7 @@ import Stub from '../../models/stub';
   Field updates trigger updates to the model automatically, even on the server.  This differs
   from the quick-add component above, in that it is not waiting for a submit trigger.
 */
-export default can.Component.extend({
+export default CanComponent.extend({
   tag: 'ggrc-quick-update',
   leakScope: true,
   viewModel: can.Map.extend({
