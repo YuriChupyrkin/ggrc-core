@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {ggrcAjax} from './plugins/ajax_extensions';
 import CanCompute from 'can-compute';
 import CanConstruct from 'can-construct';
 import {getPageInstance} from './plugins/utils/current-page-utils';
@@ -215,7 +216,7 @@ const Permission = CanConstruct.extend({
   },
 
   refresh: function () {
-    return $.ajax({
+    return ggrcAjax({
       url: '/permissions',
       type: 'get',
       dataType: 'json',
