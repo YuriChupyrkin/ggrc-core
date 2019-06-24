@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import '../controls-toolbar/assessment-controls-toolbar';
@@ -122,7 +123,7 @@ export default CanComponent.extend({
         value: false,
       },
       mappedSnapshots: {
-        Value: can.List,
+        Value: CanList,
       },
       assessmentTypeNameSingular: {
         get: function () {
@@ -157,13 +158,13 @@ export default CanComponent.extend({
         },
       },
       comments: {
-        Value: can.List,
+        Value: CanList,
       },
       urls: {
-        Value: can.List,
+        Value: CanList,
       },
       files: {
-        Value: can.List,
+        Value: CanList,
       },
       editMode: {
         type: 'boolean',

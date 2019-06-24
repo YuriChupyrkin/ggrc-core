@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanList from 'can-list';
 import component from './people-autocomplete-wrapper';
 import {getComponentVM} from '../../../../js_specs/spec_helpers';
 
@@ -160,7 +161,7 @@ describe('people-autocomplete-wrapper component', () => {
           let data;
 
           beforeEach(() => {
-            data = new can.List([1, 2, 3]);
+            data = new CanList([1, 2, 3]);
           });
 
           it('assigns passed data to "result" attribute', () => {

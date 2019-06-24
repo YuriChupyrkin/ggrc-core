@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import '../dropdown/dropdown-component';
@@ -35,10 +36,10 @@ export default CanComponent.extend({
         },
       },
       repeatOptions: {
-        Value: can.List,
+        Value: CanList,
       },
       unitOptions: {
-        Value: can.List,
+        Value: CanList,
       },
       canSave: {
         type: 'boolean',

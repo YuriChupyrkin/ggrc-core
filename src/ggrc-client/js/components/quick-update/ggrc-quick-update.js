@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import Stub from '../../models/stub';
@@ -68,7 +69,7 @@ export default CanComponent.extend({
       let isDropdown = el.is('select');
       if (isCheckbox) {
         if (!this.viewModel.instance[el.attr('name')]) {
-          this.viewModel.instance.attr(el.attr('name'), new can.List());
+          this.viewModel.instance.attr(el.attr('name'), new CanList());
         }
         this.viewModel.instance
           .attr(el.attr('name'))

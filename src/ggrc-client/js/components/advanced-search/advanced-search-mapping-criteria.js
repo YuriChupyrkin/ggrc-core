@@ -101,7 +101,7 @@ let viewModel = CanMap.extend({
   isClone: false,
   /**
    * Returns a list of available attributes for specific model.
-   * @return {can.List} - List of available attributes.
+   * @return {CanList} - List of available attributes.
    */
   availableAttributes: function () {
     return getAvailableAttributes(this.attr('criteria.objectName'));
