@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanModel from 'can-model';
 import CanConstruct from 'can-construct';
 import {reify} from '../plugins/utils/reify-utils';
 import allModels from './all-models';
@@ -87,7 +88,7 @@ const RefreshQueueManager = CanConstruct.extend({}, {
     let id = obj.id;
 
     if (!obj.selfLink) {
-      if (obj instanceof can.Model) {
+      if (obj instanceof CanModel) {
         modelName = obj.constructor.model_singular;
       } else if (obj.type) {
         // FIXME: obj.kind is to catch invalid stubs coming from Directives

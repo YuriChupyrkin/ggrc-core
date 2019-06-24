@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanModel from 'can-model';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -23,7 +24,7 @@ export default CanComponent.extend({
     define: {
       instance: {
         set(instance) {
-          if (!(instance instanceof can.Model) && isSnapshotType(instance)) {
+          if (!(instance instanceof CanModel) && isSnapshotType(instance)) {
             instance = new Snapshot(instance);
           }
           return instance;
