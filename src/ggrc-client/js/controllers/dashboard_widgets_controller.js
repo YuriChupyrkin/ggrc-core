@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanControl from 'can-control';
 import {getPageModel} from '../plugins/utils/current-page-utils';
 
@@ -51,7 +52,7 @@ export default CanControl.extend({
       url: this.options.widget_view,
       dataType: 'text',
     })).then((ctx, view) => {
-      let frag = can.stache(view[0])(ctx);
+      let frag = CanStache(view[0])(ctx);
       this.draw_widget(frag);
     });
 

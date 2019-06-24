@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import '../three-dots-menu/three-dots-menu';
@@ -54,7 +55,7 @@ let viewModel = CanMap.extend({
 
 export default CanComponent.extend({
   tag: 'people-list-info',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel,
   events: {

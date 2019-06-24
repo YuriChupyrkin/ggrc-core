@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
 import DashboardWidgets from './dashboard_widgets_controller';
@@ -82,7 +83,7 @@ const DashboardControl = CanControl.extend({
         url: this.options.header_view,
         dataType: 'text',
       }).then((view) => {
-        let frag = can.stache(view)();
+        let frag = CanStache(view)();
         $pageHeader.html(frag);
       });
     }
@@ -103,7 +104,7 @@ const DashboardControl = CanControl.extend({
         dataType: 'text',
         async: false,
       }).then((view) => {
-        let render = can.stache(view);
+        let render = CanStache(view);
         $innernav.html(render(options));
       });
       return;

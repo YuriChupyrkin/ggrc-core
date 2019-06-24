@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -15,7 +16,7 @@ import './label-autocomplete-wrapper';
 
 export default CanComponent.extend({
   tag: 'multi-select-label',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel: CanMap.extend({
     define: {

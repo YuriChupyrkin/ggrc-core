@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanComponent from 'can-component';
 import './advanced-search-mapping-group';
 import './advanced-search-mapping-criteria';
@@ -68,7 +69,7 @@ let viewModel = AdvancedSearchContainer.extend({
  */
 export default CanComponent.extend({
   tag: 'advanced-search-mapping-container',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel: viewModel,
 });

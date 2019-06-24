@@ -3,12 +3,13 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
-describe('can.stache.helper.date', () => {
+import CanStache from 'can-stache';
+describe('CanStache.helper.date', () => {
   let helper;
   let testDate;
 
   beforeAll(() => {
-    helper = can.stache.getHelper('date').fn;
+    helper = CanStache.getHelper('date').fn;
   });
 
   it('returns date only when boolean true is passed in', () => {

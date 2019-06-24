@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -24,7 +25,7 @@ const HIGHLIGHT_CLASS = 'diff-highlighted';
 
 export default CanComponent.extend({
   tag: 'revisions-comparer',
-  view: can.stache('<content/>'),
+  view: CanStache('<content/>'),
   leakScope: true,
   viewModel: CanMap.extend({
     instance: null,
@@ -81,7 +82,7 @@ export default CanComponent.extend({
               $.ajax({
                 url: view, dataType: 'text',
               }).then((view) => {
-                let render = can.stache(view);
+                let render = CanStache(view);
                 let fragLeft = render(revisions[0]);
                 let fragRight = render(revisions[1]);
 

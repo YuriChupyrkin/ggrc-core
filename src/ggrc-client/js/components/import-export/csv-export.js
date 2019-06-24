@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import './relevant-filter';
@@ -36,7 +37,7 @@ import QueryParser from '../../generated/ggrc_filter_query_parser';
 
 export default CanComponent.extend({
   tag: 'csv-export',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel: CanMap.extend({
     define: {
