@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanMap from 'can-map';
 import CanControl from 'can-control';
 import '../components/comment/comments-section';
 import '../components/related-objects/proposals/related-proposals';
@@ -33,7 +34,7 @@ export default CanControl.extend({
     if (this.options.instance.info_pane_preload) {
       this.options.instance.info_pane_preload();
     }
-    this.options.context = new can.Map({
+    this.options.context = new CanMap({
       model: this.options.model,
       instance: this.options.instance,
       start_menu: this.options.start_menu,
