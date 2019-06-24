@@ -6,9 +6,10 @@
 import CanModel from 'can-model';
 import CanList from 'can-list';
 import CanControl from 'can-control';
+import CanValidate from 'can-validate-legacy/can-validate';
 const originalControlSetup = CanControl.setup;
 const originListReplace = CanList.prototype.replace;
-const defaultValidator = can.validate.validator();
+const defaultValidator = CanValidate.validator();
 const originalOnce = defaultValidator.once;
 
 // Set "attributes" field
