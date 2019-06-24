@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import TreeLoader from './tree-loader';
@@ -70,7 +71,7 @@ export default TreeLoader.extend({
         url: this.options.header_view,
         dataType: 'text',
       })).then((ctx, view) => {
-        let frag = can.stache(view[0])(ctx);
+        let frag = CanStache(view[0])(ctx);
         if (this.element) {
           this.element.prepend(frag);
         }
@@ -175,7 +176,7 @@ export default TreeLoader.extend({
       url: this.options.list_view,
       dataType: 'text',
     }).then((view) => {
-      let frag = can.stache(view)(this.context);
+      let frag = CanStache(view)(this.context);
       this.element.find('.spinner, .tree-structure').hide();
       this.element.append(frag).trigger('loaded');
       this.options.state.attr('loading', false);

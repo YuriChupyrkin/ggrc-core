@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import template from './templates/three-dots-menu.stache';
@@ -41,7 +42,7 @@ const events = {
 
 export default CanComponent.extend({
   tag: 'three-dots-menu',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel,
   events,

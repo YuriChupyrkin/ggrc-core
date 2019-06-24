@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import template from './bulk-update-target-state.stache';
@@ -22,7 +23,7 @@ let objectStateToWarningMap = {
 
 export default CanComponent.extend({
   tag: 'bulk-update-target-state',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel: CanMap.extend({
     define: {
