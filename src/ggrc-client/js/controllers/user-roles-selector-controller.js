@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -93,7 +94,7 @@ const userRolesModalSelector = CanControl.extend({
     return Role.findAll(
       params,
       (options) => {
-        options = can.makeArray(_.sortBy(options, 'role_order'));
+        options = MakeArray(_.sortBy(options, 'role_order'));
         const description =
           'This role allows a user access to the MyWork dashboard and ' +
           'applications Help files.';

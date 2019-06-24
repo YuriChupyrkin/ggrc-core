@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -54,7 +55,7 @@ export default CanComponent.extend({
     },
     optionHidden: function (option) {
       let type = option.model_singular;
-      return can.makeArray(this.attr('relevantTo'))
+      return MakeArray(this.attr('relevantTo'))
         .some(function (item) {
           return item.readOnly && item.type === type;
         });

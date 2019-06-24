@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import MakeArray from 'can-util/js/make-array/make-array';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import * as TreeViewUtils from '../../../plugins/utils/tree-view-utils';
@@ -161,7 +162,7 @@ describe('mapper-results component', function () {
       viewModel.attr('object', 'Program');
       viewModel.attr('type', 'Control');
       viewModel.setColumnsConfiguration();
-      expect(can.makeArray(viewModel.attr('columns.service'))).toEqual([]);
+      expect(MakeArray(viewModel.attr('columns.service'))).toEqual([]);
     });
   });
 
@@ -704,7 +705,7 @@ describe('mapper-results component', function () {
         id: 123,
       });
       viewModel.disableItself(isMegaMapping, allItems);
-      expect(can.makeArray(viewModel.attr('disabledIds'))).toEqual([123]);
+      expect(MakeArray(viewModel.attr('disabledIds'))).toEqual([123]);
     });
 
     it('assigns true to "isDisabled" for allItems ' +
