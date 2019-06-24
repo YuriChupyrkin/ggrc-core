@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import './advanced-search-filter-attribute';
@@ -24,11 +25,11 @@ let viewModel = AdvancedSearchContainer.extend({
     /**
      * Contains Filter Attributes, Groups and Operators.
      * Initializes Items with State Attribute by default.
-     * @type {can.List}
+     * @type {CanList}
      */
     items: {
       type: '*',
-      Value: can.List,
+      Value: CanList,
       get: function (items) {
         if (this.attr('defaultStatusFilter') && items && !items.length &&
           StateUtils.hasFilter(this.attr('modelName'))) {
@@ -67,9 +68,9 @@ let viewModel = AdvancedSearchContainer.extend({
   modelName: null,
   /**
    * Contains available attributes for specific model.
-   * @type {can.List}
+   * @type {CanList}
    */
-  availableAttributes: can.List(),
+  availableAttributes: CanList(),
   /**
    * Adds Filter Operator and Filter Attribute to the collection.
    */

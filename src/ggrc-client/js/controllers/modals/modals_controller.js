@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
 import '../../components/issue-tracker/modal-issue-tracker-fields';
@@ -566,7 +567,7 @@ export default CanControl.extend({
 
     if (name.length > 1) {
       if (can.isArray(value)) {
-        value = new can.List(_.filteredMap(value,
+        value = new CanList(_.filteredMap(value,
           (v) => new CanMap({}).attr(name.slice(1).join('.'), v)));
       } else if ($elem.is('[data-lookup]')) {
         if (!value) {

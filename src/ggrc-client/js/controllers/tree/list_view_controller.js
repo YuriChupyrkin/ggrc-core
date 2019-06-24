@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import TreeLoader from './tree-loader';
 import {getCounts} from '../../plugins/utils/widgets-utils';
@@ -15,7 +16,7 @@ function modelListLoader(controller, params) {
     let collectionName = model.root_collection + '_collection';
     let collection = results[collectionName] || [];
 
-    page.resolve(new can.List(collection), results.paging);
+    page.resolve(new CanList(collection), results.paging);
   });
   return page;
 }
@@ -151,7 +152,7 @@ export default TreeLoader.extend({
 
     if (list) {
       if (!this.options.list) {
-        this.options.list = new can.List();
+        this.options.list = new CanList();
         list.on('add', function (list, item, index) {
           that.enqueue_items(item);
         }).on('remove', function (list, item, index) {

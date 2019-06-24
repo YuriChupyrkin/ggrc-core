@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanList from 'can-list';
 import CanMap from 'can-map';
 import {makeFakeInstance} from '../../../../js_specs/spec_helpers';
 import * as TreeViewUtils from '../../../plugins/utils/tree-view-utils';
@@ -113,7 +114,7 @@ describe('tree-widget-container component', function () {
         }],
       },
       filter = new CanMap({testFilter: true});
-      request = new can.List([{testRequest: true}]);
+      request = new CanList([{testRequest: true}]);
 
       vm.attr('model', {
         model_singular: modelName,
@@ -337,18 +338,18 @@ describe('tree-widget-container component', function () {
 
   describe('openAdvancedFilter() method', function () {
     it('copies applied filter and mapping items', function () {
-      let appliedFilterItems = new can.List([
+      let appliedFilterItems = new CanList([
         AdvancedSearch.create.attribute(),
       ]);
-      let appliedMappingItems = new can.List([
+      let appliedMappingItems = new CanList([
         AdvancedSearch.create.mappingCriteria({
           filter: AdvancedSearch.create.attribute(),
         }),
       ]);
       vm.attr('advancedSearch.appliedFilterItems', appliedFilterItems);
       vm.attr('advancedSearch.appliedMappingItems', appliedMappingItems);
-      vm.attr('advancedSearch.filterItems', can.List());
-      vm.attr('advancedSearch.mappingItems', can.List());
+      vm.attr('advancedSearch.filterItems', CanList());
+      vm.attr('advancedSearch.mappingItems', CanList());
 
       vm.openAdvancedFilter();
 
@@ -368,10 +369,10 @@ describe('tree-widget-container component', function () {
   });
 
   describe('applyAdvancedFilters() method', function () {
-    let filterItems = new can.List([
+    let filterItems = new CanList([
       AdvancedSearch.create.attribute(),
     ]);
-    let mappingItems = new can.List([
+    let mappingItems = new CanList([
       AdvancedSearch.create.mappingCriteria({
         filter: AdvancedSearch.create.attribute(),
       }),
@@ -379,8 +380,8 @@ describe('tree-widget-container component', function () {
     beforeEach(function () {
       vm.attr('advancedSearch.filterItems', filterItems);
       vm.attr('advancedSearch.mappingItems', mappingItems);
-      vm.attr('advancedSearch.appliedFilterItems', can.List());
-      vm.attr('advancedSearch.appliedMappingItems', can.List());
+      vm.attr('advancedSearch.appliedFilterItems', CanList());
+      vm.attr('advancedSearch.appliedMappingItems', CanList());
       spyOn(vm, 'onFilter');
       spyOn(AdvancedSearch, 'buildFilter')
         .and.callFake(function (items, request) {
@@ -410,7 +411,7 @@ describe('tree-widget-container component', function () {
     });
 
     it('initializes advancedSearch.request property', function () {
-      vm.attr('advancedSearch.request', can.List());
+      vm.attr('advancedSearch.request', CanList());
 
 
       vm.applyAdvancedFilters();
@@ -439,10 +440,10 @@ describe('tree-widget-container component', function () {
     });
 
     it('removes applied filter and mapping items', function () {
-      vm.attr('advancedSearch.appliedFilterItems', new can.List([
+      vm.attr('advancedSearch.appliedFilterItems', new CanList([
         {title: 'item'},
       ]));
-      vm.attr('advancedSearch.appliedMappingItems', new can.List([
+      vm.attr('advancedSearch.appliedMappingItems', new CanList([
         {title: 'item'},
       ]));
 
@@ -475,7 +476,7 @@ describe('tree-widget-container component', function () {
     });
 
     it('resets advancedSearch.request list', function () {
-      vm.attr('advancedSearch.request', new can.List([{data: 'test'}]));
+      vm.attr('advancedSearch.request', new CanList([{data: 'test'}]));
 
       vm.removeAdvancedFilters();
 
@@ -485,7 +486,7 @@ describe('tree-widget-container component', function () {
 
   describe('resetAdvancedFilters() method', function () {
     it('resets filter items', function () {
-      vm.attr('advancedSearch.filterItems', new can.List([
+      vm.attr('advancedSearch.filterItems', new CanList([
         {title: 'item'},
       ]));
 
@@ -495,7 +496,7 @@ describe('tree-widget-container component', function () {
     });
 
     it('resets mapping items', function () {
-      vm.attr('advancedSearch.mappingItems', new can.List([
+      vm.attr('advancedSearch.mappingItems', new CanList([
         {title: 'item'},
       ]));
 
@@ -796,7 +797,7 @@ describe('tree-widget-container component', function () {
       modelName = 'testModelName';
       parent = new CanMap({testParent: true});
       filter = new CanMap({testFilter: true});
-      request = new can.List([{testRequest: true}]);
+      request = new CanList([{testRequest: true}]);
 
       vm.attr('model', {
         model_singular: modelName,

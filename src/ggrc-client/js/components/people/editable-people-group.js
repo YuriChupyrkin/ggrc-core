@@ -50,7 +50,7 @@ let viewModel = peopleGroupVM.extend({
     },
     /**
      * Contains people list which is displayed when editableMode is off
-     * @type {can.List}
+     * @type {CanList}
      */
     showPeople: {
       get: function () {
