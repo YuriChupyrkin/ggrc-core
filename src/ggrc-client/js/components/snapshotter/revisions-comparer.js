@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanBatch from 'can-event/batch/batch';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -163,7 +164,7 @@ export default CanComponent.extend({
         if (index === 1) {
           const instWithProposedValues = new CanMap(content);
           // new model method overrides modified fields
-          can.batch.start();
+          CanBatch.start();
           CanMap.keys(proposalContent).forEach((key) => {
             if (Array.isArray(proposalContent[key])) {
               instWithProposedValues.attr(key).replace(proposalContent[key]);
@@ -171,7 +172,7 @@ export default CanComponent.extend({
               instWithProposedValues.attr(key, proposalContent[key]);
             }
           });
-          can.batch.stop();
+          CanBatch.stop();
           content = instWithProposedValues.attr();
         }
 
