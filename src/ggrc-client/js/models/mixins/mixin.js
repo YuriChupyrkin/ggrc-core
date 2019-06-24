@@ -3,7 +3,9 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
-const Mixin = can.Construct.extend({
+import CanConstruct from 'can-construct';
+
+const Mixin = CanConstruct.extend({
   newInstance: function () {
     throw new Error('Mixins cannot be directly instantiated');
   },
