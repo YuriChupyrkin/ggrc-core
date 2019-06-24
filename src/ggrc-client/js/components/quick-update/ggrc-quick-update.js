@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import Stub from '../../models/stub';
 
@@ -19,7 +20,7 @@ import Stub from '../../models/stub';
 export default CanComponent.extend({
   tag: 'ggrc-quick-update',
   leakScope: true,
-  viewModel: can.Map.extend({
+  viewModel: CanMap.extend({
     instance: null,
     model: null,
     attributes: {},
