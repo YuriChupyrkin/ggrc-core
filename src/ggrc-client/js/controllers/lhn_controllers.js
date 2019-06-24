@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanControl from 'can-control';
@@ -381,7 +382,7 @@ const LhnSearchControl = CanControl.extend({
     //  We also listen for this value in the controller
     //  to trigger the search.
     let view = GGRC.Templates[this.element.data('template')];
-    let frag = can.stache(view)(lhnPrefs);
+    let frag = CanStache(view)(lhnPrefs);
     this.element.html(frag);
 
     let initialParams = {};
@@ -712,7 +713,7 @@ const LhnSearchControl = CanControl.extend({
 
       let listView = GGRC.Templates[
         $list.data('template') || self.options.list_view];
-      let listItem = can.stache(listView)(context);
+      let listItem = CanStache(listView)(context);
       $list.find(self.options.list_content_selector).html(listItem);
 
       // If this category we're rendering is the one that is open, wait for the
@@ -728,7 +729,7 @@ const LhnSearchControl = CanControl.extend({
 
       let actionView = GGRC.Templates[
         $list.data('actions') || self.options.actions_view];
-      let actions = can.stache(actionView)(context);
+      let actions = CanStache(actionView)(context);
       $list.find(self.options.actions_content_selector).html(actions);
     });
   },

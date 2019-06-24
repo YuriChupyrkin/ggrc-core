@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import Pagination from '../../base-objects/pagination';
@@ -12,7 +13,7 @@ import Revision from '../../../models/service-models/revision.js';
 
 export default CanComponent.extend({
   tag: 'related-revisions',
-  view: can.stache(template),
+  view: CanStache(template),
   leakScope: true,
   viewModel: CanMap.extend({
     define: {

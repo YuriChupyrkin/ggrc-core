@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import CanStache from 'can-stache';
 import CanControl from 'can-control';
 export default CanControl.extend({
   defaults: {},
@@ -22,7 +23,7 @@ export default CanControl.extend({
 
       let view = '<spinner-component extraCssClass:from="\'tree-items\'"' +
       ' toggle:from="showMe" size:from="\'large\'"></spinner-component>';
-      let renderer = can.stache(view);
+      let renderer = CanStache(view);
       let spinner = renderer({showMe: true});
 
       // Admin dashboard

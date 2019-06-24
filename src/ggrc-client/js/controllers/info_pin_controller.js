@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanControl from 'can-control';
 import '../components/info-pin-buttons/info-pin-buttons';
 import '../components/questions-link/questions-link';
@@ -90,7 +91,7 @@ export default CanControl.extend({
           url: view,
           dataType: 'text',
         }).then((view) => {
-          let frag = can.stache(view)(context);
+          let frag = CanStache(view)(context);
           this.element.html(frag);
         });
       });
@@ -159,7 +160,7 @@ export default CanControl.extend({
   },
   confirmEdit: function (instance, modalDetails) {
     let confirmDfd = $.Deferred();
-    let renderer = can.stache(modalDetails.description);
+    let renderer = CanStache(modalDetails.description);
     confirm({
       modal_description: renderer(instance).textContent,
       modal_confirm: modalDetails.button,

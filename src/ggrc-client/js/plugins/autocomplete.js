@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import {
   buildRelevantIdsQuery,
@@ -279,7 +280,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
         url: GGRC.templates_path + template,
         dataType: 'text',
       }).then((view) => {
-        let frag = can.stache(view)(context);
+        let frag = CanStache(view)(context);
         $ul.html(frag);
         new LhnTooltipsControl($ul);
         new InfiniteScrollControl($ul);
