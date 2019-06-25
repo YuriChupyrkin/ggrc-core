@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsNull from 'lodash/isNull';
 import loIncludes from 'lodash/includes';
 import loIsEmpty from 'lodash/isEmpty';
 import loForEach from 'lodash/forEach';
@@ -100,7 +101,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
         }
 
         configHandler(resultConfig);
-        if (_.isNull(this.attr('freezedConfigTillSubmit'))) {
+        if (loIsNull(this.attr('freezedConfigTillSubmit'))) {
           this.attr('freezedConfigTillSubmit', resultConfig);
         }
 

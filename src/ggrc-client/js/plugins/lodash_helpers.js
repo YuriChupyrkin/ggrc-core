@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsNull from 'lodash/isNull';
 import loUniq from 'lodash/uniq';
 import loTrim from 'lodash/trim';
 import loIsObject from 'lodash/isObject';
@@ -22,7 +23,7 @@ _.mixin({
       keys = key.split('.');
     }
     return keys.reduce(function (base, memo) {
-      return (loIsUndefined(base) || _.isNull(base)) ? base : base[memo];
+      return (loIsUndefined(base) || loIsNull(base)) ? base : base[memo];
     }, obj);
   },
   /*
@@ -68,6 +69,6 @@ _.mixin({
    */
   filteredMap: function (items, predicate) {
     return loMap(items, predicate)
-      .filter((item) => !_.isNull(item) && !loIsUndefined(item));
+      .filter((item) => !loIsNull(item) && !loIsUndefined(item));
   },
 });

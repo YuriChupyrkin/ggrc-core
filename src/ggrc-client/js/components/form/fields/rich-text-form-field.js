@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsNull from 'lodash/isNull';
 import loTrim from 'lodash/trim';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -22,7 +23,7 @@ export default CanComponent.extend({
     define: {
       value: {
         set(newValue) {
-          if (!_.isNull(newValue) && this.isAllowToSet(newValue)) {
+          if (!loIsNull(newValue) && this.isAllowToSet(newValue)) {
             this.attr('_oldValue', newValue);
             this.attr('_value', newValue);
           }
