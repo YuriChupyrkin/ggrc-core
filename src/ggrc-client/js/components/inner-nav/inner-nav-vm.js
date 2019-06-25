@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loSortBy from 'lodash/sortBy';
 import loMap from 'lodash/map';
 import IsEmptyObject from 'can-util/js/is-empty-object/is-empty-object';
 import CanList from 'can-list';
@@ -65,7 +66,7 @@ export default CanMap.extend({
     let widgets = loMap(descriptors,
       (descriptor) => this.createWidget(descriptor));
 
-    widgets = _.sortBy(widgets, ['order', 'title']);
+    widgets = loSortBy(widgets, ['order', 'title']);
 
     this.attr('widgetList', widgets);
   },

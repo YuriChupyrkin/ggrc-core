@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loSortBy from 'lodash/sortBy';
 import loIsEqual from 'lodash/isEqual';
 import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
@@ -212,7 +213,7 @@ export default CanComponent.extend({
             value = unifyValue(value);
             let isDifferent = false;
             if (_.isObject(origVal) && _.isObject(value)) {
-              isDifferent = !loIsEqual(_.sortBy(origVal), _.sortBy(value));
+              isDifferent = !loIsEqual(loSortBy(origVal), loSortBy(value));
             } else {
               isDifferent = origVal !== value;
             }
@@ -370,7 +371,7 @@ export default CanComponent.extend({
       let chains = _.chain(revisions)
         .groupBy('resource_id')
         .mapValues(function (chain) {
-          return _.sortBy(chain, 'updated_at');
+          return loSortBy(chain, 'updated_at');
         }).value();
       return loMap(revisions, function (revision) {
         return this._mappingChange(revision, chains[revision.resource_id]);
