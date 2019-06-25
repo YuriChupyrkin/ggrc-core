@@ -3,11 +3,12 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsObject from 'lodash/isObject';
 import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 const getAttrErrors = (attrErrors, propertyName) => {
   return loFilter(attrErrors, (fieldError) =>
-    _.isObject(fieldError) && fieldError[propertyName]);
+    loIsObject(fieldError) && fieldError[propertyName]);
 };
 
 const isComplexAttr = (attribute) => {

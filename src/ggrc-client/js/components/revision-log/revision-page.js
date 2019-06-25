@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsObject from 'lodash/isObject';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
@@ -178,7 +179,7 @@ export default CanComponent.extend({
         let unifyValue = function (value) {
           value = value || EMPTY_DIFF_VALUE;
           value = value.length ? value : EMPTY_DIFF_VALUE;
-          if (_.isObject(value)) {
+          if (loIsObject(value)) {
             value = value.map(function (item) {
               return item.display_name;
             });
@@ -215,7 +216,7 @@ export default CanComponent.extend({
             origVal = unifyValue(origVal);
             value = unifyValue(value);
             let isDifferent = false;
-            if (_.isObject(origVal) && _.isObject(value)) {
+            if (loIsObject(origVal) && loIsObject(value)) {
               isDifferent = !loIsEqual(loSortBy(origVal), loSortBy(value));
             } else {
               isDifferent = origVal !== value;

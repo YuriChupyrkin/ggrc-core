@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsObject from 'lodash/isObject';
 import loIsUndefined from 'lodash/isUndefined';
 import loMap from 'lodash/map';
 _.mixin({
@@ -40,7 +41,7 @@ _.mixin({
     if (loIsUndefined(splitter)) {
       splitter = ',';
     }
-    if (_.isObject(splitter)) {
+    if (loIsObject(splitter)) {
       options = splitter;
       splitter = ',';
     }

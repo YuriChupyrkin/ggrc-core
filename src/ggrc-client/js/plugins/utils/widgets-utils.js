@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsObject from 'lodash/isObject';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanMap from 'can-map';
 import * as TreeViewUtils from './tree-view-utils';
@@ -230,7 +231,7 @@ function getWidgetConfig(modelName) {
   let objectVersion;
 
   // Workflow approach
-  if (_.isObject(modelName)) {
+  if (loIsObject(modelName)) {
     modelName.widgetName = modelName.name;
     modelName.widgetId = modelName.name;
     return modelName;
