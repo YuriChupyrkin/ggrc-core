@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsFunction from 'lodash/isFunction';
 import loMap from 'lodash/map';
 import CanModel from 'can-model';
 import CanList from 'can-list';
@@ -47,7 +48,7 @@ CanControl.setup = function () {
 };
 
 CanList.prototype.replace = function (items) {
-  if (!items || !items.then || !_.isFunction(items.then)) {
+  if (!items || !items.then || !loIsFunction(items.then)) {
     originListReplace.call(this, items);
     return;
   }

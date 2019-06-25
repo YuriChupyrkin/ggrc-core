@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -158,7 +159,7 @@ export default CanControl.extend({
   add_child_list: function (item, data) {
     let findParams;
 
-    if (_.isFunction(item.instance[data.property])) {
+    if (loIsFunction(item.instance[data.property])) {
       // Special case for handling mappings which are functions until
       // first requested, then set their name via .attr('...')
       findParams = function () {

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import {confirm} from '../plugins/utils/modals';
 import {hasPending as hasPendingUtil} from '../plugins/ggrc_utils';
@@ -365,7 +366,7 @@ $(function () {
           $html.addClass('alert-autohide');
         }
 
-        if ( _.isFunction(flash[type]) ) {
+        if ( loIsFunction(flash[type]) ) {
           $html.append(flash[type](flash.data || {}));
         } else {
           for (messageI in flash[type]) {

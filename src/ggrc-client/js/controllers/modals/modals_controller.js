@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import loFilter from 'lodash/filter';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -358,7 +359,7 @@ export default CanControl.extend({
 
     if (!this.wasDestroyed()) {
       // Do the fields (re-)setting
-      if (_.isFunction(setFieldsCb)) {
+      if (loIsFunction(setFieldsCb)) {
         setFieldsCb();
       }
       // This is to trigger `focus_first_element` in modal_ajax handling

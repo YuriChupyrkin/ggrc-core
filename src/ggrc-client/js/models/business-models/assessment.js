@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsFunction from 'lodash/isFunction';
 import loAssign from 'lodash/assign';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import Cacheable from '../cacheable';
@@ -198,7 +199,7 @@ export default Cacheable.extend({
       oldModel = this.findInCacheById(id);
     }
 
-    let model = oldModel && _.isFunction(oldModel.attr) ?
+    let model = oldModel && loIsFunction(oldModel.attr) ?
       oldModel.attr(attributes) :
       new this(attributes);
 

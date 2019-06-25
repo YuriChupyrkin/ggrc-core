@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import CanConstruct from 'can-construct';
 
@@ -35,7 +36,7 @@ const Mixin = CanConstruct.extend({
           //   Necessary for "attributes"/"serialize"/"convert"
           // Defaults will always be "after" for functions
           //  and "override" for non-function values
-          if (_.isFunction(oldfn)) {
+          if (loIsFunction(oldfn)) {
             switch (aspect) {
               case 'before':
                 obj[key] = function () {

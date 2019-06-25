@@ -3,6 +3,7 @@
  * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsFunction from 'lodash/isFunction';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -59,7 +60,7 @@ export default CanComponent.extend({
     onClickHandler: function (scope, el, event) {
       let eventType = this.attr('click_event');
       let handler = this[eventType] || function () {};
-      let confirmation = _.isFunction(this.confirmationCallback) ?
+      let confirmation = loIsFunction(this.confirmationCallback) ?
         this.confirmationCallback() :
         null;
       let args = arguments;
