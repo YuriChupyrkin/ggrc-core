@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanModel from 'can-model';
 import CanStache from 'can-stache';
@@ -1043,7 +1044,7 @@ export default CanControl.extend({
       !this.options.skip_refresh && !instance.isNew()) {
       if (instance.type === 'AssessmentTemplate') {
         cad = instance.attr('custom_attribute_definitions');
-        cad = _.filter(cad, function (attr) {
+        cad = loFilter(cad, function (attr) {
           return attr.id;
         });
         instance.attr('custom_attribute_definitions', cad);

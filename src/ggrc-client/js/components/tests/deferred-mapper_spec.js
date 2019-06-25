@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFilter from 'lodash/filter';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import Component from '../deferred-mapper';
@@ -296,7 +297,7 @@ describe('deferred-mapper component', function () {
 
     it('calls performMapActions for objects pending mapping', async (done) => {
       const objectsToMap =
-        _.filter(vm.attr('instance._pendingJoins'), ({how}) => how === 'map')
+        loFilter(vm.attr('instance._pendingJoins'), ({how}) => how === 'map')
           .map(({what}) => what);
 
       await vm.deferredUpdate();
@@ -310,7 +311,7 @@ describe('deferred-mapper component', function () {
 
     it('calls performUnmapActions for objects pending mapping',
       async (done) => {
-        const objectsToUnmap = _.filter(vm.attr('instance._pendingJoins'),
+        const objectsToUnmap = loFilter(vm.attr('instance._pendingJoins'),
           ({how}) => how === 'unmap')
           .map(({what}) => what);
 

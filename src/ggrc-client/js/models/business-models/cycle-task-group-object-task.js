@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFilter from 'lodash/filter';
 import moment from 'moment';
 import Cacheable from '../cacheable';
 import CycleTaskGroup from './cycle-task-group';
@@ -39,7 +40,7 @@ function populateFromWorkflow(form, workflow) {
   }
 
   workflow.refresh_all('cycles').then(function (cycleList) {
-    let activeCycleList = _.filter(cycleList, {is_current: true});
+    let activeCycleList = loFilter(cycleList, {is_current: true});
     let activeCycle;
 
     if (!activeCycleList.length) {

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -37,7 +38,7 @@ export default CanComponent.extend({
       notifier('progress', progressMessage);
       return updateService.update(model, args.selected, args.options)
         .then(function (res) {
-          let updated = _.filter(res, {status: 'updated'});
+          let updated = loFilter(res, {status: 'updated'});
           let updatedCount = updated.length;
           let message = this.getResultNotification(model, updatedCount);
 

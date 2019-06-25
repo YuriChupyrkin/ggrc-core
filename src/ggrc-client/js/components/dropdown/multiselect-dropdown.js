@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -61,7 +62,7 @@ export default CanComponent.extend({
         set: function (value, setValue) {
           setValue(value);
 
-          this.attr('selected', _.filter(value,
+          this.attr('selected', loFilter(value,
             (item) => item.checked));
         },
       },
@@ -79,7 +80,7 @@ export default CanComponent.extend({
     updateSelected: function () {
       this.attr('_stateWasUpdated', true);
 
-      this.attr('selected', _.filter(this.attr('options'),
+      this.attr('selected', loFilter(this.attr('options'),
         (item) => item.checked));
 
       this.dispatch({

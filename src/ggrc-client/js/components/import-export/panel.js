@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFilter from 'lodash/filter';
 import CanCompute from 'can-compute';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -44,15 +45,15 @@ export default CanMap.extend({
     let type = this.attr('type');
 
     let definitions = this.getModelAttributeDefenitions(type);
-    let filtered = _.filter(definitions, (def) => {
+    let filtered = loFilter(definitions, (def) => {
       return this.filterModelAttributes(def);
     });
 
-    let attributes = _.filter(filtered, (el) => {
+    let attributes = loFilter(filtered, (el) => {
       return el.type !== 'mapping' && el.type !== 'object_custom';
     });
 
-    let mappings = _.filter(filtered, (el) => {
+    let mappings = loFilter(filtered, (el) => {
       return el.type === 'mapping';
     });
 
@@ -61,7 +62,7 @@ export default CanMap.extend({
 
     let localAttributes = [];
     if (this.attr('useLocalAttribute')) {
-      localAttributes = _.filter(filtered, (el) => {
+      localAttributes = loFilter(filtered, (el) => {
         return el.type === 'object_custom';
       });
     }
