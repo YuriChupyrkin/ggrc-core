@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loKeys from 'lodash/keys';
 import loDifference from 'lodash/difference';
 import CanMap from 'can-map';
 import * as Mappings from '../mappings';
@@ -170,7 +171,7 @@ describe('Mappings', function () {
       it('returns mappable types for ' + type, function () {
         let expectedModels = unmappingRules[type];
         let result = Mappings.getAllowedToUnmapModels(type);
-        let resultModels = _.keys(result);
+        let resultModels = loKeys(result);
 
         expect(expectedModels.sort()).toEqual(resultModels.sort());
       });
