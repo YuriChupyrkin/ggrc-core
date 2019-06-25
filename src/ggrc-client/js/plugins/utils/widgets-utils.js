@@ -3,6 +3,9 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loReduce from 'lodash/reduce';
+import loCompact from 'lodash/compact';
+import loFlow from 'lodash/flow';
 import loIsEmpty from 'lodash/isEmpty';
 import loEach from 'lodash/each';
 import loIsObject from 'lodash/isObject';
@@ -135,12 +138,12 @@ function initWidgetCounts(widgets, type, id) {
   let baseCounts = widgets.reduce((result, val) => ({...result, [val]: 0}), {});
 
   return Promise.all(resultsArray).then((values) => {
-    let combinedValue = _.chain(values)
-      .compact()
-      .reduce((sum, value) => {
+    let combinedValue = loFlow(
+      (values) => loCompact(values),
+      (values) => loReduce(values, (sum, value) => {
         return Object.assign(sum, value);
       }, {})
-      .value();
+    )(values);
 
     combinedValue = Object.assign({}, baseCounts, combinedValue);
 

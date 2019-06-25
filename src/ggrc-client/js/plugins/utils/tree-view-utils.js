@@ -3,6 +3,9 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
+import loSortBy from 'lodash/sortBy';
+import loFlow from 'lodash/flow';
 import loLast from 'lodash/last';
 import loAssign from 'lodash/assign';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -112,16 +115,16 @@ const NO_DEFAULT_SORTING_LIST = Object.freeze([
 allTypes.forEach(function (type) {
   let related = baseWidgets[type].slice(0);
 
-  orderedModelsForSubTier[type] = _.chain(related)
-    .map(function (type) {
+  orderedModelsForSubTier[type] = loFlow(
+    (related) => loMap(related, (type) => {
       return {
         name: type,
         order: defaultOrderTypes[type],
       };
-    })
-    .sortBy(['order', 'name'])
-    .map('name')
-    .value();
+    }),
+    (mappedRelated) => loSortBy(mappedRelated, ['order', 'name']),
+    (sortedRelated) => loMap(sortedRelated, 'name')
+  )(related);
 });
 
 // Define specific rules for Workflow models

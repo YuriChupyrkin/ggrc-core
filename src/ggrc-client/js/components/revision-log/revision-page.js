@@ -3,6 +3,11 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loJoin from 'lodash/join';
+import loCompact from 'lodash/compact';
+import loConcat from 'lodash/concat';
+import loMapValues from 'lodash/mapValues';
+import loGroupBy from 'lodash/groupBy';
 import loReverse from 'lodash/reverse';
 import loFlow from 'lodash/flow';
 import loXor from 'lodash/xor';
@@ -76,13 +81,16 @@ export default CanComponent.extend({
       this._loadACLPeople(revisions.object);
 
       // combine all the changes and sort them by date descending
-      let changeHistory = _([]).concat(
-        MakeArray(this._computeObjectChanges(revisions.object,
-          revisions.revisionsForCompare)),
-        MakeArray(this._computeMappingChanges(revisions.mappings)))
-        .sortBy('updatedAt')
-        .reverse()
-        .value();
+      let changeHistory = loFlow(
+        (items) => loConcat(
+          items,
+          MakeArray(this._computeObjectChanges(
+            revisions.object,
+            revisions.revisionsForCompare)),
+          MakeArray(this._computeMappingChanges(revisions.mappings))),
+        (items) => loSortBy(items, 'updatedAt'),
+        (items) => loReverse(items)
+      )([]);
       this.attr('changeHistory', changeHistory);
     },
     /**
@@ -214,10 +222,20 @@ export default CanComponent.extend({
           }
           if (LIST_FIELDS[fieldName]) {
             if (value) {
-              value = _(value).splitTrim(',').sort().compact().join(', ');
+              value = loFlow(
+                (items) => _.splitTrim(items, ','),
+                (items) => items.sort(),
+                (items) => loCompact(items),
+                (items) => loJoin(items, ', ')
+              )(value);
             }
             if (origVal) {
-              origVal = _(origVal).splitTrim(',').sort().compact().join(', ');
+              origVal = loFlow(
+                (items) => _.splitTrim(items, ','),
+                (items) => items.sort(),
+                (items) => loCompact(items),
+                (items) => loJoin(items, ', ')
+              )(origVal);
             }
           }
           if (origVal || value) {
@@ -349,9 +367,9 @@ export default CanComponent.extend({
       ids = loUniq(loKeys(origValues).concat(loKeys(newValues)));
       defs = loMerge(origDefs, newDefs);
 
-      return _.chain(ids)
-        .filter((id) => !!defs[id])
-        .map((id) => {
+      return loFlow(
+        (ids) => loFilter(ids, (id) => !!defs[id]),
+        (filteredIds) => loMap(filteredIds, (id) => {
           const def = defs[id];
           const diff = {
             fieldName: def.title,
@@ -364,9 +382,9 @@ export default CanComponent.extend({
             return undefined;
           }
           return diff;
-        })
-        .filter()
-        .value();
+        }),
+        (mappedIds) => loFilter(mappedIds),
+      )(ids);
     },
     /**
      * Compute the instance's object mapping-related changes from the list of
@@ -380,14 +398,15 @@ export default CanComponent.extend({
      *   method.
      */
     _computeMappingChanges: function (revisions) {
-      let chains = _.chain(revisions)
-        .groupBy('resource_id')
-        .mapValues(function (chain) {
-          return loSortBy(chain, 'updated_at');
-        }).value();
-      return loMap(revisions, function (revision) {
-        return this._mappingChange(revision, chains[revision.resource_id]);
-      }.bind(this));
+      let groupedRevisions = loFlow(
+        (revisions) => loGroupBy(revisions, 'resource_id'),
+        (groupedRevisions) => loMapValues(groupedRevisions, (revision) => {
+          return loSortBy(revision, 'updated_at');
+        })
+      )(revisions);
+
+      return loMap(revisions, (revision) =>
+        this._mappingChange(revision, groupedRevisions[revision.resource_id]));
     },
     /**
      * A helper function for extracting the mapping change information from a
