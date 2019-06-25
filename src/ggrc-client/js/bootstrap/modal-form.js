@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsString from 'lodash/isString';
 import loSome from 'lodash/some';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
@@ -353,7 +354,7 @@ $(function () {
       }
 
       if (flash[type]) {
-        if (_.isString(flash[type])) {
+        if (loIsString(flash[type])) {
           flash[type] = [flash[type]];
         }
 
@@ -377,7 +378,7 @@ $(function () {
             message = flash[type][messageI];
             // Skip error codes. To force display use String(...) when
             // triggering the flash.
-            if (_.isString(message)) {
+            if (loIsString(message)) {
               addLink = message.indexOf('{reload_link}') > -1;
               message = message.replace('{reload_link}', '');
               $html.append($(textContainer).text(message));

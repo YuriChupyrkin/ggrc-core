@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsString from 'lodash/isString';
 import loIncludes from 'lodash/includes';
 import loTrim from 'lodash/trim';
 import loAssign from 'lodash/assign';
@@ -96,8 +97,8 @@ CanStache.registerHelper('addclass', function (prefix, compute, options = {}) {
   prefix = resolveComputed(prefix);
   let computeVal = resolveComputed(compute);
   let opts = options.hash || {};
-  let separator = _.isString(opts.separator) ? opts.separator : '-';
-  let computeSeparator = _.isString(opts.computeSeparator)
+  let separator = loIsString(opts.separator) ? opts.separator : '-';
+  let computeSeparator = loIsString(opts.computeSeparator)
     ? opts.computeSeparator : '';
   let classSegment = loTrim(computeVal)
     .replace(/[\s\t]+/g, computeSeparator)
