@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loZip from 'lodash/zip';
 import loRange from 'lodash/range';
 import loFind from 'lodash/find';
 import CanStache from 'can-stache';
@@ -65,7 +66,7 @@ export default CanComponent.extend({
         vals = vals.concat(range);
       }
 
-      return _.zip(options, vals).map(function (zip) {
+      return loZip(options, vals).map(function (zip) {
         let attr = new CanMap();
         let val = parseInt(zip[1], 10);
         attr.attr('type', field.attr('attribute_type'));
