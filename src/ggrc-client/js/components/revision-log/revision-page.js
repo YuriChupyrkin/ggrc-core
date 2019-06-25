@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -124,7 +125,7 @@ export default CanComponent.extend({
         let prev = revisions[i - 1] || prevRevision;
         return this._objectChangeDiff(prev, revision);
       }.bind(this));
-      return _.filter(diffList, 'changes.length');
+      return loFilter(diffList, 'changes.length');
     },
     /**
      * A helper function for computing the difference between the two Revisions

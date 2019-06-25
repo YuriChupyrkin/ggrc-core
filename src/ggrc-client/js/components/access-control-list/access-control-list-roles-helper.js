@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -30,7 +31,7 @@ export default CanComponent.extend({
     setAutoPopulatedRoles: function () {
       let instance = this.attr('instance');
       let autoPopulatedRoles =
-        _.filter(getRolesForType(instance.class.model_singular), {
+        loFilter(getRolesForType(instance.class.model_singular), {
           default_to_current_user: true,
         });
 

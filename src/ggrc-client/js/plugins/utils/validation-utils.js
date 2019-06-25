@@ -3,8 +3,9 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 const getAttrErrors = (attrErrors, propertyName) => {
-  return _.filter(attrErrors, (fieldError) =>
+  return loFilter(attrErrors, (fieldError) =>
     _.isObject(fieldError) && fieldError[propertyName]);
 };
 

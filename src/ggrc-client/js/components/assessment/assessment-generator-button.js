@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -156,11 +157,11 @@ export default CanComponent.extend({
       if (!this._results) {
         return;
       }
-      success = _.filter(this._results, function (assessment) {
+      success = loFilter(this._results, function (assessment) {
         return !_.isNull(assessment) &&
           !(assessment.state && assessment.state() === 'rejected');
       }).length;
-      errors = _.filter(this._results, function (assessment) {
+      errors = loFilter(this._results, function (assessment) {
         return assessment.state && assessment.state() === 'rejected';
       }).length;
 

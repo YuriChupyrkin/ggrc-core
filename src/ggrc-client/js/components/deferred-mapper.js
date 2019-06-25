@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFilter from 'lodash/filter';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import {
@@ -126,10 +127,10 @@ export default CanComponent.extend({
       }
 
       const objectsToMap =
-        _.filter(pendingJoins, ({how}) => how === 'map')
+        loFilter(pendingJoins, ({how}) => how === 'map')
           .map(({what}) => what);
       const objectsToUnmap =
-        _.filter(pendingJoins, ({how}) => how === 'unmap')
+        loFilter(pendingJoins, ({how}) => how === 'unmap')
           .map(({what}) => what);
 
       await Promise.all([
