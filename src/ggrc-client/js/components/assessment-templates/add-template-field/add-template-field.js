@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loHead from 'lodash/head';
 import loIndexOf from 'lodash/indexOf';
 import loIncludes from 'lodash/includes';
 import loSome from 'lodash/some';
@@ -108,7 +109,7 @@ export default CanComponent.extend({
     init() {
       let types = this.viewModel.attr('types');
       if (!this.viewModel.attr('selected.type')) {
-        this.viewModel.attr('selected.type', _.head(types).attr('type'));
+        this.viewModel.attr('selected.type', loHead(types).attr('type'));
       }
     },
   },
