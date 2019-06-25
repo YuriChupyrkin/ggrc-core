@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loCapitalize from 'lodash/capitalize';
 import loIsObject from 'lodash/isObject';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
@@ -431,7 +432,7 @@ export default CanComponent.extend({
 
       fieldName = 'Mapping to ' + displayType + ': ' + displayName;
       origVal = EMPTY_DIFF_VALUE;
-      newVal = _.capitalize(revision.action);
+      newVal = loCapitalize(revision.action);
       previous = chain[loFindIndex(chain, revision) - 1];
       if (revision.action !== 'deleted' &&
         _.exists(revision.content, 'attrs.AssigneeType')) {

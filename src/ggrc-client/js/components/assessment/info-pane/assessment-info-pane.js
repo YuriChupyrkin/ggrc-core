@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loCapitalize from 'lodash/capitalize';
 import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanBatch from 'can-event/batch/batch';
@@ -285,7 +286,7 @@ export default CanComponent.extend({
     requestQuery: function (query, type) {
       let dfd = $.Deferred();
       type = type || '';
-      this.attr('isUpdating' + _.capitalize(type), true);
+      this.attr('isUpdating' + loCapitalize(type), true);
 
       batchRequests(query)
         .done(function (response) {
@@ -297,7 +298,7 @@ export default CanComponent.extend({
           dfd.resolve([]);
         })
         .always(function () {
-          this.attr('isUpdating' + _.capitalize(type), false);
+          this.attr('isUpdating' + loCapitalize(type), false);
 
           tracker.stop(this.attr('instance.type'),
             tracker.USER_JOURNEY_KEYS.INFO_PANE,
@@ -319,7 +320,7 @@ export default CanComponent.extend({
     },
     updateItems: function () {
       MakeArray(arguments).forEach(function (type) {
-        this.attr(type).replace(this['load' + _.capitalize(type)]());
+        this.attr(type).replace(this['load' + loCapitalize(type)]());
       }.bind(this));
     },
     removeItems: function (event, type) {
@@ -338,7 +339,7 @@ export default CanComponent.extend({
     },
     addItems: function (event, type) {
       let items = event.items;
-      this.attr('isUpdating' + _.capitalize(type), true);
+      this.attr('isUpdating' + loCapitalize(type), true);
       return this.attr(type).unshift(...MakeArray(items));
     },
     getEvidenceAdditionFilter: function (kind) {
@@ -412,7 +413,7 @@ export default CanComponent.extend({
         })
         .always(function (assessment) {
           assessment.removeAttr('actions');
-          self.attr('isUpdating' + _.capitalize(type), false);
+          self.attr('isUpdating' + loCapitalize(type), false);
 
           // dispatching event on instance to pass to the auto-save-form
           self.attr('instance').dispatch(RELATED_ITEMS_LOADED);
@@ -430,7 +431,7 @@ export default CanComponent.extend({
       };
       let items = self.attr(type);
       let index = items.indexOf(item);
-      this.attr('isUpdating' + _.capitalize(type), true);
+      this.attr('isUpdating' + loCapitalize(type), true);
       items.splice(index, 1);
 
       this.attr('deferredSave').push(function () {
@@ -442,7 +443,7 @@ export default CanComponent.extend({
         })
         .always(function (assessment) {
           assessment.removeAttr('actions');
-          self.attr('isUpdating' + _.capitalize(type), false);
+          self.attr('isUpdating' + loCapitalize(type), false);
 
           self.refreshCounts(['Evidence']);
         });
