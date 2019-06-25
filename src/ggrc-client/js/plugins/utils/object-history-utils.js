@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loRemove from 'lodash/remove';
 import loKeys from 'lodash/keys';
 import loGroupBy from 'lodash/groupBy';
 import loUnion from 'lodash/union';
@@ -43,7 +44,7 @@ const buildRoleACL = (modifiedRoleId, currentRoleACL, modifiedRole) => {
   modifiedRoleACL.push(...shouldBeAdded);
 
   // remove existed people
-  _.remove(modifiedRoleACL, (aclItem) =>
+  loRemove(modifiedRoleACL, (aclItem) =>
     loFindIndex(modifiedRole.deleted, {id: aclItem.person_id}) > -1
   );
 
@@ -108,7 +109,7 @@ const buildModifiedListField = (currentField, modifiedItem) => {
   });
 
   // remove deleted items
-  _.remove(modifiedField, (item) =>
+  loRemove(modifiedField, (item) =>
     loFindIndex(modifiedItem.deleted, {id: item.id}) > -1);
 
   return modifiedField;
