@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loGroupBy from 'lodash/groupBy';
 import loIndexOf from 'lodash/indexOf';
 import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
@@ -243,7 +244,7 @@ export default CanComponent.extend({
         return;
       }
 
-      roleAssignments = _.groupBy(instance
+      roleAssignments = loGroupBy(instance
         .attr('access_control_list'), 'ac_role_id');
 
       roles = this.getFilteredRoles();
@@ -272,7 +273,7 @@ export default CanComponent.extend({
     refreshPeopleInGroups() {
       let instance = this.attr('instance');
       let groups = this.attr('groups');
-      let roleAssignments = _.groupBy(instance
+      let roleAssignments = loGroupBy(instance
         .attr('access_control_list'), 'ac_role_id');
 
       groups.forEach((group) =>

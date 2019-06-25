@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loGroupBy from 'lodash/groupBy';
 import loIsNumber from 'lodash/isNumber';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -310,7 +311,7 @@ function _buildAllMappedObjectsRequest(relevant, types, fields) { // eslint-disa
 }
 
 function _buildMappedObjectsRequest(stubs, fields) { // eslint-disable-line
-  const groupedStubsByType = _.groupBy(stubs, 'type');
+  const groupedStubsByType = loGroupBy(stubs, 'type');
 
   return loMap(groupedStubsByType, (stubs, objectsType) =>
     batchRequests(buildParam(

@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loGroupBy from 'lodash/groupBy';
 import loUnion from 'lodash/union';
 import loFindIndex from 'lodash/findIndex';
 import CanMap from 'can-map';
@@ -59,7 +60,7 @@ const buildModifiedACL = (instance, modifiedRoles) => {
     return instance.access_control_list;
   }
 
-  aclRoles = _.groupBy(instance.access_control_list, 'ac_role_id');
+  aclRoles = loGroupBy(instance.access_control_list, 'ac_role_id');
   allRoles = loUnion(
     _.keys(aclRoles).map((key) => Number(key)),
     modifiedRolesKeys
