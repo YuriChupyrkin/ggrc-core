@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import * as businessModels from '../models/business-models';
 import {getRelatedWidgetNames} from '../plugins/utils/mega-object-utils';
@@ -66,7 +67,7 @@ let defaultOrderTypes = {
 };
 // Items allowed for mapping via snapshot.
 let snapshotWidgetsConfig = GGRC.config.snapshotable_objects || [];
-let objectVersions = _.map(snapshotWidgetsConfig, function (obj) {
+let objectVersions = loMap(snapshotWidgetsConfig, function (obj) {
   return obj + '_version';
 });
 

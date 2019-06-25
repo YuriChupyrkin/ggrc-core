@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 _.mixin({
   exists: function (obj, key) {
     let keys;
@@ -44,7 +45,7 @@ _.mixin({
     }
 
     values = values.split(splitter);
-    values = _.map(values, _.trim);
+    values = loMap(values, _.trim);
 
     options = options || {};
     if (options.unique) {
@@ -62,7 +63,7 @@ _.mixin({
    * @return {Array} - result of "map" operation without "null" and "undefined" values
    */
   filteredMap: function (items, predicate) {
-    return _.map(items, predicate)
+    return loMap(items, predicate)
       .filter((item) => !_.isNull(item) && !_.isUndefined(item));
   },
 });

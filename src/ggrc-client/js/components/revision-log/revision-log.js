@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import moment from 'moment';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -199,9 +200,9 @@ export default CanComponent.extend({
       });
 
       return {
-        object: _.map(objRevisions, this.reifyObject),
-        mappings: _.map(mappings, this.reifyObject),
-        revisionsForCompare: _.map(revisionsForCompare, this.reifyObject),
+        object: loMap(objRevisions, this.reifyObject),
+        mappings: loMap(mappings, this.reifyObject),
+        revisionsForCompare: loMap(revisionsForCompare, this.reifyObject),
       };
     },
     reifyObject(object) {

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 /*
@@ -79,7 +80,7 @@ export default CanComponent.extend({
       let sortables = el.find('li.sortable-item');
       // It's not nice way to rely on DOM for sorting,
       // but it was easiest for implementation
-      this.viewModel.fields.replace(_.map(sortables,
+      this.viewModel.fields.replace(loMap(sortables,
         function (item) {
           return $(item).data('field');
         }

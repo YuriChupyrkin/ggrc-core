@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanComponent from 'can-component';
 import '../../components/advanced-search/advanced-search-filter-container';
@@ -67,7 +68,7 @@ export default CanComponent.extend({
         });
     },
     cloneObjects() {
-      let sourceIds = _.map(this.viewModel.attr('selected'), (item) => item.id);
+      let sourceIds = loMap(this.viewModel.attr('selected'), (item) => item.id);
       let destinationId = this.viewModel.attr('join_object_id');
 
       return $.post('/api/assessment_template/clone', [{

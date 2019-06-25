@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanModel from 'can-model';
 import CanList from 'can-list';
 import CanControl from 'can-control';
@@ -66,7 +67,7 @@ defaultValidator.once = function (value, options, name) {
 };
 
 CanList.prototype.sort = function (predicate) {
-  const array = _.map(this, (item) => item);
+  const array = loMap(this, (item) => item);
   this.replace(array.sort(predicate));
   return this;
 };

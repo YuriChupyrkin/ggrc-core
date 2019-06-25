@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import IsEmptyObject from 'can-util/js/is-empty-object/is-empty-object';
 import CanCompute from 'can-compute';
@@ -300,7 +301,7 @@ const TreeViewControl = TreeLoader.extend({
 
     items = MakeArray(optionsList);
 
-    items = _.map(items, function (options) {
+    items = loMap(items, function (options) {
       let elem = document.createElement('li');
       let control = new TreeViewNode(elem, options);
       drawItemsDfds.push(control._draw_node_deferred);

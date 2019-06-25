@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import {ROLES_CONFLICT} from '../../events/eventTypes';
@@ -245,7 +246,7 @@ export default CanComponent.extend({
 
       roles = this.getFilteredRoles();
 
-      groups = _.map(roles, (role) => {
+      groups = loMap(roles, (role) => {
         return this.buildGroups(role, roleAssignments);
       })
         .filter((group) => {

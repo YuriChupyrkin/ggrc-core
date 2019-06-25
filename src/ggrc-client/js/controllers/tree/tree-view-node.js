@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
@@ -70,7 +71,7 @@ export default CanControl.extend({
   '{instance} custom_attribute_values':
     function (object, ev, newVal, oldVal) {
       function getValues(cav) {
-        return _.map(reify(cav), 'attribute_value');
+        return loMap(reify(cav), 'attribute_value');
       }
       if ((!oldVal || !newVal) || (oldVal.length === newVal.length &&
         _.difference(getValues(oldVal), getValues(newVal)).length)) {

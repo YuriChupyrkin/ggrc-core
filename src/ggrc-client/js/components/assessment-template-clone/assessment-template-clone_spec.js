@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import Component from './assessment-template-clone';
 
@@ -206,7 +207,7 @@ describe('assessment-template-clone component', () => {
 
       it('returns response of post request for clone', () => {
         let expectedArguments = [{
-          sourceObjectIds: _.map(vm.attr('selected'), (item) => item.id),
+          sourceObjectIds: loMap(vm.attr('selected'), (item) => item.id),
           destination: {
             type: 'Audit',
             id: vm.attr('join_object_id'),

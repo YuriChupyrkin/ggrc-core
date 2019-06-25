@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -206,7 +207,7 @@ export default CanComponent.extend({
     getObjectsForExport: function () {
       let panels = this.attr('panels');
 
-      return _.map(panels, function (panel, index) {
+      return loMap(panels, function (panel, index) {
         let allItems = panel.attr('attributes')
           .concat(panel.attr('mappings'))
           .concat(panel.attr('localAttributes'));

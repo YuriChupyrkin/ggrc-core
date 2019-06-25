@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
@@ -69,7 +70,7 @@ export default CanControl.extend({
 
   generate_menu_items: function (itemNames, displayPrefix) {
     displayPrefix = displayPrefix || '';
-    return loFilter(_.map(itemNames, function (name) {
+    return loFilter(loMap(itemNames, function (name) {
       if (name in businessModels) {
         let model = businessModels[name];
         return {

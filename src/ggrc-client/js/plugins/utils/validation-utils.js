@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 const getAttrErrors = (attrErrors, propertyName) => {
   return loFilter(attrErrors, (fieldError) =>
@@ -43,7 +44,7 @@ const getPropertyErrors = (instance, attribute) => {
 
   const propertyErrors = getAttrErrors(attrErrors, complextAttr.propertyName);
 
-  return _.map(propertyErrors, (propertyError) => {
+  return loMap(propertyErrors, (propertyError) => {
     return propertyError[complextAttr.propertyName];
   }).join('; ');
 };

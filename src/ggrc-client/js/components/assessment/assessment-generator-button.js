@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -94,7 +95,7 @@ export default CanComponent.extend({
 
       this._results = null;
       que.enqueue(list).trigger().then(function (items) {
-        let results = _.map(items, function (item) {
+        let results = loMap(items, function (item) {
           let id = options.assessmentTemplate.split('-')[0];
           return this.generateModel(item, id);
         }.bind(this));
@@ -110,7 +111,7 @@ export default CanComponent.extend({
               window.location.reload();
               return;
             }
-            ids = _.uniq(_.map(arguments, function (task) {
+            ids = _.uniq(loMap(arguments, function (task) {
               return task.id;
             }));
             this.updateStatus(ids[0], 0);

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanConstruct from 'can-construct';
 import tracker from '../tracker';
@@ -35,7 +36,7 @@ export default CanConstruct.extend({
     return function () {
       let size = bucket.background ? bucket.objs.length : that.BATCH_SIZE;
       let objs = bucket.objs.splice(0, size);
-      let body = _.map(objs, function (obj) {
+      let body = loMap(objs, function (obj) {
         let list = {};
         list[bucket.type] = obj.serialize();
         return list;

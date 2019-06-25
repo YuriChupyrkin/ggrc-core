@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -120,7 +121,7 @@ export default CanComponent.extend({
       }
 
       revisions = _.reverse(revisions);
-      let diffList = _.map(revisions, function (revision, i) {
+      let diffList = loMap(revisions, function (revision, i) {
         // default to empty revision
         let prev = revisions[i - 1] || prevRevision;
         return this._objectChangeDiff(prev, revision);
@@ -273,8 +274,8 @@ export default CanComponent.extend({
 
         // if arrays are not equal by person id
         let idsDiff = _.xor(
-          _.map(rev1people, (person) => person.id),
-          _.map(rev2people, (person) => person.id)
+          loMap(rev1people, (person) => person.id),
+          loMap(rev2people, (person) => person.id)
         );
         if (idsDiff.length) {
           roleDiff = new CanMap({
@@ -370,7 +371,7 @@ export default CanComponent.extend({
         .mapValues(function (chain) {
           return _.sortBy(chain, 'updated_at');
         }).value();
-      return _.map(revisions, function (revision) {
+      return loMap(revisions, function (revision) {
         return this._mappingChange(revision, chains[revision.resource_id]);
       }.bind(this));
     },

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMap from 'lodash/map';
 import CanModel from 'can-model';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -38,7 +39,7 @@ function reifyMap(obj) {
 }
 
 function reifyList(obj) {
-  return new CanList(_.map(obj, function (item) {
+  return new CanList(loMap(obj, function (item) {
     return reifyMap(item);
   }));
 }
