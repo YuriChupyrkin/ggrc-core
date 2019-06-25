@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsNumber from 'lodash/isNumber';
 import loAssign from 'lodash/assign';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
@@ -209,7 +210,7 @@ export default CanControl.extend({
         let $el = $(this);
         let rowIndex = $el.data('row-index');
 
-        if (_.isNumber(rowIndex)) {
+        if (loIsNumber(rowIndex)) {
           chart.setSelection([{row: rowIndex, column: null}]);
         }
       })

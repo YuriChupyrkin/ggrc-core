@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsNumber from 'lodash/isNumber';
 import loIsUndefined from 'lodash/isUndefined';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
@@ -118,7 +119,7 @@ export default CanConstruct.extend({
 
   _step: function (elem) {
     this._queue.push(elem);
-    if (_.isNumber(this._timeout)) {
+    if (loIsNumber(this._timeout)) {
       clearTimeout(this._timeout);
     }
     this._timeout = setTimeout(() => {

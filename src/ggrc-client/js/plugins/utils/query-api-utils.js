@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsNumber from 'lodash/isNumber';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -49,7 +50,7 @@ function batchRequests(params) {
   let dfd = $.Deferred();
   batchQueue.push({dfd: dfd, params: params});
 
-  if (_.isNumber(batchTimeout)) {
+  if (loIsNumber(batchTimeout)) {
     clearTimeout(batchTimeout);
   }
 
@@ -117,7 +118,7 @@ function buildParam(objName, page, relevant, fields, filters) {
       last += page.buffer;
     }
     params.limit = [first, last];
-  } else if (_.isNumber(page.first) && _.isNumber(page.last)) {
+  } else if (loIsNumber(page.first) && loIsNumber(page.last)) {
     params.limit = [page.first, page.last];
   }
 

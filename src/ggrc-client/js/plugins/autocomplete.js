@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsNumber from 'lodash/isNumber';
 import loForEach from 'lodash/forEach';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
@@ -36,7 +37,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
       // Search based on the term
       let query = request.term || '';
       let queue = new RefreshQueue();
-      let isNextPage = _.isNumber(request.start);
+      let isNextPage = loIsNumber(request.start);
       let dfd;
 
       if (query.indexOf('@') > -1) {
