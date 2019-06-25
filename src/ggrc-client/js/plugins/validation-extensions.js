@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loCompact from 'lodash/compact';
 import loIsArray from 'lodash/isArray';
 import loUniq from 'lodash/uniq';
 import loSome from 'lodash/some';
@@ -116,7 +117,7 @@ validatejs.validators.validateMultiChoiceOptions = (value,
     return 'At least one possible value required.';
   }
 
-  nonBlanks = _.compact(choices);
+  nonBlanks = loCompact(choices);
   if (nonBlanks.length < choices.length) {
     return 'Blank values not allowed.';
   }
