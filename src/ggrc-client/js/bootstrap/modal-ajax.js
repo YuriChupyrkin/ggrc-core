@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loAssign from 'lodash/assign';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import Spinner from 'spin.js';
@@ -59,7 +60,7 @@ let handlers = {
     };
 
     if (hasWarningType(instance)) {
-      modalSettings = _.assign(
+      modalSettings = loAssign(
         modalSettings,
         warning.settings,
         {

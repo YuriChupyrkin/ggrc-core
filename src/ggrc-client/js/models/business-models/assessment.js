@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loAssign from 'lodash/assign';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import Cacheable from '../cacheable';
 import {prepareCustomAttributes} from '../../plugins/utils/ca-utils';
@@ -206,7 +207,7 @@ export default Cacheable.extend({
     // In this case we have to update backup to solve isDirty issues.
     let backup = model._backupStore();
     if (backup) {
-      _.assign(backup, attributes);
+      loAssign(backup, attributes);
     }
 
     // This is a temporary solution

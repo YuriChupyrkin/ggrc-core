@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loAssign from 'lodash/assign';
 import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import * as businessModels from '../models/business-models';
@@ -139,7 +140,7 @@ _.each(baseWidgetsByType, (val, widget) => {
   }
 });
 
-baseWidgetsByType = _.assign(baseWidgetsByType, objectVersionWidgets);
+baseWidgetsByType = loAssign(baseWidgetsByType, objectVersionWidgets);
 
 export default new CanMap({
   base_widgets_by_type: baseWidgetsByType,

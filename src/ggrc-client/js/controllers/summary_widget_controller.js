@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loAssign from 'lodash/assign';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -217,7 +218,7 @@ export default CanControl.extend({
       });
   },
   getChartOptions: function (raw) {
-    let options = _.assign({}, this.options.chartOptions);
+    let options = loAssign({}, this.options.chartOptions);
     let colorMaps = this.options.colorsMap;
     options.colors = raw.statuses.map(function (e) {
       return colorMaps[e.name];

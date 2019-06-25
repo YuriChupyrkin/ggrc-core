@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loAssign from 'lodash/assign';
 import loFind from 'lodash/find';
 import moment from 'moment';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -634,7 +635,7 @@ Example:
 */
 CanStache.registerHelper('add_to_current_scope', function (options) {
   return options.fn(options.contexts
-    .add(_.assign({}, options.context, options.hash)));
+    .add(loAssign({}, options.context, options.hash)));
 });
 
 /*
