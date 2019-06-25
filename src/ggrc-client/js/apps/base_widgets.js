@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loDifference from 'lodash/difference';
 import loAssign from 'lodash/assign';
 import loMap from 'lodash/map';
 import CanMap from 'can-map';
@@ -87,7 +88,7 @@ let auditInclusion = [
 ];
 let baseWidgetsByType;
 
-let filteredTypes = _.difference(allCoreTypes, excludeMappingConfig);
+let filteredTypes = loDifference(allCoreTypes, excludeMappingConfig);
 // Audit is excluded and created a separate logic for it
 
 let objectVersionWidgets = {};
@@ -96,17 +97,17 @@ snapshotWidgetsConfig.forEach(function (model) {
 });
 
 baseWidgetsByType = {
-  AccessGroup: _.difference(filteredTypes, ['AccessGroup']),
+  AccessGroup: loDifference(filteredTypes, ['AccessGroup']),
   AccountBalance: filteredTypes,
   Audit: [].concat(snapshotWidgetsConfig, excludeMappingConfig,
     auditInclusion).sort(),
-  Contract: _.difference(filteredTypes, ['Contract']),
+  Contract: loDifference(filteredTypes, ['Contract']),
   Control: filteredTypes,
   Assessment: snapshotWidgetsConfig.concat(
     ['Audit', 'Issue', 'Evidence']).sort(),
   AssessmentTemplate: ['Audit'],
   DataAsset: filteredTypes,
-  Document: _.difference(filteredTypes, ['Audit', 'Assessment', 'Document',
+  Document: loDifference(filteredTypes, ['Audit', 'Assessment', 'Document',
     'Person']),
   Evidence: ['Audit', 'Assessment'],
   Facility: filteredTypes,
@@ -116,16 +117,16 @@ baseWidgetsByType = {
   Metric: filteredTypes,
   Objective: filteredTypes,
   OrgGroup: filteredTypes,
-  Person: ['Evidence'].concat(_.difference(filteredTypes, ['Person'])),
-  Policy: _.difference(filteredTypes, ['Policy']),
+  Person: ['Evidence'].concat(loDifference(filteredTypes, ['Person'])),
+  Policy: loDifference(filteredTypes, ['Policy']),
   Process: filteredTypes,
   Product: filteredTypes,
   ProductGroup: filteredTypes,
-  Program: _.difference(filteredTypes, ['Program', 'Assessment']),
+  Program: loDifference(filteredTypes, ['Program', 'Assessment']),
   Project: filteredTypes,
-  Regulation: _.difference(filteredTypes, ['Regulation']),
+  Regulation: loDifference(filteredTypes, ['Regulation']),
   Requirement: filteredTypes,
-  Standard: _.difference(filteredTypes, ['Standard']),
+  Standard: loDifference(filteredTypes, ['Standard']),
   System: filteredTypes,
   Risk: filteredTypes,
   TechnologyEnvironment: filteredTypes,

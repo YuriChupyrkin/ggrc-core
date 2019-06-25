@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loDifference from 'lodash/difference';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
@@ -76,7 +77,7 @@ export default CanControl.extend({
         return loMap(reify(cav), 'attribute_value');
       }
       if ((!oldVal || !newVal) || (oldVal.length === newVal.length &&
-        _.difference(getValues(oldVal), getValues(newVal)).length)) {
+        loDifference(getValues(oldVal), getValues(newVal)).length)) {
         this.draw_node();
       }
     },
