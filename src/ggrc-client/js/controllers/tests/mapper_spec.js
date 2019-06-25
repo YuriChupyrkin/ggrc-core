@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loOmit from 'lodash/omit';
 import loAssign from 'lodash/assign';
 import CanMap from 'can-map';
 import {
@@ -108,7 +109,7 @@ describe('ObjectMapper', function () {
       it('throws Error with message if data.join_object_id does not exist',
         function () {
           let closure = function () {
-            method(_.omit(fakeData, 'join_object_id'));
+            method(loOmit(fakeData, 'join_object_id'));
           };
 
           expect(closure).toThrowError();
