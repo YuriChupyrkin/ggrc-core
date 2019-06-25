@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loThrottle from 'lodash/throttle';
 import loIsFunction from 'lodash/isFunction';
 import loAssign from 'lodash/assign';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -348,7 +349,7 @@ export default Cacheable.extend({
     if (!this._pending_refresh) {
       this._pending_refresh = {
         dfd: $.Deferred(),
-        fn: _.throttle(() => {
+        fn: loThrottle(() => {
           let dfd = this._pending_refresh.dfd;
           ggrcAjax({
             url: href,

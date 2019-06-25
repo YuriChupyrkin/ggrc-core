@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loThrottle from 'lodash/throttle';
 import loIsEmpty from 'lodash/isEmpty';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
@@ -616,7 +617,7 @@ export default CanModel.extend({
     if (!this._pending_refresh) {
       this._pending_refresh = {
         dfd: $.Deferred(),
-        fn: _.throttle(function () {
+        fn: loThrottle(function () {
           let dfd = that._pending_refresh.dfd;
           let stopFn = tracker.start(that.type,
             tracker.USER_JOURNEY_KEYS.API,
