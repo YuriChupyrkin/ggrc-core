@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loTrim from 'lodash/trim';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import CanStache from 'can-stache';
@@ -42,8 +43,8 @@ export default CanComponent.extend({
     addField() {
       let fields = this.attr('fields');
       let selected = this.attr('selected');
-      let title = _.trim(selected.title);
-      let type = _.trim(selected.type);
+      let title = loTrim(selected.title);
+      let type = loTrim(selected.type);
       let values = _.splitTrim(selected.values, {
         unique: true,
       }).join(',');

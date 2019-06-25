@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loTrim from 'lodash/trim';
 import loIsObject from 'lodash/isObject';
 import loIsUndefined from 'lodash/isUndefined';
 import loMap from 'lodash/map';
@@ -47,7 +48,7 @@ _.mixin({
     }
 
     values = values.split(splitter);
-    values = loMap(values, _.trim);
+    values = loMap(values, loTrim);
 
     options = options || {};
     if (options.unique) {

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loTrim from 'lodash/trim';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -34,7 +35,7 @@ export default CanComponent.extend({
         set(newValue) {
           let oldValue = this.attr('_oldValue');
           if (newValue === oldValue ||
-              newValue.length && !_.trim(newValue).length) {
+              newValue.length && !loTrim(newValue).length) {
             return;
           }
 

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loTrim from 'lodash/trim';
 import {getPlainText} from '../../ggrc_utils';
 
 /**
@@ -15,7 +16,7 @@ function hasEmptyValue(caObject) {
   const value = caObject.value;
 
   if (typeof value === 'string') {
-    return _.flow(getPlainText, _.trim, _.isEmpty)(value);
+    return _.flow(getPlainText, loTrim, _.isEmpty)(value);
   }
 
   return Boolean(value) === false;
