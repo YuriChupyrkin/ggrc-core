@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loKeyBy from 'lodash/keyBy';
 import loCapitalize from 'lodash/capitalize';
 import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -548,7 +549,7 @@ export default CanComponent.extend({
       );
 
       let updatedFormFields = convertValuesToFormFields(cavs);
-      let updatedFieldsIds = _.keyBy(updatedFormFields, 'id');
+      let updatedFieldsIds = loKeyBy(updatedFormFields, 'id');
 
       this.attr('formFields').forEach((field) => {
         let updatedField = updatedFieldsIds[field.attr('id')];

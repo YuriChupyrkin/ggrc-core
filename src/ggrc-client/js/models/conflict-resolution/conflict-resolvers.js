@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loKeyBy from 'lodash/keyBy';
 import loIsEqual from 'lodash/isEqual';
 export function buildChangeDescriptor(
   previousValue,
@@ -54,9 +55,9 @@ export function customAttributeResolver(
   currentValue = [],
   remoteValue = [],
   container = []) {
-  let currentValuesById = _.keyBy(currentValue, 'custom_attribute_id');
-  let remoteValuesById = _.keyBy(remoteValue, 'custom_attribute_id');
-  let containerValuesById = _.keyBy(container, 'custom_attribute_id');
+  let currentValuesById = loKeyBy(currentValue, 'custom_attribute_id');
+  let remoteValuesById = loKeyBy(remoteValue, 'custom_attribute_id');
+  let containerValuesById = loKeyBy(container, 'custom_attribute_id');
 
   let conflict = false;
   previousValue.forEach((previousValueItem) => {
