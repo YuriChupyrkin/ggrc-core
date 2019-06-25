@@ -3,6 +3,7 @@ Copyright (C) 2019 Google Inc.
 Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loEvery from 'lodash/every';
 import loFind from 'lodash/find';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -390,7 +391,7 @@ describe('CustomAttributeAccess module', () => {
         result = caAccess._getFilteredCaObjects({
           type: CUSTOM_ATTRIBUTE_TYPE.LOCAL,
         });
-        isLocal = _.every(result, (caObject) =>
+        isLocal = loEvery(result, (caObject) =>
           caObject.type === CUSTOM_ATTRIBUTE_TYPE.LOCAL
         );
         expect(result.length).toBe(expectedResult.length);

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loEvery from 'lodash/every';
 import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -42,7 +43,7 @@ export default CanComponent.extend({
         get: function () {
           let options = this.attr('options');
 
-          return _.every(options, function (item) {
+          return loEvery(options, function (item) {
             return item.attr('checked');
           });
         },

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loEvery from 'lodash/every';
 import loIsEqual from 'lodash/isEqual';
 import {warning} from './modals';
 import {hasQuestions} from './ggrcq-utils';
@@ -49,7 +50,7 @@ function hasWarningType(instance) {
 }
 
 function _checkExtraConditions(conditions) {
-  return _.every(conditions, function (condition) {
+  return loEvery(conditions, function (condition) {
     return condition();
   });
 }
