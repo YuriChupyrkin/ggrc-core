@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loReverse from 'lodash/reverse';
 import loDebounce from 'lodash/debounce';
 import loEach from 'lodash/each';
 import loIsEqual from 'lodash/isEqual';
@@ -140,7 +141,7 @@ export default CanComponent.extend({
         // set correct order of revisions
         const isNeedReverse = revisions[0].id !== currentRevisionID;
         if (isNeedReverse) {
-          revisions = _.reverse(revisions);
+          revisions = loReverse(revisions);
         }
         return new CanList(revisions);
       });

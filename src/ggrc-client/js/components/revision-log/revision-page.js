@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loReverse from 'lodash/reverse';
 import loFlow from 'lodash/flow';
 import loXor from 'lodash/xor';
 import loKeys from 'lodash/keys';
@@ -133,7 +134,7 @@ export default CanComponent.extend({
         prevRevision = revisionsForCompare[0];
       }
 
-      revisions = _.reverse(revisions);
+      revisions = loReverse(revisions);
       let diffList = loMap(revisions, function (revision, i) {
         // default to empty revision
         let prev = revisions[i - 1] || prevRevision;
