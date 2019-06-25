@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loDebounce from 'lodash/debounce';
 import loIsNumber from 'lodash/isNumber';
 import loForEach from 'lodash/forEach';
 import {ggrcAjax} from '../plugins/ajax_extensions';
@@ -33,7 +34,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
       $(event.target).trigger('change');
     },
     minLength: 0,
-    source: _.debounce(function (request, response) {
+    source: loDebounce(function (request, response) {
       // Search based on the term
       let query = request.term || '';
       let queue = new RefreshQueue();

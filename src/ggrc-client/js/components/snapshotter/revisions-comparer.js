@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loDebounce from 'lodash/debounce';
 import loEach from 'lodash/each';
 import loIsEqual from 'lodash/isEqual';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -219,7 +220,7 @@ export default CanComponent.extend({
      * @param {Object} $target - jQuery object
      * @param {CanList} revisions - revisions for comparing
      */
-    highlightDifference: _.debounce(function ($target, revisions) {
+    highlightDifference: loDebounce(function ($target, revisions) {
       this.highlightAttributes($target);
       this.highlightCustomRoles($target);
       this.highlightAttachments($target, revisions);

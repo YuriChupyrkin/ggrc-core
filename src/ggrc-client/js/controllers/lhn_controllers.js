@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loDebounce from 'lodash/debounce';
 import loForEach from 'lodash/forEach';
 import CanCompute from 'can-compute';
 import CanStache from 'can-stache';
@@ -36,7 +37,7 @@ const LhnControl = CanControl.extend({}, {
     // Set up a scroll handler to capture the current scroll-Y position on the
     // whole LHN search panel.  scroll events do not bubble, so this cannot be
     // set as a delegate on the controller element.
-    let lhsHolderOnscroll = _.debounce(function () {
+    let lhsHolderOnscroll = loDebounce(function () {
       setLHNState({panel_scroll: this.scrollTop});
     }, 250);
     this.element.find('.affix-holder').on('scroll', lhsHolderOnscroll);
@@ -394,7 +395,7 @@ const LhnSearchControl = CanControl.extend({
 
     let subLevelElements = this.element.find('.sub-level');
     new InfiniteScrollControl(subLevelElements);
-    subLevelElements.on('scroll', _.debounce(function () {
+    subLevelElements.on('scroll', loDebounce(function () {
       setLHNState({category_scroll: this.scrollTop});
     }, 250));
 
@@ -430,7 +431,7 @@ const LhnSearchControl = CanControl.extend({
   },
   post_init: function () {
     let lhnCtr = $('#lhn').control();
-    let refreshCounts = _.debounce(this.refresh_counts.bind(this), 1000, {
+    let refreshCounts = loDebounce(this.refresh_counts.bind(this), 1000, {
       leading: true,
       trailing: false,
     });

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loDebounce from 'lodash/debounce';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -172,7 +173,7 @@ export default CanComponent.extend({
   leakScope: true,
   viewModel,
   events: {
-    '{window} resize': _.debounce(function () {
+    '{window} resize': loDebounce(function () {
       this.viewModel.showHideTitles(this.element);
     }, 100),
     inserted: function () {
