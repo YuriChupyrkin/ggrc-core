@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loLast from 'lodash/last';
 import loAssign from 'lodash/assign';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanList from 'can-list';
@@ -413,7 +414,7 @@ function loadFirstTierItems(modelName,
   requestData.push(params);
   return $.when(...requestData.attr().map((el) => batchRequests(el)))
     .then((...response) => {
-      response = _.last(response)[requestedType];
+      response = loLast(response)[requestedType];
 
       response.values = response.values.map(function (source) {
         return _createInstance(source, modelName);

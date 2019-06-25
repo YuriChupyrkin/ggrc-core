@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loLast from 'lodash/last';
 import loIsEmpty from 'lodash/isEmpty';
 import * as StateUtils from './state-utils';
 import QueryParser from '../../generated/ggrc_filter_query_parser';
@@ -110,7 +111,7 @@ export const reversePolishNotation = (items) => {
       result.push(item);
     } else {
       if (!loIsEmpty(stack) &&
-        priorities[item.value] <= priorities[_.last(stack).value]) {
+        priorities[item.value] <= priorities[loLast(stack).value]) {
         result.push(stack.pop());
       }
       stack.push(item);

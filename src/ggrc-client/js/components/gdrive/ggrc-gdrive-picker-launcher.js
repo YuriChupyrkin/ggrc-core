@@ -3,6 +3,7 @@
  * Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loLast from 'lodash/last';
 import loIsFunction from 'lodash/isFunction';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -144,7 +145,7 @@ export default CanComponent.extend({
             })
             .fail(function () {
               // This case happens when user have no access to write in audit folder
-              let error = _.last(arguments);
+              let error = loLast(arguments);
 
               stopFn(true);
               if (error && error.code === 403) {
