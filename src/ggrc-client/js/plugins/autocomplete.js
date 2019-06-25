@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loDefer from 'lodash/defer';
 import loDebounce from 'lodash/debounce';
 import loIsNumber from 'lodash/isNumber';
 import loForEach from 'lodash/forEach';
@@ -270,7 +271,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
           }
 
           context.attr('items_loading', false);
-          _.defer(function () {
+          loDefer(function () {
             context.attr('scroll_op_in_progress', false);
           });
         });
