@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loOrderBy from 'lodash/orderBy';
 import loIncludes from 'lodash/includes';
 import loIsUndefined from 'lodash/isUndefined';
 import loFilter from 'lodash/filter';
@@ -52,7 +53,7 @@ function populateFromWorkflow(form, workflow) {
       );
       return;
     }
-    activeCycleList = _.orderBy(
+    activeCycleList = loOrderBy(
       activeCycleList, ['start_date'], ['desc']);
     activeCycle = activeCycleList[0];
     form.attr('workflow', {id: workflow.id, type: 'Workflow'});
