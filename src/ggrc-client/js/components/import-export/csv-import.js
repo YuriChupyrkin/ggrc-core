@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSome from 'lodash/some';
 import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -393,7 +394,7 @@ export default CanComponent.extend({
         if (data[ACTION] === PICKED) {
           file = data[DOCUMENTS][0];
 
-          if (file && _.some(allowedTypes, function (type) {
+          if (file && loSome(allowedTypes, function (type) {
             return type === file.mimeType;
           })) {
             if (that.attr('jobId')) {

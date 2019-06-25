@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSome from 'lodash/some';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import {confirm} from '../plugins/utils/modals';
@@ -321,7 +322,7 @@ $(function () {
     };
     let textContainer;
     let $html;
-    let gotMessage = _.some(_.values(flash), function (msg) {
+    let gotMessage = loSome(_.values(flash), function (msg) {
       return !!msg;
     });
 

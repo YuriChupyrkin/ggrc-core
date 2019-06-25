@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSome from 'lodash/some';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanControl from 'can-control';
@@ -200,7 +201,7 @@ export default CanControl.extend({
     const insideInfoPane = $target.closest('.pin-content').length > 0;
     const excludeForEscapeKey = ['button', '[role=button]', '.btn', 'input',
       'textarea'];
-    const isExcludingControl = _.some(excludeForEscapeKey, (typeName) =>
+    const isExcludingControl = loSome(excludeForEscapeKey, (typeName) =>
       $target.is(typeName)
     );
     return (

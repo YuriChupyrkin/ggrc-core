@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSome from 'lodash/some';
 import validatejs from 'validate.js/validate';
 
 import {getRole} from './utils/acl-utils';
@@ -34,7 +35,7 @@ const validateDefaultPeople = (people, attrName, isMandatory) => {
 
 validatejs.validators.validateAssignee = (value, roleType, key, attributes) => {
   const assigneeRole = getRole(roleType, 'Task Assignees');
-  const hasAssignee = assigneeRole && _.some(attributes.access_control_list, {
+  const hasAssignee = assigneeRole && loSome(attributes.access_control_list, {
     ac_role_id: assigneeRole.id,
   });
 

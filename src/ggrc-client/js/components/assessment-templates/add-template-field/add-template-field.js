@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSome from 'lodash/some';
 import loTrim from 'lodash/trim';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
@@ -132,7 +133,7 @@ const isEqualTitle = (title, attr) => {
 };
 
 const isDublicateTitle = (fields, selectedTitle) => {
-  let duplicateField = _.some(fields, (item) => {
+  let duplicateField = loSome(fields, (item) => {
     return item.title.toLowerCase() === selectedTitle.toLowerCase() &&
       !item._pending_delete;
   });
