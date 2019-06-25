@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIndexOf from 'lodash/indexOf';
 import loIncludes from 'lodash/includes';
 import loSome from 'lodash/some';
 import loTrim from 'lodash/trim';
@@ -150,7 +151,7 @@ const isEmptyTitle = (selectedTitle) => {
 };
 
 const isInvalidTitle = (title) => {
-  if (_.indexOf(title, '*') !== -1) {
+  if (loIndexOf(title, '*') !== -1) {
     return 'A custom attribute title cannot contain *';
   }
   return '';

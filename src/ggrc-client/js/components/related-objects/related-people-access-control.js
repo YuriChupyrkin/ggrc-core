@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIndexOf from 'lodash/indexOf';
 import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
 import CanMap from 'can-map';
@@ -92,7 +93,7 @@ export default CanComponent.extend({
       let hasConflict = false;
 
       let conflictGroups = groups
-        .filter((group) => _.indexOf(conflictRoles, group.title) > -1);
+        .filter((group) => loIndexOf(conflictRoles, group.title) > -1);
 
       conflictGroups.forEach((conflictGroup) => {
         let otherConflictGroups = conflictGroups
@@ -118,7 +119,7 @@ export default CanComponent.extend({
       // get people IDs from conflict groups except current group
       let peopleIds = groups
         .filter((group) => groupTitle !== group.title &&
-          _.indexOf(conflictRoles, group.title) > -1)
+          loIndexOf(conflictRoles, group.title) > -1)
         .map((group) => group.people)
         .map((people) => people.map((person) => person.id));
 
@@ -172,8 +173,8 @@ export default CanComponent.extend({
       const objectRoles = getRolesForType(instance.class.model_singular);
 
       return objectRoles.filter((item) => {
-        return _.indexOf(includeRoles, item.name) > -1 &&
-          _.indexOf(excludeRoles, item.name) === -1;
+        return loIndexOf(includeRoles, item.name) > -1 &&
+          loIndexOf(excludeRoles, item.name) === -1;
       });
     },
     filterByInclude(includeRoles) {
@@ -181,14 +182,14 @@ export default CanComponent.extend({
       const objectRoles = getRolesForType(instance.class.model_singular);
 
       return objectRoles.filter((item) =>
-        _.indexOf(includeRoles, item.name) > -1);
+        loIndexOf(includeRoles, item.name) > -1);
     },
     filterByExclude(excludeRoles) {
       const instance = this.attr('instance');
       const objectRoles = getRolesForType(instance.class.model_singular);
 
       return objectRoles.filter((item) =>
-        _.indexOf(excludeRoles, item.name) === -1);
+        loIndexOf(excludeRoles, item.name) === -1);
     },
     getFilteredRoles() {
       const instance = this.attr('instance');
