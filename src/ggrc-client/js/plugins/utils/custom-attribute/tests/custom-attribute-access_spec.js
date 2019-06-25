@@ -3,6 +3,7 @@ Copyright (C) 2019 Google Inc.
 Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CustomAttributeAccess from '../custom-attribute-access';
@@ -129,7 +130,7 @@ describe('CustomAttributeAccess module', () => {
           const caObjects = caAccess.read(options);
           expect(caObjects.length).toBe(gcas.length);
           gcas.forEach((gca) => {
-            const caObject = _.find(caObjects,
+            const caObject = loFind(caObjects,
               (caObject) => caObject.customAttributeId === gca.id);
             expect(caObject).not.toBeUndefined();
           });
@@ -575,7 +576,7 @@ describe('CustomAttributeAccess module', () => {
       const caObjects = caAccess._caObjects;
       expect(caObjects.length).toBe(caDefs.length);
       caDefs.forEach((caDef) => {
-        const result = _.find(caObjects, (caObject) =>
+        const result = loFind(caObjects, (caObject) =>
           caObject.customAttributeId === caDef.id
         );
         expect(result).toBeDefined();

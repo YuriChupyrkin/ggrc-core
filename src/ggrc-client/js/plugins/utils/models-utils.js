@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import loSortBy from 'lodash/sortBy';
 import {notifier} from './notifiers-utils';
 import RefreshQueue from '../../models/refresh_queue';
@@ -84,7 +85,7 @@ const inferObjectType = (data) => {
   if (!data) {
     return null;
   } else {
-    let obj = _.find(Object.keys(data), (key) => objectTypeDecisionTree[key]);
+    let obj = loFind(Object.keys(data), (key) => objectTypeDecisionTree[key]);
     return objectTypeDecisionTree[obj];
   }
 };

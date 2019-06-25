@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -51,7 +52,7 @@ export default CanComponent.extend({
     },
     isInstanceValid(instance) {
       let gcas = instance.customAttr().each((caObject) => caObject.validate());
-      let gcaValid = _.find(gcas, (caObject) =>
+      let gcaValid = loFind(gcas, (caObject) =>
         caObject.validationState.hasGCAErrors
       ) === undefined;
 

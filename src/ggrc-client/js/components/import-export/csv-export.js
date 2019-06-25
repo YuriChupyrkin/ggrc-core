@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
 import CanStache from 'can-stache';
@@ -158,7 +159,7 @@ export default CanComponent.extend({
     onStopExport({id}) {
       stopExportJob(id)
         .then(() => {
-          let exportJob = _.find(this.attr('currentExports'), (job) => {
+          let exportJob = loFind(this.attr('currentExports'), (job) => {
             return job.id === id;
           });
 
@@ -249,7 +250,7 @@ export default CanComponent.extend({
       let targetJobId = router.attr('job_id');
 
       if (targetJobId) {
-        let isJobActive = _.find(this.attr('currentExports'), function (el) {
+        let isJobActive = loFind(this.attr('currentExports'), function (el) {
           return el.id === parseInt(targetJobId);
         });
 

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -102,7 +103,7 @@ export default CanComponent.extend({
     },
     '{viewModel.relevant} change': function (list, item, which) {
       this.viewModel.attr('has_parent',
-        _.find(this.viewModel.attr('relevant'),
+        loFind(this.viewModel.attr('relevant'),
           {model_name: '__previous__'}));
       if (!/model_name/gi.test(which)) {
         return;

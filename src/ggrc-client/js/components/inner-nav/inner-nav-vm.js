@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import loSortBy from 'lodash/sortBy';
 import loMap from 'lodash/map';
@@ -136,7 +137,7 @@ export default CanMap.extend({
   addToHiddenWidgets(widget) {
     let hiddenWidgets = this.attr('hiddenWidgets');
     let hiddenWidget =
-        _.find(hiddenWidgets, (hidden) => hidden.id === widget.id);
+        loFind(hiddenWidgets, (hidden) => hidden.id === widget.id);
 
     if (!hiddenWidget) {
       hiddenWidgets.push(widget);
@@ -180,7 +181,7 @@ export default CanMap.extend({
      * @return {CanMap} widget
      */
   findWidgetById(widgetId) {
-    return _.find(this.attr('widgetList'),
+    return loFind(this.attr('widgetList'),
       (widget) => widget.id === widgetId);
   },
   /**
@@ -189,7 +190,7 @@ export default CanMap.extend({
      * @return {CanMap} widget
      */
   findWidgetByCountsName(countsName) {
-    return _.find(this.attr('widgetList'),
+    return loFind(this.attr('widgetList'),
       (widget) => widget.countsName === countsName);
   },
   /**

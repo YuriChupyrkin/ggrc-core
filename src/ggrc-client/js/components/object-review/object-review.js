@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -129,7 +130,7 @@ export default CanComponent.extend({
     },
     updateAccessControlList(review) {
       const acl = review.attr('access_control_list');
-      const isCurrentUserReviewer = !!_.find(acl, (item) =>
+      const isCurrentUserReviewer = !!loFind(acl, (item) =>
         item.person.id === GGRC.current_user.id);
 
       if (!isCurrentUserReviewer) {

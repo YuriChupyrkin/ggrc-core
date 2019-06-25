@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import loSortBy from 'lodash/sortBy';
 import loIsEqual from 'lodash/isEqual';
@@ -184,7 +185,7 @@ export default CanComponent.extend({
           return value;
         };
         if (attrDefs) {
-          displayName = (_.find(attrDefs, function (attr) {
+          displayName = (loFind(attrDefs, function (attr) {
             return attr.attr_name === fieldName;
           }) || {}).display_name;
         } else {

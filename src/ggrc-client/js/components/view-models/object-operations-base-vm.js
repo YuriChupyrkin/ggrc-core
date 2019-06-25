@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import loIsEqual from 'lodash/isEqual';
 import CanBatch from 'can-event/batch/batch';
 import CanMap from 'can-map';
@@ -46,7 +47,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
   extractConfig: function (type, config) {
     let resultConfig;
     let special = _.result(
-      _.find(
+      loFind(
         config.special,
         function (special) {
           return _.includes(special.types, type);

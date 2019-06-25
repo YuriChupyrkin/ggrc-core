@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -333,7 +334,7 @@ viewModel = CanMap.extend({
     return filter;
   },
   _getFilterByName: function (name) {
-    let filter = _.find(this.attr('filters'), {name: name});
+    let filter = loFind(this.attr('filters'), {name: name});
 
     return filter && filter.query ? filter.query : null;
   },

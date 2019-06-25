@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -96,7 +97,7 @@ export default CanComponent.extend({
       const field = this.viewModel.attr('field');
       const denormalized = this.viewModel.denormalizeMandatory(field);
       const types = this.viewModel.attr('types');
-      const item = _.find(types, function (obj) {
+      const item = loFind(types, function (obj) {
         return obj.type === field.attr('attribute_type');
       });
       this.viewModel.field.attr('attribute_name', item.name);

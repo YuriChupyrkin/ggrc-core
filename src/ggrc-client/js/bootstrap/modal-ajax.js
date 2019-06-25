@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import Spinner from 'spin.js';
 import {
   warning,
@@ -431,7 +432,7 @@ $.fn.modal.Constructor.prototype.show = function () {
 
   // prevent form submissions when descendant elements are also modals.
   let keypressEvents = $._data($el[0], 'events').keypress;
-  let hasPreventDblSubmitEvent = _.find(keypressEvents, (el) => {
+  let hasPreventDblSubmitEvent = loFind(keypressEvents, (el) => {
     return el.namespace.indexOf('preventdoublesubmit') > -1;
   });
 
@@ -451,7 +452,7 @@ $.fn.modal.Constructor.prototype.show = function () {
   }
 
   let keyupEvents = $._data($el[0], 'events').keyup;
-  let hasPreventDblEscEvent = _.find(keyupEvents, (el) => {
+  let hasPreventDblEscEvent = loFind(keyupEvents, (el) => {
     return el.namespace.indexOf('preventdoubleescape') > -1;
   });
 

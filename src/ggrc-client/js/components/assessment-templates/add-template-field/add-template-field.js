@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -114,7 +115,7 @@ export default CanComponent.extend({
      */
     placeholder(options) {
       let types = this.attr('types');
-      let item = _.find(types, {
+      let item = loFind(types, {
         type: this.attr('selected.type'),
       });
       if (item) {

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import moment from 'moment';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -568,7 +569,7 @@ CanStache.registerHelper('if_instance_of', function (inst, cls, options) {
     cls = [cls];
   }
 
-  result = _.find(cls, (cl) => inst instanceof cl);
+  result = loFind(cls, (cl) => inst instanceof cl);
   return options[result ? 'fn' : 'inverse'](options.contexts);
 });
 
@@ -684,7 +685,7 @@ CanStache.registerHelper('has_role', function (role, instance, options) {
     return options.inverse(options.contexts);
   }
 
-  const hasRole = !!_.find(instance.access_control_list, (item) => {
+  const hasRole = !!loFind(instance.access_control_list, (item) => {
     return item.ac_role_id === acr.id &&
       item.person_id === GGRC.current_user.id;
   });
