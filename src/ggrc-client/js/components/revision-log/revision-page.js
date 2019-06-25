@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFlow from 'lodash/flow';
 import loXor from 'lodash/xor';
 import loKeys from 'lodash/keys';
 import loKeyBy from 'lodash/keyBy';
@@ -317,7 +318,7 @@ export default CanComponent.extend({
         let obj;
         switch (def.attribute_type) {
           case 'Checkbox':
-            return _.flow(Number, Boolean)(value.attribute_value)
+            return loFlow(Number, Boolean)(value.attribute_value)
               ? '✓'
               : undefined;
           case 'Map:Person':
