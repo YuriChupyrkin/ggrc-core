@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loXor from 'lodash/xor';
 import loKeys from 'lodash/keys';
 import loKeyBy from 'lodash/keyBy';
 import loMerge from 'lodash/merge';
@@ -284,7 +285,7 @@ export default CanComponent.extend({
         let roleDiff;
 
         // if arrays are not equal by person id
-        let idsDiff = _.xor(
+        let idsDiff = loXor(
           loMap(rev1people, (person) => person.id),
           loMap(rev2people, (person) => person.id)
         );
