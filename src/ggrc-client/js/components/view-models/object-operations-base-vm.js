@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loResult from 'lodash/result';
 import loIsNull from 'lodash/isNull';
 import loIncludes from 'lodash/includes';
 import loIsEmpty from 'lodash/isEmpty';
@@ -50,7 +51,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
    */
   extractConfig: function (type, config) {
     let resultConfig;
-    let special = _.result(
+    let special = loResult(
       loFind(
         config.special,
         function (special) {
