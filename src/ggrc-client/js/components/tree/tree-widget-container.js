@@ -3,6 +3,10 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loGet from 'lodash/get';
+import loIsNull from 'lodash/isNull';
+import loFind from 'lodash/find';
+import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
@@ -332,7 +336,7 @@ viewModel = CanMap.extend({
     return filter;
   },
   _getFilterByName: function (name) {
-    let filter = _.find(this.attr('filters'), {name: name});
+    let filter = loFind(this.attr('filters'), {name: name});
 
     return filter && filter.query ? filter.query : null;
   },
@@ -343,9 +347,9 @@ viewModel = CanMap.extend({
     let countsName = this.attr('options.countsName');
     let loaded = this.attr('loaded');
     let total = this.attr('pageInfo.total');
-    let counts = _.get(getCounts(), countsName);
+    let counts = loGet(getCounts(), countsName);
 
-    if (!_.isNull(loaded) && (total !== counts)) {
+    if (!loIsNull(loaded) && (total !== counts)) {
       this.loadItems();
     }
 
@@ -535,7 +539,7 @@ viewModel = CanMap.extend({
     let showedItems = this.attr('showedItems');
     let pageInfo = this.attr('pageInfo');
     let startIndex = pageInfo.pageSize * (pageInfo.current - 1);
-    let relativeItemIndex = _.findIndex(showedItems,
+    let relativeItemIndex = loFindIndex(showedItems,
       {id: instance.id, type: instance.type});
     return relativeItemIndex > -1 ?
       startIndex + relativeItemIndex :

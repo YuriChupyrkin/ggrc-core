@@ -3,6 +3,11 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIdentity from 'lodash/identity';
+import loKeys from 'lodash/keys';
+import loPickBy from 'lodash/pickBy';
+import loIsString from 'lodash/isString';
+import loForEach from 'lodash/forEach';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 export default CanComponent.extend({
@@ -17,8 +22,8 @@ export default CanComponent.extend({
     let viewModel = this.viewModel;
     let values = viewModel.attr('instance.' + viewModel.attr('property'));
 
-    if (values && _.isString(values)) {
-      _.forEach(_.splitTrim(values, ','), function (val) {
+    if (values && loIsString(values)) {
+      loForEach(_.splitTrim(values, ','), function (val) {
         if (val) {
           viewModel.attr('values.' + val, true);
         }
@@ -28,10 +33,10 @@ export default CanComponent.extend({
   events: {
     '{viewModel.values} change': function () {
       let viewModel = this.viewModel;
-      let values = _.keys(
-        _.pickBy(
+      let values = loKeys(
+        loPickBy(
           viewModel.attr('values').serialize(),
-          _.identity
+          loIdentity
         )
       );
       viewModel.instance.attr(viewModel.attr('property'), values.join(','));

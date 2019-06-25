@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFind from 'lodash/find';
 import CanConstruct from 'can-construct';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -274,7 +275,7 @@ function getSnapshotsCounts(widgets, instance) {
       stopFn();
       let countsMap = {};
       Object.keys(counts).forEach((name) => {
-        let widget = _.find(widgetsObject, (widgetObj) => {
+        let widget = loFind(widgetsObject, (widgetObj) => {
           return widgetObj.name === name;
         });
 

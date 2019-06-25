@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -37,7 +38,7 @@ export default CanComponent.extend({
         },
         get() {
           const selected = this.attr('_value').split(',');
-          return _.map(this.attr('_options'), (item) => {
+          return loMap(this.attr('_options'), (item) => {
             return {value: item, checked: selected.includes(item)};
           });
         },

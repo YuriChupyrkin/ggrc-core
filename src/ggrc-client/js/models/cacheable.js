@@ -3,6 +3,10 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loThrottle from 'lodash/throttle';
+import loIsEmpty from 'lodash/isEmpty';
+import loIsFunction from 'lodash/isFunction';
+import loForEach from 'lodash/forEach';
 // Disabling some minor eslint rules until major refactoring
 /* eslint-disable no-console, id-length */
 
@@ -136,7 +140,7 @@ export default CanModel.extend({
       this.table_singular = staticProps.table_singular || this.root_object;
     }
 
-    if (!_.isFunction(this.findAll)) {
+    if (!loIsFunction(this.findAll)) {
       this.findPage = this.makeFindPage(this.findAll);
     }
 
@@ -150,7 +154,7 @@ export default CanModel.extend({
     let that = this;
 
     if (staticProps.mixins) {
-      _.forEach(staticProps.mixins, function (mixin) {
+      loForEach(staticProps.mixins, function (mixin) {
         mixin.add_to(that);
       });
       delete this.mixins;
@@ -588,7 +592,7 @@ export default CanModel.extend({
     }
 
     const serializedErrors = errors.attr();
-    return _.isEmpty(serializedErrors) ? null : serializedErrors;
+    return loIsEmpty(serializedErrors) ? null : serializedErrors;
   },
   computed_errors: function () {
     let errors = this.getInstanceErrors();
@@ -611,7 +615,7 @@ export default CanModel.extend({
     if (!this._pending_refresh) {
       this._pending_refresh = {
         dfd: $.Deferred(),
-        fn: _.throttle(function () {
+        fn: loThrottle(function () {
           let dfd = that._pending_refresh.dfd;
           let stopFn = tracker.start(that.type,
             tracker.USER_JOURNEY_KEYS.API,
@@ -674,16 +678,16 @@ export default CanModel.extend({
         } else {
           serial[name] = val;
         }
-      } else if (val && _.isFunction(val.save)) {
+      } else if (val && loIsFunction(val.save)) {
         serial[name] = (new Stub(val)).serialize();
       } else if (typeof val === 'object' && val !== null && val.length) {
         serial[name] = _.filteredMap(val, (v) => {
-          let isModel = v && _.isFunction(v.save);
+          let isModel = v && loIsFunction(v.save);
           return isModel ?
             (new Stub(v)).serialize() :
             (v && v.serialize) ? v.serialize() : v;
         });
-      } else if (!_.isFunction(val)) {
+      } else if (!loIsFunction(val)) {
         if (this[name] && this[name].isComputed) {
           serial[name] = val && val.serialize ? val.serialize() : val;
         } else {

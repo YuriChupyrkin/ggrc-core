@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEmpty from 'lodash/isEmpty';
 import CanStache from 'can-stache';
 import CanComponent from 'can-component';
 import '../assessment-templates/assessment-templates-dropdown/assessment-templates-dropdown';
@@ -88,7 +89,7 @@ export default CanComponent.extend({
     },
     '{viewModel} assessmentTemplate': function ([viewModel], ev, val) {
       let type;
-      if (_.isEmpty(val)) {
+      if (loIsEmpty(val)) {
         return this.viewModel.attr('block_type_change', false);
       }
 

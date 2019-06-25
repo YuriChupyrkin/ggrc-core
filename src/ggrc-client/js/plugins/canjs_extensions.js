@@ -3,6 +3,8 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsFunction from 'lodash/isFunction';
+import loMap from 'lodash/map';
 import CanModel from 'can-model';
 import CanList from 'can-list';
 import CanControl from 'can-control';
@@ -46,7 +48,7 @@ CanControl.setup = function () {
 };
 
 CanList.prototype.replace = function (items) {
-  if (!items || !items.then || !_.isFunction(items.then)) {
+  if (!items || !items.then || !loIsFunction(items.then)) {
     originListReplace.call(this, items);
     return;
   }
@@ -66,7 +68,7 @@ defaultValidator.once = function (value, options, name) {
 };
 
 CanList.prototype.sort = function (predicate) {
-  const array = _.map(this, (item) => item);
+  const array = loMap(this, (item) => item);
   this.replace(array.sort(predicate));
   return this;
 };
