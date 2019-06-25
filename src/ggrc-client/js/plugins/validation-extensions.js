@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUniq from 'lodash/uniq';
 import loSome from 'lodash/some';
 import validatejs from 'validate.js/validate';
 
@@ -119,7 +120,7 @@ validatejs.validators.validateMultiChoiceOptions = (value,
     return 'Blank values not allowed.';
   }
 
-  uniques = _.uniq(nonBlanks);
+  uniques = loUniq(nonBlanks);
   if (uniques.length < nonBlanks.length) {
     return 'Duplicate values found.';
   }

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loUniq from 'lodash/uniq';
 import loForEach from 'lodash/forEach';
 import Person from '../../models/business-models/person';
 import PersonProfile from '../../models/service-models/person-profile';
@@ -62,7 +63,7 @@ function getUserRoles(person) {
   });
 
   if (parentInstance && parentInstance.access_control_list) {
-    allRoleNames = _.uniq(parentInstance.access_control_list.filter((acl) => {
+    allRoleNames = loUniq(parentInstance.access_control_list.filter((acl) => {
       return acl.person.id === person.id && acl.ac_role_id in roles;
     }).map((acl) => {
       return roles[acl.ac_role_id].name;

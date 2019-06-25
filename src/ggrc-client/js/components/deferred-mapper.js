@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loUniq from 'lodash/uniq';
 import loFindIndex from 'lodash/findIndex';
 import loFilter from 'lodash/filter';
 import CanMap from 'can-map';
@@ -87,7 +88,7 @@ export default CanComponent.extend({
     afterDeferredUpdate(objectsToMap, objectsToUnmap) {
       const objects = objectsToMap.concat(objectsToUnmap);
       const instance = this.attr('instance');
-      const objectTypes = _.uniq(objects
+      const objectTypes = loUniq(objects
         .map((object) => object.type)
       );
 

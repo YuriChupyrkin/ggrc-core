@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUniq from 'lodash/uniq';
 import loTrim from 'lodash/trim';
 import loIsObject from 'lodash/isObject';
 import loIsUndefined from 'lodash/isUndefined';
@@ -52,7 +53,7 @@ _.mixin({
 
     options = options || {};
     if (options.unique) {
-      values = _.uniq(values);
+      values = loUniq(values);
     }
     if (options.compact) {
       values = _.compact(values);

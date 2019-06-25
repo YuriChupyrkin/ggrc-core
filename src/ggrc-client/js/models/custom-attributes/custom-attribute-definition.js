@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUniq from 'lodash/uniq';
 import Cacheable from '../cacheable';
 import Stub from '../stub';
 
@@ -63,7 +64,7 @@ export default Cacheable.extend({
         return 'Blank values not allowed.';
       }
 
-      const uniques = _.uniq(nonBlanks);
+      const uniques = loUniq(nonBlanks);
       if (uniques.length < nonBlanks.length) {
         return 'Duplicate values found.';
       }

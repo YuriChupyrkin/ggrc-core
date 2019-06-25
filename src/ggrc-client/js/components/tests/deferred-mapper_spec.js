@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUniq from 'lodash/uniq';
 import loFilter from 'lodash/filter';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -223,7 +224,7 @@ describe('deferred-mapper component', function () {
             type: 'type2',
           },
         ];
-        const objectTypes = _.uniq(objects
+        const objectTypes = loUniq(objects
           .map((object) => object.type)
         );
 

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUniq from 'lodash/uniq';
 import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 import CanStache from 'can-stache';
@@ -111,7 +112,7 @@ export default CanComponent.extend({
               window.location.reload();
               return;
             }
-            ids = _.uniq(loMap(arguments, function (task) {
+            ids = loUniq(loMap(arguments, function (task) {
               return task.id;
             }));
             this.updateStatus(ids[0], 0);
