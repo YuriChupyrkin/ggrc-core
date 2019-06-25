@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIdentity from 'lodash/identity';
 import loKeys from 'lodash/keys';
 import loPickBy from 'lodash/pickBy';
 import loIsString from 'lodash/isString';
@@ -35,7 +36,7 @@ export default CanComponent.extend({
       let values = loKeys(
         loPickBy(
           viewModel.attr('values').serialize(),
-          _.identity
+          loIdentity
         )
       );
       viewModel.instance.attr(viewModel.attr('property'), values.join(','));
