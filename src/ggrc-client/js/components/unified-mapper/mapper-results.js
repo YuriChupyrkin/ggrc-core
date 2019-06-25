@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -529,7 +530,7 @@ export default CanComponent.extend({
     },
     onItemDestroyed({itemId}) {
       const selectedItems = this.attr('selected');
-      const selectedIndex = _.findIndex(selectedItems,
+      const selectedIndex = loFindIndex(selectedItems,
         (item) => item.attr('id') === itemId);
 
       // remove selection of destroyed item

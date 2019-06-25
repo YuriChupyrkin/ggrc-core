@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import CanMap from 'can-map';
 // #region ACL
 const buildAclObject = (person, roleId) => {
@@ -32,7 +33,7 @@ const buildRoleACL = (modifiedRoleId, currentRoleACL, modifiedRole) => {
   modifiedRoleACL = currentRoleACL.slice();
 
   shouldBeAdded = modifiedRole.added.filter((person) =>
-    _.findIndex(currentRoleACL, {person_id: person.id}) === -1
+    loFindIndex(currentRoleACL, {person_id: person.id}) === -1
   ).map((person) => buildAclObject(person, modifiedRoleId));
 
   // add new people
@@ -40,7 +41,7 @@ const buildRoleACL = (modifiedRoleId, currentRoleACL, modifiedRole) => {
 
   // remove existed people
   _.remove(modifiedRoleACL, (aclItem) =>
-    _.findIndex(modifiedRole.deleted, {id: aclItem.person_id}) > -1
+    loFindIndex(modifiedRole.deleted, {id: aclItem.person_id}) > -1
   );
 
   return modifiedRoleACL;
@@ -89,7 +90,7 @@ const buildModifiedListField = (currentField, modifiedItem) => {
   modifiedField = currentField.slice();
 
   modifiedItem.added.forEach((item) => {
-    const index = _.findIndex(modifiedField, {id: item.id});
+    const index = loFindIndex(modifiedField, {id: item.id});
 
     if (!item.hasOwnProperty('display_name')) {
       item.display_name = item.title || item.name;
@@ -105,7 +106,7 @@ const buildModifiedListField = (currentField, modifiedItem) => {
 
   // remove deleted items
   _.remove(modifiedField, (item) =>
-    _.findIndex(modifiedItem.deleted, {id: item.id}) > -1);
+    loFindIndex(modifiedItem.deleted, {id: item.id}) > -1);
 
   return modifiedField;
 };

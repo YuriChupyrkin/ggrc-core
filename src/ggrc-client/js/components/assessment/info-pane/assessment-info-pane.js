@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanBatch from 'can-event/batch/batch';
 import CanStache from 'can-stache';
@@ -326,7 +327,7 @@ export default CanComponent.extend({
 
       CanBatch.start();
       let resultItems = items.filter((item) => {
-        let newItemIndex = _.findIndex(event.items, (newItem) => {
+        let newItemIndex = loFindIndex(event.items, (newItem) => {
           return newItem === item;
         });
         return newItemIndex < 0;

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -57,7 +58,7 @@ export default CanComponent.extend({
      *   the definition that was removed
      */
     fieldRemoved: function (field) {
-      let idx = _.findIndex(this.fields, {title: field.title});
+      let idx = loFindIndex(this.fields, {title: field.title});
       if (idx >= 0) {
         this.fields.splice(idx, 1);
       } else {

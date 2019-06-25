@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFindIndex from 'lodash/findIndex';
 import loFilter from 'lodash/filter';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -105,7 +106,7 @@ export default CanComponent.extend({
       instance.dispatch(REFRESH_SUB_TREE);
 
       const pageInstance = getPageInstance();
-      const pageInstanceIndex = _.findIndex(objects, ({id, type}) =>
+      const pageInstanceIndex = loFindIndex(objects, ({id, type}) =>
         id === pageInstance.id &&
         type === pageInstance.type
       );
@@ -143,7 +144,7 @@ export default CanComponent.extend({
       this.afterDeferredUpdate(objectsToMap, objectsToUnmap);
     },
     _indexOfPendingJoin(object, action) {
-      return _.findIndex(this.attr('instance._pendingJoins'),
+      return loFindIndex(this.attr('instance._pendingJoins'),
         ({what, how}) =>
           what.id === object.id &&
           what.type === object.type &&
@@ -181,7 +182,7 @@ export default CanComponent.extend({
         });
       }
 
-      const indexInList = _.findIndex(this.attr('list'),
+      const indexInList = loFindIndex(this.attr('list'),
         ({id, type}) => id === obj.id && type === obj.type);
       this.attr('list').splice(indexInList, 1);
     },

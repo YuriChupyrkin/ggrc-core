@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -176,7 +177,7 @@ export default CanComponent.extend({
     deleteJob(id) {
       deleteExportJob(id)
         .then(() => {
-          let index = _.findIndex(this.attr('currentExports'), {id});
+          let index = loFindIndex(this.attr('currentExports'), {id});
           this.attr('currentExports').splice(index, 1);
         }, () => {
           this.attr(`disabledItems.${id}`, false);

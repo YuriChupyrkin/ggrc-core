@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -213,7 +214,7 @@ export default CanComponent.extend({
       }
 
       orderOfRoles.forEach((roleName, index) => {
-        let roleIndex = _.findIndex(groups, {title: roleName});
+        let roleIndex = loFindIndex(groups, {title: roleName});
         let group;
         let firstGroup;
 

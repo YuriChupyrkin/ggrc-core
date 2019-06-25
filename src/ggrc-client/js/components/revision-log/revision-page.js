@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFindIndex from 'lodash/findIndex';
 import loSortBy from 'lodash/sortBy';
 import loIsEqual from 'lodash/isEqual';
 import loMap from 'lodash/map';
@@ -428,7 +429,7 @@ export default CanComponent.extend({
       fieldName = 'Mapping to ' + displayType + ': ' + displayName;
       origVal = EMPTY_DIFF_VALUE;
       newVal = _.capitalize(revision.action);
-      previous = chain[_.findIndex(chain, revision) - 1];
+      previous = chain[loFindIndex(chain, revision) - 1];
       if (revision.action !== 'deleted' &&
         _.exists(revision.content, 'attrs.AssigneeType')) {
         newVal = revision.content.attrs.AssigneeType;

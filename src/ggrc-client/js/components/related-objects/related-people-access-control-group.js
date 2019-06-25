@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import {
@@ -102,7 +103,7 @@ export default CanComponent.extend({
     },
     removePerson: function (args) {
       let person = args.person;
-      let idx = _.findIndex(
+      let idx = loFindIndex(
         this.attr('people'),
         {id: person.id});
 

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loFindIndex from 'lodash/findIndex';
 import loSortBy from 'lodash/sortBy';
 import loMap from 'lodash/map';
 import IsEmptyObject from 'can-util/js/is-empty-object/is-empty-object';
@@ -147,7 +148,7 @@ export default CanMap.extend({
      */
   removeFromHiddenWidgets(widget) {
     let hiddenWidgets = this.attr('hiddenWidgets');
-    let index = _.findIndex(hiddenWidgets,
+    let index = loFindIndex(hiddenWidgets,
       (hiddenWidget) => hiddenWidget.id === widget.id);
 
     if (index > -1) {

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loFindIndex from 'lodash/findIndex';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -65,7 +66,7 @@ const viewModel = CanMap.extend({
     }
   },
   withoutExcludedFilter: (objects, {object: mappedObject}) => {
-    return _.findIndex(objects, (object) => (
+    return loFindIndex(objects, (object) => (
       mappedObject.id === object.id &&
       mappedObject.type === object.type
     )) === -1;
