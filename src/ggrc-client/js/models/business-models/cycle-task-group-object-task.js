@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loIsUndefined from 'lodash/isUndefined';
 import loFilter from 'lodash/filter';
 import moment from 'moment';
@@ -294,6 +295,6 @@ export default Cacheable.extend({
     const status = this.attr('status');
 
     return cycle.attr('is_current') &&
-      !_.includes(['Finished', 'Verified'], status);
+      !loIncludes(['Finished', 'Verified'], status);
   },
 });

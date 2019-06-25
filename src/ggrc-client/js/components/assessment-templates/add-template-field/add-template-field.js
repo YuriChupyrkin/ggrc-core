@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loSome from 'lodash/some';
 import loTrim from 'lodash/trim';
 import loForEach from 'lodash/forEach';
@@ -24,7 +25,7 @@ export default CanComponent.extend({
       isDisplayValues: {
         get() {
           let type = this.attr('selected.type');
-          return _.includes(multiChoiceable, type);
+          return loIncludes(multiChoiceable, type);
         },
       },
     },

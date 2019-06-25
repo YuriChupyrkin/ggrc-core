@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loForEach from 'lodash/forEach';
 import CanModel from 'can-model';
 import CanMap from 'can-map';
@@ -70,7 +71,7 @@ function allowedToCreate(source, target) {
   let sourceType = _getType(source);
 
   let allowedTypes = _.keys(getAllowedToCreateModels(sourceType));
-  let canCreate = _.includes(allowedTypes, targetType);
+  let canCreate = loIncludes(allowedTypes, targetType);
 
   return canCreate && userHasPermissions(source, target);
 }
@@ -90,8 +91,8 @@ function allowedToMap(source, target) {
   let mappableTypes = _.keys(getAllowedToMapModels(sourceType));
   let externalTypes = _.keys(getExternalMapModels(sourceType));
 
-  let canMap = _.includes(mappableTypes, targetType) ||
-    _.includes(externalTypes, targetType);
+  let canMap = loIncludes(mappableTypes, targetType) ||
+    loIncludes(externalTypes, targetType);
 
   return canMap && userHasPermissions(source, target);
 }
@@ -113,9 +114,9 @@ function allowedToCreateOrMap(source, target) {
   let externalTypes = _.keys(getExternalMapModels(sourceType));
   let createTypes = _.keys(getAllowedToCreateModels(sourceType));
 
-  let canCreateOrMap = _.includes(mappableTypes, targetType) ||
-    _.includes(createTypes, targetType) ||
-    _.includes(externalTypes, targetType);
+  let canCreateOrMap = loIncludes(mappableTypes, targetType) ||
+    loIncludes(createTypes, targetType) ||
+    loIncludes(externalTypes, targetType);
 
   return canCreateOrMap && userHasPermissions(source, target);
 }
@@ -133,7 +134,7 @@ function allowedToUnmap(source, target) {
   let targetType = _getType(target);
 
   let unmappableTypes = _.keys(getAllowedToUnmapModels(sourceType));
-  let canUnmap = _.includes(unmappableTypes, targetType);
+  let canUnmap = loIncludes(unmappableTypes, targetType);
 
   return canUnmap && userHasPermissions(source, target);
 }

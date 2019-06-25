@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIncludes from 'lodash/includes';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
@@ -223,7 +224,7 @@ const TreeViewControl = TreeLoader.extend({
       v = new TreeViewOptions();
       v.attr('instance', tmp);
       this.options.each(function (val, k) {
-        if (!_.includes(that.constructor.do_not_propagate, k)) {
+        if (!loIncludes(that.constructor.do_not_propagate, k)) {
           v.attr(k, val);
         }
       });

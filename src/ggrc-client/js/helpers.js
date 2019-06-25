@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loTrim from 'lodash/trim';
 import loAssign from 'lodash/assign';
 import loFind from 'lodash/find';
@@ -109,7 +110,7 @@ CanStache.registerHelper('in_array', function (needle, haystack, options) {
   needle = resolveComputed(needle);
   haystack = resolveComputed(haystack);
 
-  return options[_.includes(haystack, needle) ?
+  return options[loIncludes(haystack, needle) ?
     'fn' : 'inverse'](options.contexts);
 });
 
@@ -714,7 +715,7 @@ CanStache.registerHelper('isScopeModel', function (instance, options) {
 CanStache.registerHelper('if_recurring_workflow', function (object, options) {
   object = isFunction(object) ? object() : object;
   if (object.type === 'Workflow' &&
-      _.includes(['day', 'week', 'month'], object.unit)) {
+      loIncludes(['day', 'week', 'month'], object.unit)) {
     return options.fn(this);
   }
   return options.inverse(this);

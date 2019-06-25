@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIncludes from 'lodash/includes';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -58,7 +59,7 @@ export default CanComponent.extend({
       let predefinedFilter = this.attr('predefinedFilter');
       let filters;
 
-      let hasSimilar = _.includes(['Assessment', 'Control', 'Objective'],
+      let hasSimilar = loIncludes(['Assessment', 'Control', 'Objective'],
         this.attr('baseInstance.type'));
 
       if (predefinedFilter) {

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -26,7 +27,7 @@ export default CanComponent.extend({
 
           if (options.length && value && typeof(value) === 'string') {
             return value.split(',')
-              .filter((item) => _.includes(options, item))
+              .filter((item) => loIncludes(options, item))
               .map((item) => `<p><i class="fa fa-circle"></i>${item}</p>`)
               .join('');
           }

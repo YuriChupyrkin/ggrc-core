@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIncludes from 'lodash/includes';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -119,8 +120,8 @@ const viewModel = CanMap.extend({
       'CycleTaskGroup',
       'CycleTaskGroupObjectTask',
     ];
-    return _.includes(pages, getPageType()) &&
-      _.includes(instanceTypes, this.attr('instance').type);
+    return loIncludes(pages, getPageType()) &&
+      loIncludes(instanceTypes, this.attr('instance').type);
   },
   showReducedOptions() {
     let pages = ['Workflow'];
@@ -128,8 +129,8 @@ const viewModel = CanMap.extend({
       'Cycle',
       'CycleTaskGroup',
     ];
-    return _.includes(pages, getPageType()) &&
-      _.includes(instanceTypes, this.attr('instance').type);
+    return loIncludes(pages, getPageType()) &&
+      loIncludes(instanceTypes, this.attr('instance').type);
   },
 });
 

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -104,7 +105,7 @@ export default CanComponent.extend({
       // duplicate URLs check
       let existingUrls = loMap(this.attr('urls'), 'link');
 
-      if (_.includes(existingUrls, newUrl.value)) {
+      if (loIncludes(existingUrls, newUrl.value)) {
         notifier('error', 'URL already exists.');
         return false;
       }

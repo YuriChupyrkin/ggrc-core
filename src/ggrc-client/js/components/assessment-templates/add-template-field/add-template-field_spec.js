@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import CanMap from 'can-map';
 import Component, * as Validations from './add-template-field';
 import {getComponentVM} from '../../../../js_specs/spec_helpers';
@@ -257,7 +258,7 @@ describe('add-template-field component', () => {
 
       spyOn(Validations, 'isDublicateTitle').and
         .callFake((fields, title) => {
-          return _.includes(fields, title) ?
+          return loIncludes(fields, title) ?
             'duplicates val message' :
             '';
         });

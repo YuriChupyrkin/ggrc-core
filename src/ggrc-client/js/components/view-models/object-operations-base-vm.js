@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIncludes from 'lodash/includes';
 import loIsEmpty from 'lodash/isEmpty';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
@@ -52,7 +53,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
       loFind(
         config.special,
         function (special) {
-          return _.includes(special.types, type);
+          return loIncludes(special.types, type);
         }),
       'config'
     );

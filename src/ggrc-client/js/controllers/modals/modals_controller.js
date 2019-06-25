@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIncludes from 'lodash/includes';
 import loIsUndefined from 'lodash/isUndefined';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
@@ -947,7 +948,7 @@ export default CanControl.extend({
     instance.attr('_suppress_errors', true);
 
     if (this.options.add_more &&
-      _.includes(saveContactModels, this.options.model.model_singular)) {
+      loIncludes(saveContactModels, this.options.model.model_singular)) {
       instance.attr('contact', this.options.attr('instance.contact'));
     }
 

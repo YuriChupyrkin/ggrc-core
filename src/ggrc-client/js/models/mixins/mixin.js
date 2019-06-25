@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import CanConstruct from 'can-construct';
@@ -64,7 +65,7 @@ const Mixin = CanConstruct.extend({
       };
     }
 
-    if (!_.includes(cls._mixins, this)) {
+    if (!loIncludes(cls._mixins, this)) {
       cls._mixins = cls._mixins || [];
       cls._mixins.push(this);
       Object.keys(this).forEach(function (key) {

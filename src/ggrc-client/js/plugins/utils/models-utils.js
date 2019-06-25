@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIncludes from 'lodash/includes';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loSortBy from 'lodash/sortBy';
@@ -97,7 +98,7 @@ const inferObjectType = (data) => {
  * @return {Boolean}
  */
 const hasRelatedAssessments = (type) => {
-  return _.includes(relatedAssessmentsTypes, type);
+  return loIncludes(relatedAssessmentsTypes, type);
 };
 
 const getInstance = (objectType, objectId) => {
