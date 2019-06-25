@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import IsEmptyObject from 'can-util/js/is-empty-object/is-empty-object';
@@ -95,7 +96,7 @@ const TreeViewControl = TreeLoader.extend({
       }
     });
     this.options.attr('child_options', this.options.child_options.slice(0));
-    _.forEach(this.options.child_options, function (options, i) {
+    loForEach(this.options.child_options, function (options, i) {
       this.options.child_options.attr(i,
         new CanMap(Object.assign(options.attr(), allowed)));
     }.bind(this));

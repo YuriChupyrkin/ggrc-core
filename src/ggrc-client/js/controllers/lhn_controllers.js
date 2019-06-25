@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanCompute from 'can-compute';
 import CanStache from 'can-stache';
 import CanList from 'can-list';
@@ -898,10 +899,10 @@ const LhnSearchControl = CanControl.extend({
 
     if (term !== this.current_term || extraParams !== this.current_params) {
       // Clear current result lists
-      _.forEach(this.options.results_lists, function (list) {
+      loForEach(this.options.results_lists, function (list) {
         list.replace([]);
       });
-      _.forEach(this.options.visible_lists, function (list) {
+      loForEach(this.options.visible_lists, function (list) {
         list.replace([]);
         list.attr('is_loading', true);
       });

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -124,7 +125,7 @@ $.widget('ggrc.autocomplete', $.ui.autocomplete, {
         .then(function (searchResult) {
           let objects = [];
 
-          _.forEach(that.options.searchtypes, function (searchtype) {
+          loForEach(that.options.searchtypes, function (searchtype) {
             objects.push(...searchResult.getResultsForType(searchtype));
           });
           return objects;

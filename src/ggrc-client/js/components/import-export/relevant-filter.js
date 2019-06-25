@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -73,7 +74,7 @@ export default CanComponent.extend({
       this.viewModel.attr('relevant').replace([]);
 
       const relevantTo = this.viewModel.attr('relevantTo') || [];
-      _.forEach(relevantTo, function (item) {
+      loForEach(relevantTo, function (item) {
         let model = new businessModels[item.type](item);
         this.viewModel.attr('relevant').push({
           readOnly: item.readOnly,

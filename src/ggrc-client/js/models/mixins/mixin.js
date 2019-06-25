@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanConstruct from 'can-construct';
 
 const Mixin = CanConstruct.extend({
@@ -68,7 +69,7 @@ const Mixin = CanConstruct.extend({
       Object.keys(this).forEach(function (key) {
         setupFns(cls)(this[key], key);
       }.bind(this));
-      _.forEach(this.prototype, setupFns(cls.prototype));
+      loForEach(this.prototype, setupFns(cls.prototype));
     }
   },
 }, {});

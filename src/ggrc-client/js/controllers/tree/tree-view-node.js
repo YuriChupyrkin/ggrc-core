@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanStache from 'can-stache';
@@ -45,7 +46,7 @@ export default CanControl.extend({
     }
     if (opts instanceof CanMap) {
       this.options = opts;
-      _.forEach(this.constructor.defaults, function (v, k) {
+      loForEach(this.constructor.defaults, function (v, k) {
         if (!that.options.hasOwnProperty(k)) {
           that.options.attr(k, v);
         }
@@ -128,7 +129,7 @@ export default CanControl.extend({
       originalChildList = [originalChildList];
     }
 
-    _.forEach(originalChildList, function (data, i) {
+    loForEach(originalChildList, function (data, i) {
       let options = new CanMap();
       data.each(function (v, k) {
         options.attr(k, v);

@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import moment from 'moment';
 import CanStache from 'can-stache';
@@ -151,7 +152,7 @@ export default CanComponent.extend({
     fetchAdditionalInfoForRevisions(revisions) {
       const refreshQueue = new RefreshQueue();
 
-      _.forEach(revisions, (revision) => {
+      loForEach(revisions, (revision) => {
         this.enqueueRelated(revision, refreshQueue);
         if (revision.content && revision.content.automapping) {
           this.enqueueRelated(revision.content.automapping, refreshQueue);
@@ -187,7 +188,7 @@ export default CanComponent.extend({
       if (this.attr('pageInfo.pageSize') < revisions.length) {
         revisionsForCompare = revisions.splice(-1);
       }
-      _.forEach(revisions, (revision) => {
+      loForEach(revisions, (revision) => {
         if (revision.destination || revision.source) {
           mappings.push(revision);
         } else {
@@ -206,7 +207,7 @@ export default CanComponent.extend({
       };
     },
     reifyObject(object) {
-      _.forEach(['modified_by', 'source', 'destination'],
+      loForEach(['modified_by', 'source', 'destination'],
         function (field) {
           if (object[field] && isReifiable(object[field])) {
             object.attr(field, reifyUtil(object[field]));

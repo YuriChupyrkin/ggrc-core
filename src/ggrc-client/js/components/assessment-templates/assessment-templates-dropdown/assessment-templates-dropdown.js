@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -29,7 +30,7 @@ export default CanComponent.extend({
         title: 'No template',
         value: '',
       };
-      _.forEach(responses, function (instance) {
+      loForEach(responses, function (instance) {
         let type;
         type = instance.template_object_type;
         if (!result[type]) {

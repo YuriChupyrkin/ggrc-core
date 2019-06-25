@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 // Disabling some minor eslint rules until major refactoring
 /* eslint-disable no-console, id-length */
 
@@ -152,7 +153,7 @@ export default CanModel.extend({
     let that = this;
 
     if (staticProps.mixins) {
-      _.forEach(staticProps.mixins, function (mixin) {
+      loForEach(staticProps.mixins, function (mixin) {
         mixin.add_to(that);
       });
       delete this.mixins;

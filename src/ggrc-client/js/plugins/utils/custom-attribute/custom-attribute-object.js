@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanBatch from 'can-event/batch/batch';
 import CanMap from 'can-map';
 import StateValidator from '../state-validator-utils';
@@ -266,7 +267,7 @@ export default class CustomAttributeObject {
 
     CanBatch.start();
     // set for caValue requiered fields if they were missed
-    _.forEach(requiredDefaultFields, (requiredValue, key) => {
+    loForEach(requiredDefaultFields, (requiredValue, key) => {
       const hasMissedRequieredField = !caValueKeys.includes(key);
       if (hasMissedRequieredField) {
         caValue.attr(key, requiredValue);

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanModel from 'can-model';
 import CanMap from 'can-map';
 // TODO: this import is used to correctly build assets. It should be removed and cyclic dependencies should be resolved.
@@ -200,7 +201,7 @@ function getAllowedToCreateModels(object) {
 function _getModelsFromConfig(object, prop) {
   let mappings = {};
   if (config[object] && config[object][prop]) {
-    _.forEach(config[object][prop],
+    loForEach(config[object][prop],
       (model) => {
         mappings[model] = businessModels[model];
       });

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import * as AjaxExtensions from '../plugins/ajax_extensions';
 import Permission from '../permission';
@@ -76,7 +77,7 @@ describe('Permission', function () {
           };
         });
 
-        _.forEach(permissionCollection, function (permission) {
+        loForEach(permissionCollection, function (permission) {
           expect(Permission._permission_match(permissions, permission))
             .toEqual(false);
         });

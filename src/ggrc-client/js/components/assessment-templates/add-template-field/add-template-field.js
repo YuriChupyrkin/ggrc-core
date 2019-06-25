@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -66,7 +67,7 @@ export default CanComponent.extend({
         attribute_type: type,
         multi_choice_options: values,
       });
-      _.forEach(['title', 'values', 'multi_choice_options'],
+      loForEach(['title', 'values', 'multi_choice_options'],
         (type) => {
           selected.attr(type, '');
         });

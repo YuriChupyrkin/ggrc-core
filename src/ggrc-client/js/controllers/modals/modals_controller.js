@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loFilter from 'lodash/filter';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanModel from 'can-model';
@@ -606,7 +607,7 @@ export default CanControl.extend({
       after: 'minDate',
     };
 
-    _.forEach(options, (val, key) => {
+    loForEach(options, (val, key) => {
       let targetEl;
       let isInput;
       let targetDate;

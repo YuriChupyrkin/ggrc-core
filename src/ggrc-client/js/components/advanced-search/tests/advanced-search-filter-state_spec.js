@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loFilter from 'lodash/filter';
 import CanMap from 'can-map';
 import * as StateUtils from '../../../plugins/utils/state-utils';
@@ -52,7 +53,7 @@ describe('advanced-search-filter-state component', function () {
       const result = viewModel.attr('filterStates');
       expect(result.length).toBe(states.length);
 
-      _.forEach(result, (item) => {
+      loForEach(result, (item) => {
         expect(item.checked).toBeFalsy();
       });
     });

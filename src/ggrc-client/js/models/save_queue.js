@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanConstruct from 'can-construct';
@@ -99,7 +100,7 @@ export default CanConstruct.extend({
           return $.Deferred().resolve(this);
         };
       };
-      _.forEach(objs, function (obj, idx) {
+      loForEach(objs, function (obj, idx) {
         let single = data[idx];
         // Add extra check to avoid possible exceptions
         single = Array.isArray(single) ? single : false;

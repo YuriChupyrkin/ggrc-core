@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import {confirm} from '../plugins/utils/modals';
 import {hasPending as hasPendingUtil} from '../plugins/ggrc_utils';
 import {navigate} from '../plugins/utils/current-page-utils';
@@ -113,7 +114,7 @@ $.extend(ModalForm.prototype, {
       this._cached_values = cache;
     } else {
       // Otherwise compute a diff to determine whether the form is dirty
-      _.forEach(cache, function (value, key) {
+      loForEach(cache, function (value, key) {
         if (!dirty) {
           dirty = (value !== that._cached_values[key] &&
             (!!value || that._cached_values[key] !== undefined));

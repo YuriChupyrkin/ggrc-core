@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanMap from 'can-map';
 import SummaryWidgetController from '../controllers/summary_widget_controller';
 import DashboardWidget from '../controllers/dashboard_widget_controller';
@@ -95,7 +96,7 @@ _.assign(CoreExtension, {
       // Initialize child_model_list, and child_display_list each model_type
       wList = baseWidgetsByType[name];
 
-      _.forEach(wList, function (item) {
+      loForEach(wList, function (item) {
         let childConfig;
         if (possibleModelType.indexOf(item) !== -1) {
           childConfig = getWidgetConfig(name);
@@ -187,7 +188,7 @@ _.assign(CoreExtension, {
       },
     };
 
-    _.forEach(farModels, function (modelName) {
+    loForEach(farModels, function (modelName) {
       let widgetConfig = getWidgetConfig(modelName);
       modelName = widgetConfig.name;
 

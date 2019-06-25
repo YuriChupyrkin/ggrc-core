@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanConstruct from 'can-construct';
 import SummaryWidgetController from '../controllers/summary_widget_controller';
 import DashboardWidget from '../controllers/dashboard_widget_controller';
@@ -37,8 +38,8 @@ export default CanConstruct.extend({
     let widgets = {};
     let descriptors = {};
 
-    _.forEach(this.modules, function (module) {
-      _.forEach(module[pageType], function (descriptor, id) {
+    loForEach(this.modules, function (module) {
+      loForEach(module[pageType], function (descriptor, id) {
         if (!widgets[id]) {
           widgets[id] = descriptor;
         } else {
@@ -47,7 +48,7 @@ export default CanConstruct.extend({
       });
     });
 
-    _.forEach(widgets, function (widget, widgetId) {
+    loForEach(widgets, function (widget, widgetId) {
       let ctrl = widget.content_controller;
       let options = widget.content_controller_options;
 
@@ -84,7 +85,7 @@ export default CanConstruct.extend({
       }
     });
 
-    _.forEach(descriptors, function (descriptor, id) {
+    loForEach(descriptors, function (descriptor, id) {
       if (!descriptor || descriptor.suppressed) {
         delete descriptors[id];
       }

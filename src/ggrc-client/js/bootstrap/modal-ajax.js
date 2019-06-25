@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import Spinner from 'spin.js';
 import {
@@ -596,7 +597,7 @@ function registerModalHook(toggle, launchFn) {
 }
 
 $(function () {
-  _.forEach({
+  loForEach({
     '': handlers.modal,
     form: handlers.form,
     deleteform: handlers.deleteform,

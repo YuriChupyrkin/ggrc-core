@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loSortBy from 'lodash/sortBy';
 import {notifier} from './notifiers-utils';
@@ -185,7 +186,7 @@ function groupTypes(types) {
     return _addFormattedType(modelName, groups);
   });
 
-  _.forEach(groups, (group) => {
+  loForEach(groups, (group) => {
     group.items = loSortBy(group.items, 'name');
   });
 

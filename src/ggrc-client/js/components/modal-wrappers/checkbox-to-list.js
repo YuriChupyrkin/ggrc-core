@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loForEach from 'lodash/forEach';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 export default CanComponent.extend({
@@ -18,7 +19,7 @@ export default CanComponent.extend({
     let values = viewModel.attr('instance.' + viewModel.attr('property'));
 
     if (values && _.isString(values)) {
-      _.forEach(_.splitTrim(values, ','), function (val) {
+      loForEach(_.splitTrim(values, ','), function (val) {
         if (val) {
           viewModel.attr('values.' + val, true);
         }

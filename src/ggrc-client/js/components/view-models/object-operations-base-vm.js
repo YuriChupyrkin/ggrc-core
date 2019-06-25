@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loIsEqual from 'lodash/isEqual';
 import CanBatch from 'can-event/batch/batch';
@@ -171,7 +172,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
     CanBatch.start();
 
     // do not update fields with the same values in VM and config
-    _.forEach(config, (value, key) => {
+    loForEach(config, (value, key) => {
       let vmValue = this.attr(key);
       let hasSerialize = Boolean(vmValue && vmValue.serialize);
 

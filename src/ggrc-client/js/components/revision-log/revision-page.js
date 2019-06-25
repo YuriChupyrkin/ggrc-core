@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import loSortBy from 'lodash/sortBy';
@@ -171,7 +172,7 @@ export default CanComponent.extend({
       diff.updatedAt = rev2.updated_at;
       diff.role = 'none';
 
-      _.forEach(rev2.content, function (value, fieldName) {
+      loForEach(rev2.content, function (value, fieldName) {
         let origVal = rev1.content[fieldName];
         let displayName;
         let unifyValue = function (value) {
