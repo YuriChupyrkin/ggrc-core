@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loConstant from 'lodash/constant';
 import loIsEmpty from 'lodash/isEmpty';
 import loAssign from 'lodash/assign';
 import loForEach from 'lodash/forEach';
@@ -76,8 +77,8 @@ let handlers = {
 
     warning(
       modalSettings,
-      _.constant({}),
-      _.constant({}), {
+      loConstant({}),
+      loConstant({}), {
         controller: DeleteModalControl,
         target: $target,
       });
