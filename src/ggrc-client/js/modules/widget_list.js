@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loMerge from 'lodash/merge';
 import loForEach from 'lodash/forEach';
 import CanConstruct from 'can-construct';
 import SummaryWidgetController from '../controllers/summary_widget_controller';
@@ -43,7 +44,7 @@ export default CanConstruct.extend({
         if (!widgets[id]) {
           widgets[id] = descriptor;
         } else {
-          _.merge(widgets[id], descriptor);
+          loMerge(widgets[id], descriptor);
         }
       });
     });
@@ -117,7 +118,7 @@ export default CanConstruct.extend({
   add_widget: function (pageType, id, descriptor) {
     this[pageType] = this[pageType] || {};
     if (this[pageType][id]) {
-      _.merge(this[pageType][id], descriptor);
+      loMerge(this[pageType][id], descriptor);
     } else {
       this[pageType][id] = descriptor;
     }

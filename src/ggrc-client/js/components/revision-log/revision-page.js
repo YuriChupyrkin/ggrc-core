@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loMerge from 'lodash/merge';
 import loUniq from 'lodash/uniq';
 import loCapitalize from 'lodash/capitalize';
 import loIsObject from 'lodash/isObject';
@@ -341,7 +342,7 @@ export default CanComponent.extend({
       newDefs = _.keyBy(newDefs, 'id');
 
       ids = loUniq(_.keys(origValues).concat(_.keys(newValues)));
-      defs = _.merge(origDefs, newDefs);
+      defs = loMerge(origDefs, newDefs);
 
       return _.chain(ids)
         .filter((id) => !!defs[id])
