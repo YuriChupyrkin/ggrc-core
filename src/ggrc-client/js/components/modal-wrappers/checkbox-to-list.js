@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loPickBy from 'lodash/pickBy';
 import loIsString from 'lodash/isString';
 import loForEach from 'lodash/forEach';
 import CanMap from 'can-map';
@@ -31,7 +32,7 @@ export default CanComponent.extend({
     '{viewModel.values} change': function () {
       let viewModel = this.viewModel;
       let values = _.keys(
-        _.pickBy(
+        loPickBy(
           viewModel.attr('values').serialize(),
           _.identity
         )

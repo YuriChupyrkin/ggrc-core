@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loPickBy from 'lodash/pickBy';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import {groupTypes} from '../../plugins/utils/models-utils';
@@ -17,7 +18,7 @@ export default CanComponent.extend({
           let objectTypes = groupTypes(GGRC.config.snapshotable_objects);
 
           // remove the groups that have ended up being empty
-          objectTypes = _.pickBy(objectTypes, function (objGroup) {
+          objectTypes = loPickBy(objectTypes, function (objGroup) {
             return objGroup.items && objGroup.items.length > 0;
           });
 
