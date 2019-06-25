@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loRange from 'lodash/range';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -71,7 +72,7 @@ export default CanComponent.extend({
       }
     },
     pagesList: function () {
-      return _.range(1, this.paging.attr('count') + 1);
+      return loRange(1, this.paging.attr('count') + 1);
     },
     getPageTitle: function (pageNumber) {
       let size = this.attr('paging.pageSize');

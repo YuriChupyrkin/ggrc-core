@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loRange from 'lodash/range';
 import loFind from 'lodash/find';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -57,7 +58,7 @@ export default CanComponent.extend({
       if (!isEqualLength && options.length < vals.length) {
         vals.length = options.length;
       } else if (!isEqualLength && options.length > vals.length) {
-        range = _.range(options.length - vals.length);
+        range = loRange(options.length - vals.length);
         range = range.map(function () {
           return '0';
         });
