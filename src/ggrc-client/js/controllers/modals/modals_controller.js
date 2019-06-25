@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loReduce from 'lodash/reduce';
 import loIncludes from 'lodash/includes';
 import loIsUndefined from 'lodash/isUndefined';
 import loIsFunction from 'lodash/isFunction';
@@ -224,7 +225,7 @@ export default CanControl.extend({
       instance.attr('_transient', new CanMap({}));
     }
 
-    _.reduce(name.slice(0, -1), function (current, next) {
+    loReduce(name.slice(0, -1), function (current, next) {
       current = current + '.' + next;
       if (!instance.attr(current)) {
         instance.attr(current, new CanMap({}));

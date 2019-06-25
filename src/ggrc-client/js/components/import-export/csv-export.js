@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loReduce from 'lodash/reduce';
 import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
 import loMap from 'lodash/map';
@@ -50,7 +51,7 @@ export default CanComponent.extend({
             return false;
           }
 
-          return _.reduce(this.attr('panels'), (allowed, panel) => {
+          return loReduce(this.attr('panels'), (allowed, panel) => {
             return allowed && panel.attr('isValidConfiguration');
           }, true);
         },
@@ -213,7 +214,7 @@ export default CanComponent.extend({
         let allItems = panel.attr('attributes')
           .concat(panel.attr('mappings'))
           .concat(panel.attr('localAttributes'));
-        let relevantFilter = _.reduce(panel.attr('relevant'),
+        let relevantFilter = loReduce(panel.attr('relevant'),
           (result, el, filterIndex) => {
             const isPrevious = el.model_name === '__previous__';
             const id = isPrevious ? index - 1 : el.filter.id;

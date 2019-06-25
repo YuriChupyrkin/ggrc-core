@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loReduce from 'lodash/reduce';
 import loFind from 'lodash/find';
 import CanList from 'can-list';
 import CanMap from 'can-map';
@@ -123,7 +124,7 @@ export default class CustomAttributeAccess {
     const instance = this._instance;
     const caDefinitions = instance.attr('custom_attribute_definitions');
     const caValues = instance.attr('custom_attribute_values');
-    const caObjectsMap = _.reduce(caDefinitions, (map, caDefinition) => {
+    const caObjectsMap = loReduce(caDefinitions, (map, caDefinition) => {
       const caId = caDefinition.attr('id');
       let caValue = this._findCaValueByCaId(caId, caValues);
 

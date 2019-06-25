@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loReduce from 'lodash/reduce';
 import {ggrcAjax} from './plugins/ajax_extensions';
 import CanCompute from 'can-compute';
 import CanConstruct from 'can-construct';
@@ -26,7 +27,7 @@ let _CONDITIONS_MAP = {
   },
   is: function (instance, args) {
     let value = Permission._resolve_permission_variable(args.value);
-    let propertyValue = _.reduce(args.property_name.split('.'),
+    let propertyValue = loReduce(args.property_name.split('.'),
       function (obj, key) {
         let value = obj.attr(key);
         if (value instanceof Stub) {

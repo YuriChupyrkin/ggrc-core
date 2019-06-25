@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loReduce from 'lodash/reduce';
 import loIsArray from 'lodash/isArray';
 import loIsString from 'lodash/isString';
 import loIncludes from 'lodash/includes';
@@ -442,8 +443,8 @@ CanStache.registerHelper('urlPath', function () {
   FIXME: Only synchronous helpers (those which call options.fn() or options.inverse()
     without yielding the thread through defer_render or otherwise) can currently be used
     with if_helpers.  if_helpers should support all helpers by changing the walk through
-    conjunctions and disjunctions to one using a _.reduce(Array, function (Deferred, item) {}, $.when())
-    pattern instead of _.reduce(Array, function (Boolean, item) {}, Boolean) pattern. --BM 8/29/2014
+    conjunctions and disjunctions to one using a loReduce(Array, function (Deferred, item) {}, $.when())
+    pattern instead of loReduce(Array, function (Boolean, item) {}, Boolean) pattern. --BM 8/29/2014
 */
 CanStache.registerHelper('if_helpers', function (...args) {
   let options = args[args.length - 1];
@@ -517,13 +518,13 @@ CanStache.registerHelper('if_helpers', function (...args) {
 
   if (disjunctions.length) {
     // Evaluate statements
-    let result = _.reduce(disjunctions,
+    let result = loReduce(disjunctions,
       function (disjunctiveResult, conjunctions) {
         if (disjunctiveResult) {
           return true;
         }
 
-        let conjunctiveResult = _.reduce(conjunctions,
+        let conjunctiveResult = loReduce(conjunctions,
           function (currentResult, stmt) {
             if (!currentResult) {
               return false;

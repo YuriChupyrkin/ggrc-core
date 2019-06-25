@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loReduce from 'lodash/reduce';
 import loFindIndex from 'lodash/findIndex';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanStache from 'can-stache';
@@ -316,7 +317,7 @@ export default CanComponent.extend({
         let disabledIds;
 
         if (isMegaMapping) {
-          disabledIds = _.reduce(relatedData, (result, val) => {
+          disabledIds = loReduce(relatedData, (result, val) => {
             return result.concat(val[type].ids);
           }, []);
         } else {

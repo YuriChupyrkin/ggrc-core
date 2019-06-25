@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loReduce from 'lodash/reduce';
 import loIncludes from 'lodash/includes';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
@@ -267,7 +268,7 @@ const TreeViewControl = TreeLoader.extend({
     if (listWindow.length > 0) {
       queue.push(listWindow);
     }
-    finalDfd = _.reduce(queue, function (dfd, listWindow) {
+    finalDfd = loReduce(queue, function (dfd, listWindow) {
       return dfd.then(function () {
         let res = $.Deferred();
         if (that._add_child_lists_id !== opId) {
