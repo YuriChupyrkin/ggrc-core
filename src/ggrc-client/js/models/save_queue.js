@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsUndefined from 'lodash/isUndefined';
 import loForEach from 'lodash/forEach';
 import loMap from 'lodash/map';
 import {ggrcAjax} from '../plugins/ajax_extensions';
@@ -145,7 +146,7 @@ export default CanConstruct.extend({
       bucketName = type + (obj.run_in_background ? '_bg' : '');
       bucket = this._buckets[bucketName];
 
-      if (_.isUndefined(bucket)) {
+      if (loIsUndefined(bucket)) {
         plural = obj.constructor.table_plural;
         bucket = {
           objs: [],

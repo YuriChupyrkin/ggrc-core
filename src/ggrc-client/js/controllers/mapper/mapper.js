@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsUndefined from 'lodash/isUndefined';
 import loAssign from 'lodash/assign';
 import CanStache from 'can-stache';
 import CanControl from 'can-control';
@@ -71,7 +72,7 @@ const ObjectMapper = CanControl.extend({
       return;
     }
 
-    if (_.isUndefined(data.join_object_type) ||
+    if (loIsUndefined(data.join_object_type) ||
       _.isNull(data.join_object_type)) {
       throw new Error(OBJECT_REQUIRED_MESSAGE);
     }
@@ -113,7 +114,7 @@ const ObjectMapper = CanControl.extend({
       }
 
       if (
-        _.isUndefined(data.join_object_id) ||
+        loIsUndefined(data.join_object_id) ||
         _.isNull(data.join_object_id)
       ) {
         throw new Error(OBJECT_REQUIRED_MESSAGE);

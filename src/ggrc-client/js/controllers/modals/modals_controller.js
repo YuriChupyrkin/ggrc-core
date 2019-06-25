@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsUndefined from 'lodash/isUndefined';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 import loFilter from 'lodash/filter';
@@ -519,9 +520,9 @@ export default CanControl.extend({
     }
     // if data was populated in a callback, use that data from the instance
     // except if we are editing an instance and some fields are already populated
-    if (!_.isUndefined(el.attr('data-populated-in-callback')) &&
+    if (!loIsUndefined(el.attr('data-populated-in-callback')) &&
       value === '') {
-      if (!_.isUndefined(instance[name])) {
+      if (!loIsUndefined(instance[name])) {
         if (typeof instance[name] === 'object' && instance[name] !== null) {
           this.set_value({name: name, value: instance[name].id});
         } else {

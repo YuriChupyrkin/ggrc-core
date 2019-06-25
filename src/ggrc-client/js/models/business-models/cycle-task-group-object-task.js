@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsUndefined from 'lodash/isUndefined';
 import loFilter from 'lodash/filter';
 import moment from 'moment';
 import Cacheable from '../cacheable';
@@ -276,7 +277,7 @@ export default Cacheable.extend({
       }
     } else {
       cycle = reify(form.cycle);
-      if (!_.isUndefined(cycle.workflow)) {
+      if (!loIsUndefined(cycle.workflow)) {
         form.attr('workflow', reify(cycle.workflow));
       }
     }
