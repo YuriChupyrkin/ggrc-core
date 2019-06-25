@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loEach from 'lodash/each';
 import loIsEqual from 'lodash/isEqual';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -359,7 +360,7 @@ export default CanComponent.extend({
        */
       function highlightValues(selector) {
         const infoPanes = $target.find('.info .tier-content');
-        _.each(infoPanes, (pane) => {
+        loEach(infoPanes, (pane) => {
           $(pane).find(selector).addClass(HIGHLIGHT_CLASS);
         });
       }

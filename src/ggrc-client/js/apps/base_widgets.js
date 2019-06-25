@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loEach from 'lodash/each';
 import loDifference from 'lodash/difference';
 import loAssign from 'lodash/assign';
 import loMap from 'lodash/map';
@@ -134,7 +135,7 @@ baseWidgetsByType = {
   Vendor: filteredTypes,
 };
 
-_.each(baseWidgetsByType, (val, widget) => {
+loEach(baseWidgetsByType, (val, widget) => {
   if (businessModels[widget] && businessModels[widget].isMegaObject) {
     baseWidgetsByType[widget] = baseWidgetsByType[widget]
       .concat(getRelatedWidgetNames(widget));

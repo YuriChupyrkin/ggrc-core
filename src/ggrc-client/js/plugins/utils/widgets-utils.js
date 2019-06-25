@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loEach from 'lodash/each';
 import loIsObject from 'lodash/isObject';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanMap from 'can-map';
@@ -166,7 +167,7 @@ function _initWidgetCounts(widgets, type, id) {
   });
 
   let params = [];
-  _.each(widgetsObject, function (widgetObject) {
+  loEach(widgetsObject, function (widgetObject) {
     let expression = TreeViewUtils.makeRelevantExpression(
       widgetObject.name,
       type,
