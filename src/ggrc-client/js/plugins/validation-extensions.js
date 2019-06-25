@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsArray from 'lodash/isArray';
 import loUniq from 'lodash/uniq';
 import loSome from 'lodash/some';
 import validatejs from 'validate.js/validate';
@@ -21,7 +22,7 @@ const validateDefaultPeople = (people, attrName, isMandatory) => {
 
   // "people" arg is array in case when selected "other" option.
   // empty array is not valid.
-  if (_.isArray(people)) {
+  if (loIsArray(people)) {
     return !people.length ? validationMessage : undefined;
   }
 

@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsArray from 'lodash/isArray';
 import loIsString from 'lodash/isString';
 import loIncludes from 'lodash/includes';
 import loTrim from 'lodash/trim';
@@ -759,7 +760,7 @@ CanStache.registerHelper('isValidAttr',
 CanStache.registerHelper('isArray', (items, options) => {
   items = isFunction(items) ? items() : items;
 
-  return _.isArray(items) || items instanceof CanList ?
+  return loIsArray(items) || items instanceof CanList ?
     options.fn(options.contexts) :
     options.inverse(options.contexts);
 });
