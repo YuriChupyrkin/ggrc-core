@@ -3,16 +3,17 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsEqual from 'lodash/isEqual';
 export function buildChangeDescriptor(
   previousValue,
   currentValue,
   remoteValue) {
   // The object attribute was changed on the server
-  let isChangedOnServer = !_.isEqual(previousValue, remoteValue);
+  let isChangedOnServer = !loIsEqual(previousValue, remoteValue);
   // The object attribute was changed on the client
-  let isChangedLocally = !_.isEqual(previousValue, currentValue);
+  let isChangedLocally = !loIsEqual(previousValue, currentValue);
   // The change on the server was not the same as the change on the client
-  let isDifferent = !_.isEqual(currentValue, remoteValue);
+  let isDifferent = !loIsEqual(currentValue, remoteValue);
 
   let hasConflict = (isChangedOnServer && isChangedLocally && isDifferent);
 

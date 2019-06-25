@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEqual from 'lodash/isEqual';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import MakeArray from 'can-util/js/make-array/make-array';
 import CanBatch from 'can-event/batch/batch';
@@ -349,7 +350,7 @@ export default CanComponent.extend({
         const valueNew = Object.assign({},
           right && right instanceof CanMap && right.attr() || []);
 
-        return _.isEqual(valueOld, valueNew);
+        return loIsEqual(valueOld, valueNew);
       }
 
       /**

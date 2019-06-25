@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEqual from 'lodash/isEqual';
 import loMap from 'lodash/map';
 import loFilter from 'lodash/filter';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -211,7 +212,7 @@ export default CanComponent.extend({
             value = unifyValue(value);
             let isDifferent = false;
             if (_.isObject(origVal) && _.isObject(value)) {
-              isDifferent = !_.isEqual(_.sortBy(origVal), _.sortBy(value));
+              isDifferent = !loIsEqual(_.sortBy(origVal), _.sortBy(value));
             } else {
               isDifferent = origVal !== value;
             }
