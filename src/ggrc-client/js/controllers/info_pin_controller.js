@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loSome from 'lodash/some';
 import {ggrcAjax} from '../plugins/ajax_extensions';
 import CanStache from 'can-stache';
@@ -109,7 +110,7 @@ export default CanControl.extend({
       options = populatedOpts;
     }
 
-    if (!_.isEmpty(confirmEdit)) {
+    if (!loIsEmpty(confirmEdit)) {
       confirmEdit.confirm = this.confirmEdit;
     }
 

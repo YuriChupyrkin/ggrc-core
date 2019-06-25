@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loAssign from 'lodash/assign';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
@@ -193,7 +194,7 @@ let handlers = {
         // (present in the DOM) if we want event handlers to be invoked.
         if (!document.contains($trigger[0])) {
           $trigger = $('[data-link-purpose="open-edit-modal"]');
-          if (_.isEmpty($trigger)) {
+          if (loIsEmpty($trigger)) {
             console.warn(WARN_MSG);
             return;
           }

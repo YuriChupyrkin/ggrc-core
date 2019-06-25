@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loIsObject from 'lodash/isObject';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -45,7 +46,7 @@ export default CanComponent.extend({
       let instance = this.attr('instance');
       let path = this.attr('path');
 
-      if (_.isEmpty(item)) {
+      if (loIsEmpty(item)) {
         instance.attr(path, null);
       } else if (loIsObject(item)) {
         instance.attr(path, item);

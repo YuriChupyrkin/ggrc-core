@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loEach from 'lodash/each';
 import loIsObject from 'lodash/isObject';
 import MakeArray from 'can-util/js/make-array/make-array';
@@ -143,7 +144,7 @@ function initWidgetCounts(widgets, type, id) {
 
     combinedValue = Object.assign({}, baseCounts, combinedValue);
 
-    if (!_.isEmpty(combinedValue)) {
+    if (!loIsEmpty(combinedValue)) {
       getCounts().attr(combinedValue);
     }
   });

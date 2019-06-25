@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loForEach from 'lodash/forEach';
 import loFind from 'lodash/find';
 import loIsEqual from 'lodash/isEqual';
@@ -56,7 +57,7 @@ const ObjectOperationsBaseVM = CanMap.extend({
       'config'
     );
 
-    resultConfig = !_.isEmpty(special) ? special : config.general;
+    resultConfig = !loIsEmpty(special) ? special : config.general;
     return resultConfig;
   },
 }, {

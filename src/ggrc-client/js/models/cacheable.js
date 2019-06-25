@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIsEmpty from 'lodash/isEmpty';
 import loIsFunction from 'lodash/isFunction';
 import loForEach from 'lodash/forEach';
 // Disabling some minor eslint rules until major refactoring
@@ -592,7 +593,7 @@ export default CanModel.extend({
     }
 
     const serializedErrors = errors.attr();
-    return _.isEmpty(serializedErrors) ? null : serializedErrors;
+    return loIsEmpty(serializedErrors) ? null : serializedErrors;
   },
   computed_errors: function () {
     let errors = this.getInstanceErrors();
