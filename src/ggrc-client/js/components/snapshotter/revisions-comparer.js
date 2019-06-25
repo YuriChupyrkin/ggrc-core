@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loDifferenceBy from 'lodash/differenceBy';
 import loReverse from 'lodash/reverse';
 import loDebounce from 'lodash/debounce';
 import loEach from 'lodash/each';
@@ -273,8 +274,8 @@ export default CanComponent.extend({
         const listNew = $value2.find(listSelector);
 
         if (listOld.length || listNew.length) {
-          const diffLeft = _.differenceBy(listOld, listNew, 'innerHTML');
-          const diffRight = _.differenceBy(listNew, listOld, 'innerHTML');
+          const diffLeft = loDifferenceBy(listOld, listNew, 'innerHTML');
+          const diffRight = loDifferenceBy(listNew, listOld, 'innerHTML');
           const diffs = [
             {attr: $value1, list: diffLeft},
             {attr: $value2, list: diffRight},
