@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loSnakeCase from 'lodash/snakeCase';
 import loForEach from 'lodash/forEach';
 let $body = $('body');
 let $window = $(window);
@@ -30,7 +31,7 @@ function openMapperByElement(ev, disableMapper) {
   let data = {};
 
   loForEach(btn.data(), function (val, key) {
-    data[_.snakeCase(key)] = val;
+    data[loSnakeCase(key)] = val;
   });
 
   if (data.tooltip) {
