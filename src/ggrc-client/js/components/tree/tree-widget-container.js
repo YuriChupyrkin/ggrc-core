@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import loGet from 'lodash/get';
 import loIsNull from 'lodash/isNull';
 import loFind from 'lodash/find';
 import loFindIndex from 'lodash/findIndex';
@@ -346,7 +347,7 @@ viewModel = CanMap.extend({
     let countsName = this.attr('options.countsName');
     let loaded = this.attr('loaded');
     let total = this.attr('pageInfo.total');
-    let counts = _.get(getCounts(), countsName);
+    let counts = loGet(getCounts(), countsName);
 
     if (!loIsNull(loaded) && (total !== counts)) {
       this.loadItems();

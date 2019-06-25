@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loGet from 'lodash/get';
 import loReduce from 'lodash/reduce';
 import loIsArray from 'lodash/isArray';
 import loIsString from 'lodash/isString';
@@ -588,12 +589,12 @@ CanStache.registerHelper('ggrc_config_value',
     }
     default_ = resolveComputed(default_);
     default_ = default_ || '';
-    return _.get(GGRC.config, key) || default_;
+    return loGet(GGRC.config, key) || default_;
   });
 
 CanStache.registerHelper('if_config_exist', function (key, options) {
   key = resolveComputed(key);
-  let configValue = _.get(GGRC.config, key);
+  let configValue = loGet(GGRC.config, key);
 
   return configValue ?
     options.fn(options.contexts) :

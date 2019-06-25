@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loGet from 'lodash/get';
 import loKeyBy from 'lodash/keyBy';
 import loIsEqual from 'lodash/isEqual';
 export function buildChangeDescriptor(
@@ -31,9 +32,9 @@ export function simpleFieldResolver(
   container,
   key,
   rootKey) {
-  let previousValue = _.get(baseAttrs, key);
-  let currentValue = _.get(attrs, key);
-  let remoteValue = _.get(remoteAttrs, key);
+  let previousValue = loGet(baseAttrs, key);
+  let currentValue = loGet(attrs, key);
+  let remoteValue = loGet(remoteAttrs, key);
 
   let {hasConflict, isChangedLocally} = buildChangeDescriptor(
     previousValue,
@@ -42,7 +43,7 @@ export function simpleFieldResolver(
 
   if (isChangedLocally) {
     let path = rootKey || key;
-    let currentRoot = _.get(attrs, path);
+    let currentRoot = loGet(attrs, path);
     container.attr(path, currentRoot);
   }
 
