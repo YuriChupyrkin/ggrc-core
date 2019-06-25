@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loPick from 'lodash/pick';
 import loMap from 'lodash/map';
 import CanStache from 'can-stache';
 import CanComponent from 'can-component';
@@ -26,7 +27,7 @@ export default CanComponent.extend({
       },
       extendInstanceData(instance) {
         instance = instance().serialize();
-        let audit = _.pick(instance, ['id', 'type', 'title', 'issue_tracker']);
+        let audit = loPick(instance, ['id', 'type', 'title', 'issue_tracker']);
         let context = {
           id: instance.context.id,
           type: instance.context.type,
