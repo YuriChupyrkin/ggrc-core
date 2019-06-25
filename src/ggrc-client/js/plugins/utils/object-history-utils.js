@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loUnion from 'lodash/union';
 import loFindIndex from 'lodash/findIndex';
 import CanMap from 'can-map';
 // #region ACL
@@ -59,7 +60,7 @@ const buildModifiedACL = (instance, modifiedRoles) => {
   }
 
   aclRoles = _.groupBy(instance.access_control_list, 'ac_role_id');
-  allRoles = _.union(
+  allRoles = loUnion(
     _.keys(aclRoles).map((key) => Number(key)),
     modifiedRolesKeys
   );
@@ -148,7 +149,7 @@ const buildModifiedAttValues = (values, definitions, modifiedAttrs) => {
   // convert to string.
   const valueKeys = values.map((val) => `${val.custom_attribute_id}`);
   const caKeys = CanMap.keys(modifiedAttrs);
-  const modifiedValues = _.union(valueKeys, caKeys).map((attrId) => {
+  const modifiedValues = loUnion(valueKeys, caKeys).map((attrId) => {
     let attr;
     let modifiedAttr;
     attrId = Number(attrId);
