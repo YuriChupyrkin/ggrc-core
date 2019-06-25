@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loIntersection from 'lodash/intersection';
 import loGroupBy from 'lodash/groupBy';
 import loIndexOf from 'lodash/indexOf';
 import loFindIndex from 'lodash/findIndex';
@@ -108,7 +109,7 @@ export default CanComponent.extend({
             .map((group) => group.people)
             .map((people) => people.map((person) => person.id));
 
-          hasConflict = !!_.intersection(...peopleIds).length;
+          hasConflict = !!loIntersection(...peopleIds).length;
         });
       });
 
@@ -131,7 +132,7 @@ export default CanComponent.extend({
         .map((people) => people.map((person) => person.id))[0];
 
       peopleIds.forEach((peopleGroupIds) => {
-        if (_.intersection(peopleGroupIds, currentGroupPeopleIds).length) {
+        if (loIntersection(peopleGroupIds, currentGroupPeopleIds).length) {
           hasConflict = true;
         }
       });
