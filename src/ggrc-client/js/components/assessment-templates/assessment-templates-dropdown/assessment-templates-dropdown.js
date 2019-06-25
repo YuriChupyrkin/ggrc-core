@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loToArray from 'lodash/toArray';
 import loForEach from 'lodash/forEach';
 import CanStache from 'can-stache';
 import CanMap from 'can-map';
@@ -44,7 +45,7 @@ export default CanComponent.extend({
           value: instance.id + '-' + type,
         });
       });
-      return [noValue].concat(_.toArray(result));
+      return [noValue].concat(loToArray(result));
     },
     /**
      * Set the initial Assessment Template to be selected in the relevant

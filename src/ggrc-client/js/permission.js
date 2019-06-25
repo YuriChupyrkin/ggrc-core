@@ -3,6 +3,7 @@
   Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import loToArray from 'lodash/toArray';
 import loReduce from 'lodash/reduce';
 import {ggrcAjax} from './plugins/ajax_extensions';
 import CanCompute from 'can-compute';
@@ -130,7 +131,7 @@ const Permission = CanConstruct.extend({
       let i;
       let condition;
       if (this._permission_match(permissions, permission)) {
-        conditions = _.toArray(_.exists(permissions,
+        conditions = loToArray(_.exists(permissions,
           permission.action,
           permission.resource_type,
           'conditions',
