@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {filteredMap} from '../plugins/ggrc_utils';
 import loThrottle from 'lodash/throttle';
 import loIsEmpty from 'lodash/isEmpty';
 import loIsFunction from 'lodash/isFunction';
@@ -519,7 +520,7 @@ export default CanModel.extend({
       GGRC.custom_attr_defs = {};
       console.warn('Missing injected custom attribute definitions');
     }
-    definitions = _.filteredMap(GGRC.custom_attr_defs, (def) => {
+    definitions = filteredMap(GGRC.custom_attr_defs, (def) => {
       let idCheck = !def.definition_id || def.definition_id === this.id;
       if (idCheck &&
           def.definition_type === this.constructor.table_singular) {
@@ -681,7 +682,7 @@ export default CanModel.extend({
       } else if (val && loIsFunction(val.save)) {
         serial[name] = (new Stub(val)).serialize();
       } else if (typeof val === 'object' && val !== null && val.length) {
-        serial[name] = _.filteredMap(val, (v) => {
+        serial[name] = filteredMap(val, (v) => {
           let isModel = v && loIsFunction(v.save);
           return isModel ?
             (new Stub(v)).serialize() :

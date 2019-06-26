@@ -9,7 +9,7 @@ import CanStache from 'can-stache';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
 import template from './templates/dropdown-wrap-text.stache';
-import {isInnerClick} from '../../plugins/ggrc_utils';
+import {isInnerClick, filteredMap} from '../../plugins/ggrc_utils';
 
 const DefaultNoValueLabel = '--';
 
@@ -47,7 +47,7 @@ export default CanComponent.extend({
             } :
             option;
 
-          const list = _.filteredMap(optionsList, filteredMapPredicate);
+          const list = filteredMap(optionsList, filteredMapPredicate);
 
           if (!this.attr('noValue')) {
             return list;
