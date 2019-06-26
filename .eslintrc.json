@@ -17,8 +17,6 @@
   },
 
   "globals": {
-    "_": false,
-    "can": false,
     "GGRC": false,
     "moment": false,
     "MutationObserver": false,
@@ -110,13 +108,6 @@
     "no-new": 0,
     "no-console": ["error", {
       "allow": ["warn", "error"]
-    }],
-    "no-restricted-properties": [2, {
-      "object": "can",
-      "property": "Deferred"
-    }, {
-      "object": "can",
-      "property": "when"
     }]
   }
 }
