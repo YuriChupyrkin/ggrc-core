@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+import {exists, splitTrim} from '../../plugins/ggrc_utils';
 import loJoin from 'lodash/join';
 import loCompact from 'lodash/compact';
 import loConcat from 'lodash/concat';
@@ -223,7 +224,7 @@ export default CanComponent.extend({
           if (LIST_FIELDS[fieldName]) {
             if (value) {
               value = loFlow(
-                (items) => _.splitTrim(items, ','),
+                (items) => splitTrim(items, ','),
                 (items) => items.sort(),
                 (items) => loCompact(items),
                 (items) => loJoin(items, ', ')
@@ -231,7 +232,7 @@ export default CanComponent.extend({
             }
             if (origVal) {
               origVal = loFlow(
-                (items) => _.splitTrim(items, ','),
+                (items) => splitTrim(items, ','),
                 (items) => items.sort(),
                 (items) => loCompact(items),
                 (items) => loJoin(items, ', ')
@@ -461,10 +462,10 @@ export default CanComponent.extend({
       newVal = loCapitalize(revision.action);
       previous = chain[loFindIndex(chain, revision) - 1];
       if (revision.action !== 'deleted' &&
-        _.exists(revision.content, 'attrs.AssigneeType')) {
+        exists(revision.content, 'attrs.AssigneeType')) {
         newVal = revision.content.attrs.AssigneeType;
       }
-      if (_.exists(previous, 'content.attrs.AssigneeType')) {
+      if (exists(previous, 'content.attrs.AssigneeType')) {
         origVal = previous.content.attrs.AssigneeType;
       } else if (revision.action === 'deleted') {
         origVal = 'Created';

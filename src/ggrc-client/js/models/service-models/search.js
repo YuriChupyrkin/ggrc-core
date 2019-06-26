@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {filteredMap} from '../../plugins/ggrc_utils';
 import {ggrcAjax} from '../../plugins/ajax_extensions';
 import CanModel from 'can-model';
 import CanList from 'can-list';
@@ -70,7 +71,7 @@ export default CanModel.extend({
       this.entries instanceof CanList)) {
       entries = this.entries[modelName] || [];
     } else {
-      entries = _.filteredMap(this.entries, (v) => {
+      entries = filteredMap(this.entries, (v) => {
         if (v.type === modelName) {
           return v;
         }

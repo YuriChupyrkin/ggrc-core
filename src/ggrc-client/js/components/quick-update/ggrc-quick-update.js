@@ -3,6 +3,7 @@
     Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
 */
 
+import {filteredMap} from '../../plugins/ggrc_utils';
 import CanList from 'can-list';
 import CanMap from 'can-map';
 import CanComponent from 'can-component';
@@ -74,7 +75,7 @@ export default CanComponent.extend({
         this.viewModel.instance
           .attr(el.attr('name'))
           .replace(
-            _.filteredMap(
+            filteredMap(
               this.element.find(
                 'input[name="' + el.attr('name') + '"]:checked'),
               (el) => $(el).val())
