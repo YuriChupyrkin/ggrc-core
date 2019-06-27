@@ -376,17 +376,28 @@ def is_headless_chrome(pytestconfig):
   """Return whether `--headless = True` is specified in pytest config."""
   return pytestconfig.getoption("headless") == "True"
 
-
+# pylint: disable=bad-format-string
 def filter_by_text(elements, text):
   """Filter elements by text."""
   # Text filter is not converted to XPath in Nerodia. E.g.
   #   browser.elements(cls=cls, text=text)
   # has O(N) complexity where N is the number of elements with class `cls`
   browser = elements[0].browser
-  return browser.execute_script("""
+  return browser.execute_script(r"""
     var elements = arguments;
+
+    // implementation of _.escapeRegExp function
+    var escapeRegExp = function(string) {
+      var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+      var reHasRegExpChar = RegExp(reRegExpChar.source);
+
+      return (string && reHasRegExpChar.test(string))
+        ? string.replace(reRegExpChar, '\\$&')
+        : string;
+    };
+
     return $(elements).filter(function() {{
-      var s = _.escapeRegExp('{0}');
+      var s = escapeRegExp('{0}');
       var reg = new RegExp(s, 'ig');
       return reg.test($(this).text());
     }})
