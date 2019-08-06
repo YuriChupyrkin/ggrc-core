@@ -247,124 +247,16 @@ export default canComponent.extend({
     commentsTotalCount: 0,
     commentsPerPage: 10,
     newCommentsCount: 0,
-    refreshCounts: function (types) {
-      let pageInstance = getPageInstance();
-      initCounts(
-        types,
-        pageInstance.attr('type'),
-        pageInstance.attr('id')
-      );
-    },
     setUrlEditMode: function (value) {
       this.attr('urlsEditMode', value);
     },
     setInProgressState: function () {
       this.onStateChange({state: 'In Progress', undo: false});
     },
-    getQuery: function (type, sortObj, additionalFilter) {
-      let relevantFilters = [{
-        type: this.attr('instance.type'),
-        id: this.attr('instance.id'),
-        operation: 'relevant',
-      }];
-      return buildParam(type,
-        sortObj || {},
-        relevantFilters,
-        [],
-        additionalFilter || []);
-    },
-    getSnapshotQuery: function () {
-      return this.getQuery('Snapshot');
-    },
-    getEvidenceQuery: function (kind) {
-      let query = this.getQuery(
-        'Evidence',
-        {sort: [{key: 'created_at', direction: 'desc'}]},
-        this.getEvidenceAdditionFilter(kind));
-      return query;
-    },
-    requestQuery: function (query, type) {
-      let dfd = $.Deferred();
-      type = type || '';
-      this.attr('isUpdating' + loCapitalize(type), true);
-
-      batchRequests(query)
-        .done(function (response) {
-          let type = Object.keys(response)[0];
-          let values = response[type].values;
-          dfd.resolve(values);
-        })
-        .fail(function () {
-          dfd.resolve([]);
-        })
-        .always(function () {
-          this.attr('isUpdating' + loCapitalize(type), false);
-
-          tracker.stop(this.attr('instance.type'),
-            tracker.USER_JOURNEY_KEYS.INFO_PANE,
-            tracker.USER_ACTIONS.INFO_PANE.OPEN_INFO_PANE);
-        }.bind(this));
-      return dfd;
-    },
-    loadSnapshots: function () {
-      let query = this.getSnapshotQuery();
-      return this.requestQuery(query);
-    },
-    loadFiles: function () {
-      let query = this.getEvidenceQuery('FILE');
-      return this.requestQuery(query, 'files');
-    },
-    loadUrls: function () {
-      let query = this.getEvidenceQuery('URL');
-      return this.requestQuery(query, 'urls');
-    },
-    updateItems: function () {
-      makeArray(arguments).forEach(function (type) {
-        this.attr(type).replace(this['load' + loCapitalize(type)]());
-      }.bind(this));
-    },
-    removeItems: function (event, type) {
-      let items = this.attr(type);
-
-      canBatch.start();
-      let resultItems = items.filter((item) => {
-        let newItemIndex = loFindIndex(event.items, (newItem) => {
-          return newItem === item;
-        });
-        return newItemIndex < 0;
-      });
-
-      items.replace(resultItems);
-      canBatch.stop();
-    },
     addItems: function (event, type) {
       let items = event.items;
       this.attr('isUpdating' + loCapitalize(type), true);
       return this.attr(type).unshift(...makeArray(items));
-    },
-    getEvidenceAdditionFilter: function (kind) {
-      return kind ?
-        {
-          expression: {
-            left: 'kind',
-            op: {name: '='},
-            right: kind,
-          },
-        } :
-        [];
-    },
-    addAction: function (actionType, related) {
-      let assessment = this.attr('instance');
-      let path = 'actions.' + actionType;
-
-      if (!assessment.attr('actions')) {
-        assessment.attr('actions', {});
-      }
-      if (assessment.attr(path)) {
-        assessment.attr(path).push(related);
-      } else {
-        assessment.attr(path, [related]);
-      }
     },
     addRelatedItem: function (event, type) {
       let self = this;
@@ -376,7 +268,7 @@ export default canComponent.extend({
       };
 
       this.attr('deferredSave').execute(function () {
-        self.addAction('add_related', related);
+        addAction(self, 'add_related', related);
       })
         .done(() => {
           if (type === 'comments') {
@@ -407,9 +299,12 @@ export default canComponent.extend({
               false);
           }
 
-          self.removeItems({
-            items: [event.item],
-          }, type);
+          removeItems(
+            self,
+            {
+              items: [event.item],
+            },
+            type);
         })
         .always(function (assessment) {
           assessment.removeAttr('actions');
@@ -419,7 +314,7 @@ export default canComponent.extend({
           self.attr('instance').dispatch(RELATED_ITEMS_LOADED);
 
           if (relatedItemType === 'Evidence') {
-            self.refreshCounts(['Evidence']);
+            refreshCounts(['Evidence']);
           }
         });
     },
@@ -435,7 +330,7 @@ export default canComponent.extend({
       items.splice(index, 1);
 
       this.attr('deferredSave').push(function () {
-        self.addAction('remove_related', related);
+        addAction(self, 'remove_related', related);
       })
         .fail(function () {
           notifier('error', 'Unable to remove URL.');
@@ -445,43 +340,8 @@ export default canComponent.extend({
           assessment.removeAttr('actions');
           self.attr('isUpdating' + loCapitalize(type), false);
 
-          self.refreshCounts(['Evidence']);
+          refreshCounts(['Evidence']);
         });
-    },
-    updateRelatedItems: function () {
-      this.attr('isUpdatingRelatedItems', true);
-
-      return this.attr('instance').getRelatedObjects()
-        .then((data) => {
-          this.attr('mappedSnapshots').replace(data.Snapshot);
-          this.attr('files')
-            .replace(data['Evidence:FILE'].map((file) => new Evidence(file)));
-          this.attr('urls')
-            .replace(data['Evidence:URL'].map((url) => new Evidence(url)));
-
-          this.attr('isUpdatingRelatedItems', false);
-          this.attr('instance').dispatch(RELATED_ITEMS_LOADED);
-
-          tracker.stop(this.attr('instance.type'),
-            tracker.USER_JOURNEY_KEYS.INFO_PANE,
-            tracker.USER_ACTIONS.INFO_PANE.OPEN_INFO_PANE);
-        });
-    },
-    async loadFirstComments(count) {
-      let instance = this.attr('instance');
-      let newCommentsCount = this.attr('newCommentsCount');
-
-      // load more comments as they can be added by other users before or after current user's new comments
-      let pageSize = (count || this.attr('commentsPerPage')) + newCommentsCount;
-
-      let response = await loadComments(instance, 'Comment', 0, pageSize);
-      let {values: comments, total} = response.Comment;
-
-      this.attr('comments').splice(0, newCommentsCount);
-      this.attr('comments').unshift(...comments);
-
-      this.attr('commentsTotalCount', total);
-      this.attr('newCommentsCount', 0);
     },
     async loadMoreComments(startIndex) {
       this.attr('isLoadingComments', true);
@@ -499,7 +359,7 @@ export default canComponent.extend({
           // new comments were added by other users
           let newCommentsCount = total - totalCount;
           await Promise.all([
-            this.loadFirstComments(newCommentsCount),
+            loadFirstComments(this, newCommentsCount),
             this.loadMoreComments(index + newCommentsCount)]);
         } else {
           this.attr('comments').push(...comments);
@@ -520,44 +380,16 @@ export default canComponent.extend({
             type: item.attr('type'),
           };
 
-          this.addAction('add_related', related);
+          addAction(this, 'add_related', related);
         });
       })
         .done(() => {
-          this.updateItems('urls', 'files');
-          this.refreshCounts(['Evidence']);
+          updateItems.call(this, 'urls', 'files');
+          refreshCounts(['Evidence']);
         })
         .always(() => {
           this.attr('instance').removeAttr('actions');
         });
-    },
-    initializeFormFields: function () {
-      const cavs =
-      getCustomAttributes(
-        this.attr('instance'),
-        CA_UTILS_CA_TYPE.LOCAL
-      );
-      this.attr('formFields',
-        convertValuesToFormFields(cavs)
-      );
-    },
-    reinitFormFields() {
-      const cavs = getCustomAttributes(
-        this.attr('instance'),
-        CA_UTILS_CA_TYPE.LOCAL
-      );
-
-      let updatedFormFields = convertValuesToFormFields(cavs);
-      let updatedFieldsIds = loKeyBy(updatedFormFields, 'id');
-
-      this.attr('formFields').forEach((field) => {
-        let updatedField = updatedFieldsIds[field.attr('id')];
-
-        if (updatedField &&
-          field.attr('value') !== updatedField.attr('value')) {
-          field.attr('value', updatedField.attr('value'));
-        }
-      });
     },
     initGlobalAttributes: function () {
       const instance = this.attr('instance');
@@ -565,35 +397,15 @@ export default canComponent.extend({
         .customAttr({type: CUSTOM_ATTRIBUTE_TYPE.GLOBAL});
       this.attr('globalAttributes', caObjects);
     },
-    initializeDeferredSave: function () {
-      this.attr('deferredSave', new DeferredTransaction(
-        function (resolve, reject) {
-          this.attr('instance').save().done(resolve).fail(reject);
-        }.bind(this), 1000));
-    },
+
+    /*
     refreshAssessment() {
       this.attr('instance').refresh().then((response) => {
         this.setCurrentState(response.status);
       });
     },
-    beforeStatusSave(newStatus, isUndo) {
-      const instance = this.attr('instance');
+    */
 
-      if (isUndo) {
-        instance.attr('status', this.attr('previousStatus'));
-        this.attr('previousStatus', undefined);
-      } else {
-        this.attr('previousStatus', instance.attr('status'));
-        instance.attr('status', newStatus);
-      }
-    },
-    afterStatusSave(savedStatus) {
-      this.attr('instance.status', savedStatus);
-      this.setCurrentState(savedStatus);
-    },
-    setCurrentState(state) {
-      this.attr('currentState', state);
-    },
     onStateChange: function (event) {
       const isUndo = event.undo;
       const newStatus = event.state;
@@ -622,10 +434,10 @@ export default canComponent.extend({
       this.attr('isUpdatingState', true);
 
       return this.attr('deferredSave').execute(
-        this.beforeStatusSave.bind(this, newStatus, isUndo)
+        beforeStatusSave.bind(this, newStatus, isUndo)
       ).then((resp) => {
         const newStatus = resp.status;
-        this.afterStatusSave(newStatus);
+        afterStatusSave(this, newStatus);
 
         this.attr('isUndoButtonVisible', !isUndo);
 
@@ -644,7 +456,7 @@ export default canComponent.extend({
         if (xhr && xhr.status === 409 && xhr.remoteObject) {
           instance.attr('status', xhr.remoteObject.status);
         } else {
-          this.afterStatusSave(status);
+          afterStatusSave(this, status);
           this.attr('previousStatus', previousStatus);
           notifier('error', getAjaxErrorInfo(xhr).details);
         }
@@ -690,40 +502,29 @@ export default canComponent.extend({
       canBatch.stop();
       this.attr('modal.state.open', true);
     },
-    setVerifierRoleId: function () {
-      let verifierRole = getRole('Assessment', 'Verifiers');
-
-      let verifierRoleId = verifierRole ? verifierRole.id : null;
-      this.attr('_verifierRoleId', verifierRoleId);
-    },
-    resetCurrentState() {
-      this.setCurrentState(this.attr('instance.status'));
-      this.attr('previousStatus', undefined);
-      this.attr('isUndoButtonVisible', false);
-    },
   }),
   async init() {
-    this.viewModel.initializeFormFields();
+    initializeFormFields(this.viewModel);
     this.viewModel.initGlobalAttributes();
-    this.viewModel.updateRelatedItems();
-    this.viewModel.initializeDeferredSave();
-    this.viewModel.setVerifierRoleId();
+    updateRelatedItems(this.viewModel);
+    initializeDeferredSave(this.viewModel);
+    setVerifierRoleId(this.viewModel);
 
     try {
       this.viewModel.attr('isLoadingComments', true);
-      await this.viewModel.loadFirstComments();
+      await loadFirstComments(this.viewModel);
     } finally {
       this.viewModel.attr('isLoadingComments', false);
     }
   },
   events: {
     inserted() {
-      this.viewModel.resetCurrentState();
+      resetCurrentState(this.viewModel);
     },
     [`{viewModel.instance} ${REFRESH_MAPPING.type}`]([scope], event) {
       const viewModel = this.viewModel;
       viewModel.attr('mappedSnapshots')
-        .replace(this.viewModel.loadSnapshots());
+        .replace(loadFn.loadSnapshots(this.viewModel));
       viewModel.attr('instance').dispatch({
         ...REFRESH_RELATED,
         model: event.destinationType,
@@ -731,7 +532,7 @@ export default canComponent.extend({
     },
     [`{viewModel.instance} ${REFRESHED.type}`]() {
       const status = this.viewModel.attr('instance.status');
-      this.viewModel.setCurrentState(status);
+      setCurrentState(this.viewModel, status);
     },
     '{viewModel.instance} updated'([instance]) {
       const vm = this.viewModel;
@@ -740,7 +541,7 @@ export default canComponent.extend({
       if (!isPending) {
         // reinit LCA when queue is empty
         // to avoid rewriting of changed values
-        vm.reinitFormFields();
+        reinitFormFields(vm);
       }
     },
     '{viewModel.instance} modelBeforeSave': function () {
@@ -748,7 +549,7 @@ export default canComponent.extend({
     },
     '{viewModel.instance} modelAfterSave': function () {
       this.viewModel.attr('isAssessmentSaving', false);
-      this.viewModel.setCurrentState(this.viewModel.attr('instance.status'));
+      setCurrentState(this.viewModel, this.viewModel.attr('instance.status'));
     },
     '{viewModel.instance} assessment_type'() {
       const onSave = () => {
@@ -761,16 +562,16 @@ export default canComponent.extend({
       this.viewModel.instance.bind('updated', onSave);
     },
     async '{viewModel} instance'() {
-      this.viewModel.initializeFormFields();
+      initializeFormFields(this.viewModel);
       this.viewModel.initGlobalAttributes();
-      this.viewModel.updateRelatedItems();
-      this.viewModel.resetCurrentState();
+      updateRelatedItems(this.viewModel);
+      resetCurrentState(this.viewModel);
 
       try {
         this.viewModel.attr('comments', []);
         this.viewModel.attr('commentsTotalCount', 0);
         this.viewModel.attr('isLoadingComments', true);
-        await this.viewModel.loadFirstComments();
+        await loadFirstComments(this.viewModel);
       } finally {
         this.viewModel.attr('isLoadingComments', false);
       }
@@ -780,7 +581,7 @@ export default canComponent.extend({
       // handle removing evidence on Evidence tab
       // evidence on Assessment tab should be updated
       if (instance instanceof Evidence) {
-        this.viewModel.updateItems('files', 'urls');
+        updateItems.call(this.viewModel, 'files', 'urls');
       }
     },
     '{pubSub} relatedItemSaved'(pubSub, event) {
@@ -791,3 +592,232 @@ export default canComponent.extend({
     },
   },
 });
+
+const loadFn = {
+  loadSnapshots: (vm) => {
+    let query = getSnapshotQuery(vm);
+    return requestQuery(vm, query);
+  },
+  loadFiles: (vm) => {
+    let query = getEvidenceQuery(vm, 'FILE');
+    return requestQuery(vm, query, 'files');
+  },
+  loadUrls: (vm) => {
+    let query = getEvidenceQuery(vm, 'URL');
+    return requestQuery(vm, query, 'urls');
+  },
+};
+
+function refreshCounts(types) {
+  let pageInstance = getPageInstance();
+  initCounts(
+    types,
+    pageInstance.attr('type'),
+    pageInstance.attr('id')
+  );
+}
+
+function getQuery(vm, type, sortObj, additionalFilter) {
+  let relevantFilters = [{
+    type: vm.attr('instance.type'),
+    id: vm.attr('instance.id'),
+    operation: 'relevant',
+  }];
+  return buildParam(type,
+    sortObj || {},
+    relevantFilters,
+    [],
+    additionalFilter || []);
+}
+
+function getSnapshotQuery(vm) {
+  return getQuery(vm, 'Snapshot');
+}
+
+function getEvidenceQuery(vm, kind) {
+  let query = getQuery(
+    vm,
+    'Evidence',
+    {sort: [{key: 'created_at', direction: 'desc'}]},
+    getEvidenceAdditionFilter(kind));
+  return query;
+}
+
+function requestQuery(vm, query, type) {
+  let dfd = $.Deferred();
+  type = type || '';
+  vm.attr('isUpdating' + loCapitalize(type), true);
+
+  batchRequests(query)
+    .done(function (response) {
+      let type = Object.keys(response)[0];
+      let values = response[type].values;
+      dfd.resolve(values);
+    })
+    .fail(function () {
+      dfd.resolve([]);
+    })
+    .always(function () {
+      vm.attr('isUpdating' + loCapitalize(type), false);
+
+      tracker.stop(vm.attr('instance.type'),
+        tracker.USER_JOURNEY_KEYS.INFO_PANE,
+        tracker.USER_ACTIONS.INFO_PANE.OPEN_INFO_PANE);
+    });
+  return dfd;
+}
+
+function updateItems() {
+  makeArray(arguments).forEach(function (type) {
+    this.attr(type).replace(loadFn['load' + loCapitalize(type)](this));
+  }.bind(this));
+}
+
+function removeItems(vm, event, type) {
+  let items = vm.attr(type);
+
+  canBatch.start();
+  let resultItems = items.filter((item) => {
+    let newItemIndex = loFindIndex(event.items, (newItem) => {
+      return newItem === item;
+    });
+    return newItemIndex < 0;
+  });
+
+  items.replace(resultItems);
+  canBatch.stop();
+}
+
+function getEvidenceAdditionFilter(kind) {
+  return kind ?
+    {
+      expression: {
+        left: 'kind',
+        op: {name: '='},
+        right: kind,
+      },
+    } :
+    [];
+}
+
+function addAction(vm, actionType, related) {
+  let assessment = vm.attr('instance');
+  let path = 'actions.' + actionType;
+
+  if (!assessment.attr('actions')) {
+    assessment.attr('actions', {});
+  }
+  if (assessment.attr(path)) {
+    assessment.attr(path).push(related);
+  } else {
+    assessment.attr(path, [related]);
+  }
+}
+
+function updateRelatedItems(vm) {
+  vm.attr('isUpdatingRelatedItems', true);
+
+  return vm.attr('instance').getRelatedObjects()
+    .then((data) => {
+      vm.attr('mappedSnapshots').replace(data.Snapshot);
+      vm.attr('files')
+        .replace(data['Evidence:FILE'].map((file) => new Evidence(file)));
+      vm.attr('urls')
+        .replace(data['Evidence:URL'].map((url) => new Evidence(url)));
+
+      vm.attr('isUpdatingRelatedItems', false);
+      vm.attr('instance').dispatch(RELATED_ITEMS_LOADED);
+
+      tracker.stop(vm.attr('instance.type'),
+        tracker.USER_JOURNEY_KEYS.INFO_PANE,
+        tracker.USER_ACTIONS.INFO_PANE.OPEN_INFO_PANE);
+    });
+}
+
+async function loadFirstComments(vm, count) {
+  let instance = vm.attr('instance');
+  let newCommentsCount = vm.attr('newCommentsCount');
+
+  // load more comments as they can be added by other users before or after current user's new comments
+  let pageSize = (count || vm.attr('commentsPerPage')) + newCommentsCount;
+
+  let response = await loadComments(instance, 'Comment', 0, pageSize);
+  let {values: comments, total} = response.Comment;
+
+  vm.attr('comments').splice(0, newCommentsCount);
+  vm.attr('comments').unshift(...comments);
+
+  vm.attr('commentsTotalCount', total);
+  vm.attr('newCommentsCount', 0);
+}
+
+function initializeFormFields(vm) {
+  const cavs =
+  getCustomAttributes(
+    vm.attr('instance'),
+    CA_UTILS_CA_TYPE.LOCAL
+  );
+  vm.attr('formFields',
+    convertValuesToFormFields(cavs)
+  );
+}
+
+function reinitFormFields(vm) {
+  const cavs = getCustomAttributes(
+    vm.attr('instance'),
+    CA_UTILS_CA_TYPE.LOCAL
+  );
+
+  let updatedFormFields = convertValuesToFormFields(cavs);
+  let updatedFieldsIds = loKeyBy(updatedFormFields, 'id');
+
+  vm.attr('formFields').forEach((field) => {
+    let updatedField = updatedFieldsIds[field.attr('id')];
+
+    if (updatedField &&
+      field.attr('value') !== updatedField.attr('value')) {
+      field.attr('value', updatedField.attr('value'));
+    }
+  });
+}
+
+function initializeDeferredSave(vm) {
+  vm.attr('deferredSave', new DeferredTransaction(
+    function (resolve, reject) {
+      vm.attr('instance').save().done(resolve).fail(reject);
+    }, 1000));
+}
+
+function beforeStatusSave(newStatus, isUndo) {
+  const instance = this.attr('instance');
+
+  if (isUndo) {
+    instance.attr('status', this.attr('previousStatus'));
+    this.attr('previousStatus', undefined);
+  } else {
+    this.attr('previousStatus', instance.attr('status'));
+    instance.attr('status', newStatus);
+  }
+}
+
+function afterStatusSave(vm, savedStatus) {
+  vm.attr('instance.status', savedStatus);
+  setCurrentState(vm, savedStatus);
+}
+
+function setCurrentState(vm, state) {
+  vm.attr('currentState', state);
+}
+
+function setVerifierRoleId(vm) {
+  let verifierRole = getRole('Assessment', 'Verifiers');
+
+  let verifierRoleId = verifierRole ? verifierRole.id : null;
+  vm.attr('_verifierRoleId', verifierRoleId);
+}
+
+function resetCurrentState(vm) {
+  setCurrentState(vm, vm.attr('instance.status'));
+  vm.attr('previousStatus', undefined);
+  vm.attr('isUndoButtonVisible', false);
+}
