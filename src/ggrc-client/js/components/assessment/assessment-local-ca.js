@@ -57,7 +57,7 @@ export default canComponent.extend({
       isEvidenceRequired: {
         get: function () {
           let optionsWithEvidence =
-            this.getDropdownOptions(isEvidenceRequired);
+            getDropdownOptions(this, isEvidenceRequired);
 
           return optionsWithEvidence.length > this.attr('evidenceAmount');
         },
@@ -65,134 +65,11 @@ export default canComponent.extend({
       isUrlRequired: {
         get: function () {
           let optionsWithURLs =
-            this.getDropdownOptions(isUrlRequired);
+            getDropdownOptions(this, isUrlRequired);
 
           return optionsWithURLs.length > this.attr('urlsAmount');
         },
       },
-    },
-    getDropdownOptions(predicate = () => true) {
-      return this.attr('fields')
-        .filter((item) => item.attr('type') === 'dropdown')
-        .filter(predicate);
-    },
-    validateForm: function ({
-      triggerField = null,
-      triggerAttachmentModals = false,
-      saveDfd = null,
-    } = {}) {
-      let hasValidationErrors = false;
-      this.attr('fields')
-        .each((field) => {
-          this.performValidation(field);
-          if ( !field.validation.valid ) {
-            hasValidationErrors = true;
-          }
-          if ( triggerField === field &&
-                triggerAttachmentModals &&
-                field.validation.hasMissingInfo ) {
-            this.dispatch({
-              type: 'validationChanged',
-              field,
-              saveDfd,
-            });
-          }
-        });
-
-      if ( this.attr('instance') ) {
-        this.attr('instance._hasValidationErrors', hasValidationErrors);
-      }
-
-      if ( hasValidationErrors ) {
-        this.dispatch(VALIDATION_ERROR);
-      }
-    },
-    performDropdownValidation(field) {
-      let value = field.value;
-      let isMandatory = field.validation.mandatory;
-      let errorsMap = field.errorsMap || {
-        evidence: false,
-        comment: false,
-        url: false,
-      };
-
-      let requiresEvidence = isEvidenceRequired(field);
-      let requiresComment = isCommentRequired(field);
-      let requiresUrl = isUrlRequired(field);
-
-      let hasMissingEvidence = requiresEvidence &&
-        this.attr('isEvidenceRequired');
-
-      let hasMissingUrl = requiresUrl &&
-        this.attr('isUrlRequired');
-
-      let hasMissingComment = requiresComment && !!errorsMap.comment;
-
-      let fieldValid = (value) ?
-        !(hasMissingEvidence || hasMissingComment || hasMissingUrl) :
-        !isMandatory;
-
-      field.attr({
-        validation: {
-          show: isMandatory || !!value,
-          valid: fieldValid,
-          hasMissingInfo: (hasMissingEvidence || hasMissingComment ||
-            hasMissingUrl),
-          requiresAttachment: (requiresEvidence || requiresComment ||
-            requiresUrl),
-        },
-        errorsMap: {
-          evidence: hasMissingEvidence,
-          comment: hasMissingComment,
-          url: hasMissingUrl,
-        },
-      });
-    },
-    performValidation: function (field) {
-      if (field.type === 'dropdown') {
-        this.performDropdownValidation(field);
-      } else {
-        let value = field.value;
-        let isMandatory = field.validation.mandatory;
-
-        if (field.type === 'text') {
-          value = getPlainText(value).trim();
-        }
-
-        field.attr({
-          validation: {
-            show: isMandatory,
-            valid: isMandatory ? !!(value) : true,
-            hasMissingInfo: false,
-          },
-        });
-      }
-    },
-    save: function (fieldId, fieldValue) {
-      const self = this;
-      const changes = {
-        [fieldId]: fieldValue,
-      };
-      const stopFn = tracker.start(this.attr('instance.type'),
-        tracker.USER_JOURNEY_KEYS.INFO_PANE,
-        tracker.USER_ACTIONS.ASSESSMENT.EDIT_LCA);
-
-      this.attr('isDirty', true);
-
-      return this.attr('deferredSave').push(function () {
-        let caValues = self.attr('instance.custom_attribute_values');
-        applyChangesToCAValue(
-          caValues,
-          new canMap(changes));
-
-        self.attr('saving', true);
-      })
-      // todo: error handling
-        .always(() => {
-          this.attr('saving', false);
-          this.attr('isDirty', false);
-          stopFn();
-        });
     },
     attributeChanged: function (e) {
       e.field.attr('value', e.value);
@@ -204,9 +81,9 @@ export default canComponent.extend({
         e.field.attr('errorsMap.comment', true);
       }
 
-      let saveDfd = this.save(e.fieldId, e.value);
+      let saveDfd = save(this, e.fieldId, e.value);
 
-      this.validateForm({
+      validateForm(this, {
         triggerAttachmentModals: true,
         triggerField: e.field,
         saveDfd: saveDfd,
@@ -215,16 +92,16 @@ export default canComponent.extend({
   }),
   events: {
     '{viewModel} evidenceAmount': function () {
-      this.viewModel.validateForm();
+      validateForm(this.viewModel);
     },
     '{viewModel} urlsAmount': function () {
-      this.viewModel.validateForm();
+      validateForm(this.viewModel);
     },
     [`{viewModel.instance} ${RELATED_ITEMS_LOADED.type}`]: function () {
-      this.viewModel.validateForm();
+      validateForm(this.viewModel);
     },
     '{viewModel} fields'() {
-      this.viewModel.validateForm();
+      validateForm(this.viewModel);
     },
     '{viewModel.instance} showInvalidField': function (ev) {
       let pageType = getPageInstance().type;
@@ -266,3 +143,133 @@ export default canComponent.extend({
     },
   },
 });
+
+function getDropdownOptions(vm, predicate = () => true) {
+  return vm.attr('fields')
+    .filter((item) => item.attr('type') === 'dropdown')
+    .filter(predicate);
+}
+
+function validateForm(
+  vm,
+  {
+    triggerField = null,
+    triggerAttachmentModals = false,
+    saveDfd = null,
+  } = {}) {
+  let hasValidationErrors = false;
+  vm.attr('fields')
+    .each((field) => {
+      performValidation(vm, field);
+      if ( !field.validation.valid ) {
+        hasValidationErrors = true;
+      }
+      if ( triggerField === field &&
+            triggerAttachmentModals &&
+            field.validation.hasMissingInfo ) {
+        vm.dispatch({
+          type: 'validationChanged',
+          field,
+          saveDfd,
+        });
+      }
+    });
+
+  if ( vm.attr('instance') ) {
+    vm.attr('instance._hasValidationErrors', hasValidationErrors);
+  }
+
+  if ( hasValidationErrors ) {
+    vm.dispatch(VALIDATION_ERROR);
+  }
+}
+
+function performDropdownValidation(vm, field) {
+  let value = field.value;
+  let isMandatory = field.validation.mandatory;
+  let errorsMap = field.errorsMap || {
+    evidence: false,
+    comment: false,
+    url: false,
+  };
+
+  let requiresEvidence = isEvidenceRequired(field);
+  let requiresComment = isCommentRequired(field);
+  let requiresUrl = isUrlRequired(field);
+
+  let hasMissingEvidence = requiresEvidence &&
+    vm.attr('isEvidenceRequired');
+
+  let hasMissingUrl = requiresUrl &&
+    vm.attr('isUrlRequired');
+
+  let hasMissingComment = requiresComment && !!errorsMap.comment;
+
+  let fieldValid = (value) ?
+    !(hasMissingEvidence || hasMissingComment || hasMissingUrl) :
+    !isMandatory;
+
+  field.attr({
+    validation: {
+      show: isMandatory || !!value,
+      valid: fieldValid,
+      hasMissingInfo: (hasMissingEvidence || hasMissingComment ||
+        hasMissingUrl),
+      requiresAttachment: (requiresEvidence || requiresComment ||
+        requiresUrl),
+    },
+    errorsMap: {
+      evidence: hasMissingEvidence,
+      comment: hasMissingComment,
+      url: hasMissingUrl,
+    },
+  });
+}
+
+function performValidation(vm, field) {
+  if (field.type === 'dropdown') {
+    performDropdownValidation(vm, field);
+  } else {
+    let value = field.value;
+    let isMandatory = field.validation.mandatory;
+
+    if (field.type === 'text') {
+      value = getPlainText(value).trim();
+    }
+
+    field.attr({
+      validation: {
+        show: isMandatory,
+        valid: isMandatory ? !!(value) : true,
+        hasMissingInfo: false,
+      },
+    });
+  }
+}
+
+function save(vm, fieldId, fieldValue) {
+  const self = vm;
+  const changes = {
+    [fieldId]: fieldValue,
+  };
+  const stopFn = tracker.start(vm.attr('instance.type'),
+    tracker.USER_JOURNEY_KEYS.INFO_PANE,
+    tracker.USER_ACTIONS.ASSESSMENT.EDIT_LCA);
+
+  vm.attr('isDirty', true);
+
+  return vm.attr('deferredSave').push(function () {
+    let caValues = self.attr('instance.custom_attribute_values');
+    applyChangesToCAValue(
+      caValues,
+      new canMap(changes));
+
+    self.attr('saving', true);
+  })
+  // todo: error handling
+    .always(() => {
+      vm.attr('saving', false);
+      vm.attr('isDirty', false);
+      stopFn();
+    });
+}

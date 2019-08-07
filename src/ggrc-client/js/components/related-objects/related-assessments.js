@@ -77,29 +77,11 @@ export default canComponent.extend({
     loading: false,
     needReuse: false,
     relatedAssessments: [],
-    buildEvidenceModel: function (evidence) {
-      const baseData = {
-        context: new Context({id: this.attr('instance.context.id') || null}),
-        parent_obj: {
-          id: this.attr('instance.id'),
-          type: this.attr('instance.type'),
-        },
-        kind: evidence.attr('kind'),
-        title: evidence.attr('title'),
-      };
-      const specificData = evidence.attr('kind') === 'FILE' ?
-        {source_gdrive_id: evidence.attr('gdrive_id')} :
-        {link: evidence.attr('link')};
-
-      let data = Object.assign({}, baseData, specificData);
-
-      return new Evidence(data);
-    },
     reuseSelected: function () {
       this.attr('isSaving', true);
 
       let reusedObjectList = this.attr('selectedEvidences').map((evidence) => {
-        let model = this.buildEvidenceModel(evidence);
+        let model = buildEvidenceModel(this, evidence);
 
         return backendGdriveClient.withAuth(() => {
           return model.save();
@@ -118,94 +100,116 @@ export default canComponent.extend({
           this.attr('isSaving', false);
         });
     },
-    loadRelatedAssessments() {
-      const limits = this.attr('paging.limits');
-      const orderBy = this.attr('orderBy');
-      let currentOrder = [];
-      const stopFn = tracker.start(
-        this.attr('instance.type'),
-        tracker.USER_JOURNEY_KEYS.API,
-        tracker.USER_ACTIONS.ASSESSMENT.RELATED_ASSESSMENTS);
-
-      if (!orderBy.attr('field')) {
-        currentOrder = defaultOrderBy;
-      } else {
-        currentOrder = [orderBy];
-      }
-
-      this.attr('loading', true);
-
-      return this.attr('instance').getRelatedAssessments(limits, currentOrder)
-        .then((response) => {
-          const assessments = response.data.map((assessment) => {
-            let values = assessment.custom_attribute_values || [];
-            let definitions = assessment.custom_attribute_definitions || [];
-
-            if (definitions.length) {
-              assessment.custom_attribute_values =
-                prepareCustomAttributes(definitions, values);
-            }
-
-            return {
-              instance: assessment,
-            };
-          });
-
-          this.attr('paging.total', response.total);
-          this.attr('relatedAssessments').replace(assessments);
-
-          stopFn();
-          this.attr('loading', false);
-        }, () => {
-          stopFn(true);
-          this.attr('loading', false);
-        });
-    },
-    checkReuseAbility(evidence) {
-      let isFile = evidence.attr('kind') === 'FILE';
-      let isGdriveIdProvided = !!evidence.attr('gdrive_id');
-
-      let isAble = !isFile || isGdriveIdProvided;
-
-      return isAble;
-    },
-    isFunction(evidence) {
-      return isFunction(evidence) ? evidence() : evidence;
-    },
   }),
   init() {
-    this.viewModel.loadRelatedAssessments();
+    loadRelatedAssessments(this.viewModel);
   },
   events: {
     '{viewModel.paging} current'() {
-      this.viewModel.loadRelatedAssessments();
+      loadRelatedAssessments(this.viewModel);
     },
     '{viewModel.paging} pageSize'() {
-      this.viewModel.loadRelatedAssessments();
+      loadRelatedAssessments(this.viewModel);
     },
     '{viewModel.orderBy} changed'() {
-      this.viewModel.loadRelatedAssessments();
+      loadRelatedAssessments(this.viewModel);
     },
     [`{viewModel.instance} ${REFRESH_RELATED.type}`]([scope], event) {
       if (event.model === 'Related Assessments') {
-        this.viewModel.loadRelatedAssessments();
+        loadRelatedAssessments(this.viewModel);
       }
     },
   },
   helpers: {
     isAllowedToReuse(evidence) {
-      evidence = this.isFunction(evidence);
+      evidence = unwrapEvidence(evidence);
 
-      let isAllowed = this.checkReuseAbility(evidence);
+      let isAllowed = checkReuseAbility(evidence);
 
       return isAllowed;
     },
     ifAllowedToReuse(evidence, options) {
-      evidence = this.isFunction(evidence);
+      evidence = unwrapEvidence(evidence);
 
-      let isAllowed = this.checkReuseAbility(evidence);
+      let isAllowed = checkReuseAbility(evidence);
 
       return isAllowed ? options.fn(this) : options.inverse(this);
     },
   },
 });
+
+function buildEvidenceModel(vm, evidence) {
+  const baseData = {
+    context: new Context({id: vm.attr('instance.context.id') || null}),
+    parent_obj: {
+      id: vm.attr('instance.id'),
+      type: vm.attr('instance.type'),
+    },
+    kind: evidence.attr('kind'),
+    title: evidence.attr('title'),
+  };
+  const specificData = evidence.attr('kind') === 'FILE' ?
+    {source_gdrive_id: evidence.attr('gdrive_id')} :
+    {link: evidence.attr('link')};
+
+  let data = Object.assign({}, baseData, specificData);
+
+  return new Evidence(data);
+}
+
+function loadRelatedAssessments(vm) {
+  const limits = vm.attr('paging.limits');
+  const orderBy = vm.attr('orderBy');
+  let currentOrder = [];
+  const stopFn = tracker.start(
+    vm.attr('instance.type'),
+    tracker.USER_JOURNEY_KEYS.API,
+    tracker.USER_ACTIONS.ASSESSMENT.RELATED_ASSESSMENTS);
+
+  if (!orderBy.attr('field')) {
+    currentOrder = defaultOrderBy;
+  } else {
+    currentOrder = [orderBy];
+  }
+
+  vm.attr('loading', true);
+
+  return vm.attr('instance').getRelatedAssessments(limits, currentOrder)
+    .then((response) => {
+      const assessments = response.data.map((assessment) => {
+        let values = assessment.custom_attribute_values || [];
+        let definitions = assessment.custom_attribute_definitions || [];
+
+        if (definitions.length) {
+          assessment.custom_attribute_values =
+            prepareCustomAttributes(definitions, values);
+        }
+
+        return {
+          instance: assessment,
+        };
+      });
+
+      vm.attr('paging.total', response.total);
+      vm.attr('relatedAssessments').replace(assessments);
+
+      stopFn();
+      vm.attr('loading', false);
+    }, () => {
+      stopFn(true);
+      vm.attr('loading', false);
+    });
+}
+
+function checkReuseAbility(evidence) {
+  let isFile = evidence.attr('kind') === 'FILE';
+  let isGdriveIdProvided = !!evidence.attr('gdrive_id');
+
+  let isAble = !isFile || isGdriveIdProvided;
+
+  return isAble;
+}
+
+function unwrapEvidence(evidence) {
+  return isFunction(evidence) ? evidence() : evidence;
+}

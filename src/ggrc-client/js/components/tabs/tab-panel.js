@@ -57,32 +57,6 @@ export default canComponent.extend({
     warningState: false,
     warningText: '',
     extraClasses: '',
-    addPanel: function () {
-      let panels = this.attr('panels');
-      let isAlreadyAdded = panels.indexOf(this) > -1;
-      if (isAlreadyAdded) {
-        return;
-      }
-      this.attr('tabIndex', panels.length + 1);
-      panels.push(this);
-      panels.dispatch('panelAdded');
-    },
-    removePanel: function () {
-      let itemTabIndex = this.attr('tabIndex');
-      let panels = this.attr('panels');
-      let indexToRemove;
-
-      panels.each(function (panel, index) {
-        if (panel.attr('tabIndex') === itemTabIndex) {
-          indexToRemove = index;
-          return false;
-        }
-      });
-      if (indexToRemove > -1) {
-        panels.splice(indexToRemove, 1);
-        panels.dispatch('panelRemoved');
-      }
-    },
     updateWarningState(event) {
       this.attr('warningState', event.warning);
     },
@@ -93,14 +67,42 @@ export default canComponent.extend({
      */
     init: function () {
       let vm = this.viewModel;
-      vm.addPanel();
+      addPanel(vm);
 
       if (vm.attr('preRenderContent')) {
         setTimeout(() => vm.attr('preRender', true), PRE_RENDER_DELAY);
       }
     },
     removed: function () {
-      this.viewModel.removePanel();
+      removePanel(this.viewModel);
     },
   },
 });
+
+function addPanel(vm) {
+  let panels = vm.attr('panels');
+  let isAlreadyAdded = panels.indexOf(vm) > -1;
+  if (isAlreadyAdded) {
+    return;
+  }
+  vm.attr('tabIndex', panels.length + 1);
+  panels.push(vm);
+  panels.dispatch('panelAdded');
+}
+
+function removePanel(vm) {
+  let itemTabIndex = vm.attr('tabIndex');
+  let panels = vm.attr('panels');
+  let indexToRemove;
+
+  panels.each(function (panel, index) {
+    if (panel.attr('tabIndex') === itemTabIndex) {
+      indexToRemove = index;
+      return false;
+    }
+  });
+  if (indexToRemove > -1) {
+    panels.splice(indexToRemove, 1);
+    panels.dispatch('panelRemoved');
+  }
+}

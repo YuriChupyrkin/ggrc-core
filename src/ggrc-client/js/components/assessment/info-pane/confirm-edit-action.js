@@ -21,35 +21,9 @@ export default canComponent.extend({
     isEditIconDenied: false,
     isConfirmationNeeded: true,
     onStateChangeDfd: $.Deferred().resolve(),
-    openEditMode: function (el) {
-      return this.attr('onStateChangeDfd').then(function () {
-        if (this.isInEditableState()) {
-          this.dispatch('setEditMode');
-        }
-      }.bind(this));
-    },
-    isInEditableState: function () {
-      return EDITABLE_STATES.includes(this.attr('instance.status'));
-    },
-    showConfirm: function () {
-      let self = this;
-      let confirmation = $.Deferred();
-      confirm({
-        modal_title: 'Confirm moving Assessment to "In Progress"',
-        modal_description: 'You are about to move Assessment from "' +
-          this.instance.status +
-          '" to "In Progress" - are you sure about that?',
-        button_view: GGRC.templates_path + '/modals/prompt_buttons.stache',
-      }, confirmation.resolve, confirmation.reject);
-
-      return confirmation.then(function (data) {
-        self.dispatch('setInProgress');
-        self.openEditMode();
-      });
-    },
     confirmEdit: function () {
-      if (this.attr('isConfirmationNeeded') && !this.isInEditableState()) {
-        return this.showConfirm();
+      if (this.attr('isConfirmationNeeded') && !isInEditableState(this)) {
+        return showConfirm(this);
       }
 
       // send 'isLastOpenInline' when inline is opening without confirm
@@ -60,3 +34,32 @@ export default canComponent.extend({
     },
   }),
 });
+
+function openEditMode(vm, el) {
+  return vm.attr('onStateChangeDfd').then(function () {
+    if (isInEditableState(vm)) {
+      vm.dispatch('setEditMode');
+    }
+  });
+}
+
+function isInEditableState(vm) {
+  return EDITABLE_STATES.includes(vm.attr('instance.status'));
+}
+
+function showConfirm(vm) {
+  let self = vm;
+  let confirmation = $.Deferred();
+  confirm({
+    modal_title: 'Confirm moving Assessment to "In Progress"',
+    modal_description: 'You are about to move Assessment from "' +
+    vm.instance.status +
+      '" to "In Progress" - are you sure about that?',
+    button_view: GGRC.templates_path + '/modals/prompt_buttons.stache',
+  }, confirmation.resolve, confirmation.reject);
+
+  return confirmation.then(function (data) {
+    self.dispatch('setInProgress');
+    openEditMode(self);
+  });
+}

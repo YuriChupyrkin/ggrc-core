@@ -38,9 +38,9 @@ export default canComponent.extend({
   init: function () {
     const viewModel = this.viewModel;
 
-    viewModel.initObjectReview();
+    initObjectReview(viewModel);
 
-    viewModel.fetchItems();
+    fetchItems(viewModel);
   },
   viewModel: canMap.extend({
     define: {
@@ -64,184 +64,193 @@ export default canComponent.extend({
     review: null,
     isLoading: false,
     revisions: null,
-    fetchItems: function () {
-      this.attr('isLoading', true);
-      this.attr('revisions', null);
-
-      const stopFn = tracker.start(
-        this.attr('instance.type'),
-        tracker.USER_JOURNEY_KEYS.LOADING,
-        tracker.USER_ACTIONS.CHANGE_LOG);
-
-      return this.fetchRevisions()
-        .then(this.fetchAdditionalInfoForRevisions.bind(this))
-        .then(this.composeRevisionsData.bind(this))
-        .done((revisionsData) => {
-          this.attr('revisions', revisionsData);
-          stopFn();
-        })
-        .fail(function () {
-          stopFn(true);
-          notifier('error', 'Failed to fetch revision history data.');
-        })
-        .always(function () {
-          this.attr('isLoading', false);
-        }.bind(this));
-    },
-    fetchRevisions() {
-      const filter = this.getQueryFilter();
-      const pageInfo = this.attr('pageInfo');
-      const page = {
-        current: pageInfo.current,
-        pageSize: pageInfo.pageSize,
-        buffer: 1, // we need additional item to calculate diff for last item on page
-        sort: [{
-          direction: 'desc',
-          key: 'created_at',
-        }],
-      };
-      let params = buildParam(
-        'Revision',
-        page,
-        null,
-        null,
-        filter
-      );
-
-      return batchRequests(params).then((data) => {
-        data = data.Revision;
-        const total = data.total;
-        this.attr('pageInfo.total', total);
-
-        return this.makeRevisionModels(data);
-      });
-    },
-    getQueryFilter() {
-      const instance = this.attr('instance');
-
-      if (!this.attr('options.showLastReviewUpdates')) {
-        return QueryParser.parse(
-          `${instance.type} not_empty_revisions_for ${instance.id} OR
-          source_type = ${instance.type} AND
-          source_id = ${instance.id} OR
-          destination_type = ${instance.type} AND
-          destination_id = ${instance.id}`);
-      } else {
-        const reviewDate = moment(this.attr('review.last_reviewed_at'))
-          .format('YYYY-MM-DD HH:mm:ss');
-
-        return QueryParser.parse(
-          `${instance.type} not_empty_revisions_for ${instance.id} AND
-          created_at >= "${reviewDate}" OR
-          source_type = ${instance.type} AND
-          source_id = ${instance.id} AND
-          created_at >= "${reviewDate}" OR
-          destination_type = ${instance.type} AND
-          destination_id = ${instance.id} AND
-          created_at >= "${reviewDate}"`);
-      }
-    },
-    makeRevisionModels(data) {
-      let revisions = data.values;
-      revisions = revisions.map(function (source) {
-        return Revision.model(source, 'Revision');
-      });
-
-      return revisions;
-    },
-    fetchAdditionalInfoForRevisions(revisions) {
-      const refreshQueue = new RefreshQueue();
-
-      loForEach(revisions, (revision) => {
-        this.enqueueRelated(revision, refreshQueue);
-        if (revision.content && revision.content.automapping) {
-          this.enqueueRelated(revision.content.automapping, refreshQueue);
-        }
-      });
-
-      return refreshQueue.trigger().then(() => revisions);
-    },
-    enqueueRelated(object, refreshQueue) {
-      if (object.modified_by) {
-        refreshQueue.enqueue(object.modified_by);
-      }
-      if (object.destination_type && object.destination_id) {
-        object.destination = new Stub({
-          id: object.destination_id,
-          type: object.destination_type,
-        });
-        refreshQueue.enqueue(object.destination);
-      }
-      if (object.source_type && object.source_id) {
-        object.source = new Stub({
-          id: object.source_id,
-          type: object.source_type,
-        });
-        refreshQueue.enqueue(object.source);
-      }
-    },
-    composeRevisionsData(revisions) {
-      let objRevisions = [];
-      let mappings = [];
-      let revisionsForCompare = [];
-
-      if (this.attr('pageInfo.pageSize') < revisions.length) {
-        revisionsForCompare = revisions.splice(-1);
-      }
-      loForEach(revisions, (revision) => {
-        if (revision.destination || revision.source) {
-          mappings.push(revision);
-        } else {
-          objRevisions.push(revision);
-        }
-
-        if (revision.content && revision.content.automapping) {
-          this.reifyObject(revision.content.automapping);
-        }
-      });
-
-      return {
-        object: loMap(objRevisions, this.reifyObject),
-        mappings: loMap(mappings, this.reifyObject),
-        revisionsForCompare: loMap(revisionsForCompare, this.reifyObject),
-      };
-    },
-    reifyObject(object) {
-      ['modified_by', 'source', 'destination'].forEach(
-        (field) => {
-          if (object[field] && isReifiable(object[field])) {
-            object.attr(field, reifyUtil(object[field]));
-          }
-        });
-      return object;
-    },
     changeLastUpdatesFilter(element) {
       const isChecked = element.checked;
       this.attr('options.showLastReviewUpdates', isChecked);
 
       this.attr('pageInfo.current', 1);
-      this.fetchItems();
-    },
-    initObjectReview() {
-      const review = this.attr('instance.review');
-
-      if (review) {
-        this.attr('review', reifyUtil(review));
-      }
+      fetchItems(this);
     },
   }),
   events: {
     '{viewModel.instance} refreshInstance': function () {
-      this.viewModel.fetchItems();
+      fetchItems(this.viewModel);
     },
     '{viewModel.pageInfo} current'() {
-      this.viewModel.fetchItems();
+      fetchItems(this.viewModel);
     },
     '{viewModel.pageInfo} pageSize'() {
-      this.viewModel.fetchItems();
+      fetchItems(this.viewModel);
     },
     removed() {
       this.viewModel.attr('options.showLastReviewUpdates', false);
     },
   },
 });
+
+function fetchItems(vm) {
+  vm.attr('isLoading', true);
+  vm.attr('revisions', null);
+
+  const stopFn = tracker.start(
+    vm.attr('instance.type'),
+    tracker.USER_JOURNEY_KEYS.LOADING,
+    tracker.USER_ACTIONS.CHANGE_LOG);
+
+  return fetchRevisions(vm)
+    .then(fetchAdditionalInfoForRevisions.bind(vm))
+    .then(composeRevisionsData.bind(vm))
+    .done((revisionsData) => {
+      vm.attr('revisions', revisionsData);
+      stopFn();
+    })
+    .fail(function () {
+      stopFn(true);
+      notifier('error', 'Failed to fetch revision history data.');
+    })
+    .always(function () {
+      vm.attr('isLoading', false);
+    });
+}
+
+function fetchRevisions(vm) {
+  const filter = getQueryFilter(vm);
+  const pageInfo = vm.attr('pageInfo');
+  const page = {
+    current: pageInfo.current,
+    pageSize: pageInfo.pageSize,
+    buffer: 1, // we need additional item to calculate diff for last item on page
+    sort: [{
+      direction: 'desc',
+      key: 'created_at',
+    }],
+  };
+  let params = buildParam(
+    'Revision',
+    page,
+    null,
+    null,
+    filter
+  );
+
+  return batchRequests(params).then((data) => {
+    data = data.Revision;
+    const total = data.total;
+    vm.attr('pageInfo.total', total);
+
+    return makeRevisionModels(data);
+  });
+}
+
+function getQueryFilter(vm) {
+  const instance = vm.attr('instance');
+
+  if (!vm.attr('options.showLastReviewUpdates')) {
+    return QueryParser.parse(
+      `${instance.type} not_empty_revisions_for ${instance.id} OR
+      source_type = ${instance.type} AND
+      source_id = ${instance.id} OR
+      destination_type = ${instance.type} AND
+      destination_id = ${instance.id}`);
+  } else {
+    const reviewDate = moment(vm.attr('review.last_reviewed_at'))
+      .format('YYYY-MM-DD HH:mm:ss');
+
+    return QueryParser.parse(
+      `${instance.type} not_empty_revisions_for ${instance.id} AND
+      created_at >= "${reviewDate}" OR
+      source_type = ${instance.type} AND
+      source_id = ${instance.id} AND
+      created_at >= "${reviewDate}" OR
+      destination_type = ${instance.type} AND
+      destination_id = ${instance.id} AND
+      created_at >= "${reviewDate}"`);
+  }
+}
+
+function makeRevisionModels(data) {
+  let revisions = data.values;
+  revisions = revisions.map(function (source) {
+    return Revision.model(source, 'Revision');
+  });
+
+  return revisions;
+}
+
+function fetchAdditionalInfoForRevisions(revisions) {
+  const refreshQueue = new RefreshQueue();
+
+  loForEach(revisions, (revision) => {
+    enqueueRelated(revision, refreshQueue);
+    if (revision.content && revision.content.automapping) {
+      enqueueRelated(revision.content.automapping, refreshQueue);
+    }
+  });
+
+  return refreshQueue.trigger().then(() => revisions);
+}
+
+function enqueueRelated(object, refreshQueue) {
+  if (object.modified_by) {
+    refreshQueue.enqueue(object.modified_by);
+  }
+  if (object.destination_type && object.destination_id) {
+    object.destination = new Stub({
+      id: object.destination_id,
+      type: object.destination_type,
+    });
+    refreshQueue.enqueue(object.destination);
+  }
+  if (object.source_type && object.source_id) {
+    object.source = new Stub({
+      id: object.source_id,
+      type: object.source_type,
+    });
+    refreshQueue.enqueue(object.source);
+  }
+}
+
+function composeRevisionsData(revisions) {
+  let objRevisions = [];
+  let mappings = [];
+  let revisionsForCompare = [];
+
+  if (this.attr('pageInfo.pageSize') < revisions.length) {
+    revisionsForCompare = revisions.splice(-1);
+  }
+  loForEach(revisions, (revision) => {
+    if (revision.destination || revision.source) {
+      mappings.push(revision);
+    } else {
+      objRevisions.push(revision);
+    }
+
+    if (revision.content && revision.content.automapping) {
+      reifyObject(revision.content.automapping);
+    }
+  });
+
+  return {
+    object: loMap(objRevisions, reifyObject),
+    mappings: loMap(mappings, reifyObject),
+    revisionsForCompare: loMap(revisionsForCompare, reifyObject),
+  };
+}
+
+function reifyObject(object) {
+  ['modified_by', 'source', 'destination'].forEach(
+    (field) => {
+      if (object[field] && isReifiable(object[field])) {
+        object.attr(field, reifyUtil(object[field]));
+      }
+    });
+  return object;
+}
+
+function initObjectReview(vm) {
+  const review = vm.attr('instance.review');
+
+  if (review) {
+    vm.attr('review', reifyUtil(review));
+  }
+}

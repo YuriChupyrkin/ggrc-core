@@ -47,43 +47,31 @@ export default canComponent.extend({
         panel.dispatch('updateActiveTab');
       });
     },
-    /**
-     * Update selected item and set it to the fist item if no previous selection is available
-     */
-    setDefaultActivePanel: function () {
-      let tabIndex = this.attr('selectedTabIndex');
-      let panels = this.attr('panels');
-      // Select the first panel if tabIndex is not defined
-      if (!tabIndex && panels.length) {
-        tabIndex = panels[0].attr('tabIndex');
-      }
-      this.setActivePanel(tabIndex);
-    },
     setLastErrorTab: function (tabIndex) {
       this.attr('lastErrorTab', tabIndex);
     },
-    navigate(tabId, tabOptions) {
-      const panels = this.attr('panels');
-      const panel = loFind(panels, (panel) => panel.tabId === tabId);
+    // navigate(tabId, tabOptions) {
+    //   const panels = this.attr('panels');
+    //   const panel = loFind(panels, (panel) => panel.tabId === tabId);
 
-      if (panel) {
-        this.attr('tabOptions', tabOptions);
-        this.setActivePanel(panel.tabIndex);
-      }
-    },
+    //   if (panel) {
+    //     this.attr('tabOptions', tabOptions);
+    //     this.setActivePanel(panel.tabIndex);
+    //   }
+    // },
   }),
   events: {
     /**
      * Update Currently selected Tab on each add of Panels
      */
     '{viewModel.panels} panelAdded': function () {
-      this.viewModel.setDefaultActivePanel();
+      setDefaultActivePanel(this.viewModel);
     },
     /**
      * Update Currently selected Tab on each remove of Panels
      */
     '{viewModel.panels} panelRemoved': function () {
-      this.viewModel.setDefaultActivePanel();
+      setDefaultActivePanel(this.viewModel);
     },
     /**
      * Activate lastErrorTab.
@@ -92,7 +80,28 @@ export default canComponent.extend({
       this.viewModel.setActivePanel(this.viewModel.lastErrorTab);
     },
     [`{viewModel.instance} ${NAVIGATE_TO_TAB.type}`](el, ev) {
-      this.viewModel.navigate(ev.tabId, ev.options);
+      navigate(this.viewModel, ev.tabId, ev.options);
     },
   },
 });
+
+// Update selected item and set it to the fist item if no previous selection is available
+function setDefaultActivePanel(vm) {
+  let tabIndex = vm.attr('selectedTabIndex');
+  let panels = vm.attr('panels');
+  // Select the first panel if tabIndex is not defined
+  if (!tabIndex && panels.length) {
+    tabIndex = panels[0].attr('tabIndex');
+  }
+  vm.setActivePanel(tabIndex);
+}
+
+function navigate(vm, tabId, tabOptions) {
+  const panels = vm.attr('panels');
+  const panel = loFind(panels, (panel) => panel.tabId === tabId);
+
+  if (panel) {
+    vm.attr('tabOptions', tabOptions);
+    vm.setActivePanel(panel.tabIndex);
+  }
+}

@@ -49,33 +49,6 @@ export default canComponent.extend({
     sendNotifications: true,
     isSaving: false,
     isLoading: false,
-    getCommentData: function () {
-      let source = this.attr('instance');
-
-      return {
-        send_notification: this.attr('sendNotifications'),
-        context: source.context,
-        assignee_type: getAssigneeType(source),
-      };
-    },
-    updateComment: function (comment) {
-      comment.attr(this.getCommentData());
-      return comment;
-    },
-    afterCreation: function (comment, wasSuccessful) {
-      this.attr('isSaving', false);
-      this.dispatch({
-        type: 'afterCreate',
-        item: comment,
-        success: wasSuccessful,
-      });
-      if (wasSuccessful) {
-        this.attr('instance').dispatch({
-          ...COMMENT_CREATED,
-          comment: comment,
-        });
-      }
-    },
     onCommentCreated: function (e) {
       let comment = e.comment;
       let self = this;
@@ -85,17 +58,47 @@ export default canComponent.extend({
         tracker.USER_ACTIONS.INFO_PANE.ADD_COMMENT);
 
       self.attr('isSaving', true);
-      comment = self.updateComment(comment);
+      comment = updateComment(self, comment);
       self.dispatch({type: 'beforeCreate', items: [comment]});
 
       comment.save()
         .done(function () {
-          return self.afterCreation(comment, true);
+          return afterCreation(self, comment, true);
         })
         .fail(function () {
           notifier('error', 'Saving has failed');
-          self.afterCreation(comment, false);
+          afterCreation(self, comment, false);
         });
     },
   }),
 });
+
+function getCommentData(vm) {
+  let source = vm.attr('instance');
+
+  return {
+    send_notification: vm.attr('sendNotifications'),
+    context: source.context,
+    assignee_type: getAssigneeType(source),
+  };
+}
+
+function updateComment(vm, comment) {
+  comment.attr(getCommentData(vm));
+  return comment;
+}
+
+function afterCreation(vm, comment, wasSuccessful) {
+  vm.attr('isSaving', false);
+  vm.dispatch({
+    type: 'afterCreate',
+    item: comment,
+    success: wasSuccessful,
+  });
+  if (wasSuccessful) {
+    vm.attr('instance').dispatch({
+      ...COMMENT_CREATED,
+      comment: comment,
+    });
+  }
+}

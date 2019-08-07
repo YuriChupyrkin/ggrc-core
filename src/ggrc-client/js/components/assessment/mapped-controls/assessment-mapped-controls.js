@@ -78,31 +78,8 @@ const viewModel = canMap.extend({
   snapshot: {},
   assessmentType: '',
   withoutDetails: false,
-  /**
-   * Generate params required for Query API
-   * @param {Number} id - Id of Control's Snapshot
-   * @return {Object} request query object
-   */
-  getParams(id) {
-    // Right now we load only Snapshots of related Objectives and Regulations
-    const relevant = {
-      type: 'Snapshot',
-      id: id,
-      operation: 'relevant',
-    };
-    let params = this.attr('queries')
-      .map((query) => {
-        const resultingQuery =
-          buildParam(query.objName, {}, relevant, query.fields);
-        return {
-          type: query.type,
-          request: transformQueryToSnapshot(resultingQuery),
-        };
-      });
-    return params;
-  },
   loadItems(id) {
-    let params = this.getParams(id);
+    let params = getParams(this, id);
 
     this.attr('isLoading', true);
     return $.when(...params.map((param) => {
@@ -113,13 +90,6 @@ const viewModel = canMap.extend({
     })).then(null, () => {
       notifier('error', 'Failed to fetch related objects.');
     }).always(() => this.attr('isLoading', false));
-  },
-  attributesToFormFields(snapshot) {
-    const attributes = prepareCustomAttributes(
-      snapshot.custom_attribute_definitions,
-      snapshot.custom_attribute_values)
-      .map(convertToFormViewField);
-    return attributes;
   },
 });
 /**
@@ -139,7 +109,7 @@ export default canComponent.extend({
           let id = item.attr('id');
           this.viewModel.loadItems(id);
         }
-        attributes = this.viewModel.attributesToFormFields(
+        attributes = attributesToFormFields(
           item.attr('revision.content'));
         this.viewModel.attr('customAttributes', attributes);
         this.viewModel.attr('snapshot',
@@ -149,3 +119,36 @@ export default canComponent.extend({
     },
   },
 });
+
+/**
+ * Generate params required for Query API
+ * @param {CanMap} vm - component's viewModel
+ * @param {Number} id - Id of Control's Snapshot
+ * @return {Object} request query object
+ */
+function getParams(vm, id) {
+  // Right now we load only Snapshots of related Objectives and Regulations
+  const relevant = {
+    type: 'Snapshot',
+    id: id,
+    operation: 'relevant',
+  };
+  let params = vm.attr('queries')
+    .map((query) => {
+      const resultingQuery =
+        buildParam(query.objName, {}, relevant, query.fields);
+      return {
+        type: query.type,
+        request: transformQueryToSnapshot(resultingQuery),
+      };
+    });
+  return params;
+}
+
+function attributesToFormFields(snapshot) {
+  const attributes = prepareCustomAttributes(
+    snapshot.custom_attribute_definitions,
+    snapshot.custom_attribute_values)
+    .map(convertToFormViewField);
+  return attributes;
+}

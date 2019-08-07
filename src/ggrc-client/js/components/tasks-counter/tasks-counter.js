@@ -39,7 +39,7 @@ export default canComponent.extend({
             return;
           }
           setValue(value);
-          this.loadTasks();
+          loadTasks(this);
         },
       },
       stateCss: {
@@ -52,24 +52,11 @@ export default canComponent.extend({
         },
       },
     },
-    loadTasks: function () {
-      let id = this.attr('person.id');
-      let user = Person.findInCacheById(id);
-
-      if (!user) {
-        user = new Person(this.attr('person'));
-      }
-      return user.getTasksCount()
-        .then(function (results) {
-          this.attr('tasksAmount', results.open_task_count);
-          this.attr('hasOverdue', results.has_overdue);
-        }.bind(this));
-    },
   }),
   events: {
     onModelChange: function ([model], event, instance) {
       if (instance instanceof CycleTaskGroupObjectTask) {
-        this.viewModel.loadTasks();
+        loadTasks(this.viewModel);
       }
     },
     '{CycleTaskGroupObjectTask} updated': 'onModelChange',
@@ -77,3 +64,17 @@ export default canComponent.extend({
     '{CycleTaskGroupObjectTask} created': 'onModelChange',
   },
 });
+
+function loadTasks(vm) {
+  let id = vm.attr('person.id');
+  let user = Person.findInCacheById(id);
+
+  if (!user) {
+    user = new Person(vm.attr('person'));
+  }
+  return user.getTasksCount()
+    .then(function (results) {
+      vm.attr('tasksAmount', results.open_task_count);
+      vm.attr('hasOverdue', results.has_overdue);
+    });
+}

@@ -73,7 +73,7 @@ export default canComponent.extend({
       let isSelected = selectionFilter ?
         $(ev.target).closest(selectionFilter, el).length :
         true;
-      this.clearSelection();
+      clearSelection(this);
       // Select Item only in case required HTML item was clicked
       if (isSelected) {
         this.attr('selectedItem.el', el);
@@ -81,33 +81,35 @@ export default canComponent.extend({
         ctx.attr('isSelected', true);
       }
     },
-    /**
-     * Deselect all items and clear selected item Object
-     */
-    clearSelection: function () {
-      this.attr('items').forEach(function (item) {
-        item.removeAttr('isSelected', false);
-      });
-      this.attr('selectedItem.el', null);
-      this.attr('selectedItem.data', null);
-    },
-    /**
-     * Event Handler executed on each viewport click
-     */
-    onOuterClick: function () {
-      let isInnerClick = this.attr('isInnerClick');
-      if (!isInnerClick) {
-        this.clearSelection();
-      }
-      this.attr('isInnerClick', false);
-    },
   }),
   events: {
     '.object-list__item click': function () {
       this.viewModel.attr('isInnerClick', true);
     },
     '{window} click': function () {
-      this.viewModel.onOuterClick();
+      onOuterClick(this.viewModel);
     },
   },
 });
+
+/**
+ * Deselect all items and clear selected item Object
+ */
+function clearSelection(vm) {
+  vm.attr('items').forEach(function (item) {
+    item.removeAttr('isSelected', false);
+  });
+  vm.attr('selectedItem.el', null);
+  vm.attr('selectedItem.data', null);
+}
+
+/**
+ * Event Handler executed on each viewport click
+ */
+function onOuterClick(vm) {
+  let isInnerClick = vm.attr('isInnerClick');
+  if (!isInnerClick) {
+    clearSelection(vm);
+  }
+  vm.attr('isInnerClick', false);
+}
