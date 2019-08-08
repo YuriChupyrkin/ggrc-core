@@ -23,7 +23,7 @@ export default canComponent.extend({
         get: function () {
           let classes = [];
 
-          if (this.isActiveActionArea()) {
+          if (isActiveActionArea(this)) {
             classes.push('active-action-area');
           }
 
@@ -69,16 +69,6 @@ export default canComponent.extend({
         columns: selectedNames,
       });
     },
-    onOrderChange() {
-      const field = this.attr('orderBy.field');
-      const sortDirection = this.attr('orderBy.direction');
-
-      this.dispatch({
-        type: 'sort',
-        field,
-        sortDirection,
-      });
-    },
     initializeColumns: function () {
       let selectedColumns = this.attr('selectedColumns');
       let availableColumns = this.attr('availableColumns');
@@ -90,23 +80,8 @@ export default canComponent.extend({
         this.attr('columns', columns);
       }
     },
-    isActiveActionArea: function () {
-      let modelName = this.attr('model').model_singular;
-
-      return modelName === 'CycleTaskGroupObjectTask' || modelName === 'Cycle';
-    },
-    initializeOrder() {
-      let sortingInfo;
-      if (!this.attr('model')) {
-        return;
-      }
-
-      sortingInfo = getSortingForModel(this.attr('model').model_singular);
-      this.attr('orderBy.field', sortingInfo.key);
-      this.attr('orderBy.direction', sortingInfo.direction);
-    },
     init: function () {
-      this.initializeOrder();
+      initializeOrder(this);
       this.initializeColumns();
     },
   }),
@@ -118,7 +93,35 @@ export default canComponent.extend({
       this.viewModel.initializeColumns();
     },
     '{viewModel.orderBy} changed'() {
-      this.viewModel.onOrderChange();
+      onOrderChange(this.viewModel);
     },
   },
 });
+
+function onOrderChange(vm) {
+  const field = vm.attr('orderBy.field');
+  const sortDirection = vm.attr('orderBy.direction');
+
+  vm.dispatch({
+    type: 'sort',
+    field,
+    sortDirection,
+  });
+}
+
+function isActiveActionArea(vm) {
+  let modelName = vm.attr('model').model_singular;
+
+  return modelName === 'CycleTaskGroupObjectTask' || modelName === 'Cycle';
+}
+
+function initializeOrder(vm) {
+  let sortingInfo;
+  if (!vm.attr('model')) {
+    return;
+  }
+
+  sortingInfo = getSortingForModel(vm.attr('model').model_singular);
+  vm.attr('orderBy.field', sortingInfo.key);
+  vm.attr('orderBy.direction', sortingInfo.direction);
+}

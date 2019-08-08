@@ -37,7 +37,7 @@ export default canComponent.extend({
             this.attr('instance.isRevision') ||
             this.attr('instance.archived') ||
             this.attr('isAttributesDisabled') ||
-            this.isReadOnlyForInstance(this.attr('instance')) ||
+            isReadOnlyForInstance(this.attr('instance')) ||
             !isAllowedFor('update', this.attr('instance'));
         },
       },
@@ -48,21 +48,6 @@ export default canComponent.extend({
      * @type {canList}
      */
     items: [],
-    isReadOnlyForInstance(instance) {
-      if (!instance) {
-        return false;
-      }
-
-      return instance.constructor.isProposable || instance.attr('readonly');
-    },
-    initCustomAttributes: function () {
-      const instance = this.attr('instance');
-      const result = instance
-        .customAttr({
-          type: CUSTOM_ATTRIBUTE_TYPE.GLOBAL,
-        });
-      this.attr('items', result);
-    },
     saveCustomAttributes: function (event, field) {
       const caId = field.customAttributeId;
       const value = event.value;
@@ -86,11 +71,28 @@ export default canComponent.extend({
     },
   }),
   init: function () {
-    this.viewModel.initCustomAttributes();
+    initCustomAttributes(this.viewModel);
   },
   events: {
     '{viewModel.instance} readyForRender': function () {
-      this.viewModel.initCustomAttributes();
+      initCustomAttributes(this.viewModel);
     },
   },
 });
+
+function isReadOnlyForInstance(instance) {
+  if (!instance) {
+    return false;
+  }
+
+  return instance.constructor.isProposable || instance.attr('readonly');
+}
+
+function initCustomAttributes(vm) {
+  const instance = vm.attr('instance');
+  const result = instance
+    .customAttr({
+      type: CUSTOM_ATTRIBUTE_TYPE.GLOBAL,
+    });
+  vm.attr('items', result);
+}

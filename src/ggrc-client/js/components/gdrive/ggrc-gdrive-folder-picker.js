@@ -49,76 +49,6 @@ export default canComponent.extend({
     tabindex: '',
     placeholder: '',
     instance: null,
-    /**
-     * Helper method for unlinking folder currently linked to the
-     * given instance.
-     *
-     * @return {Object} - a deferred object that is resolved when the instance's
-     *   folder has been successfully unlinked from it
-     */
-    unlinkFolder: function () {
-      let instance = this.attr('instance');
-
-      return ggrcAjax({
-        url: '/api/remove_folder',
-        type: 'POST',
-        data: {
-          object_type: instance.attr('type'),
-          object_id: instance.attr('id'),
-          folder: instance.attr('folder'),
-        },
-      }).then(() => {
-        return instance.refresh();
-      });
-    },
-    /**
-     * Helper method for linking new folder to the given instance
-     *
-     * @param {String} folderId - GDrive folder id
-     * @return {Object} - a deferred object that is resolved when the instance's
-     *   folder has been successfully linked to it
-     */
-    linkFolder: function (folderId) {
-      let instance = this.attr('instance');
-
-      return ggrcAjax({
-        url: '/api/add_folder',
-        type: 'POST',
-        data: {
-          object_type: instance.attr('type'),
-          object_id: instance.attr('id'),
-          folder: folderId,
-        },
-      }).then(() => {
-        return instance.refresh();
-      });
-    },
-    setCurrent: function (folderId) {
-      this.attr('_folder_change_pending', true);
-
-      return findGDriveItemById(folderId)
-        .always(function () {
-          this.attr('_folder_change_pending', false);
-        }.bind(this))
-        .done(function (gdriveFolder) {
-          this.attr('current_folder', gdriveFolder);
-          this.attr('folder_error', null);
-        }.bind(this))
-        .fail(function (error) {
-          this.attr('folder_error', error);
-        }.bind(this));
-    },
-    unsetCurrent: function () {
-      this.attr('_folder_change_pending', false);
-      this.attr('folder_error', null);
-      this.attr('current_folder', null);
-    },
-    setRevisionFolder: function () {
-      let folderId = this.instance.attr('folder');
-      if (folderId) {
-        this.setCurrent(folderId);
-      }
-    },
   }),
 
   events: {
@@ -129,7 +59,7 @@ export default canComponent.extend({
         this.element.removeAttr('tabindex');
       }
 
-      viewModel.setRevisionFolder();
+      setRevisionFolder(viewModel);
     },
 
     '{viewModel.instance} change': function () {
@@ -137,7 +67,7 @@ export default canComponent.extend({
         return;
       }
 
-      this.viewModel.setRevisionFolder();
+      setRevisionFolder(this.viewModel);
     },
 
     /**
@@ -157,10 +87,10 @@ export default canComponent.extend({
         viewModel.instance.attr('folder', null);
         dfd = $.when();
       } else {
-        dfd = viewModel.unlinkFolder();
+        dfd = unlinkFolder(viewModel);
       }
 
-      return dfd.then(viewModel.unsetCurrent.bind(viewModel));
+      return dfd.then(unsetCurrent.bind(viewModel));
     },
     'a[data-toggle=gdrive-picker] click': function (el) {
       uploadFiles({
@@ -222,10 +152,10 @@ export default canComponent.extend({
         viewModel.instance.attr('folder', folderId);
         dfd = $.when();
       } else {
-        dfd = viewModel.linkFolder(folderId);
+        dfd = linkFolder(viewModel, folderId);
       }
 
-      dfd.then(viewModel.setCurrent(folderId))
+      dfd.then(setCurrent(viewModel, folderId))
         .then(function () {
           if (viewModel.deferred && viewModel.instance._transient) {
             viewModel.instance.attr('_transient.folder', files[0]);
@@ -235,3 +165,78 @@ export default canComponent.extend({
     },
   },
 });
+
+/**
+ * Helper method for unlinking folder currently linked to the
+ * given instance.
+ *
+ * @return {Object} - a deferred object that is resolved when the instance's
+ *   folder has been successfully unlinked from it
+ */
+function unlinkFolder(vm) {
+  let instance = vm.attr('instance');
+
+  return ggrcAjax({
+    url: '/api/remove_folder',
+    type: 'POST',
+    data: {
+      object_type: instance.attr('type'),
+      object_id: instance.attr('id'),
+      folder: instance.attr('folder'),
+    },
+  }).then(() => {
+    return instance.refresh();
+  });
+}
+
+/**
+ * Helper method for linking new folder to the given instance
+ *
+ * @param {String} folderId - GDrive folder id
+ * @return {Object} - a deferred object that is resolved when the instance's
+ *   folder has been successfully linked to it
+ */
+function linkFolder(vm, folderId) {
+  let instance = vm.attr('instance');
+
+  return ggrcAjax({
+    url: '/api/add_folder',
+    type: 'POST',
+    data: {
+      object_type: instance.attr('type'),
+      object_id: instance.attr('id'),
+      folder: folderId,
+    },
+  }).then(() => {
+    return instance.refresh();
+  });
+}
+
+function setCurrent(vm, folderId) {
+  this.attr('_folder_change_pending', true);
+
+  return findGDriveItemById(folderId)
+    .always(function () {
+      vm.attr('_folder_change_pending', false);
+    })
+    .done(function (gdriveFolder) {
+      vm.attr('current_folder', gdriveFolder);
+      vm.attr('folder_error', null);
+    })
+    .fail(function (error) {
+      vm.attr('folder_error', error);
+    });
+}
+
+function unsetCurrent() {
+  this.attr('_folder_change_pending', false);
+  this.attr('folder_error', null);
+  this.attr('current_folder', null);
+}
+
+function setRevisionFolder(vm) {
+  let folderId = vm.instance.attr('folder');
+  if (folderId) {
+    setCurrent(vm, folderId);
+  }
+}

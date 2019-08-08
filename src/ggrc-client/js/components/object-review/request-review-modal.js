@@ -37,18 +37,6 @@ export default canComponent.extend({
     modalState: {
       open: false,
     },
-    prepareModalContent() {
-      let review = this.attr('review');
-
-      if (!review) {
-        const parentInstance = this.attr('parentInstance');
-
-        review = createReviewInstance(parentInstance);
-        this.attr('review', review);
-      }
-      // Backup Review because in other case restore on cancel will not work properly
-      review.backup();
-    },
     cancel() {
       this.attr('modalState.open', false);
       this.attr('review').restore(true);
@@ -83,8 +71,21 @@ export default canComponent.extend({
   events: {
     '{viewModel.modalState} open'() {
       if (this.viewModel.attr('modalState.open')) {
-        this.viewModel.prepareModalContent();
+        prepareModalContent(this.viewModel);
       }
     },
   },
 });
+
+function prepareModalContent(vm) {
+  let review = vm.attr('review');
+
+  if (!review) {
+    const parentInstance = vm.attr('parentInstance');
+
+    review = createReviewInstance(parentInstance);
+    vm.attr('review', review);
+  }
+  // Backup Review because in other case restore on cancel will not work properly
+  review.backup();
+}

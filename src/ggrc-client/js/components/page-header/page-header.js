@@ -133,19 +133,6 @@ let viewModel = canMap.extend({
   },
   menuInitialized: false,
   isOpenLhnTriggered: false,
-  showHideTitles: function (element) {
-    let elWidth = element.width();
-    let $menu = element.find('.menu');
-    let $title = element.find('h1');
-
-    this.attr('showTitles', true);
-
-    if (elWidth < ($menu.width() + $title.width())) {
-      this.attr('showTitles', false);
-    } else {
-      this.attr('showTitles', true);
-    }
-  },
   handleMenuOpening() {
     this.attr('menuInitialized', true);
   },
@@ -174,10 +161,24 @@ export default canComponent.extend({
   viewModel,
   events: {
     '{window} resize': loDebounce(function () {
-      this.viewModel.showHideTitles(this.element);
+      showHideTitles(this.viewModel, this.element);
     }, 100),
     inserted: function () {
-      this.viewModel.showHideTitles(this.element);
+      showHideTitles(this.viewModel, this.element);
     },
   },
 });
+
+function showHideTitles(vm, element) {
+  let elWidth = element.width();
+  let $menu = element.find('.menu');
+  let $title = element.find('h1');
+
+  vm.attr('showTitles', true);
+
+  if (elWidth < ($menu.width() + $title.width())) {
+    vm.attr('showTitles', false);
+  } else {
+    vm.attr('showTitles', true);
+  }
+}

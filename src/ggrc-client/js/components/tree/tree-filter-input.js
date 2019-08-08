@@ -15,7 +15,7 @@ let viewModel = canMap.extend({
     filter: {
       type: 'string',
       set: function (newValue = '') {
-        this.onFilterChange(newValue);
+        onFilterChange(this, newValue);
         return newValue;
       },
     },
@@ -50,23 +50,10 @@ let viewModel = canMap.extend({
       this.registerFilter(options);
     }
 
-    this.setupFilterFromUrl();
+    setupFilterFromUrl(this);
   },
   submit: function () {
     this.dispatch('submit');
-  },
-  onFilterChange: function (newValue) {
-    let filter = QueryParser.parse(newValue);
-    let isExpression =
-      !!filter && !!filter.expression.op &&
-      filter.expression.op.name !== 'text_search' &&
-      filter.expression.op.name !== 'exclude_text_search';
-    this.attr('isExpression', isExpression);
-
-    this.attr('options.query', newValue.length ? filter : null);
-  },
-  setupFilterFromUrl() {
-    this.attr('filter', router.attr('query'));
   },
   openAdvancedFilter: function () {
     this.dispatch('openAdvanced');
@@ -83,7 +70,7 @@ export default canComponent.extend({
   viewModel,
   events: {
     'input keyup': function (el, ev) {
-      this.viewModel.onFilterChange(el.val());
+      onFilterChange(this, el.val());
 
       if (ev.keyCode === 13) {
         this.viewModel.submit();
@@ -95,3 +82,18 @@ export default canComponent.extend({
     },
   },
 });
+
+function onFilterChange(vm, newValue) {
+  let filter = QueryParser.parse(newValue);
+  let isExpression =
+    !!filter && !!filter.expression.op &&
+    filter.expression.op.name !== 'text_search' &&
+    filter.expression.op.name !== 'exclude_text_search';
+  vm.attr('isExpression', isExpression);
+
+  vm.attr('options.query', newValue.length ? filter : null);
+}
+
+function setupFilterFromUrl(vm) {
+  vm.attr('filter', router.attr('query'));
+}

@@ -76,45 +76,7 @@ export default canComponent.extend({
         option.attr('checked', value);
       });
 
-      this.updateSelected();
-    },
-    updateSelected: function () {
-      this.attr('_stateWasUpdated', true);
-
-      this.attr('selected', loFilter(this.attr('options'),
-        (item) => item.checked));
-
-      this.dispatch({
-        type: 'selectedChanged',
-        selected: this.attr('selected'),
-      });
-    },
-    dropdownClosed: function () {
-      // don't trigger event if state didn't change
-      if (!this.attr('_stateWasUpdated')) {
-        return;
-      }
-
-      let selected = this.attr('selected');
-
-      this.attr('_stateWasUpdated', false);
-
-      this.dispatch({
-        type: 'dropdownClose',
-        selected: selected,
-      });
-    },
-    changeOpenCloseState: function () {
-      if (!this.attr('isOpen')) {
-        if (this.attr('canBeOpen')) {
-          this.attr('canBeOpen', false);
-          this.attr('isOpen', true);
-        }
-      } else {
-        this.attr('isOpen', false);
-        this.attr('canBeOpen', false);
-        this.dropdownClosed();
-      }
+      updateSelected(this);
     },
     openDropdown: function () {
       if (this.attr('disabled')) {
@@ -128,7 +90,7 @@ export default canComponent.extend({
       // click event triggered before new value of input is saved
       item.attr('checked', !item.checked);
 
-      this.updateSelected();
+      updateSelected(this);
     },
     dropdownBodyClick: function (ev) {
       ev.stopPropagation();
@@ -139,7 +101,48 @@ export default canComponent.extend({
       if (this.viewModel.attr('disabled')) {
         return;
       }
-      this.viewModel.changeOpenCloseState();
+      changeOpenCloseState(this.viewModel);
     },
   },
 });
+
+function updateSelected(vm) {
+  vm.attr('_stateWasUpdated', true);
+
+  vm.attr('selected', loFilter(vm.attr('options'),
+    (item) => item.checked));
+
+  vm.dispatch({
+    type: 'selectedChanged',
+    selected: vm.attr('selected'),
+  });
+}
+
+function dropdownClosed(vm) {
+  // don't trigger event if state didn't change
+  if (!vm.attr('_stateWasUpdated')) {
+    return;
+  }
+
+  let selected = vm.attr('selected');
+
+  vm.attr('_stateWasUpdated', false);
+
+  vm.dispatch({
+    type: 'dropdownClose',
+    selected: selected,
+  });
+}
+
+function changeOpenCloseState(vm) {
+  if (!vm.attr('isOpen')) {
+    if (vm.attr('canBeOpen')) {
+      vm.attr('canBeOpen', false);
+      vm.attr('isOpen', true);
+    }
+  } else {
+    vm.attr('isOpen', false);
+    vm.attr('canBeOpen', false);
+    dropdownClosed(vm);
+  }
+}

@@ -107,7 +107,7 @@ let viewModel = canMap.extend({
 
         return filters.filter(function (options) {
           return options.query;
-        }).reduce(this._concatFilters, additionalFilter);
+        }).reduce(_concatFilters, additionalFilter);
       },
     },
     isSavedSearchShown: {
@@ -177,7 +177,7 @@ let viewModel = canMap.extend({
     },
     selectedItem: {
       set(newValue) {
-        this.selectedItemHandler(newValue);
+        selectedItemHandler(this, newValue);
         return newValue;
       },
     },
@@ -270,32 +270,6 @@ let viewModel = canMap.extend({
       })
       .then(stopFn, stopFn.bind(null, true));
   },
-  refresh(destinationType) {
-    if (!destinationType || this.attr('modelName') === destinationType) {
-      this.closeInfoPane();
-      return this.loadItems();
-    }
-
-    return Promise.resolve();
-  },
-  setColumnsConfiguration: function () {
-    let columns = TreeViewUtils.getColumnsForModel(
-      this.attr('model').model_singular,
-      this.attr('options.widgetId')
-    );
-
-    this.attr('columns.available', columns.available);
-    this.attr('columns.selected', columns.selected);
-    this.attr('columns.mandatory', columns.mandatory);
-    this.attr('columns.disableConfiguration', columns.disableConfiguration);
-  },
-  setSortingConfiguration: function () {
-    let sortingInfo = TreeViewUtils
-      .getSortingForModel(this.attr('modelName'));
-
-    this.attr('sortingInfo.sortBy', sortingInfo.key);
-    this.attr('sortingInfo.sortDirection', sortingInfo.direction);
-  },
   onUpdateColumns: function (event) {
     let selectedColumns = event.columns;
     let columns = TreeViewUtils.setColumnsForModel(
@@ -311,14 +285,14 @@ let viewModel = canMap.extend({
     this.attr('sortingInfo.sortDirection', event.sortDirection);
 
     this.attr('pageInfo.current', 1);
-    this.refresh();
+    refresh(this);
   },
   onFilter: function () {
     const stopFn = tracker.start(this.attr('modelName'),
       tracker.USER_JOURNEY_KEYS.TREEVIEW,
       tracker.USER_ACTIONS.TREEVIEW.FILTER);
     this.attr('pageInfo.current', 1);
-    this.refresh().then(stopFn);
+    refresh(this).then(stopFn);
   },
   getDepthFilter: function (deepLevel) {
     let filters = makeArray(this.attr('filters'));
@@ -327,77 +301,10 @@ let viewModel = canMap.extend({
       return options.query &&
         options.depth &&
         options.filterDeepLimit > deepLevel;
-    }).reduce(this._concatFilters, null);
+    }).reduce(_concatFilters, null);
   },
   registerFilter: function (option) {
     this.attr('filters').push(option);
-  },
-  /**
-   * Concatenation active filters.
-   *
-   * @param {String} filter - Parsed filter string
-   * @param {Object} options - Filter parameters
-   * @return {string} - Result of concatenation filters.
-   * @private
-   */
-  _concatFilters: function (filter, options) {
-    if (filter) {
-      filter = QueryParser.joinQueries(
-        filter,
-        options.query.attr(),
-        'AND');
-    } else if (options.query) {
-      filter = options.query;
-    }
-
-    return filter;
-  },
-  _widgetHidden: function () {
-    this._triggerListeners(true);
-  },
-  _widgetShown() {
-    let countsName = this.attr('options.countsName');
-    let total = this.attr('pageInfo.total');
-    let counts = loGet(getCounts(), countsName);
-
-    this._triggerListeners();
-
-    if (this.attr('refetch') ||
-      router.attr('refetch') ||
-      this.attr('options.forceRefetch') ||
-      // this condition is mostly for Issues, Documents and Evidence as they can be created from other object info pane
-      (total !== counts)) {
-      this.loadItems();
-      this.attr('refetch', false);
-    }
-  },
-  _needToRefreshAfterRelRemove(relationship) {
-    const parentInstance = this.attr('parent_instance');
-    const {
-      source,
-      destination,
-    } = relationship;
-
-    const isRelForCurrentInstance = (
-      (
-        source.type === parentInstance.attr('type') &&
-        source.id === parentInstance.attr('id')
-      ) || (
-        destination.type === parentInstance.attr('type') &&
-        destination.id === parentInstance.attr('id')
-      )
-    );
-
-    return isRelForCurrentInstance;
-  },
-  _isRefreshNeeded(instance) {
-    let needToRefresh = true;
-
-    if (instance instanceof Relationship) {
-      needToRefresh = this._needToRefreshAfterRelRemove(instance);
-    }
-
-    return needToRefresh;
   },
   _triggerListeners: (function () {
     let activeTabModel;
@@ -426,7 +333,7 @@ let viewModel = canMap.extend({
             current > 1 ? current - 1 : 1);
         }
 
-        if (self._isRefreshNeeded(instance)) {
+        if (_isRefreshNeeded(self, instance)) {
           _refresh();
 
           // TODO: This is a workaround.We need to update communication between
@@ -460,7 +367,7 @@ let viewModel = canMap.extend({
         const total = self.attr('pageInfo.total');
         getCounts().attr(countsName, total);
       }
-      self.closeInfoPane();
+      closeInfoPane();
     };
 
     // timeout required to let server correctly calculate changed counts
@@ -562,24 +469,6 @@ let viewModel = canMap.extend({
     this.attr('advancedSearch.open', true);
     this.attr('filterIsDirty', false);
   },
-  clearAppliedSavedSearch() {
-    this.attr('advancedSearch.selectedSavedSearch', null);
-    this.attr('savedSearchPermalink', null);
-    this.attr('appliedSavedSearch', null);
-  },
-  applySavedSearch(selectedSavedSearch) {
-    if (!selectedSavedSearch || this.attr('filterIsDirty')) {
-      this.clearAppliedSavedSearch();
-      return;
-    }
-
-    const modelName = this.attr('model').table_singular;
-    const permalink = AdvancedSearch
-      .buildSearchPermalink(selectedSavedSearch.id, modelName);
-
-    this.attr('savedSearchPermalink', permalink);
-    this.attr('appliedSavedSearch', selectedSavedSearch.serialize());
-  },
   applyAdvancedFilters: function () {
     const filters = this.attr('advancedSearch.filterItems').serialize();
     const mappings = this.attr('advancedSearch.mappingItems').serialize();
@@ -603,7 +492,8 @@ let viewModel = canMap.extend({
 
     this.attr('advancedSearch.open', false);
 
-    this.applySavedSearch(
+    applySavedSearch(
+      this,
       this.attr('advancedSearch.selectedSavedSearch')
     );
     this.onFilter();
@@ -614,60 +504,13 @@ let viewModel = canMap.extend({
     this.attr('advancedSearch.request', canList());
     this.attr('advancedSearch.filter', null);
     this.attr('advancedSearch.open', false);
-    this.clearAppliedSavedSearch();
+    clearAppliedSavedSearch(this);
     this.onFilter();
   },
   resetAdvancedFilters: function () {
     this.attr('advancedSearch.filterItems', canList());
     this.attr('advancedSearch.mappingItems', canList());
     this.attr('advancedSearch.parentItems', canList());
-  },
-  closeInfoPane: function () {
-    $('.pin-content')
-      .control()
-      .close();
-  },
-  getAbsoluteItemNumber: function (instance) {
-    let showedItems = this.attr('showedItems');
-    let pageInfo = this.attr('pageInfo');
-    let startIndex = pageInfo.pageSize * (pageInfo.current - 1);
-    let relativeItemIndex = loFindIndex(showedItems,
-      {id: instance.id, type: instance.type});
-    return relativeItemIndex > -1 ?
-      startIndex + relativeItemIndex :
-      relativeItemIndex;
-  },
-  getRelativeItemNumber: function (absoluteNumber, pageSize) {
-    let pageNumber = Math.floor(absoluteNumber / pageSize);
-    let startIndex = pageSize * pageNumber;
-    return absoluteNumber - startIndex;
-  },
-  getNextItemPage: function (absoluteNumber, pageInfo) {
-    let pageNumber = Math.floor(absoluteNumber / pageInfo.pageSize) + 1;
-    let dfd = $.Deferred().resolve();
-
-    if (pageInfo.current !== pageNumber) {
-      this.attr('loading', true);
-      this.attr('pageInfo.current', pageNumber);
-      dfd = this.loadItems();
-    }
-
-    return dfd;
-  },
-  updateActiveItemIndicator: function (index) {
-    let element = this.attr('$el');
-    element
-      .find('.item-active')
-      .removeClass('item-active');
-    element
-      .find('tree-item:nth-of-type(' + (index + 1) +
-        ') .tree-item-content')
-      .addClass('item-active');
-  },
-  showLastPage: function () {
-    const lastPageIndex = this.attr('pageInfo.count');
-
-    this.attr('pageInfo.current', lastPageIndex);
   },
   export() {
     let modelName = this.attr('modelName');
@@ -690,59 +533,6 @@ let viewModel = canMap.extend({
 
     notifier('info', exportMessage, {data: true});
   },
-  selectedItemHandler(itemIndex) {
-    let componentSelector = 'assessment-info-pane';
-    let pageInfo = this.attr('pageInfo');
-
-    let relativeIndex = this
-      .getRelativeItemNumber(itemIndex, pageInfo.pageSize);
-    let pageLoadDfd = this
-      .getNextItemPage(itemIndex, pageInfo);
-    let pinControl = $('.pin-content').control();
-
-    if (!this.attr('canOpenInfoPin')) {
-      return;
-    }
-
-    pinControl.setLoadingIndicator(componentSelector, true);
-
-    pageLoadDfd
-      .then(function () {
-        const items = this.attr('showedItems');
-        const newInstance = items[relativeIndex];
-
-        if (!newInstance) {
-          this.closeInfoPane();
-          this.showLastPage();
-
-          return $.Deferred().resolve();
-        }
-
-        return newInstance
-          .refresh();
-      }.bind(this))
-      .then(function (newInstance) {
-        if (!newInstance) {
-          return;
-        }
-
-        pinControl
-          .updateInstance(componentSelector, newInstance);
-        newInstance.dispatch('refreshRelatedDocuments');
-        newInstance.dispatch({
-          ...REFRESH_RELATED,
-          model: 'Assessment',
-        });
-
-        this.updateActiveItemIndicator(relativeIndex);
-      }.bind(this))
-      .fail(function () {
-        notifier('error', 'Failed to fetch an object.');
-      })
-      .always(function () {
-        pinControl.setLoadingIndicator(componentSelector, false);
-      });
-  },
   searchModalClosed() {
     this.attr('advancedSearch.selectedSavedSearch', null);
   },
@@ -757,8 +547,8 @@ export default canComponent.extend({
   leakScope: true,
   viewModel,
   init: function () {
-    this.viewModel.setColumnsConfiguration();
-    this.viewModel.setSortingConfiguration();
+    setColumnsConfiguration(this.viewModel);
+    setSortingConfiguration(this.viewModel);
   },
   events: {
     '{viewModel.advancedSearch} selectedSavedSearch'() {
@@ -775,7 +565,7 @@ export default canComponent.extend({
     },
     '{viewModel.pageInfo} current': function () {
       if (!this.viewModel.attr('loading')) {
-        this.viewModel.refresh();
+        refresh(this.viewModel);
       }
     },
     '{viewModel.pageInfo} pageSize': function () {
@@ -789,7 +579,7 @@ export default canComponent.extend({
         parent_instance: parent,
         options: this.viewModel,
       });
-      let itemNumber = this.viewModel.getAbsoluteItemNumber(instance);
+      let itemNumber = getAbsoluteItemNumber(this.viewModel, instance);
       let isSubTreeItem = itemNumber === -1;
 
       ev.stopPropagation();
@@ -816,12 +606,12 @@ export default canComponent.extend({
     },
     ' refreshTree'(el, ev) {
       ev.stopPropagation();
-      this.viewModel.refresh();
+      refresh(this.viewModel);
     },
     [`{viewModel.parent_instance} ${REFRESH_MAPPING.type}`](
       [scope], {destinationType}
     ) {
-      this.viewModel.refresh(destinationType);
+      refresh(this.viewModel, destinationType);
     },
     inserted() {
       let viewModel = this.viewModel;
@@ -829,9 +619,9 @@ export default canComponent.extend({
       viewModel.attr('router', router);
 
       this.element.closest('.widget')
-        .on('widget_hidden', viewModel._widgetHidden.bind(viewModel));
+        .on('widget_hidden', _widgetHidden.bind(viewModel));
       this.element.closest('.widget')
-        .on('widget_shown', viewModel._widgetShown.bind(viewModel));
+        .on('widget_shown', _widgetShown.bind(viewModel));
       viewModel._triggerListeners();
 
       if (isLoadSavedSearch(this.viewModel)) {
@@ -841,7 +631,7 @@ export default canComponent.extend({
       }
     },
     '{viewModel.parent_instance} displayTree'([scope], {destinationType}) {
-      this.viewModel.refresh(destinationType);
+      refresh(this.viewModel, destinationType);
     },
     '{viewModel.router} saved_search'() {
       if (isLoadSavedSearch(this.viewModel)) {
@@ -947,3 +737,228 @@ const selectSavedSearchFilter = (advancedSearch, savedSearch) => {
   // save selected saved search
   advancedSearch.attr('selectedSavedSearch', selectedSavedSearch);
 };
+
+function refresh(vm, destinationType) {
+  if (!destinationType || vm.attr('modelName') === destinationType) {
+    closeInfoPane();
+    return vm.loadItems();
+  }
+
+  return Promise.resolve();
+}
+
+function setColumnsConfiguration(vm) {
+  let columns = TreeViewUtils.getColumnsForModel(
+    vm.attr('model').model_singular,
+    vm.attr('options.widgetId')
+  );
+
+  vm.attr('columns.available', columns.available);
+  vm.attr('columns.selected', columns.selected);
+  vm.attr('columns.mandatory', columns.mandatory);
+  vm.attr('columns.disableConfiguration', columns.disableConfiguration);
+}
+
+function setSortingConfiguration(vm) {
+  let sortingInfo = TreeViewUtils
+    .getSortingForModel(vm.attr('modelName'));
+
+  vm.attr('sortingInfo.sortBy', sortingInfo.key);
+  vm.attr('sortingInfo.sortDirection', sortingInfo.direction);
+}
+
+/**
+ * Concatenation active filters.
+ *
+ * @param {String} filter - Parsed filter string
+ * @param {Object} options - Filter parameters
+ * @return {string} - Result of concatenation filters.
+ * @private
+ */
+function _concatFilters(filter, options) {
+  if (filter) {
+    filter = QueryParser.joinQueries(
+      filter,
+      options.query.attr(),
+      'AND');
+  } else if (options.query) {
+    filter = options.query;
+  }
+
+  return filter;
+}
+
+function _widgetHidden() {
+  this._triggerListeners(true);
+}
+
+function _widgetShown() {
+  let countsName = this.attr('options.countsName');
+  let total = this.attr('pageInfo.total');
+  let counts = loGet(getCounts(), countsName);
+
+  this._triggerListeners();
+
+  if (this.attr('refetch') ||
+    router.attr('refetch') ||
+    this.attr('options.forceRefetch') ||
+    // this condition is mostly for Issues, Documents and Evidence as they can be created from other object info pane
+    (total !== counts)) {
+    this.loadItems();
+    this.attr('refetch', false);
+  }
+}
+
+function _needToRefreshAfterRelRemove(vm, relationship) {
+  const parentInstance = vm.attr('parent_instance');
+  const {
+    source,
+    destination,
+  } = relationship;
+
+  const isRelForCurrentInstance = (
+    (
+      source.type === parentInstance.attr('type') &&
+      source.id === parentInstance.attr('id')
+    ) || (
+      destination.type === parentInstance.attr('type') &&
+      destination.id === parentInstance.attr('id')
+    )
+  );
+
+  return isRelForCurrentInstance;
+}
+
+function _isRefreshNeeded(vm, instance) {
+  let needToRefresh = true;
+
+  if (instance instanceof Relationship) {
+    needToRefresh = _needToRefreshAfterRelRemove(vm, instance);
+  }
+
+  return needToRefresh;
+}
+
+function clearAppliedSavedSearch(vm) {
+  vm.attr('advancedSearch.selectedSavedSearch', null);
+  vm.attr('savedSearchPermalink', null);
+  vm.attr('appliedSavedSearch', null);
+}
+
+function applySavedSearch(vm, selectedSavedSearch) {
+  if (!selectedSavedSearch || vm.attr('filterIsDirty')) {
+    clearAppliedSavedSearch(vm);
+    return;
+  }
+
+  const modelName = vm.attr('model').table_singular;
+  const permalink = AdvancedSearch
+    .buildSearchPermalink(selectedSavedSearch.id, modelName);
+
+  vm.attr('savedSearchPermalink', permalink);
+  vm.attr('appliedSavedSearch', selectedSavedSearch.serialize());
+}
+
+function closeInfoPane() {
+  $('.pin-content')
+    .control()
+    .close();
+}
+
+function getAbsoluteItemNumber(vm, instance) {
+  let showedItems = vm.attr('showedItems');
+  let pageInfo = vm.attr('pageInfo');
+  let startIndex = pageInfo.pageSize * (pageInfo.current - 1);
+  let relativeItemIndex = loFindIndex(showedItems,
+    {id: instance.id, type: instance.type});
+  return relativeItemIndex > -1 ?
+    startIndex + relativeItemIndex :
+    relativeItemIndex;
+}
+
+function getRelativeItemNumber(absoluteNumber, pageSize) {
+  let pageNumber = Math.floor(absoluteNumber / pageSize);
+  let startIndex = pageSize * pageNumber;
+  return absoluteNumber - startIndex;
+}
+
+function getNextItemPage(vm, absoluteNumber, pageInfo) {
+  let pageNumber = Math.floor(absoluteNumber / pageInfo.pageSize) + 1;
+  let dfd = $.Deferred().resolve();
+
+  if (pageInfo.current !== pageNumber) {
+    vm.attr('loading', true);
+    vm.attr('pageInfo.current', pageNumber);
+    dfd = vm.loadItems();
+  }
+
+  return dfd;
+}
+
+function updateActiveItemIndicator(vm, index) {
+  let element = vm.attr('$el');
+  element
+    .find('.item-active')
+    .removeClass('item-active');
+  element
+    .find('tree-item:nth-of-type(' + (index + 1) +
+      ') .tree-item-content')
+    .addClass('item-active');
+}
+
+function showLastPage (vm) {
+  const lastPageIndex = vm.attr('pageInfo.count');
+  vm.attr('pageInfo.current', lastPageIndex);
+}
+
+function selectedItemHandler(vm, itemIndex) {
+  let componentSelector = 'assessment-info-pane';
+  let pageInfo = vm.attr('pageInfo');
+
+  let relativeIndex = getRelativeItemNumber(itemIndex, pageInfo.pageSize);
+  let pageLoadDfd = getNextItemPage(vm, itemIndex, pageInfo);
+  let pinControl = $('.pin-content').control();
+
+  if (!vm.attr('canOpenInfoPin')) {
+    return;
+  }
+
+  pinControl.setLoadingIndicator(componentSelector, true);
+
+  pageLoadDfd
+    .then(function () {
+      const items = vm.attr('showedItems');
+      const newInstance = items[relativeIndex];
+
+      if (!newInstance) {
+        closeInfoPane();
+        showLastPage(vm);
+
+        return $.Deferred().resolve();
+      }
+
+      return newInstance
+        .refresh();
+    })
+    .then(function (newInstance) {
+      if (!newInstance) {
+        return;
+      }
+
+      pinControl
+        .updateInstance(componentSelector, newInstance);
+      newInstance.dispatch('refreshRelatedDocuments');
+      newInstance.dispatch({
+        ...REFRESH_RELATED,
+        model: 'Assessment',
+      });
+
+      updateActiveItemIndicator(vm, relativeIndex);
+    })
+    .fail(function () {
+      notifier('error', 'Failed to fetch an object.');
+    })
+    .always(function () {
+      pinControl.setLoadingIndicator(componentSelector, false);
+    });
+}

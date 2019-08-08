@@ -62,15 +62,6 @@ export default canComponent.extend({
     isNotEditable: false,
     allowToRemove: true,
     /**
-     * @description Moves focus to the create url input element
-     */
-    moveFocusToInput: function () {
-      let inputElements = this.element.find('input');
-      if (inputElements.length) {
-        inputElements[0].focus();
-      }
-    },
-    /**
      * Handle changes during toggling form visibility.
      *
      * @param  {Boolean} isVisible - New value for form visibility
@@ -84,7 +75,7 @@ export default canComponent.extend({
         this.attr('value', '');
       }
       if (isVisible) {
-        this.moveFocusToInput();
+        moveFocusToInput(this);
       }
     },
     /**
@@ -149,3 +140,13 @@ export default canComponent.extend({
     },
   },
 });
+
+/**
+ * @description Moves focus to the create url input element
+ */
+function moveFocusToInput(vm) {
+  let inputElements = vm.element.find('input');
+  if (inputElements.length) {
+    inputElements[0].focus();
+  }
+}

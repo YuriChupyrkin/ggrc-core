@@ -36,23 +36,6 @@ export default canComponent.extend({
       // remain only first comments
       this.attr('comments').splice(this.attr('pageSize'));
     },
-    async loadFirstComments(count) {
-      let instance = this.attr('instance');
-      let modelName = this.attr('commentObjectName');
-      let newCommentsCount = this.attr('newCommentsCount');
-
-      // load more comments as they can be added by other users before or after current user's new comments
-      let pageSize = (count || this.attr('pageSize')) + newCommentsCount;
-
-      let response = await loadComments(instance, modelName, 0, pageSize);
-      let {values: comments, total} = response[modelName];
-
-      this.attr('comments').splice(0, newCommentsCount);
-      this.attr('comments').unshift(...comments);
-
-      this.attr('totalCount', total);
-      this.attr('newCommentsCount', 0);
-    },
     async loadMoreComments(startIndex) {
       this.attr('isLoading', true);
 
@@ -70,7 +53,7 @@ export default canComponent.extend({
           // new comments were added by other users
           let newCommentsCount = total - totalCount;
           await Promise.all([
-            this.loadFirstComments(newCommentsCount),
+            loadFirstComments(this, newCommentsCount),
             this.loadMoreComments(index + newCommentsCount)]);
         } else {
           this.attr('comments').push(...comments);
@@ -83,18 +66,12 @@ export default canComponent.extend({
       let newComment = event.items[0];
       return this.attr('comments').unshift(newComment);
     },
-    removeComment(commentToRemove) {
-      let comments = this.attr('comments');
-      comments.replace(comments.filter((comment) => {
-        return comment !== commentToRemove;
-      }));
-    },
     processComment(event) {
       if (event.success) {
         this.attr('totalCount', this.attr('totalCount') + 1);
         this.attr('newCommentsCount', this.attr('newCommentsCount') + 1);
 
-        this.mapToInstance(event.item).then(() => {
+        mapToInstance(this, event.item).then(() => {
           const instance = this.attr('instance');
           instance.dispatch({
             ...REFRESH_MAPPED_COUNTER,
@@ -103,25 +80,14 @@ export default canComponent.extend({
           instance.refresh();
         });
       } else {
-        this.removeComment(event.item);
+        removeComment(this, event.item);
       }
-    },
-    mapToInstance(comment) {
-      return (new Relationship({
-        context: this.attr('instance.context') || new Context({id: null}),
-        source: this.attr('instance'),
-        destination: comment,
-      }))
-        .save()
-        .fail(() => {
-          this.removeComment(comment);
-        });
     },
   }),
   async init() {
     this.viewModel.attr('isLoading', true);
     try {
-      await this.viewModel.loadFirstComments();
+      await loadFirstComments(this.viewModel);
     } finally {
       this.viewModel.attr('isLoading', false);
     }
@@ -129,7 +95,44 @@ export default canComponent.extend({
   events: {
     [`{viewModel.instance} ${REFRESH_COMMENTS.type}`]() {
       this.viewModel.attr('comments').replace([]);
-      this.viewModel.loadFirstComments();
+      loadFirstComments(this.viewModel);
     },
   },
 });
+
+async function loadFirstComments(vm, count) {
+  let instance = vm.attr('instance');
+  let modelName = vm.attr('commentObjectName');
+  let newCommentsCount = vm.attr('newCommentsCount');
+
+  // load more comments as they can be added by other users before or after current user's new comments
+  let pageSize = (count || vm.attr('pageSize')) + newCommentsCount;
+
+  let response = await loadComments(instance, modelName, 0, pageSize);
+  let {values: comments, total} = response[modelName];
+
+  vm.attr('comments').splice(0, newCommentsCount);
+  vm.attr('comments').unshift(...comments);
+
+  vm.attr('totalCount', total);
+  vm.attr('newCommentsCount', 0);
+}
+
+function removeComment(vm, commentToRemove) {
+  let comments = vm.attr('comments');
+  comments.replace(comments.filter((comment) => {
+    return comment !== commentToRemove;
+  }));
+}
+
+function mapToInstance(vm, comment) {
+  return (new Relationship({
+    context: vm.attr('instance.context') || new Context({id: null}),
+    source: vm.attr('instance'),
+    destination: comment,
+  }))
+    .save()
+    .fail(() => {
+      removeComment(vm, comment);
+    });
+}

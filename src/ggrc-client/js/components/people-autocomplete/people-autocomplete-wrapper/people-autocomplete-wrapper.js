@@ -47,22 +47,24 @@ export default canComponent.extend({
             prefix: value,
             limit: 10,
           },
-        ).then(this.processItems.bind(this, value));
+        ).then(processItems.bind(this, value));
       } else {
         return this.requestItems(value)
           .then((data) => data[type].values)
-          .then(this.processItems.bind(this, value));
-      }
-    },
-    processItems(value, data) {
-      if (value === this.attr('currentValue')) {
-        if (data.length) {
-          this.attr('result', data);
-          this.attr('showResults', true);
-        } else {
-          this.attr('showResults', false);
-        }
+          .then(processItems.bind(this, value));
       }
     },
   }),
 });
+
+function processItems(value, data) {
+  if (value === this.attr('currentValue')) {
+    if (data.length) {
+      this.attr('result', data);
+      this.attr('showResults', true);
+    } else {
+      this.attr('showResults', false);
+    }
+  }
+}
+

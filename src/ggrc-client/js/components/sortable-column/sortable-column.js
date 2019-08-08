@@ -31,20 +31,13 @@ export default canComponent.extend({
     sortField: '',
     applySort() {
       if (this.attr('isSorted')) {
-        this.toggleSortDirection();
+        toggleSortDirection(this);
       } else {
         this.attr('sort.field', this.attr('sortField'));
         this.attr('sort.direction', 'asc');
       }
 
       this.attr('sort').dispatch('changed');
-    },
-    toggleSortDirection() {
-      if (this.attr('sort.direction') === 'asc') {
-        this.attr('sort.direction', 'desc');
-      } else {
-        this.attr('sort.direction', 'asc');
-      }
     },
   }),
   events: {
@@ -53,3 +46,11 @@ export default canComponent.extend({
     },
   },
 });
+
+function toggleSortDirection(vm) {
+  if (vm.attr('sort.direction') === 'asc') {
+    vm.attr('sort.direction', 'desc');
+  } else {
+    vm.attr('sort.direction', 'asc');
+  }
+}

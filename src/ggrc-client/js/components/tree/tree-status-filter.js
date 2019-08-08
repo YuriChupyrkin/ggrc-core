@@ -39,63 +39,12 @@ let viewModel = canMap.extend({
       },
     },
   },
-  getDefaultStates() {
-    let widgetId = this.attr('widgetId');
-    // Get the status list from local storage
-    let savedStates = getTreeViewStates(widgetId);
-    // Get the status list from query string
-    let queryStates = router.attr('state');
-
-    let modelName = this.attr('modelName');
-    let allStates = this.attr('allStates');
-
-    let defaultStates = (queryStates || savedStates).filter((state) => {
-      return allStates.includes(state);
-    });
-
-    if (defaultStates.length === 0) {
-      defaultStates = StateUtils.getDefaultStatesForModel(modelName);
-    }
-
-    return defaultStates;
-  },
-  saveTreeStates(selectedStates) {
-    let widgetId = this.attr('widgetId');
-    setTreeViewStates(widgetId, selectedStates);
-  },
-  setStatesDropdown(states) {
-    let statuses = this.attr('filterStates').map((item) => {
-      item.attr('checked', (states.indexOf(item.value) > -1));
-
-      return item;
-    });
-
-    // need to trigget change event for 'filterStates' attr
-    this.attr('filterStates', statuses);
-  },
-  setStatesRoute(states) {
-    let allStates = this.attr('allStates');
-
-    if (states.length && loDifference(allStates, states).length) {
-      router.attr('state', states);
-    } else {
-      router.removeAttr('state');
-    }
-  },
-  buildSearchQuery(states) {
-    let allStates = this.attr('allStates');
-    let modelName = this.attr('modelName');
-    let query = (states.length && loDifference(allStates, states).length) ?
-      StateUtils.buildStatusFilter(states, modelName) :
-      null;
-    this.attr('options.query', query);
-  },
   selectItems(event) {
     let selectedStates = event.selected.map((state) => state.value);
 
-    this.buildSearchQuery(selectedStates);
-    this.saveTreeStates(selectedStates);
-    this.setStatesRoute(selectedStates);
+    buildSearchQuery(this, selectedStates);
+    saveTreeStates(this, selectedStates);
+    setStatesRoute(this, selectedStates);
     this.dispatch('filter');
   },
 });
@@ -123,19 +72,19 @@ export default canComponent.extend({
       });
       vm.attr('filterStates', filterStates);
 
-      let defaultStates = vm.getDefaultStates();
-      vm.buildSearchQuery(defaultStates);
-      vm.setStatesDropdown(defaultStates);
-      vm.setStatesRoute(defaultStates);
+      let defaultStates = getDefaultStates(vm);
+      buildSearchQuery(vm, defaultStates);
+      setStatesDropdown(vm, defaultStates);
+      setStatesRoute(vm, defaultStates);
     },
     '{viewModel} disabled'() {
       if (this.viewModel.attr('disabled')) {
-        this.viewModel.setStatesDropdown([]);
-        this.viewModel.setStatesRoute([]);
+        setStatesDropdown(this.viewModel, []);
+        setStatesRoute(this.viewModel, []);
       } else {
-        let defaultStates = this.viewModel.getDefaultStates();
-        this.viewModel.setStatesDropdown(defaultStates);
-        this.viewModel.setStatesRoute(defaultStates);
+        let defaultStates = getDefaultStates(this.viewModel);
+        setStatesDropdown(this.viewModel, defaultStates);
+        setStatesRoute(this.viewModel, defaultStates);
       }
     },
     '{viewModel.router} state'([router], event, newStatuses) {
@@ -149,8 +98,8 @@ export default canComponent.extend({
         loDifference(newStatuses, currentStates).length;
 
       if (isCurrent && isEnabled && isChanged) {
-        this.viewModel.buildSearchQuery(newStatuses);
-        this.viewModel.setStatesDropdown(newStatuses);
+        buildSearchQuery(this.viewModel, newStatuses);
+        setStatesDropdown(this.viewModel, newStatuses);
         this.viewModel.dispatch('filter');
       }
     },
@@ -161,8 +110,64 @@ export default canComponent.extend({
 
       if (isCurrent && isEnabled && !routeStatuses) {
         let statuses = this.viewModel.attr('currentStates');
-        this.viewModel.setStatesRoute(statuses);
+        setStatesRoute(this.viewModel, statuses);
       }
     },
   },
 });
+
+function getDefaultStates(vm) {
+  let widgetId = vm.attr('widgetId');
+  // Get the status list from local storage
+  let savedStates = getTreeViewStates(widgetId);
+  // Get the status list from query string
+  let queryStates = router.attr('state');
+
+  let modelName = vm.attr('modelName');
+  let allStates = vm.attr('allStates');
+
+  let defaultStates = (queryStates || savedStates).filter((state) => {
+    return allStates.includes(state);
+  });
+
+  if (defaultStates.length === 0) {
+    defaultStates = StateUtils.getDefaultStatesForModel(modelName);
+  }
+
+  return defaultStates;
+}
+
+function saveTreeStates(vm, selectedStates) {
+  let widgetId = vm.attr('widgetId');
+  setTreeViewStates(widgetId, selectedStates);
+}
+
+function setStatesDropdown(vm, states) {
+  let statuses = vm.attr('filterStates').map((item) => {
+    item.attr('checked', (states.indexOf(item.value) > -1));
+
+    return item;
+  });
+
+  // need to trigger change event for 'filterStates' attr
+  vm.attr('filterStates', statuses);
+}
+
+function setStatesRoute(vm, states) {
+  let allStates = vm.attr('allStates');
+
+  if (states.length && loDifference(allStates, states).length) {
+    router.attr('state', states);
+  } else {
+    router.removeAttr('state');
+  }
+}
+
+function buildSearchQuery(vm, states) {
+  let allStates = vm.attr('allStates');
+  let modelName = vm.attr('modelName');
+  let query = (states.length && loDifference(allStates, states).length) ?
+    StateUtils.buildStatusFilter(states, modelName) :
+    null;
+  vm.attr('options.query', query);
+}

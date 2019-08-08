@@ -81,31 +81,9 @@ let viewModel = canMap.extend({
   async undo(ctx, el, ev) {
     ev.stopPropagation();
     let previousValue = this.attr('oldValues.0');
-    const result = await this.setStatus(previousValue.status);
+    const result = await setStatus(this, previousValue.status);
     if (result) {
       this.attr('oldValues').shift();
-    }
-  },
-  async setStatus(status) {
-    const instance = this.attr('instance');
-    const stopFn = tracker.start(
-      instance.type,
-      tracker.USER_JOURNEY_KEYS.LOADING,
-      tracker.USER_ACTIONS.CYCLE_TASK.CHANGE_STATUS
-    );
-    this.attr('disabled', true);
-    try {
-      await updateStatus(instance, status);
-      return true;
-    } catch (e) {
-      notifier(
-        'error',
-        "Task state wasn't updated due to server error. Please try again."
-      );
-      return false;
-    } finally {
-      this.attr('disabled', false);
-      stopFn();
     }
   },
 });
@@ -123,3 +101,26 @@ export default canComponent.extend({
     },
   },
 });
+
+async function setStatus(vm, status) {
+  const instance = vm.attr('instance');
+  const stopFn = tracker.start(
+    instance.type,
+    tracker.USER_JOURNEY_KEYS.LOADING,
+    tracker.USER_ACTIONS.CYCLE_TASK.CHANGE_STATUS
+  );
+  vm.attr('disabled', true);
+  try {
+    await updateStatus(instance, status);
+    return true;
+  } catch (e) {
+    notifier(
+      'error',
+      "Task state wasn't updated due to server error. Please try again."
+    );
+    return false;
+  } finally {
+    vm.attr('disabled', false);
+    stopFn();
+  }
+}

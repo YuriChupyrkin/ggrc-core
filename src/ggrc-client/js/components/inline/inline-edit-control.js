@@ -107,22 +107,18 @@ export default canComponent.extend({
       this.attr('editMode', false);
       this.attr('context.value', value);
     },
-    updateContext: function () {
-      let value = this.attr('value');
-      this.attr('context.value', value);
-    },
     fieldValueChanged: function (args) {
       this.attr('context.value', args.value);
     },
   }),
   events: {
     init: function () {
-      this.viewModel.updateContext();
+      updateContext(this.viewModel);
     },
     '{viewModel} value': function () {
       // update value in the readonly mode
       if (!this.viewModel.attr('editMode')) {
-        this.viewModel.updateContext();
+        updateContext(this.viewModel);
       }
     },
     '{window} mousedown': function (el, ev) {
@@ -145,3 +141,8 @@ export default canComponent.extend({
     },
   },
 });
+
+function updateContext(vm) {
+  let value = vm.attr('value');
+  vm.attr('context.value', value);
+}

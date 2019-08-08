@@ -11,18 +11,19 @@ export default canComponent.extend({
   viewModel: canMap.extend({
     sortedItems: [],
     items: [],
-    sort() {
-      const items = this.attr('items');
-      const sortedItems = items.sort();
-      this.attr('sortedItems', sortedItems);
-    },
   }),
   events: {
     '{viewModel.items} change'() {
-      this.viewModel.sort();
+      sort(this.viewModel);
     },
     init() {
-      this.viewModel.sort();
+      sort(this.viewModel);
     },
   },
 });
+
+function sort(vm) {
+  const items = vm.attr('items');
+  const sortedItems = items.sort();
+  vm.attr('sortedItems', sortedItems);
+}

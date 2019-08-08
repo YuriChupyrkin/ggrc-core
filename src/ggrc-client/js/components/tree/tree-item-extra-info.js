@@ -144,7 +144,7 @@ let viewModel = canMap.extend({
     },
   },
   onEnter: function () {
-    this.processPendingContent();
+    processPendingContent(this);
     this.attr('active', true);
     if (!this.attr('triggered')) {
       this.attr('triggered', true);
@@ -152,12 +152,6 @@ let viewModel = canMap.extend({
   },
   onLeave: function () {
     this.attr('active', false);
-  },
-  processPendingContent() {
-    const extractedPendingContent = this.attr('pendingContent').splice(0);
-    const resolvedContent = extractedPendingContent.map((pending) => pending());
-
-    this.addContent(...resolvedContent);
   },
   addDeferredContent({deferredCallback}) {
     this.attr('pendingContent').push(deferredCallback);
@@ -188,3 +182,10 @@ export default canComponent.extend({
   leakScope: true,
   viewModel,
 });
+
+function processPendingContent(vm) {
+  const extractedPendingContent = vm.attr('pendingContent').splice(0);
+  const resolvedContent = extractedPendingContent.map((pending) => pending());
+
+  vm.addContent(...resolvedContent);
+}

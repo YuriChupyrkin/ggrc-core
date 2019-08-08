@@ -64,7 +64,7 @@ export default canComponent.extend({
       defaultValue: {
         type: String,
         get() {
-          return this.getDefaultValue();
+          return getDefaultValue(this);
         },
       },
       userRoles: {
@@ -74,58 +74,63 @@ export default canComponent.extend({
         },
       },
     },
-    /**
-     * Transforms Rich text attribute value.
-     *
-     * @param {String} value - Rich text attribute value from DB.
-     * @return {String} - the transformed rich text attribute value.
-     */
-    getConvertedRichTextAttr(value) {
-      let result = value;
-
-      if (this.isMarkdown()) {
-        result = convertMarkdownToHtml(result);
-      }
-      return getOnlyAnchorTags(result);
-    },
-    /**
-     * Retrieve the string value of an attribute.
-     *
-     * The method only supports instance attributes categorized as "default",
-     * and does not support (read: not work for) nested object references.
-     *
-     * If the attribute does not exist or is not considered
-     * to be a "default" attribute, an empty string is returned.
-     *
-     * If the attribute represents a date information, it is returned in the
-     * MM/DD/YYYY format.
-     *
-     * @return {String} - the retrieved attribute's value
-     */
-    getDefaultValue() {
-      let attrName = this.attr('name');
-      let instance = this.attr('instance');
-
-      let result = instance.attr(attrName);
-
-      if (result !== undefined && result !== null) {
-        if (PERSON_ATTRS.has(attrName)) {
-          return result.attr('email');
-        }
-
-        if (DATE_ATTRS.has(attrName)) {
-          return formatDate(result, true);
-        }
-
-        if (RICH_TEXT_ATTRS.has(attrName)) {
-          return this.getConvertedRichTextAttr(result);
-        }
-        return String(result);
-      }
-      return '';
-    },
-    isMarkdown() {
-      return !!this.attr('instance').constructor.isChangeableExternally;
-    },
   }),
 });
+
+/**
+ * Transforms Rich text attribute value.
+ *
+ * @param {CanMap} vm - component's viewMode
+ * @param {String} value - Rich text attribute value from DB.
+ * @return {String} - the transformed rich text attribute value.
+ */
+function getConvertedRichTextAttr(vm, value) {
+  let result = value;
+
+  if (isMarkdown(vm)) {
+    result = convertMarkdownToHtml(result);
+  }
+  return getOnlyAnchorTags(result);
+}
+
+/**
+ * Retrieve the string value of an attribute.
+ *
+ * The method only supports instance attributes categorized as "default",
+ * and does not support (read: not work for) nested object references.
+ *
+ * If the attribute does not exist or is not considered
+ * to be a "default" attribute, an empty string is returned.
+ *
+ * If the attribute represents a date information, it is returned in the
+ * MM/DD/YYYY format.
+ *
+ * @param {CanMap} vm - component's viewModel
+ * @return {String} - the retrieved attribute's value
+ */
+function getDefaultValue(vm) {
+  let attrName = vm.attr('name');
+  let instance = vm.attr('instance');
+
+  let result = instance.attr(attrName);
+
+  if (result !== undefined && result !== null) {
+    if (PERSON_ATTRS.has(attrName)) {
+      return result.attr('email');
+    }
+
+    if (DATE_ATTRS.has(attrName)) {
+      return formatDate(result, true);
+    }
+
+    if (RICH_TEXT_ATTRS.has(attrName)) {
+      return getConvertedRichTextAttr(vm, result);
+    }
+    return String(result);
+  }
+  return '';
+}
+
+function isMarkdown(vm) {
+  return !!vm.attr('instance').constructor.isChangeableExternally;
+}

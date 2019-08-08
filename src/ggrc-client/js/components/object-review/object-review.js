@@ -74,73 +74,14 @@ export default canComponent.extend({
     reviewersModalState: {
       open: false,
     },
-    loadReview() {
-      const review = this.attr('instance.review');
-
-      if (!this.attr('isSnapshot') && review) {
-        this.attr('loading', true);
-
-        new Review(review)
-          .refresh()
-          .then((reviewInstance) => {
-            this.attr('review', reviewInstance);
-          })
-          .always(() => {
-            this.attr('loading', false);
-          });
-      }
-    },
-    getReviewInstance() {
-      const review = this.attr('review');
-
-      return review || createReviewInstance(this.attr('instance'));
-    },
     markReviewed() {
-      const review = this.getReviewInstance();
+      const review = getReviewInstance(this);
 
-      this.updateAccessControlList(review);
-      this.changeReviewState(review, 'Reviewed')
+      updateAccessControlList(review);
+      changeReviewState(this, review, 'Reviewed')
         .then(() => {
-          this.showNotification();
+          showNotification(this);
         });
-    },
-    markUnreviewed() {
-      const review = this.attr('review');
-
-      this.changeReviewState(review, 'Unreviewed');
-    },
-    changeReviewState(review, status) {
-      review.attr('status', status);
-      this.attr('loading', true);
-
-      return this.updateReview(review).then(() => {
-        this.attr('loading', false);
-      });
-    },
-    showNotification() {
-      notifier('info', notificationTemplate, {
-        data: {revertState: this.markUnreviewed.bind(this)},
-      });
-    },
-    updateReview(review) {
-      return saveReview(review, this.attr('instance'))
-        .then((reviewInstance) => {
-          this.attr('review', reviewInstance);
-        });
-    },
-    updateAccessControlList(review) {
-      const acl = review.attr('access_control_list');
-      const isCurrentUserReviewer = !!loFind(acl, (item) =>
-        item.person.id === GGRC.current_user.id);
-
-      if (!isCurrentUserReviewer) {
-        const reviewerRole = getRole('Review', 'Reviewers');
-
-        acl.push({
-          ac_role_id: reviewerRole.id,
-          person: {type: 'Person', id: GGRC.current_user.id},
-        });
-      }
     },
     changeReviewers() {
       this.attr('reviewersModalState.open', true);
@@ -160,19 +101,83 @@ export default canComponent.extend({
   }),
   events: {
     inserted() {
-      this.viewModel.loadReview();
+      loadReview(this.viewModel);
     },
     '{viewModel.instance} modelAfterSave'() {
-      this.viewModel.loadReview();
+      loadReview(this.viewModel);
     },
     [`{viewModel.instance} ${REFRESH_MAPPING.type}`]([instance], event) {
       // check destinationType because REFRESH_MAPPING is also dispatched on modal 'hide'
       if (event.destinationType) {
-        this.viewModel.loadReview();
+        loadReview(this.viewModel);
       }
     },
     [`{viewModel.instance} ${DESTINATION_UNMAPPED.type}`]() {
-      this.viewModel.loadReview();
+      loadReview(this.viewModel);
     },
   },
 });
+
+function loadReview(vm) {
+  const review = vm.attr('instance.review');
+
+  if (!vm.attr('isSnapshot') && review) {
+    vm.attr('loading', true);
+
+    new Review(review)
+      .refresh()
+      .then((reviewInstance) => {
+        vm.attr('review', reviewInstance);
+      })
+      .always(() => {
+        vm.attr('loading', false);
+      });
+  }
+}
+
+function getReviewInstance(vm) {
+  const review = vm.attr('review');
+  return review || createReviewInstance(vm.attr('instance'));
+}
+
+function markUnreviewed() {
+  const review = this.attr('review');
+  changeReviewState(this, review, 'Unreviewed');
+}
+
+function changeReviewState(vm, review, status) {
+  review.attr('status', status);
+  vm.attr('loading', true);
+
+  return updateReview(vm, review).then(() => {
+    vm.attr('loading', false);
+  });
+}
+
+function showNotification(vm) {
+  notifier('info', notificationTemplate, {
+    data: {revertState: markUnreviewed.bind(vm)},
+  });
+}
+
+function updateReview(vm, review) {
+  return saveReview(review, vm.attr('instance'))
+    .then((reviewInstance) => {
+      vm.attr('review', reviewInstance);
+    });
+}
+
+function updateAccessControlList(review) {
+  const acl = review.attr('access_control_list');
+  const isCurrentUserReviewer = !!loFind(acl, (item) =>
+    item.person.id === GGRC.current_user.id);
+
+  if (!isCurrentUserReviewer) {
+    const reviewerRole = getRole('Review', 'Reviewers');
+
+    acl.push({
+      ac_role_id: reviewerRole.id,
+      person: {type: 'Person', id: GGRC.current_user.id},
+    });
+  }
+}

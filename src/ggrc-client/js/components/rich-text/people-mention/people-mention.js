@@ -31,18 +31,18 @@ export default canComponent.extend({
             editor.on('text-change', this.onChange.bind(this));
 
             editor.keyboard.addBinding({key: KEY_MAP.ESCAPE},
-              this.onEscapeKey.bind(this));
+              onEscapeKey.bind(this));
             editor.keyboard.addBinding({key: KEY_MAP.ARROW_DOWN},
-              this.onActionKey.bind(this, KEY_MAP.ARROW_DOWN));
+              onActionKey.bind(this, KEY_MAP.ARROW_DOWN));
             editor.keyboard.addBinding({key: KEY_MAP.ARROW_UP},
-              this.onActionKey.bind(this, KEY_MAP.ARROW_UP));
+              onActionKey.bind(this, KEY_MAP.ARROW_UP));
 
             // This is hacky way to add key binding.
             // We need to do this because there is default handlers
             // which prevents event propagation in new handlers.
             editor.keyboard.bindings[KEY_MAP.ENTER].unshift({
               key: KEY_MAP.ENTER,
-              handler: this.onActionKey.bind(this, KEY_MAP.ENTER),
+              handler: onActionKey.bind(this, KEY_MAP.ENTER),
             });
           }
           return editor;
@@ -56,29 +56,6 @@ export default canComponent.extend({
     mentionAfterSelection: null,
     mentionIndex: null,
     actionKey: null,
-    clearMention() {
-      this.attr('mentionBeforeSelection', null);
-      this.attr('mentionAfterSelection', null);
-      this.attr('mentionIndex', null);
-    },
-    onActionKey(keyCode) {
-      if (this.attr('showResults')) {
-        // trigger setter of 'actionKey'
-        this.attr('actionKey', keyCode);
-        // reset 'actionKey'
-        this.attr('actionKey', null);
-        // prevent default behavior
-        return false;
-      }
-      return true;
-    },
-    onEscapeKey() {
-      if (this.attr('showResults')) {
-        this.clearMention();
-        return false;
-      }
-      return true;
-    },
     onChange() {
       const editor = this.attr('editor');
       const selection = editor.getSelection();
@@ -106,7 +83,7 @@ export default canComponent.extend({
         this.attr('mentionAfterSelection', mentionAfterSelection);
         this.attr('mentionIndex', textBeforeMention.length);
       } else {
-        this.clearMention();
+        clearMention(this);
       }
     },
     personSelected({item}) {
@@ -127,12 +104,38 @@ export default canComponent.extend({
       const editor = this.attr('editor');
       editor.updateContents({ops});
       editor.setSelection(retainLength + mention.length + 1);
-      this.clearMention();
+      clearMention(this);
     },
   }),
   events: {
     '{window} click'() {
-      this.viewModel.clearMention();
+      clearMention(this.viewModel);
     },
   },
 });
+
+function clearMention(vm) {
+  vm.attr('mentionBeforeSelection', null);
+  vm.attr('mentionAfterSelection', null);
+  vm.attr('mentionIndex', null);
+}
+
+function onActionKey(keyCode) {
+  if (this.attr('showResults')) {
+    // trigger setter of 'actionKey'
+    this.attr('actionKey', keyCode);
+    // reset 'actionKey'
+    this.attr('actionKey', null);
+    // prevent default behavior
+    return false;
+  }
+  return true;
+}
+
+function onEscapeKey() {
+  if (this.attr('showResults')) {
+    clearMention(this);
+    return false;
+  }
+  return true;
+}

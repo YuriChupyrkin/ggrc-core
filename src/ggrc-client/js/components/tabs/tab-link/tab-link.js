@@ -11,10 +11,6 @@ const viewModel = canMap.extend({
   titleText: '',
   linkType: '',
   panels: [],
-  setupPanels() {
-    this.attr('panels').push(this);
-    this.attr('panels').dispatch('panelAdded');
-  },
 });
 
 export default canComponent.extend({
@@ -23,7 +19,12 @@ export default canComponent.extend({
   viewModel,
   events: {
     inserted() {
-      this.viewModel.setupPanels();
+      setupPanels(this.viewModel);
     },
   },
 });
+
+function setupPanels(vm) {
+  vm.attr('panels').push(vm);
+  vm.attr('panels').dispatch('panelAdded');
+}
