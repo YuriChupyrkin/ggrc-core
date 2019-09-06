@@ -4,26 +4,37 @@
  */
 
 import canStache from 'can-stache';
-import canMap from 'can-map';
 import canComponent from 'can-component';
 import template from './reusable-objects-item.stache';
+import canDefineMap from 'can-define/map/map';
+import canDefineList from 'can-define/list/list';
 
 export default canComponent.extend({
   tag: 'reusable-objects-item',
   view: canStache(template),
   leakScope: true,
-  viewModel: canMap.extend({
-    disabled: false,
-    reuseAllowed: true,
-    instance: {},
-    selectedList: [],
-    isChecked: false,
+  ViewModel: canDefineMap.extend({
+    disabled: {
+      value: false,
+    },
+    reuseAllowed: {
+      value: true,
+    },
+    instance: {
+      value: {},
+    },
+    selectedList: {
+      value: canDefineList,
+    },
+    isChecked: {
+      value: false,
+    },
     setIsChecked() {
-      let instance = this.attr('instance');
-      let list = this.attr('selectedList');
+      let instance = this.instance;
+      let list = this.selectedList;
       let index = $.makeArray(list).indexOf(instance);
 
-      this.attr('isChecked', index >= 0);
+      this.isChecked = index >= 0;
     },
   }),
   events: {
@@ -31,8 +42,8 @@ export default canComponent.extend({
       this.viewModel.setIsChecked();
     },
     '{viewModel} isChecked'([viewModel], ev, isChecked) {
-      let list = viewModel.attr('selectedList');
-      let instance = viewModel.attr('instance');
+      let list = viewModel.selectedList;
+      let instance = viewModel.instance;
       let index = list.indexOf(instance);
 
       if (isChecked && index < 0) {
