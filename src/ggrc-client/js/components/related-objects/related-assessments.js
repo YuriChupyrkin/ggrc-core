@@ -4,7 +4,6 @@
  */
 
 import canStache from 'can-stache';
-import canMap from 'can-map';
 import canComponent from 'can-component';
 import '../sortable-column/sortable-column';
 import '../object-list/object-list';
@@ -25,154 +24,172 @@ import Evidence from '../../models/business-models/evidence';
 import Context from '../../models/service-models/context';
 import * as businessModels from '../../models/business-models';
 import {REFRESH_RELATED} from '../../events/eventTypes';
+import canDefineMap from 'can-define/map/map';
+import canDefineList from 'can-define/list/list';
 
 const defaultOrderBy = [
   {field: 'finished_date', direction: 'desc'},
   {field: 'created_at', direction: 'desc'},
 ];
 
+const ViewModel = canDefineMap.extend({
+  unableToReuse: {
+    get: function () {
+      let hasItems = this.selectedEvidences && this.selectedEvidences.length;
+      let isSaving = this.isSaving;
+
+      return !hasItems || isSaving;
+    },
+  },
+  relatedObjectType: {
+    get: function () {
+      // Get related object type based on assessment or the instance itself
+      // 'instance.assessment_type' is used for object in "Related assessments" in
+      // assessments info pane.
+      // 'instance.type' is used when we are getting related assessment for
+      // a snapshot.
+      return this.instance.assessment_type || this.instance.type;
+    },
+  },
+  relatedObjectsTitle: {
+    get: function () {
+      const relObjType = this.relatedObjectType;
+
+      const objectName = businessModels[relObjType].model_plural;
+      return `Related ${objectName}`;
+    },
+  },
+  paging: {
+    value: function () {
+      return new Pagination({pageSizeSelect: [5, 10, 15]});
+    },
+  },
+  instance: {
+    value: {},
+  },
+  selectedEvidences: {
+    value: canDefineList,
+  },
+  orderBy: {
+    value: {},
+  },
+  isSaving: {
+    value: false,
+  },
+  loading: {
+    value: false,
+  },
+  needReuse: {
+    value: false,
+  },
+  relatedAssessments: {
+    value: canDefineList,
+  },
+  selectedItem: {
+    value: [],
+  },
+  buildEvidenceModel: function (evidence) {
+    const baseData = {
+      context: new Context({id: this.instance.context.id || null}),
+      parent_obj: {
+        id: this.instance.id,
+        type: this.instance.type,
+      },
+      kind: evidence.kind,
+      title: evidence.title,
+    };
+    const specificData = evidence.kind === 'FILE' ?
+      {source_gdrive_id: evidence.gdrive_id} :
+      {link: evidence.link};
+
+    let data = Object.assign({}, baseData, specificData);
+
+    return new Evidence(data);
+  },
+  reuseSelected: function () {
+    this.isSaving = true;
+
+    let reusedObjectList = this.selectedEvidences.map((evidence) => {
+      let model = this.buildEvidenceModel(evidence);
+
+      return backendGdriveClient.withAuth(() => {
+        return model.save();
+      });
+    });
+
+    return $.when(...reusedObjectList)
+      .done((...evidence) => {
+        this.dispatch({
+          type: 'reusableObjectsCreated',
+          items: evidence,
+        });
+      })
+      .always(() => {
+        this.selectedEvidences.replace([]);
+        this.isSaving = false;
+      });
+  },
+  loadRelatedAssessments() {
+    const limits = this.paging.attr('limits');
+    const orderBy = this.orderBy;
+    let currentOrder = [];
+    const stopFn = tracker.start(
+      this.instance.type,
+      tracker.USER_JOURNEY_KEYS.API,
+      tracker.USER_ACTIONS.ASSESSMENT.RELATED_ASSESSMENTS);
+
+    if (!orderBy.field) {
+      currentOrder = defaultOrderBy;
+    } else {
+      currentOrder = [orderBy];
+    }
+
+    this.loading = true;
+
+    return this.instance.getRelatedAssessments(limits, currentOrder)
+      .then((response) => {
+        const assessments = response.data.map((assessment) => {
+          let values = assessment.custom_attribute_values || [];
+          let definitions = assessment.custom_attribute_definitions || [];
+
+          if (definitions.length) {
+            assessment.custom_attribute_values =
+              prepareCustomAttributes(definitions, values);
+          }
+
+          return {
+            instance: assessment,
+          };
+        });
+
+        this.paging.attr('total', response.total);
+        this.relatedAssessments.replace(assessments);
+
+        stopFn();
+        this.loading = false;
+      }, () => {
+        stopFn(true);
+        this.loading = false;
+      });
+  },
+  checkReuseAbility(evidence) {
+    let isFile = evidence.kind === 'FILE';
+    let isGdriveIdProvided = !!evidence.gdrive_id;
+
+    let isAble = !isFile || isGdriveIdProvided;
+
+    return isAble;
+  },
+  isFunction(evidence) {
+    return isFunction(evidence) ? evidence() : evidence;
+  },
+});
+
 export default canComponent.extend({
   tag: 'related-assessments',
   view: canStache(template),
   leakScope: true,
-  viewModel: canMap.extend({
-    define: {
-      unableToReuse: {
-        get: function () {
-          let hasItems = this.attr('selectedEvidences.length');
-          let isSaving = this.attr('isSaving');
-
-          return !hasItems || isSaving;
-        },
-      },
-      relatedObjectType: {
-        get: function () {
-          // Get related object type based on assessment or the instance itself
-          // 'instance.assessment_type' is used for object in "Related assessments" in
-          // assessments info pane.
-          // 'instance.type' is used when we are getting related assessment for
-          // a snapshot.
-          return this.attr('instance.assessment_type') ||
-                 this.attr('instance.type');
-        },
-      },
-      relatedObjectsTitle: {
-        get: function () {
-          const relObjType = this.attr('relatedObjectType');
-
-          const objectName = businessModels[relObjType].model_plural;
-          return `Related ${objectName}`;
-        },
-      },
-      paging: {
-        value: function () {
-          return new Pagination({pageSizeSelect: [5, 10, 15]});
-        },
-      },
-    },
-    instance: {},
-    selectedEvidences: [],
-    orderBy: {},
-    isSaving: false,
-    loading: false,
-    needReuse: false,
-    relatedAssessments: [],
-    buildEvidenceModel: function (evidence) {
-      const baseData = {
-        context: new Context({id: this.attr('instance.context.id') || null}),
-        parent_obj: {
-          id: this.attr('instance.id'),
-          type: this.attr('instance.type'),
-        },
-        kind: evidence.attr('kind'),
-        title: evidence.attr('title'),
-      };
-      const specificData = evidence.attr('kind') === 'FILE' ?
-        {source_gdrive_id: evidence.attr('gdrive_id')} :
-        {link: evidence.attr('link')};
-
-      let data = Object.assign({}, baseData, specificData);
-
-      return new Evidence(data);
-    },
-    reuseSelected: function () {
-      this.attr('isSaving', true);
-
-      let reusedObjectList = this.attr('selectedEvidences').map((evidence) => {
-        let model = this.buildEvidenceModel(evidence);
-
-        return backendGdriveClient.withAuth(() => {
-          return model.save();
-        });
-      });
-
-      return $.when(...reusedObjectList)
-        .done((...evidence) => {
-          this.dispatch({
-            type: 'reusableObjectsCreated',
-            items: evidence,
-          });
-        })
-        .always(() => {
-          this.attr('selectedEvidences').replace([]);
-          this.attr('isSaving', false);
-        });
-    },
-    loadRelatedAssessments() {
-      const limits = this.attr('paging.limits');
-      const orderBy = this.attr('orderBy');
-      let currentOrder = [];
-      const stopFn = tracker.start(
-        this.attr('instance.type'),
-        tracker.USER_JOURNEY_KEYS.API,
-        tracker.USER_ACTIONS.ASSESSMENT.RELATED_ASSESSMENTS);
-
-      if (!orderBy.attr('field')) {
-        currentOrder = defaultOrderBy;
-      } else {
-        currentOrder = [orderBy];
-      }
-
-      this.attr('loading', true);
-
-      return this.attr('instance').getRelatedAssessments(limits, currentOrder)
-        .then((response) => {
-          const assessments = response.data.map((assessment) => {
-            let values = assessment.custom_attribute_values || [];
-            let definitions = assessment.custom_attribute_definitions || [];
-
-            if (definitions.length) {
-              assessment.custom_attribute_values =
-                prepareCustomAttributes(definitions, values);
-            }
-
-            return {
-              instance: assessment,
-            };
-          });
-
-          this.attr('paging.total', response.total);
-          this.attr('relatedAssessments').replace(assessments);
-
-          stopFn();
-          this.attr('loading', false);
-        }, () => {
-          stopFn(true);
-          this.attr('loading', false);
-        });
-    },
-    checkReuseAbility(evidence) {
-      let isFile = evidence.attr('kind') === 'FILE';
-      let isGdriveIdProvided = !!evidence.attr('gdrive_id');
-
-      let isAble = !isFile || isGdriveIdProvided;
-
-      return isAble;
-    },
-    isFunction(evidence) {
-      return isFunction(evidence) ? evidence() : evidence;
-    },
-  }),
+  ViewModel,
   init() {
     this.viewModel.loadRelatedAssessments();
   },

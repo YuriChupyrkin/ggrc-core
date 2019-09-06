@@ -78,15 +78,19 @@ export default canComponent.extend({
       if (isSelected) {
         this.attr('selectedItem.el', el);
         this.attr('selectedItem.data', ctx.instance);
-        ctx.attr('isSelected', true);
+
+        // ctx is DefineMap
+        ctx.isSelected = true;
       }
     },
     /**
      * Deselect all items and clear selected item Object
      */
     clearSelection: function () {
+      // items - DefineList
       this.attr('items').forEach(function (item) {
-        item.removeAttr('isSelected', false);
+        // item is DefineMap
+        delete item.isSelected;
       });
       this.attr('selectedItem.el', null);
       this.attr('selectedItem.data', null);
