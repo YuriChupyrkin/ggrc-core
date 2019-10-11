@@ -11,6 +11,7 @@ import {
   warning,
   BUTTON_VIEW_SAVE_CANCEL_DELETE,
   BUTTON_CREATE_PROPOSAL,
+  ASSESSMENT_TEMPLATE_FOOTER,
 } from '../plugins/utils/modals';
 import {
   hasWarningType,
@@ -29,6 +30,19 @@ import DeleteModalControl from '../controllers/modals/delete_modal_controller';
 
 let originalModalShow = $.fn.modal.Constructor.prototype.show;
 let originalModalHide = $.fn.modal.Constructor.prototype.hide;
+
+const getButtonView = (instance, isProposal) => {
+  if (isProposal) {
+    return BUTTON_CREATE_PROPOSAL;
+  }
+
+  switch (instance.type) {
+    case 'AssessmentTemplate':
+      return ASSESSMENT_TEMPLATE_FOOTER;
+    default:
+      return BUTTON_VIEW_SAVE_CANCEL_DELETE;
+  }
+};
 
 let handlers = {
   modal: function ($target, $trigger, option) {
@@ -143,9 +157,7 @@ let handlers = {
       new_object_form: !$trigger.attr('data-object-id'),
       object_params: objectParams,
       extendNewInstance,
-      button_view: isProposal ?
-        BUTTON_CREATE_PROPOSAL :
-        BUTTON_VIEW_SAVE_CANCEL_DELETE,
+      button_view: getButtonView(instance, isProposal),
       model: model,
       oldData: {
         status: instance && instance.status, // status before changing
