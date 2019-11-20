@@ -37,6 +37,14 @@ export default Cacheable.extend({
   is_custom_attributable: true,
   isRoleable: true,
   defaults: {
+    // STUB
+    review_levels: {
+      people: [],
+      current_level: 3,
+      status: '??????',
+      verified_by: '???????',
+      completed_at: '????????',
+    },
     test_plan_procedure: true,
     assessment_type: 'Control',
     status: 'Not Started',
