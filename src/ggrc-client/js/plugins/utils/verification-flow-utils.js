@@ -4,6 +4,7 @@
  */
 
 import canMap from 'can-map';
+import loFind from 'lodash/find';
 
 const VERIFICATION_FLOWS = {
   STANDARD: 'STANDARD',
@@ -24,8 +25,16 @@ const isMultiLevelFlow = (instance = canMap()) => {
     VERIFICATION_FLOWS.MULTI_LEVEL;
 };
 
+const getFlowDisplayName = (instance = canMap()) => {
+  const flow = loFind(GGRC.assessments_workflows, (flow) =>
+    instance.attr('verification_workflow') === flow.value);
+
+  return flow ? flow.display_name : '';
+};
+
 export {
   isStandardFlow,
   isSox302Flow,
   isMultiLevelFlow,
+  getFlowDisplayName,
 };
