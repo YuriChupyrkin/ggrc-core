@@ -40,7 +40,7 @@ export default Cacheable.extend({
     test_plan_procedure: true,
     assessment_type: 'Control',
     status: 'Not Started',
-    sox_302_enabled: false,
+    verification_workflow: 'STANDARD',
     send_by_default: true, // notifications when a comment is added
     recipients: 'Assignees,Creators,Verifiers', // user roles to be notified
     _is_sox_restricted: false, // restrict assignee's permissions if enabled sox302
@@ -141,8 +141,8 @@ export default Cacheable.extend({
       attr_name: 'test_plan',
       order: 20,
     }, {
-      attr_title: 'SOX 302 assessment workflow',
-      attr_name: 'sox_302_enabled',
+      attr_title: 'Assessment Workflow',
+      attr_name: 'verification_workflow',
       order: 21,
     }],
     display_attr_names: ['title', 'status', 'label', 'Assignees', 'Verifiers',
