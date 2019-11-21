@@ -274,6 +274,7 @@ export default canComponent.extend({
     commentsTotalCount: 0,
     commentsPerPage: 10,
     newCommentsCount: 0,
+    stateDisplayName: '',
     refreshCounts: function (types) {
       let pageInstance = getPageInstance();
       initCounts(
@@ -626,6 +627,25 @@ export default canComponent.extend({
     },
     setCurrentState(state) {
       this.attr('currentState', state);
+
+      const stateDisplayName = this.getStateDisplayName(
+        this.attr('instance'),
+        state
+      );
+      this.attr('stateDisplayName', stateDisplayName);
+    },
+    getStateDisplayName(instance, currentState) {
+      const reviewLevelCount = instance.attr('review_levels_count');
+
+      if (!reviewLevelCount || currentState !== 'In Review') {
+        return currentState;
+      }
+
+      const currentReviewLevel = instance.attr('review_levels.current_level');
+      const stateDisplayName =
+        `${currentState} ${currentReviewLevel} of ${reviewLevelCount}`;
+
+      return stateDisplayName;
     },
     onStateChange: function (event) {
       const isUndo = event.undo;
