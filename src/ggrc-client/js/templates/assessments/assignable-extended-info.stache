@@ -21,7 +21,7 @@
   <div class="span3">
     <h6>Status</h6>
     <p>
-      {{instance.status}}
+      {{get_status_display_name instance}}
     </p>
   </div>
 </div>

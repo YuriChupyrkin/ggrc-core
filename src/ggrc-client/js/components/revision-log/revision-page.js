@@ -176,6 +176,12 @@ export default canComponent.extend({
           displayName = fieldName;
         }
 
+        /*
+        if (displayName === 'State') {
+          console.log('STATE!!!');
+        }
+        */
+
         if (displayName && value !== origVal) {
           // format date fields
           if (DATE_FIELDS[fieldName]) {

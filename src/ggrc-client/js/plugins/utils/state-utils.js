@@ -296,6 +296,21 @@ function getDefaultStatesForModel(model) {
   return states;
 }
 
+const getStatusDisplayName = (instance) => {
+  const currentStatus = instance.attr('status');
+  const reviewLevelCount = instance.attr('review_levels_count');
+
+  if (!reviewLevelCount || currentStatus !== 'In Review') {
+    return currentStatus;
+  }
+
+  const currentReviewLevel = instance.attr('review_levels.current_level');
+  const statusDisplayName =
+    `${currentStatus} ${currentReviewLevel} of ${reviewLevelCount}`;
+
+  return statusDisplayName;
+};
+
 export {
   STATES_KEYS,
   hasState,
@@ -307,4 +322,5 @@ export {
   getDefaultStatesForModel,
   buildStatusFilter,
   getStatusFieldName,
+  getStatusDisplayName,
 };

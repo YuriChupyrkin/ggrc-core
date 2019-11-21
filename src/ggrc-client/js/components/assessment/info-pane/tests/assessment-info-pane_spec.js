@@ -24,6 +24,7 @@ import {CUSTOM_ATTRIBUTE_TYPE} from '../../../../plugins/utils/custom-attribute/
 import * as NotifiersUtils from '../../../../plugins/utils/notifiers-utils';
 import * as businessModels from '../../../../models/business-models';
 import Evidence from '../../../../models/business-models/evidence';
+import * as StateUtils from '../../../../plugins/utils/state-utils';
 
 describe('assessment-info-pane component', () => {
   let vm;
@@ -2062,6 +2063,7 @@ describe('assessment-info-pane component', () => {
         let event;
 
         beforeEach(function () {
+          spyOn(StateUtils, 'getStatusDisplayName');
           const eventName = '{viewModel.instance} modelAfterSave';
           event = Component.prototype.events[eventName].bind(fakeComponent);
         });
@@ -2128,6 +2130,7 @@ describe('assessment-info-pane component', () => {
         spyOn(vm, 'initGlobalAttributes');
         spyOn(vm, 'updateRelatedItems');
         spyOn(vm, 'loadFirstComments');
+        spyOn(StateUtils, 'getStatusDisplayName');
       });
 
       it('calls vm.initializeFormFields method', function () {
@@ -2146,6 +2149,7 @@ describe('assessment-info-pane component', () => {
       });
 
       it('calls vm.loadFirstComments method', function () {
+        //
         event();
         expect(vm.loadFirstComments).toHaveBeenCalled();
       });

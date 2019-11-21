@@ -48,11 +48,12 @@ export default Cacheable.extend({
     test_plan_procedure: true,
     assessment_type: 'Control',
     status: 'Not Started',
-    verification_workflow: 'STANDARD',
     send_by_default: true, // notifications when a comment is added
     recipients: 'Assignees,Creators,Verifiers', // user roles to be notified
     _is_sox_restricted: false, // restrict assignee's permissions if enabled sox302
     _readonly_fields: [], // readOnly attributes names to restrict permissions
+    verification_workflow: 'STANDARD',
+    review_levels_count: '7',
   },
   statuses: ['Not Started', 'In Progress', 'In Review',
     'Verified', 'Completed', 'Deprecated', 'Rework Needed'],

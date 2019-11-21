@@ -43,6 +43,7 @@ import {
   isMultiLevelFlow,
   getFlowDisplayName,
 } from './plugins/utils/verification-flow-utils';
+import {getStatusDisplayName} from './plugins/utils/state-utils';
 
 // Chrome likes to cache AJAX requests for templates.
 let templateUrls = {};
@@ -823,5 +824,12 @@ canStache.registerHelper('get_verification_flow_name',
   (instance) => {
     instance = isFunction(instance) ? instance(): instance;
     return getFlowDisplayName(instance);
+  }
+);
+
+canStache.registerHelper('get_status_display_name',
+  (instance) => {
+    instance = isFunction(instance) ? instance(): instance;
+    return getStatusDisplayName(instance);
   }
 );
