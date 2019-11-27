@@ -25,6 +25,7 @@ export default canComponent.extend({
     },
     verifiersGroup: {},
     readonly: false,
+    autoUpdate: false,
     updatableGroupId: null,
     isDirty: false,
     levelNumber: null,
@@ -36,10 +37,18 @@ export default canComponent.extend({
 
       const personId = loFindIndex(this.attr('people'), {id: person.id});
       this.attr('people').splice(personId, 1);
+
+      if (this.attr('autoUpdate')) {
+        this.saveChanges();
+      }
     },
-    personSelected({person: {id, email}}) {
+    personSelected({id, email}) {
       this.attr('isDirty', true);
       this.attr('people').push({id, email});
+
+      if (this.attr('autoUpdate')) {
+        this.saveChanges();
+      }
     },
     changeEditableGroup({editableMode}) {
       if (!editableMode) {
@@ -51,7 +60,7 @@ export default canComponent.extend({
         this.backUpPeople();
       }
     },
-    saveChanges(event) {
+    saveChanges() {
       if (!this.attr('isDirty')) {
         return;
       }
