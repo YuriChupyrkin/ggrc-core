@@ -7,6 +7,7 @@ import canMap from 'can-map';
 import canComponent from 'can-component';
 import loSortBy from 'lodash/sortBy';
 import {isMultiLevelFlow} from '../../../plugins/utils/verification-flow-utils';
+import {getOrdinalNumber} from '../../../plugins/ggrc-utils';
 
 export default canComponent.extend({
   tag: 'assessment-verifiers',
@@ -23,12 +24,13 @@ export default canComponent.extend({
 
       const verifiersGroups = sortedReviewLevels.map((reviewLevel) => {
         const levelNumber = reviewLevel.attr('level_number');
+        const levelNumberToDisplay = getOrdinalNumber(levelNumber);
         return {
           levelNumber,
           people: reviewLevel.attr('users').serialize(),
           verifiedBy: reviewLevel.attr('verified_by'),
           completedAt: reviewLevel.attr('completed_at'),
-          groupTitle: `Verifiers ${levelNumber} level`,
+          groupTitle: `Verifiers ${levelNumberToDisplay} level`,
           reviewState: reviewLevel.attr('status'),
         };
       });
