@@ -53,5 +53,8 @@ export default canComponent.extend({
     '{viewModel} instance'() {
       this.buildVerifiersGroups();
     },
+    '{viewModel.instance} updated'() {
+      this.buildVerifiersGroups();
+    },
   },
 });
