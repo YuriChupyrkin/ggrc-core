@@ -35,14 +35,20 @@ export default canComponent.extend({
     removePerson({person}) {
       this.attr('isDirty', true);
 
-      const personId = loFindIndex(this.attr('people'), {id: person.id});
-      this.attr('people').splice(personId, 1);
+      const personIndex = loFindIndex(this.attr('people'), {id: person.id});
+      this.attr('people').splice(personIndex, 1);
 
       if (this.attr('autoUpdate')) {
         this.saveChanges();
       }
     },
     personSelected({id, email}) {
+      const personIndex = loFindIndex(this.attr('people'), {id});
+
+      if (personIndex > -1) {
+        return;
+      }
+
       this.attr('isDirty', true);
       this.attr('people').push({id, email});
 
