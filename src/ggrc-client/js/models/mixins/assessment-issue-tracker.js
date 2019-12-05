@@ -10,9 +10,27 @@ import {getPageInstance} from '../../plugins/utils/current-page-utils';
 import {reify} from '../../plugins/utils/reify-utils';
 
 export default class AssessmentIssueTracker extends Mixin {
+  makeInProgressGroup() {
+    if (this.attr('verification_workflow') !== 'MLV') {
+      return;
+    }
+
+    let twoLevels = this.attr('review_levels').filter((reviewLevel) => {
+      return reviewLevel.level_number < 3;
+    });
+
+    twoLevels[0].attr('status', 'Reviewed');
+    twoLevels[0].attr('verified_by', 150);
+    twoLevels[0].attr('completed_at', '2019-11-26T14:59:39');
+
+    twoLevels[1].attr('status', 'In Review');
+  }
+
   'after:init'() {
     this.initIssueTracker();
     this.trackAuditUpdates();
+
+    this.makeInProgressGroup();
   }
 
   'before:refresh'() {
@@ -29,10 +47,13 @@ export default class AssessmentIssueTracker extends Mixin {
 
   afterRefresh() {
     this.initIssueTracker();
+
+    this.makeInProgressGroup();
   }
 
   afterSave() {
     issueTrackerUtils.checkWarnings(this);
+    this.makeInProgressGroup();
   }
 
   trackAuditUpdates() {
