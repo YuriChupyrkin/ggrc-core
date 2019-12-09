@@ -4,7 +4,12 @@
 */
 
 import Mixin from './mixin';
-import {isMultiLevelFlow} from '../../plugins/utils/verification-flow-utils';
+import {
+  isMultiLevelFlow,
+  getReviewLevelByNumber,
+} from '../../plugins/utils/verification-flow-utils';
+
+const MAX_LEVELS_COUNT = 10;
 
 export default class MultiLevelVerification extends Mixin {
   cleanUpVerifiers(resource) {
@@ -30,4 +35,43 @@ export default class MultiLevelVerification extends Mixin {
 
     return resource;
   }
+
+  getVerifiersByLevel(levelNumber) {
+    if (!isMultiLevelFlow(this)) {
+      return null;
+    }
+
+    const reviewLevel = getReviewLevelByNumber(this, levelNumber);
+    return reviewLevel ? reviewLevel.attr('users') : [];
+  }
 }
+
+MultiLevelVerification.hasMultiLevelVerificationFlow = true;
+
+MultiLevelVerification.getVerifiersStaticFields = () => {
+  return Array.from({length: MAX_LEVELS_COUNT},
+    (item, index) => {
+      return {
+        attr_title: `Verifiers level ${index}`,
+        attr_name: `verifiers_level_${index}`,
+        attr_level: index,
+        attr_type: 'multiVerificationFlow',
+        disable_sorting: true,
+      };
+    }
+  );
+};
+
+MultiLevelVerification.getReviewLevelsStaticFields = () => {
+  return Array.from({length: MAX_LEVELS_COUNT},
+    (item, index) => {
+      return {
+        attr_title: `Review level ${index} state`,
+        attr_name: `review_level_${index}`,
+        attr_level: index,
+        attr_type: 'multiVerificationFlow',
+        disable_sorting: true,
+      };
+    }
+  );
+};

@@ -209,7 +209,24 @@ function getAvailableAttributes(modelType) {
     };
   });
 
-  return attrs.concat(customAttrs, roleAttrs);
+  let availableAttributes = attrs.concat(customAttrs, roleAttrs);
+
+  if (Model.hasMultiLevelVerificationFlow) {
+    const multiLevelFlowAttr = getMultiLevelFlowAttr(Model);
+    availableAttributes = availableAttributes.concat(multiLevelFlowAttr);
+  }
+
+  return availableAttributes;
+}
+
+/**
+ * Get attributes for model with multilevel verification flow
+ * @param {Object} model - business model
+ * @return {Array} - attributes of model with multilevel verification flow
+ */
+function getMultiLevelFlowAttr(model) {
+  return model.getVerifiersStaticFields()
+    .concat(model.getReviewLevelsStaticFields());
 }
 
 /**

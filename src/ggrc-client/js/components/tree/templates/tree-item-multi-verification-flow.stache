@@ -1,0 +1,16 @@
+{{!
+    Copyright (C) 2019 Google Inc.
+    Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+}}
+
+{{#if verifiers}}
+  <tree-field-wrapper
+    source:from="verifiers"
+    type:from="verifierType"
+    field:from="'email'"
+  >
+    <tree-field source:from="items"/>
+  </tree-field-wrapper>
+{{else}}
+  <h3>LEVELS</h3>
+{{/if}}

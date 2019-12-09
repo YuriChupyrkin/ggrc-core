@@ -11,6 +11,7 @@ import {reify} from '../../plugins/utils/reify-utils';
 
 export default class AssessmentIssueTracker extends Mixin {
   makeInProgressGroup() {
+    return;
     if (this.attr('verification_workflow') !== 'MLV') {
       return;
     }
