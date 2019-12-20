@@ -6,5 +6,6 @@
 const md = require('markdown-it')();
 
 module.exports = function(content) {
+  console.log(' >>> mo-to-html MODULE. html length: ' + content.length);
   return md.render(content);
 }

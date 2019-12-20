@@ -4,6 +4,7 @@
 */
 
 module.exports = function(html) {
+  console.log(' >>> parse-inner-links MODULE. html length: ' + html.length);
   let headerRegexp = /<h2>(.*)<\/h2>/g;
   let headerMatches = [];
   let result;

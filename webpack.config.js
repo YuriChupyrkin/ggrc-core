@@ -108,6 +108,7 @@ module.exports = function (env) {
           {loader: 'raw-loader'},
           {loader: 'parse-inner-links'},
           {loader: 'md-to-html'},
+          {loader: 'load-release-notes'},
         ],
       }],
     },
