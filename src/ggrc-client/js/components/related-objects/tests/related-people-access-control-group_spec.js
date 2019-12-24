@@ -13,85 +13,85 @@ describe('related-people-access-control-group component', () => {
 
   beforeEach(() => {
     viewModel = getComponentVM(Component);
-    viewModel.attr('instance', {});
+    viewModel.instance = {};
   });
 
   describe('canEdit prop', () => {
     it('returns "false" when instance is snapshot', () => {
       spyOn(Permission, 'isAllowedFor').and.returnValue(true);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('updatableGroupId', null);
-      viewModel.attr('isNewInstance', false);
+      viewModel.instance.archived = false;
+      viewModel.updatableGroupId = null;
+      viewModel.isNewInstance = false;
 
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(true);
 
-      expect(viewModel.attr('canEdit')).toEqual(false);
+      expect(viewModel.canEdit).toEqual(false);
     });
 
     it('returns "false" when instance is archived', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
       spyOn(Permission, 'isAllowedFor').and.returnValue(true);
-      viewModel.attr('updatableGroupId', null);
-      viewModel.attr('isNewInstance', false);
+      viewModel.updatableGroupId = null;
+      viewModel.isNewInstance = false;
 
-      viewModel.instance.attr('archived', true);
+      viewModel.instance.archived = true;
 
-      expect(viewModel.attr('canEdit')).toEqual(false);
+      expect(viewModel.canEdit).toEqual(false);
     });
 
     it('returns "false" when there is updatableGroupId', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('isNewInstance', false);
+      viewModel.instance.archived = false;
+      viewModel.isNewInstance = false;
       spyOn(Permission, 'isAllowedFor').and.returnValue(true);
 
-      viewModel.attr('updatableGroupId', 'groupId');
+      viewModel.updatableGroupId = 'groupId';
 
-      expect(viewModel.attr('canEdit')).toEqual(false);
+      expect(viewModel.canEdit).toEqual(false);
     });
 
     it('returns "false" when user has no update permissions', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('updatableGroupId', null);
-      viewModel.attr('isNewInstance', false);
+      viewModel.instance.archived = false;
+      viewModel.updatableGroupId = null;
+      viewModel.isNewInstance = false;
 
       spyOn(Permission, 'isAllowedFor').and.returnValue(false);
 
-      expect(viewModel.attr('canEdit')).toEqual(false);
+      expect(viewModel.canEdit).toEqual(false);
     });
 
     it('returns "false" when is readonly', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
       spyOn(Permission, 'isAllowedFor').and.returnValue(false);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('updatableGroupId', null);
-      viewModel.attr('isNewInstance', true);
-      viewModel.attr('isReadonly', true);
+      viewModel.instance.archived = false;
+      viewModel.updatableGroupId = null;
+      viewModel.isNewInstance = true;
+      viewModel.isReadonly = true;
 
-      expect(viewModel.attr('canEdit')).toEqual(false);
+      expect(viewModel.canEdit).toEqual(false);
     });
 
     it('returns "true" when new instance', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
       spyOn(Permission, 'isAllowedFor').and.returnValue(false);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('updatableGroupId', null);
+      viewModel.instance.archived = false;
+      viewModel.updatableGroupId = null;
 
-      viewModel.attr('isNewInstance', true);
+      viewModel.isNewInstance = true;
 
-      expect(viewModel.attr('canEdit')).toEqual(true);
+      expect(viewModel.canEdit).toEqual(true);
     });
 
     it('returns "true" when user has update permissions', () => {
       spyOn(SnapshotUtils, 'isSnapshot').and.returnValue(false);
-      viewModel.instance.attr('archived', false);
-      viewModel.attr('updatableGroupId', null);
-      viewModel.attr('isNewInstance', false);
+      viewModel.instance.archived = false;
+      viewModel.updatableGroupId = null;
+      viewModel.isNewInstance = false;
 
       spyOn(Permission, 'isAllowedFor').and.returnValue(true);
 
-      expect(viewModel.attr('canEdit')).toEqual(true);
+      expect(viewModel.canEdit).toEqual(true);
     });
   });
 
@@ -102,29 +102,29 @@ describe('related-people-access-control-group component', () => {
     ];
 
     beforeEach(() => {
-      viewModel.attr('people', [peopleList[0]]);
-      viewModel.attr('groupId', 1);
-      viewModel.attr('title', peopleList[0].desc);
+      viewModel.people = [peopleList[0]];
+      viewModel.groupId = 1;
+      viewModel.title = peopleList[0].desc;
     });
 
     describe('"addPerson" method', () => {
       it('should add person to "people" list if not present', () => {
-        viewModel.addPerson(peopleList[1], viewModel.attr('groupId'));
-        expect(viewModel.attr('people').length).toBe(2);
+        viewModel.addPerson(peopleList[1], viewModel.groupId);
+        expect(viewModel.people.length).toBe(2);
       });
 
       it('should not add person to "people" list if present', () => {
-        viewModel.addPerson(peopleList[0], viewModel.attr('groupId'));
-        expect(viewModel.attr('people').length).toBe(1);
+        viewModel.addPerson(peopleList[0], viewModel.groupId);
+        expect(viewModel.people.length).toBe(1);
       });
 
       it('should replace person if singleUserRole attr is truthy',
         () => {
-          viewModel.attr('singleUserRole', true);
+          viewModel.singleUserRole = true;
 
-          viewModel.addPerson(peopleList[1], viewModel.attr('groupId'));
+          viewModel.addPerson(peopleList[1], viewModel.groupId);
 
-          let people = viewModel.attr('people');
+          let people = viewModel.people;
           expect(people.length).toBe(1);
           expect(people[0]).toEqual(jasmine.objectContaining(peopleList[1]));
         });
@@ -133,13 +133,13 @@ describe('related-people-access-control-group component', () => {
     describe('"removePerson" method', () => {
       it('should remove person from "people" list if present', () => {
         viewModel.removePerson({person: peopleList[0]});
-        expect(viewModel.attr('people').length).toBe(0);
+        expect(viewModel.people.length).toBe(0);
       });
 
       it('should not remove person from "people" list if not present', () => {
-        let count = viewModel.attr('people').length;
+        let count = viewModel.people.length;
         viewModel.removePerson({person: peopleList[1]});
-        expect(viewModel.attr('people').length).toBe(count);
+        expect(viewModel.people.length).toBe(count);
       });
     });
   });

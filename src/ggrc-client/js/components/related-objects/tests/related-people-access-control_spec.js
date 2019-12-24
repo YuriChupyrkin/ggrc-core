@@ -8,10 +8,10 @@ import {getComponentVM, makeFakeInstance} from '../../../../js_specs/spec-helper
 import * as aclUtils from '../../../plugins/utils/acl-utils';
 import Control from '../../../models/business-models/control';
 
-describe('related-people-access-control component', function () {
+describe('related-people-access-control component', () => {
   let viewModel;
 
-  beforeAll(function () {
+  beforeAll(() => {
     viewModel = getComponentVM(Component);
   });
 
@@ -20,8 +20,8 @@ describe('related-people-access-control component', function () {
 
     beforeEach(() => {
       args = {};
-      spyOn(viewModel, 'performUpdate');
-      spyOn(viewModel, 'dispatch');
+      spyOn(viewModel.__proto__, 'performUpdate');
+      spyOn(viewModel.__proto__, 'dispatch');
     });
 
     it('calls "performUpdate" method', () => {
@@ -41,22 +41,22 @@ describe('related-people-access-control component', function () {
     });
 
     it('pushes action into deferredSave if it is defined', () => {
-      viewModel.attr('deferredSave', {
+      viewModel.deferredSave = {
         push: jasmine.createSpy(),
-      });
+      };
 
       viewModel.updateRoles(args);
       expect(viewModel.performUpdate.calls.count()).toBe(1);
 
-      viewModel.attr('deferredSave').push.calls.allArgs()[0][0]();
+      viewModel.deferredSave.push.calls.allArgs()[0][0]();
       expect(viewModel.performUpdate.calls.count()).toBe(2);
     });
   });
 
   describe('"performUpdate" method', () => {
     beforeEach(() => {
-      spyOn(viewModel, 'updateAccessControlList');
-      spyOn(viewModel, 'checkConflicts');
+      spyOn(viewModel.__proto__, 'updateAccessControlList');
+      spyOn(viewModel.__proto__, 'checkConflicts');
     });
 
     it('calls "updateAccessControlList" method', () => {
@@ -75,7 +75,7 @@ describe('related-people-access-control component', function () {
       const args = {
         roleTitle: 'mockRoleTitle',
       };
-      viewModel.attr('conflictRoles', [1, 2]);
+      viewModel.conflictRoles = [1, 2];
 
       viewModel.performUpdate(args);
 
@@ -84,7 +84,7 @@ describe('related-people-access-control component', function () {
 
     it('does not call "checkConflicts" method if conflictRoles is empty',
       () => {
-        viewModel.attr('conflictRoles', []);
+        viewModel.conflictRoles = [];
 
         viewModel.performUpdate({});
 
@@ -107,32 +107,32 @@ describe('related-people-access-control component', function () {
     ]);
   });
 
-  describe('"getFilteredRoles" method', function () {
+  describe('"getFilteredRoles" method', () => {
     let instance;
     let getFilteredRolesMethod;
 
-    beforeAll(function () {
+    beforeAll(() => {
       instance = makeFakeInstance({model: Control})();
     });
 
-    beforeEach(function () {
-      viewModel.attr('instance', instance);
-      viewModel.attr('includeRoles', []);
-      viewModel.attr('excludeRoles', []);
+    beforeEach(() => {
+      viewModel.instance = instance;
+      viewModel.includeRoles = [];
+      viewModel.excludeRoles = [];
 
       getFilteredRolesMethod = viewModel.getFilteredRoles.bind(viewModel);
     });
 
-    it('should return all roles related to instance type', function () {
+    it('should return all roles related to instance type', () => {
       let roles = getFilteredRolesMethod();
       expect(roles.length).toBe(5);
     });
 
-    it('should return roles from IncludeRoles list', function () {
+    it('should return roles from IncludeRoles list', () => {
       let roles;
       let include = ['Admin', 'Secondary Contacts', 'Principal Assignees'];
 
-      viewModel.attr('includeRoles', include);
+      viewModel.includeRoles = include;
       roles = getFilteredRolesMethod();
 
       expect(roles.length).toBe(3);
@@ -140,11 +140,11 @@ describe('related-people-access-control component', function () {
     });
 
     it('should return all roles except roles from ExcludeRoles list',
-      function () {
+      () => {
         let roles;
         let exclude = ['Admin', 'Secondary Contacts', 'Principal Assignees'];
 
-        viewModel.attr('excludeRoles', exclude);
+        viewModel.excludeRoles = exclude;
         roles = getFilteredRolesMethod();
 
         expect(roles.length).toBe(2);
@@ -152,14 +152,14 @@ describe('related-people-access-control component', function () {
       }
     );
 
-    it('should return roles from IncludeRoles withou roles from ExcludeRoles',
-      function () {
+    it('should return roles from IncludeRoles without roles from ExcludeRoles',
+      () => {
         let roles;
         let include = ['Admin', 'Secondary Contacts', 'Principal Assignees'];
         let exclude = ['Admin', 'Principal Assignees', 'Primary Contacts'];
 
-        viewModel.attr('includeRoles', include);
-        viewModel.attr('excludeRoles', exclude);
+        viewModel.includeRoles = include;
+        viewModel.excludeRoles = exclude;
         roles = getFilteredRolesMethod();
 
         expect(roles.length).toBe(1);
@@ -168,25 +168,25 @@ describe('related-people-access-control component', function () {
     );
   });
 
-  describe('"checkConflicts" method', function () {
+  describe('"checkConflicts" method', () => {
     let instance;
 
-    beforeAll(function () {
+    beforeAll(() => {
       instance = makeFakeInstance({model: Control})();
     });
 
-    beforeEach(function () {
-      viewModel.attr('instance', instance);
-      viewModel.attr('includeRoles', []);
-      viewModel.attr('excludeRoles', []);
+    beforeEach(() => {
+      viewModel.instance = instance;
+      viewModel.includeRoles = [];
+      viewModel.excludeRoles = [];
     });
 
     function isGroupsHasConflict(conflictRoles, acl) {
       let groups;
       instance.attr('access_control_list', acl);
-      viewModel.attr('instance', instance);
-      viewModel.attr('groups', viewModel.getRoleList());
-      groups = viewModel.attr('groups');
+      viewModel.instance = instance;
+      viewModel.groups = viewModel.getRoleList();
+      groups = viewModel.groups;
 
       return viewModel
         .isGroupsHasConflict(groups, conflictRoles);
@@ -195,16 +195,16 @@ describe('related-people-access-control component', function () {
     function isCurrentGroupHasConflict(currentGroup, conflictRoles, acl) {
       let groups;
       instance.attr('access_control_list', acl);
-      viewModel.attr('instance', instance);
-      viewModel.attr('groups', viewModel.getRoleList());
-      groups = viewModel.attr('groups');
+      viewModel.instance = instance;
+      viewModel.groups = viewModel.getRoleList();
+      groups = viewModel.groups;
 
       return viewModel
         .isCurrentGroupHasConflict(currentGroup, groups, conflictRoles);
     }
 
     it('"isGroupsHasConflict" should return TRUE. 2 groups conflict',
-      function () {
+      () => {
         let conflictRoles = ['Admin', 'Primary Contacts'];
         let hasConflicts = false;
         let acl = [
@@ -223,7 +223,7 @@ describe('related-people-access-control component', function () {
     );
 
     it('"isGroupsHasConflict" should return TRUE. 3 groups conflict',
-      function () {
+      () => {
         let conflictRoles = [
           'Admin',
           'Primary Contacts',
@@ -250,7 +250,7 @@ describe('related-people-access-control component', function () {
     );
 
     it('"isGroupsHasConflict" should return FALSE. 3 groups conflict',
-      function () {
+      () => {
         let conflictRoles = [
           'Admin',
           'Primary Contacts',
@@ -274,7 +274,7 @@ describe('related-people-access-control component', function () {
     );
 
     it('"isCurrentGroupHasConflict" should return TRUE. 2 groups conflict',
-      function () {
+      () => {
         let conflictRoles = ['Admin', 'Primary Contacts'];
         let hasConflicts = false;
         let acl = [
@@ -293,7 +293,7 @@ describe('related-people-access-control component', function () {
     );
 
     it('"isCurrentGroupHasConflict" should return TRUE. 3 groups conflict',
-      function () {
+      () => {
         let conflictRoles = [
           'Admin',
           'Primary Contacts',
@@ -320,7 +320,7 @@ describe('related-people-access-control component', function () {
     );
 
     it('"isCurrentGroupHasConflict" should return FALSE. 3 groups conflict',
-      function () {
+      () => {
         let conflictRoles = [
           'Admin',
           'Primary Contacts',
@@ -343,7 +343,7 @@ describe('related-people-access-control component', function () {
     );
   });
 
-  describe('"setGroupOrder" method', function () {
+  describe('"setGroupOrder" method', () => {
     const groups = [
       {title: 'Primary Contacts', id: 1},
       {title: 'Secondary Contacts', id: 2},
@@ -362,22 +362,22 @@ describe('related-people-access-control component', function () {
       expect(result[5].title).toEqual('Assessor');
     }
 
-    it('should not change order of groups. Empty order array', function () {
+    it('should not change order of groups. Empty order array', () => {
       checkOrder([]);
     });
 
-    it('should not change order of groups. Without order array', function () {
+    it('should not change order of groups. Without order array', () => {
       checkOrder();
     });
 
     it('should not change order of groups. Order array has wrong titles',
-      function () {
+      () => {
         let orderArray = ['My Role', 'Primary', 'Contacts'];
         checkOrder(orderArray);
       }
     );
 
-    it('should change order of groups', function () {
+    it('should change order of groups', () => {
       let orderArray = ['Creator', 'Assessor', 'Verifier'];
       let result = viewModel.setGroupOrder(groups, orderArray);
 
@@ -388,7 +388,7 @@ describe('related-people-access-control component', function () {
     });
   });
 
-  describe('"updateAccessControlList" method', function () {
+  describe('"updateAccessControlList" method', () => {
     let instance;
     let acl = [
       {ac_role_id: 1, person: {id: 1, type: 'Person'}},
@@ -397,20 +397,20 @@ describe('related-people-access-control component', function () {
       {ac_role_id: 3, person: {id: 4, type: 'Person'}},
     ];
 
-    beforeAll(function () {
+    beforeAll(() => {
       instance = makeFakeInstance({model: Control})();
     });
 
-    beforeEach(function () {
+    beforeEach(() => {
       instance.attr('access_control_list', acl);
-      viewModel.attr('instance', instance);
+      viewModel.instance = instance;
     });
 
     it('add people w/o current role', () => {
       const peopleList = [{id: 1}, {id: 2}];
       viewModel.updateAccessControlList(peopleList, 1);
 
-      const result = instance.attr('access_control_list');
+      const result = instance.access_control_list;
       expect(result.length).toBe(acl.length);
     });
 
@@ -418,19 +418,19 @@ describe('related-people-access-control component', function () {
       const peopleList = [{id: 1}, {id: 2}];
       viewModel.updateAccessControlList(peopleList, 2);
 
-      const result = instance.attr('access_control_list');
+      const result = instance.access_control_list;
       expect(result.length).toBe(acl.length + 1);
     });
 
     it('remove people w current role', () => {
       viewModel.updateAccessControlList([], 3);
 
-      const result = instance.attr('access_control_list');
+      const result = instance.access_control_list;
       expect(result.length).toBe(acl.length - 1);
     });
   });
 
-  describe('"buildGroups" method', function () {
+  describe('"buildGroups" method', () => {
     let roles = [
       {id: 0, name: 'Role Name1', mandatory: false},
       {id: 1, name: 'Role Name2', mandatory: true},
@@ -443,8 +443,8 @@ describe('related-people-access-control component', function () {
       type: 'Person',
     };
 
-    beforeEach(function () {
-      viewModel.attr('includeRoles', [roles[1].name]);
+    beforeEach(() => {
+      viewModel.includeRoles = [roles[1].name];
     });
 
     it('should not create group if role is not present in IncludeRoles list',
@@ -495,7 +495,7 @@ describe('related-people-access-control component', function () {
         required: roles[1].mandatory,
         singleUserRole: true,
       };
-      viewModel.attr('singleUserRoles', {'Role Name2': true});
+      viewModel.singleUserRoles = {'Role Name2': true};
 
       const result = viewModel.buildGroups(roles[1], [{person: {id: 4}}]);
 
@@ -512,7 +512,7 @@ describe('related-people-access-control component', function () {
         required: roles[1].mandatory,
         singleUserRole: false,
       };
-      viewModel.attr('singleUserRoles', {'Role Name1': true});
+      viewModel.singleUserRoles = {'Role Name1': true};
 
       const result = viewModel.buildGroups(roles[1], [{person: {id: 4}}]);
 
@@ -521,7 +521,7 @@ describe('related-people-access-control component', function () {
     );
   });
 
-  describe('"getRoleList" method', function () {
+  describe('"getRoleList" method', () => {
     let instance;
     let acl = [
       {ac_role_id: 1, person: {id: 1, type: 'Person'}},
@@ -529,21 +529,21 @@ describe('related-people-access-control component', function () {
       {ac_role_id: 3, person: {id: 3, type: 'Person'}},
     ];
 
-    beforeAll(function () {
+    beforeAll(() => {
       instance = makeFakeInstance({model: Control})();
     });
 
-    beforeEach(function () {
+    beforeEach(() => {
       instance.attr('access_control_list', acl);
-      viewModel.attr('instance', instance);
-      viewModel.attr('includeRoles', []);
-      viewModel.attr('excludeRoles', []);
+      viewModel.instance = instance;
+      viewModel.includeRoles = [];
+      viewModel.excludeRoles = [];
     });
 
     it('should return empty rolesInfo list if "instance" not defined', () => {
-      viewModel.attr('instance', undefined);
+      viewModel.instance = undefined;
       viewModel.getRoleList();
-      expect(viewModel.attr('rolesInfo').length).toBe(0);
+      expect(viewModel.rolesInfo.length).toBe(0);
     });
 
     it('should return groups build based on all roles ' +
@@ -555,7 +555,7 @@ describe('related-people-access-control component', function () {
     it('should return groups build based on roles from IncludeRoles list',
       () => {
         let include = ['Admin', 'Secondary Contacts', 'Principal Assignees'];
-        viewModel.attr('includeRoles', include);
+        viewModel.includeRoles = include;
 
         const groups = viewModel.getRoleList();
         expect(groups.length).toBe(include.length);
@@ -567,7 +567,7 @@ describe('related-people-access-control component', function () {
     it('should return all groups build based on roles except roles from ' +
       'ExcludeRoles list', () => {
       let exclude = ['Admin', 'Secondary Assignees', 'Principal Assignees'];
-      viewModel.attr('excludeRoles', exclude);
+      viewModel.excludeRoles = exclude;
 
       const groups = viewModel.getRoleList();
       expect(groups.length).toBe(2);
@@ -581,8 +581,8 @@ describe('related-people-access-control component', function () {
       'w/o roles from ExcludeRoles list', () => {
       let include = ['Admin', 'Principal Assignees', 'Principal Assignees'];
       let exclude = ['Admin', 'Primary Contacts', 'Secondary Contacts'];
-      viewModel.attr('includeRoles', include);
-      viewModel.attr('excludeRoles', exclude);
+      viewModel.includeRoles = include;
+      viewModel.excludeRoles = exclude;
 
       const groups = viewModel.getRoleList();
       expect(groups.length).toBe(1);

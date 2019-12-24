@@ -18,7 +18,8 @@ function failAll(done) {
 }
 
 function getComponentVM(Component) {
-  const viewModelConfig = Component.prototype.viewModel;
+  const viewModelConfig =
+    Component.prototype.viewModel || Component.prototype.ViewModel;
   return new viewModelConfig();
 }
 
