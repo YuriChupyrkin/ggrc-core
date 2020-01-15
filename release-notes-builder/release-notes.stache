@@ -1,0 +1,26 @@
+<p>Our product team is working hard to engineer compliance @ scale and make your day to day user journeys easier. We have been adding key capabilities to the product as listed here below.</p>
+<p><a href="#1235658864717">Default sorting by ‘Last Updated Date’ (v0.10.37, 12/20/2017)</a></p>
+<p><a href="#264192608399">Change Workflow tasks state in bulk (v0.10.36, 12/12/2017)</a></p>
+<p><a href="#341568049163">Import from Google Sheets (v0.10.36, 12/12/2017)</a></p>
+<p><a href="#708526611784">Linking assessments with other issue tracking systems (v0.10.36, 12/12/2017)</a></p>
+<p><a href="#968596624142">Performance improvements</a></p>
+<h3 id="1235658864717">Default sorting by ‘Last Updated Date’ (v0.10.37, 12/20/2017)</h3><p>The system will sort all objects lists except tasks by last updated date by default, so you can easily find objects that you recently worked with. Tasks will still have default sorting by due date.</p>
+<h3 id="264192608399">Change Workflow tasks state in bulk (v0.10.36, 12/12/2017)</h3><p>You can update states of the tasks assigned to you in bulk. Please, follow the steps below:
+Go to ‘Tasks’ tab on ‘My Work’ page.
+Click 3 dots button next to ‘Create’ button and select ‘Bulk Update’ option.
+Search for tasks and select required ones.
+Choose a state from dropdown.
+Click ‘Update’ button.
+</p>
+<h3 id="341568049163">Import from Google Sheets (v0.10.36, 12/12/2017)</h3><p>You can import data either from csv file or Google Sheet!</p>
+<h3 id="708526611784">Linking assessments with other issue tracking systems (v0.10.36, 12/12/2017)</h3><p>You can link an assessment with other issue tracking/ticketing systems, to receive notifications about its updates. You need to switch on the ticket tracker integration on audit level, and the system will auto-generate a ticket tracking system's ticket for each newly created assessment in scope of this audit. The system will assign such ticket tracking system's ticket to an assessment assignee and updates it each time the assessment state is changed or a new comment is added. You can turn the synchronization off on assessment level or on audit level for all assessments in scope of this audit, if it isn’t required any more.</p>
+<h3 id="968596624142">Performance improvements</h3><p>The performance has been improved in the following places in application:
+ - editing assessments: comments, attributes, states (twice as fast);
+ - loading of related assessments (twice as fast);
+ - loading of object counts in the tabs on my work page (5 times faster);
+ - loading of the graph on audit summary page (now is less than 0.5 sec);
+ - loading of my tasks count in the header (20 times faster);
+ - loading a workflow, especially a big one (in about a sec);
+ - loading objects in tree view (20-50% faster).
+Overall these improvements reduced the load on the server and make the entire application more responsive.
+</p>

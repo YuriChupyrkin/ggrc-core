@@ -9,9 +9,11 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const path = require('path');
 const getReleaseNotesDate = require('./getReleaseNotesDate.js');
+const buildReleaseNotes = require('./release-notes-builder/build-release-notes');
 const ENV = process.env;
 const isProd = ENV.NODE_ENV === 'production';
 const isCoverage = ENV.COVERAGE === 'true';
+const isBuildReleaseNotes = ENV.RELEASE_NOTES === 'true';
 
 const contextDir = path.resolve(__dirname, 'src', 'ggrc-client');
 const imagesDir = path.resolve(contextDir, 'images');
@@ -211,6 +213,11 @@ module.exports = function (env) {
         generateStatsFile: true,
       }),
     ];
+  }
+
+  if (isBuildReleaseNotes) {
+    console.log(' ------------  ------------------ build_release_notes');
+    buildReleaseNotes();
   }
 
   return config;

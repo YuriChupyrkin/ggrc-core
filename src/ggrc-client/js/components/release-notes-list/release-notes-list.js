@@ -7,7 +7,8 @@ import canStache from 'can-stache';
 import canMap from 'can-map';
 import canComponent from 'can-component';
 import template from './release-notes-list.stache';
-import notesTemplate from './release-notes.md';
+//import notesTemplate from './release-notes.md';
+import notesTemplate from '../../../../../release-notes-builder/release-notes.stache';
 
 const viewModel = canMap.extend({
   notesTemplate: notesTemplate,
