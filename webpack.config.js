@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+const fs = require('fs-extra');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -19,8 +20,13 @@ const vendorDir = path.resolve(contextDir, 'vendor');
 const nodeModulesDir = path.resolve(__dirname, 'node_modules');
 
 const STATIC_FOLDER = '/static/';
+const RELEASE_NOTES_BODY_PATH =
+'./release-notes-builder/release-notes-body.html';
 
 module.exports = function (env) {
+  // Create "release-notes-body" if not exists
+  fs.ensureFileSync(RELEASE_NOTES_BODY_PATH);
+
   const config = {
     mode: isProd ? 'production' : 'development',
     context: contextDir,
@@ -93,6 +99,9 @@ module.exports = function (env) {
           options: '$',
         }],
       }, {
+        test: /\.html/,
+        loader: 'raw-loader',
+      }, {
         test: /\.stache/,
         loader: 'raw-loader',
       }, {
@@ -102,13 +111,6 @@ module.exports = function (env) {
         query: {
           cacheDirectory: true,
         },
-      }, {
-        test: /\.md/,
-        use: [
-          {loader: 'raw-loader'},
-          {loader: 'parse-inner-links'},
-          {loader: 'md-to-html'},
-        ],
       }],
     },
     devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
@@ -134,7 +136,7 @@ module.exports = function (env) {
         GOOGLE_ANALYTICS_ID: JSON.stringify(ENV.GOOGLE_ANALYTICS_ID),
         BUILD_DATE: JSON.stringify(new Date()),
         RELEASE_NOTES_DATE: JSON.stringify(
-          getReleaseNotesDate(`${contextDir}/js/components/release-notes-list/release-notes.md`)
+          getReleaseNotesDate(RELEASE_NOTES_BODY_PATH)
         ),
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
