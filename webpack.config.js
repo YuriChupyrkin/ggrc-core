@@ -3,6 +3,7 @@
  Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
  */
 
+const fs = require('fs-extra');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -92,6 +93,9 @@ module.exports = function (env) {
           loader: 'expose-loader',
           options: '$',
         }],
+      }, {
+        test: /\.html/,
+        loader: 'raw-loader',
       }, {
         test: /\.stache/,
         loader: 'raw-loader',
@@ -212,6 +216,17 @@ module.exports = function (env) {
       }),
     ];
   }
+
+  const releaseNotesBodyPath =
+    './release-notes-builder/release-notes-body.html';
+
+  // Create "release-notes-body" if not exists
+  fs.ensureFile(releaseNotesBodyPath, (err) => {
+    if (err) {
+      console.log('\n >>> "release-notes-body" is not created:\n');
+      console.log(err);
+    }
+  });
 
   return config;
 };
