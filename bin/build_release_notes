@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Copyright (C) 2020 Google Inc.
+# Licensed under http://www.apache.org/licenses/LICENSE-2.0 <see LICENSE file>
+
+SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
+APP_VERSION=$(python -c "from ggrc.settings.default import VERSION; print(VERSION)")
+
+cd "${SCRIPTPATH}/.."
+
+# add VERSION to env variables list
+export APP_VERSION
+
+npm run build-release-notes

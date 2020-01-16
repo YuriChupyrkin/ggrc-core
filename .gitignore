@@ -73,3 +73,6 @@ coverage
 all_files
 license_header_diff
 with_copyright
+
+# release notes html content
+release-notes-builder/release-notes-body.html
