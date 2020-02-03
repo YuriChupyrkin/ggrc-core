@@ -9,9 +9,7 @@ import * as AdvancedSearch from '../../../plugins/utils/advanced-search-utils';
 import {getComponentVM} from '../../../../js_specs/spec-helpers';
 import Component from '../advanced-search-filter-container';
 
-describe('advanced-search-filter-container component', function () {
-  'use strict';
-
+describe('advanced-search-filter-container component', () => {
   let viewModel;
 
   beforeEach(() => {
@@ -20,40 +18,39 @@ describe('advanced-search-filter-container component', function () {
     viewModel = getComponentVM(Component);
   });
 
-  describe('items get() method', function () {
+  describe('items get() method', () => {
     it('initializes "items" property with state filter if it is empty ' +
-    'and model is not stateless', function () {
+    'and model is not stateless', () => {
       let items;
       spyOn(StateUtils, 'hasFilter').and.returnValue(true);
-      viewModel.attr('items', []);
+      viewModel.items = [];
 
-      items = viewModel.attr('items');
+      items = viewModel.items;
 
       expect(items.length).toBe(1);
       expect(items[0].type).toBe('state');
     });
   });
 
-  describe('addFilterCriterion() method', function () {
-    it('adds only attribute if list is empty', function () {
+  describe('addFilterCriterion() method', () => {
+    it('adds only attribute if list is empty', () => {
       let items;
-      viewModel.attr('items', canList());
+      viewModel.items = canList();
 
       viewModel.addFilterCriterion();
 
-      items = viewModel.attr('items');
+      items = viewModel.items;
       expect(items.length).toBe(1);
       expect(items[0].type).toBe('attribute');
     });
 
-    it('adds operator and attribute', function () {
+    it('adds operator and attribute', () => {
       let items;
-      viewModel.attr('items',
-        [AdvancedSearch.create.attribute()]);
+      viewModel.items = [AdvancedSearch.create.attribute()];
 
       viewModel.addFilterCriterion();
 
-      items = viewModel.attr('items');
+      items = viewModel.items;
       expect(items.length).toBe(3);
       expect(items[0].type).toBe('attribute');
       expect(items[1].type).toBe('operator');
@@ -61,16 +58,16 @@ describe('advanced-search-filter-container component', function () {
     });
   });
 
-  describe('createGroup() method', function () {
+  describe('createGroup() method', () => {
     it('transforms attribute to group with 2 attributes and operator inside',
-      function () {
+      () => {
         let viewItems;
-        viewModel.attr('items', new canList([
+        viewModel.items = new canList([
           AdvancedSearch.create.attribute({field: 'first'}),
           AdvancedSearch.create.operator(),
           AdvancedSearch.create.attribute({field: 'second'}),
-        ]));
-        viewItems = viewModel.attr('items');
+        ]);
+        viewItems = viewModel.items;
 
         viewModel.createGroup(viewItems[0]);
 
