@@ -9,6 +9,7 @@ import {
   makeFakeInstance,
 } from '../../../../js_specs/spec-helpers';
 import Cacheable from '../../../models/cacheable';
+import * as issueTrackerUtils from '../../../plugins/utils/issue-tracker-utils';
 
 describe('modal-issue-tracker-fields component', () => {
   let viewModel;
@@ -193,6 +194,67 @@ describe('modal-issue-tracker-fields component', () => {
 
           expect(viewModel.attr('isTicketIdMandatory')).toBe(true);
         });
+    });
+
+    describe('setComponentIds() method', () => {
+      let method;
+      let loadComponentIdsResult = [1, 3, 5, 7];
+      beforeEach(() => {
+        spyOn(issueTrackerUtils, 'loadComponentIds')
+          .and.returnValue(Promise.resolve(loadComponentIdsResult));
+
+        method = viewModel.setComponentIds.bind(viewModel);
+      });
+
+      describe('when "componentIds" attr is NOT empty', () => {
+        beforeEach(() => {
+          viewModel.attr('componentIds', [1]);
+        });
+
+        it('should NOT call "loadComponentIds"', () => {
+          method();
+          expect(issueTrackerUtils.loadComponentIds).not.toHaveBeenCalled();
+        });
+
+        it('should NOT set "componentIdsLoading" to TRUE', () => {
+          viewModel.attr('componentIdsLoading', false);
+          method();
+          expect(viewModel.attr('componentIdsLoading')).toBe(false);
+        });
+      });
+
+      describe('when "componentIds" attr is empty', () => {
+        beforeEach(() => {
+          viewModel.attr('componentIds', []);
+        });
+
+        describe('and "loadComponentIds" has NOT returned result yet', () => {
+          it('should call "loadComponentIds"', () => {
+            method();
+            expect(issueTrackerUtils.loadComponentIds).toHaveBeenCalled();
+          });
+
+          it('should set "componentIdsLoading" to TRUE', () => {
+            viewModel.attr('componentIdsLoading', false);
+            method();
+            expect(viewModel.attr('componentIdsLoading')).toBe(true);
+          });
+        });
+
+        describe('and "loadComponentIds" has returned result', () => {
+          it('should set "componentIds" attr', async () => {
+            await method();
+            expect(viewModel.attr('componentIds').serialize())
+              .toEqual([1, 3, 5, 7]);
+          });
+
+          it('should set "componentIdsLoading" to FALSE', async () => {
+            viewModel.attr('componentIdsLoading', true);
+            await method();
+            expect(viewModel.attr('componentIdsLoading')).toBe(false);
+          });
+        });
+      });
     });
   });
 

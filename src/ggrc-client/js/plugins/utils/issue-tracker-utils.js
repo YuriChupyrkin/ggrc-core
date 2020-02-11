@@ -94,6 +94,20 @@ function checkWarnings(instance) {
   }
 }
 
+const loadComponentIds = () => {
+  // TODO: add request
+  return new Promise((resolve, reject) => {
+    const ids = [];
+    for (let i = 0; i < 200; i++) {
+      ids.push({value: String(i)});
+    }
+
+    setTimeout(() => {
+      resolve(ids);
+    }, 1000);
+  });
+};
+
 export {
   issueTrackerStaticFields,
   isIssueTrackerInitialized,
@@ -103,4 +117,5 @@ export {
   checkWarnings,
   cleanUpWarnings,
   cleanUpBeforeSave,
+  loadComponentIds,
 };

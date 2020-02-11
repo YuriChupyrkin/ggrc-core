@@ -45,15 +45,21 @@
       </numberbox-component>
     </div>
     <div class="ggrc-form-item__multiple-row {{^isValidAttr instance "issue_tracker.component_id"}}field-failure{{/isValidAttr}}">
-      <label class="form-label ggrc-form-item__label">
-        Component ID
-        <i class="fa fa-asterisk"></i>
-      </label>
-      <numberbox-component
-                 additionalClass:from="'input-block-level'"
-                 placeholder:from="'Enter Component ID'"
-                 value:bind="instance.issue_tracker.component_id">
-      </numberbox-component>
+      <div class="component-id-label">
+        <label class="form-label ggrc-form-item__label">
+          Component ID
+          <i class="fa fa-asterisk"></i>
+        </label>
+        <spinner-component
+          extraCssClass:from="'component-id-spinner'"
+          toggle:from="componentIdsLoading"
+        />
+      </div>
+      <autocomplete-dropdown
+        value:bind="instance.issue_tracker.component_id"
+        isDisabled:from="componentIdsLoading"
+        options:from="componentIds"
+      />
       {{#validateAttr instance "issue_tracker.component_id"}}
         <label class="help-inline warning">{{this}}</label>
       {{/validateAttr}}

@@ -7,8 +7,10 @@ import canStache from 'can-stache';
 import canMap from 'can-map';
 import canComponent from 'can-component';
 import '../dropdown/dropdown-component';
+import '../dropdown/autocomplete-dropdown';
 import '../numberbox/numberbox-component';
 import template from './templates/modal-issue-tracker-fields.stache';
+import {loadComponentIds} from '../../plugins/utils/issue-tracker-utils';
 
 const state = {
   NOT_SELECTED: 0,
@@ -34,12 +36,16 @@ export default canComponent.extend({
     note: '',
     mandatoryTicketIdNote: '',
     isTicketIdMandatory: false,
+    componentIds: [],
+    componentIdsLoading: false,
     state,
     currentState: state.NOT_SELECTED,
     generateNewTicket() {
       if (this.attr('currentState') === state.GENERATE_NEW) {
         return;
       }
+
+      this.setComponentIds();
 
       this.attr('currentState', state.GENERATE_NEW);
       this.setValidationFlags({linking: false, initialized: true});
@@ -84,6 +90,20 @@ export default canComponent.extend({
       this.attr('instance.issue_tracker').attr({
         is_linking: linking,
         _initialized: initialized,
+      });
+    },
+    setComponentIds() {
+      // componentIds attr has already set
+      if (this.attr('componentIds').length > 0) {
+        return;
+      }
+
+      this.attr('componentIdsLoading', true);
+
+      return loadComponentIds().then((ids) => {
+        this.attr('componentIds', ids);
+      }).finally(() => {
+        this.attr('componentIdsLoading', false);
       });
     },
   }),
